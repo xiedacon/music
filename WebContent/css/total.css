@@ -1,0 +1,306 @@
+.material{
+    padding: 50px 40px;
+}
+.material .material_top{
+    border-bottom: 3px #e60000 solid;
+}
+.material .material_top:after{
+    content: "";
+    display: block;
+    height: 0;
+    visibility: hidden;
+    clear: both;
+}
+.material_top h2{
+    float: left;
+    font-family: "Microsoft Yahei", Arial, Helvetica, sans-serif;
+    font-size: 1.5em;
+    line-height: 40px;
+}
+.material_top .nav_button{
+    float: left;
+    position: relative;
+    padding: 0 0 0 10px;
+}
+.nav_button .button{
+    display: block;
+    height: 30px;
+    margin: 5px 0;
+    line-height: 30px;
+    border: 1px #d3d3d3 solid;
+    padding: 0 25px 0 10px;
+    box-sizing: border-box;
+    border-radius: 3px;
+    font-size: 0.8em;
+    color: #0c73c2;
+    position: relative;
+    cursor: pointer;
+    background: #f5f5f5;
+}
+.nav_button .button:hover{
+    opacity: 0.7;
+}
+.nav_button .button i{
+    position: absolute;
+    height: 7px;
+    width: 7px;
+    top: 50%;
+    box-sizing: border-box;
+    transform: translate(-250%,-50%) rotate(45deg);
+    left: 100%;
+    border-bottom: 1px #0c73c2 solid;
+    border-right: 1px #0c73c2 solid;
+    cursor: pointer;
+}
+.nav_button .nav{
+    position: absolute;
+    width: 700px;
+    background: #fff;
+    z-index: 1;
+    top: 120%;
+    transform: translate(-13%,0);
+    border: 1px #999 solid;
+    border-radius: 5px;
+}
+.nav .nav_top{
+    border-bottom: 1px #d3d3d3 solid;
+}
+.nav_top .nav_top_button{
+    display: inline-block;
+    border: 1px #d3d3d3 solid;
+    line-height: 30px;
+    height: 30px;
+    box-sizing: border-box;
+    margin: 15px 0 10px 30px;
+    font-size: 0.8em;
+    padding: 0 10px;
+    border-radius: 3px;
+    background: #f7f7f7;
+    cursor: pointer;
+}
+.nav_top .nav_top_button:hover{
+    text-decoration: underline;
+}
+.nav_top .triangle{
+    position: absolute;
+    width: 15px;
+    height: 15px;
+    background: #fff;
+    transform: translate(-50%,-50%) rotate(45deg);
+    left: 20%;
+    border-top: 1px #d3d3d3 solid;
+    border-left: 1px #d3d3d3 solid;
+}
+.nav .subnav{
+
+}
+.nav .subnav:after{
+    content: "";
+    display: block;
+    height: 0;
+    visibility: hidden;
+    clear: both;
+}
+.nav .subnav h3{
+    float: left;
+    width: 90px;
+    line-height: 40px;
+    font-size: 0.9em;
+    font-weight: bolder;
+    padding: 0 0 10px 10px;
+    box-sizing: border-box;
+}
+.nav .subnav h3 i{
+    font-weight: 100;
+    font-size: 1.5em;
+    vertical-align: bottom;
+    padding: 0 10px 0 10px;
+    opacity: 0.7;
+}
+.nav .subnav .types{
+    float: left;
+    line-height: 40px;
+    font-size: 0.9em;
+    padding: 0 0 10px 10px;
+    width: 610px;
+    box-sizing: border-box;
+    color: #d3d3d3;
+    border-left: 1px #d3d3d3 solid;
+}
+.types .type{
+    cursor: pointer;
+    padding: 0px 5px;
+    display: inline-block;
+    font-size: 0.8em;
+    line-height: 20px;
+    color: #000;
+}
+.types .select{
+    background: #bbb;
+    color: #fff;
+}
+.types .type:hover{
+    text-decoration: underline;
+}
+.material_top .material_top_right{
+    float: right;
+    line-height: 40px;
+}
+.material_top .material_top_right .orderbyHot{
+    float: left;
+    height: 30px;
+    margin: 5px 0;
+    line-height: 30px;
+    background: #f5f5f5;
+    color: #333;
+    border: 1px #999 solid;
+    border-right: 0;
+    border-top-left-radius: 3px;
+    border-bottom-left-radius: 3px;
+    box-sizing: border-box;
+    padding: 0 10px;
+    font-size: 0.8em;
+    cursor: pointer;
+}
+.material_top .material_top_right .orderbyHot:hover{
+    text-decoration: underline;
+}
+.material_top .material_top_right .orderbyNew{
+    float: left;
+    height: 30px;
+    margin: 5px 0;
+    line-height: 30px;
+    background: #f5f5f5;
+    color: #333;
+    border: 1px #999 solid;
+    border-left: 0;
+    border-top-right-radius: 3px;
+    border-bottom-right-radius: 3px;
+    box-sizing: border-box;
+    padding: 0 10px;
+    font-size: 0.8em;
+    cursor: pointer;
+}
+.material_top .material_top_right .orderbyNew:hover{
+    text-decoration: underline;
+}
+.material_top .material_top_right .now{
+    background: #e60000;
+    color: #fff;
+    border: 1px #a20000 solid;
+}
+.material .material_middle{
+    padding: 0 0 50px 0;
+}
+.material .material_middle:after{
+    content: "";
+    display: block;
+    height: 0;
+    visibility: hidden;
+    clear: both;
+}
+.entitys .entity{
+    float: left;
+    width: 16%;
+    padding: 25px 5% 0 0;
+}
+.entity .image{
+width: 100%;
+height: 0;
+padding-bottom: 100%;
+position: relative;
+}
+.entity img{
+width: 100%;
+cursor: pointer;
+}
+.image .image_bottom{
+position: absolute;
+display: block;
+top: 100%;
+width: 100%;
+transform: translate(0,-100%);
+background:#000;
+vertical-align: middle;
+line-height: 25px;
+background-color: rgba(0,0,0,0.5);
+}
+.image_bottom i{
+float: left;
+font-family: "icomoon";
+color: #fff;
+font-size: 0.7em;
+padding: 0 7%;
+opacity: 0.7;
+}
+.image_bottom .num{
+float: left;
+color: #fff;
+font-size: 0.8em;
+opacity: 0.7;
+}
+.image_bottom .playthis{
+float: right;
+cursor: pointer;
+}
+.image_bottom .playthis:hover{
+opacity: 1;
+}
+.entity .name{
+    font-size: 0.9em;
+    margin: 5% 0 0 0;
+    display: block;
+    cursor: pointer;
+    overflow: hidden;
+    line-height: 20px;
+    height: 20px;
+}
+.entity .name:hover{
+text-decoration: underline;
+}
+.entity .by{
+    font-size: 0.8em;
+    color: #999;
+}
+.entity .songer{
+    font-size: 0.8em;
+    color: #696969;
+    cursor: pointer;
+}
+.entity .songer:hover{
+text-decoration: underline;
+}
+.material .material_bottom{
+    font-size: 0.8em;
+}
+.material_bottom .buttons{
+    text-align: center;
+}
+.buttons .button{
+    display: inline-block;
+    height: 22px;
+    line-height: 22px;
+    padding: 0 7px;
+    border: 1px #999 solid;
+    box-sizing: border-box;
+    border-radius: 3px;
+    cursor: pointer;
+    margin: 0 5px;
+}
+.buttons .enable{
+    background: #e4e4e4;
+}
+.buttons .num:hover{
+    border: 1px #000 solid;
+}
+.buttons .unable{
+    opacity: 0.5;
+    background: #e4e4e4;
+    cursor: default;
+}
+.buttons .now{
+    background: #e60000;
+    color: #fff;
+    border-color: #ff6666;
+    cursor: default;
+}

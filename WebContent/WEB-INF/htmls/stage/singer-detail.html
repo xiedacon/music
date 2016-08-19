@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" type="text/css" href="css/detail.css">
+<title>歌手详情页</title>
+</head>
+<style type="text/css">
+.entityMessage {
+    position: relative;
+    padding: 0 0 46.9% 0 !important;
+    height: 0;
+}
+
+.entityMessage img {
+	width: 100%;
+}
+
+.entityMessage .entityMessage_bottom {
+	position: absolute;
+	top: 100%;
+	width: 100%;
+	height: 70px;
+	transform: translate(0, -100%);
+	background: linear-gradient(rgba(0, 0, 0, 0), #000);
+	line-height: 70px;
+}
+
+.entityMessage_bottom h2 {
+	display: inline-block;
+	color: #fff;
+	font-size: 2em;
+	font-family: "Microsoft Yahei";
+	padding: 0 0 0 30px;
+	vertical-align: bottom;
+}
+
+.entityMessage_bottom .remark {
+	font-size: 0.7em;
+	color: #999;
+	vertical-align: bottom;
+}
+
+.entityMessage_bottom .homePage {
+    position: absolute;
+    display: inline-block;
+    background: #f5f5f5;
+    height: 30px;
+    border-radius: 30px;
+    margin: 20px 0;
+    line-height: 30px;
+    padding: 0 10px;
+    font-size: 0.8em;
+    cursor: pointer;
+    left: 50%;
+    transform: translate(-50%,0);
+}
+
+.homePage .icon {
+	display: inline-block;
+	border: 9px #e60000 solid;
+	width: 0;
+	height: 0;
+	border-radius: 9px;
+	position: relative;
+	cursor: pointer;
+	vertical-align: middle;
+	margin: -2px 0 0 0;
+}
+
+.homePage .icon i {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	color: #fff;
+	transform: translate(-50%, -50%);
+	font-size: 0.7em;
+	cursor: pointer;
+}
+
+.homePage span {
+	cursor: pointer;
+}
+
+.entityMessage_bottom .collectionButton {
+	display: inline-block;
+	height: 30px;
+	line-height: 30px;
+	color: #fff;
+	background: #404040;
+	border-radius: 3px;
+	border: 1px #353535 solid;
+	cursor: pointer;
+	padding: 0 10px;
+	float: right;
+	margin: 20px 30px 20px 0;
+}
+
+.entityMessage_bottom .collectionButton i {
+	cursor: pointer;
+	padding: 0 7px 0 0;
+	color: #fff;
+}
+
+.contentDiv .contentDiv_subnav {
+	font-size: 0;
+}
+
+.contentDiv .contentDiv_subnav li {
+	display: inline-block;
+	font-size: 14px;
+	line-height: 38px;
+	height: 40px;
+	box-sizing: border-box;
+	text-align: center;
+	width: 25%;
+	border-bottom: 1px solid #ccc;
+	vertical-align: bottom;
+	background: #f9f9f9;
+	cursor: pointer;
+	border-top: 2px rgba(0, 0, 0, 0) solid;
+}
+
+.contentDiv .contentDiv_subnav li:hover {
+	border-top: 2px #e60000 solid;
+	line-height: 38px;
+}
+
+.contentDiv .contentDiv_subnav .now {
+	border-top: 2px #e60000 solid;
+	border-bottom: 0;
+	border-left: 1px #eee solid;
+	border-right: 1px #eee solid;
+	background: #fff;
+	line-height: 38px;
+}
+
+.contentDiv .songList {
+	padding: 0;
+}
+
+.songList .buttons {
+	padding: 20px 0 10px 0;
+}
+
+.songList .buttons .play_addToPlayList {
+	display: inline-block;
+	height: 30px;
+	line-height: 30px;
+	color: #fff;
+	border-radius: 3px;
+	font-size: 0;
+	border: 1px #9faffd solid;
+	cursor: pointer;
+}
+
+.play_addToPlayList .play {
+	display: inline-block;
+	padding: 0 5px;
+	border-right: 1px #a5a5a5 solid;
+	box-sizing: border-box;
+	font-size: 12px;
+	cursor: pointer;
+	background: #3282ce;
+	vertical-align: top;
+}
+
+.play_addToPlayList .play:hover {
+	opacity: 0.7;
+}
+
+.play_addToPlayList .play i {
+	color: #fff;
+	padding: 0 5px;
+	line-height: 30px;
+	vertical-align: bottom;
+	cursor: pointer;
+}
+
+.play_addToPlayList .play span {
+	cursor: pointer;
+}
+
+.play_addToPlayList .addToPlaylist {
+	display: inline-block;
+	font-size: 12px;
+	padding: 0 10px;
+	cursor: pointer;
+	background: #3282ce;
+}
+
+.play_addToPlayList .addToPlaylist:hover {
+	opacity: 0.7;
+}
+
+.songList .buttons .button {
+	display: inline-block;
+	height: 30px;
+	line-height: 30px;
+	color: #000;
+	background: #f1f1f1;
+	border-radius: 3px;
+	border: 1px #b1b1b1 solid;
+	cursor: pointer;
+	padding: 0 10px;
+}
+
+.songList .buttons .button:hover {
+	opacity: 0.7;
+}
+
+.songList .buttons .button i {
+	cursor: pointer;
+	padding: 0 7px 0 0;
+}
+
+.songList table {
+	border: 0;
+}
+
+.songList table .maxtd {
+	padding: 0;
+}
+
+table .maxtd .max {
+	width: 90%;
+	height: 10px;
+	background: #e6e6e6;
+	margin: 0 5%;
+	border-radius: 10px;
+}
+
+table .maxtd .max .hot {
+	width: 0%;
+	height: 100%;
+	display: block;
+	background: #bfbfbf;
+	border-radius: 10px;
+}
+
+.contentDiv .albumList {
+	
+}
+
+.contentDiv .albumList .albums {
+	padding: 0 0 30px 0;
+}
+
+.contentDiv .albumList .albums:after {
+	content: "";
+	display: block;
+	height: 0;
+	visibility: hidden;
+	clear: both;
+}
+
+.albums .album {
+	float: left;
+	width: 25%;
+	padding: 20px 5% 10px 0;
+	box-sizing: border-box;
+}
+
+.album .image {
+	display: block;
+	position: relative;
+	height: 0;
+	padding-bottom: 100%;
+	cursor: pointer;
+	margin: 0 0 10px 0;
+}
+
+.album img {
+	display: block;
+	width: 100%;
+	position: absolute;
+	z-index: 1;
+}
+
+.album .image_left {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	top: 0;
+	z-index: 0;
+	left: 16%;
+	overflow: hidden;
+}
+
+.album .image_left .circle {
+	display: block;
+	position: absolute;
+	border: 70px #000 solid;
+	border-radius: 70px;
+	opacity: 0.8;
+	z-index: 3;
+	left: 50%;
+	top: 50%;
+	transform: translate(-53%, -50%);
+}
+
+.album .image_left .rectangle {
+	height: 91%;
+	width: 20px;
+	position: absolute;
+	top: 50%;
+	left: 100%;
+	border: 1px #ACACAC solid;
+	transform: translate(-175%, -50%);
+	background: #fff;
+	z-index: 1;
+}
+
+.album .image_left .triangle {
+	border: 7px #fff solid;
+	position: absolute;
+	display: block;
+	border-right-color: #000;
+	top: 50%;
+	left: 100%;
+	transform: translate(-215%, -50%);
+	z-index: 2;
+}
+
+.album .image i {
+	cursor: pointer;
+	position: absolute;
+	font-family: "icomoon";
+	color: #fff;
+	opacity: 0.7;
+	top: 100%;
+	left: 100%;
+	transform: translate(-140%, -140%);
+	font-size: 2em;
+	z-index: 3;
+	visibility: hidden;
+}
+
+.album .image:hover i {
+	visibility: visible;
+}
+
+.album .image i:hover {
+	opacity: 1;
+}
+
+.album .name {
+	display: block;
+	font-size: 1em;
+	padding: 0 0 5px 0;
+	cursor: pointer;
+	overflow: hidden;
+}
+
+.album .name:hover {
+	text-decoration: underline;
+}
+
+.album .time {
+	color: #616161;
+}
+
+.albumList .buttons .button {
+	display: inline-block;
+	height: 22px;
+	line-height: 22px;
+	padding: 0 7px;
+	border: 1px #999 solid;
+	box-sizing: border-box;
+	border-radius: 3px;
+	cursor: pointer;
+}
+
+.albumList .buttons .enable {
+	background: #e4e4e4;
+}
+
+.albumList .buttons .num:hover {
+	border: 1px #000 solid;
+}
+
+.albumList .buttons .unable {
+	opacity: 0.5;
+	background: #e4e4e4;
+	cursor: default;
+}
+
+.albumList .buttons .now {
+	background: #e60000;
+	color: #fff;
+	border-color: #ff6666;
+	cursor: default;
+}
+
+.albumList .buttons {
+	text-align: center;
+}
+
+.contentDiv .details {
+	
+}
+
+.contentDiv .details h3 {
+	font-size: 1.2em;
+	font-weight: bolder;
+	font-family: "Microsoft Yahei";
+	line-height: 30px;
+}
+
+.contentDiv .details p {
+	line-height: 25px;
+	color: #5d5d5d;
+}
+
+.similars {
+	
+}
+
+.similars .similar {
+	float: left;
+	width: 25%;
+	position: relative;
+	font-size: 0.8em;
+	text-align: center;
+	padding: 0 0 10px 6.25%;
+}
+
+.similars .similar img {
+	width: 100%;
+	padding: 0;
+	float: none;
+}
+
+.similars .similar .name {
+	cursor: pointer;
+}
+
+.similars .similar .name:hover {
+	text-decoration: underline;
+}
+</style>
+<body>
+	<div class="head">
+		<div class="head_top">
+			<h1>
+				<a href="#">我的音乐网</a>
+			</h1>
+			<ul class="nav">
+				<li class="selected">发现音乐<i></i></li>
+				<li>我的音乐</li>
+				<li>朋友</li>
+				<li>下载客户端</li>
+			</ul>
+			<div class="search">
+				<i></i> <input id="search_global" class="search_input" type="input" name="song" placeholder="单曲/歌手/专辑/歌单/MV/用户">
+			</div>
+			<span class="msg"></span>
+			<div id="userDiv" class="user">
+				<span class="username"><img src="image/default.jpg">xiedacon<i></i></span>
+				<ul class="user_nav nav_login" style="display: none;">
+					<i></i>
+					<li>
+						<ul>
+							<li>我的主页</li>
+							<li>我的等级</li>
+							<li>付费音乐包</li>
+							<li>积分商城</li>
+						</ul>
+					</li>
+					<li>
+						<ul>
+							<li>个人设置</li>
+							<li>导入歌单</li>
+						</ul>
+					</li>
+					<li class="exit">退出</li>
+				</ul>
+				<ul class="user_nav nav_logout" style="display: none;">
+					<i></i>
+					<li>
+						<ul>
+							<li id="toLoginByPhoneDiv">手机号登录</li>
+							<li>微信登录</li>
+							<li>QQ登录</li>
+							<li>Github登录</li>
+						</ul>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<div class="head_bottom">
+			<ul class="subnav">
+				<li class="selected">推荐</li>
+				<li>排行榜</li>
+				<li>歌单</li>
+				<li>主播电台</li>
+				<li>歌手</li>
+				<li>新碟上架</li>
+			</ul>
+		</div>
+	</div>
+	<div class="body">
+		<div class="material">
+			<div class="material_left">
+				<div id="singer" class="entityMessage">
+					<img src="">
+					<div class="entityMessage_bottom">
+						<h2>
+							<span></span> <span class="remark"></span>
+						</h2>
+						<a href="javascript:void(0);" class="homePage" title="" onclick="jump(this);" style="display: none"> <span class="icon"> <i
+								class="icomoon"></i>
+						</span> <span>Ta的个人主页</span>
+						</a> <span class="collectionButton"> <i class="icomoon"></i>收藏
+						</span>
+					</div>
+				</div>
+				<div class="contentDiv">
+					<ul class="contentDiv_subnav">
+						<li id="songListHead" class="now" style="border-left: 1px #eee solid;">热门50单曲</li>
+						<li id="albumListHead">所有专辑</li>
+						<li onclick="alert('暂无');">相关MV</li>
+						<li id="introductionHead" style="border-right: 1px #eee solid;">歌手介绍</li>
+					</ul>
+					<div>
+						<div class="songList" style="display: none">
+							<div class="buttons">
+								<div class="play_addToPlayList">
+									<span class="play"><i class="icomoon"></i><span>播放</span></span> <span class="addToPlaylist icomoon"></span>
+								</div>
+								<span class="collection button"> <i class="icomoon"></i>收藏热门50
+								</span>
+							</div>
+							<table>
+								<tbody id="songList">
+									<tr class="prototype">
+										<td style="width: 14%;"><span class="num"></span> <i class="play icomoon"></i></td>
+										<td style="width: 31%;"><a class="songName" title="" href="javascript:void(0);" onclick="jump(this);"></a></td>
+										<td style="width: 14%;"><span class="time"></span>
+											<p class="hidden">
+												<span class="addToPlaylist icomoon"></span> 
+												<span class="collection icomoon"></span> 
+												<span class="share icomoon"></span> 
+												<span class="download icomoon"></span>
+											</p></td>
+										<td style="width: 19%;"><a class="special" title="" href="javascript:void(0);" onclick="jump(this);"></a></td>
+										<td class="maxtd" style="width: 22%;">
+											<p class="max">
+												<span class="hot"></span>
+											</p>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+						<div class="albumList" style="display: none">
+							<ul id="albumList" class="albums">
+								<li class="album prototype">
+									<div class="image" title="">
+										<img src="" onclick="jump(this);">
+										<div class="image_left">
+											<span class="circle"></span> <span class="rectangle"></span> <span class="triangle"></span>
+										</div>
+										<i title="播放"></i>
+									</div> <a title="" class="name" href="javascript:void(0);" onclick="jump(this);"></a> <span class="time">2013.03.12</span>
+								</li>
+							</ul>
+							<ul id="pages" class="buttons">
+							</ul>
+						</div>
+						<div id="introduction" class="details" style="display: none">
+							<h3>简介</h3>
+							<p></p>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="material_right">
+				<ul class="similars select">
+					<h3>相似歌手</h3>
+					<li class="similar option"><img title="哈克" src="image/song/3416182631786344.jpg"> <span title="哈克斯阿三" class="name">哈克斯</span></li>
+					<li class="similar option"><img title="哈克" src="image/song/3416182631786344.jpg"> <span title="哈克斯阿三" class="name">哈克斯阿</span></li>
+					<li class="similar option"><img title="哈克" src="image/song/3416182631786344.jpg"> <span title="哈克斯阿三" class="name">哈克斯阿</span></li>
+					<li class="similar option"><img title="哈克" src="image/song/3416182631786344.jpg"> <span title="哈克斯阿三" class="name">哈克斯</span></li>
+					<li class="similar option"><img title="哈克" src="image/song/3416182631786344.jpg"> <span title="哈克斯阿三" class="name">哈克斯阿</span></li>
+					<li class="similar option"><img title="哈克" src="image/song/3416182631786344.jpg"> <span title="哈克斯阿三" class="name">哈克斯阿</span></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+	<div class="foot">
+		<p>@2016</p>
+	</div>
+</body>
+</html>

@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" type="text/css" href="css/total.css">
+<title>个人首页</title>
+</head>
+<style type="text/css">
+.entityMessage {
+	padding: 0 0 50px 0;
+}
+
+.entityMessage:after {
+	content: "";
+	display: block;
+	height: 0;
+	visibility: hidden;
+	clear: both;
+}
+
+.entityMessage .entityMessage_left {
+	float: left;
+	border: 1px #d5d5d5 solid;
+	padding: 3px;
+	width: 21%;
+	box-sizing: border-box;
+}
+
+.entityMessage .entityMessage_left img {
+	display: block;
+	width: 100%;
+}
+
+.entityMessage .entityMessage_right {
+	padding: 0 0 0 25%;
+}
+
+.entityMessage .entityMessage_right .right_top {
+	line-height: 40px;
+	border-bottom: 1px #d5d5d5 solid;
+}
+
+.entityMessage_right .right_top h2 {
+	display: inline-block;
+	font-size: 1.4em;
+	font-family: "Microsoft Yahei", Arial, Helvetica, sans-serif;
+	padding: 0 10px 0 0;
+}
+
+.entityMessage_right .right_top .level {
+	font-weight: bolder;
+	display: inline-block;
+	width: 40px;
+	height: 16px;
+	border: 1px #e60000 solid;
+	box-sizing: border-box;
+	line-height: 16px;
+	color: #e60000;
+	font-size: 0.7em;
+	text-align: center;
+	border-radius: 16px;
+	margin: 12px 0;
+	vertical-align: top;
+}
+
+.entityMessage_right .right_top .sex {
+	color: #25a5e3;
+	font-size: 1.5em;
+	display: inline-block;
+}
+
+.entityMessage_right .right_top .attention {
+	display: inline-block;
+	height: 30px;
+	background: #3282ce;
+	padding: 0 10px;
+	font-size: 0.8em;
+	color: #fff;
+	line-height: 30px;
+	border-radius: 3px;
+	cursor: pointer;
+	border: 1px #5b8fc1 solid;
+	box-sizing: border-box;
+	margin: 5px 0;
+	vertical-align: top;
+}
+
+.entityMessage_right .right_top .attention:hover {
+	opacity: 0.7;
+}
+
+.entityMessage_right .right_top .attention i {
+	color: #fff;
+	font-size: 0.7em;
+	padding: 0 5px 0 0;
+	cursor: pointer;
+}
+
+.entityMessage_right .right_top .authentication {
+	
+}
+
+.entityMessage_right .right_top .authentication s {
+	border: 10px #e60000 solid;
+	width: 0;
+	height: 0;
+	display: inline-block;
+	position: relative;
+	border-radius: 10px;
+	margin: 10px 0;
+	vertical-align: bottom;
+}
+
+.entityMessage_right .right_top .authentication s i {
+	color: #fff;
+	position: absolute;
+	line-height: 10px;
+	transform: translate(-46%, -58%);
+	left: 0;
+	top: 0;
+	width: 10px;
+	height: 10px;
+	text-align: center;
+}
+
+.entityMessage_right .right_top .toSongerPage {
+	float: right;
+	font-size: 0.8em;
+	height: 30px;
+	margin: 5px 0;
+	background: #f5f5f5;
+	line-height: 30px;
+	padding: 0 10px;
+	border: 1px #d5d5d5 solid;
+	cursor: pointer;
+	border-radius: 3px;
+}
+
+.entityMessage_right .right_top .toSongerPage:hover {
+	background: #fff;
+}
+
+.entityMessage .entityMessage_right .dynamic_attention_fans {
+	padding: 5px 0;
+}
+
+.dynamic_attention_fans .dynamic {
+	display: inline-block;
+	font-size: 0.8em;
+	border-right: 1px #d5d5d5 solid;
+	padding: 0 50px 0 0;
+	cursor: pointer;
+}
+
+.dynamic_attention_fans .attention {
+	display: inline-block;
+	font-size: 0.8em;
+	border-right: 1px #d5d5d5 solid;
+	padding: 0 50px 0 15px;
+	cursor: pointer;
+}
+
+.dynamic_attention_fans .fans {
+	display: inline-block;
+	font-size: 0.8em;
+	padding: 0 0 0 15px;
+	cursor: pointer;
+}
+
+.dynamic_attention_fans .num {
+	display: block;
+	font-size: 2em;
+	font-weight: bolder;
+	line-height: 30px;
+	cursor: pointer;
+}
+
+.entityMessage .entityMessage_right .detail {
+	font-size: 0.8em;
+	line-height: 20px;
+	color: #696969;
+}
+
+.material .part {
+	padding: 0 0 30px 0;
+}
+
+.material .part:after {
+	content: "";
+	display: block;
+	height: 0;
+	visibility: hidden;
+	clear: both;
+}
+
+.part h3 {
+	line-height: 40px;
+	color: #666;
+	font-size: 1.2em;
+	border-bottom: 3px #e60000 solid;
+	box-sizing: border-box;
+	height: 40px;
+	font-family: 'Microsoft Yahei';
+}
+
+.part h3 .h3_right {
+	float: right;
+	font-size: 0.7em;
+	font-family: serif;
+}
+
+.part h3 .h3_right .now {
+	font-weight: bolder;
+	cursor: pointer;
+	color: #000;
+}
+
+.part h3 .h3_right .right_span {
+	cursor: pointer;
+}
+
+.part h3 .h3_right .right_span:hover {
+	color: #000;
+}
+
+.part .songs .singular {
+	background: #fff;
+}
+
+.part .songs {
+	width: 100%;
+}
+
+.part .songs tbody {
+	background: #efefef;
+}
+
+.part .songs tr {
+	line-height: 30px;
+	height: 30px;
+	font-size: 0.8em;
+}
+
+.songs .num {
+	padding: 0 0 0 10px;
+	color: #999;
+	display: inline-block;
+}
+
+.songs .play {
+	float: right;
+	font-size: 1.3em;
+	color: #999;
+	margin: 0 10px 0 0;
+	cursor: pointer;
+	display: inline-block;
+}
+
+.songs .play:hover {
+	color: #000;
+}
+
+.songs .songName_songer {
+	
+}
+
+.songs .songName_songer .songName {
+	cursor: pointer;
+}
+
+.songs .songName_songer .songName:hover {
+	text-decoration: underline;
+}
+
+.songs .songName_songer .songer {
+	cursor: pointer;
+}
+
+.songs .songName_songer .songer:hover {
+	text-decoration: underline;
+}
+
+.songs .hot {
+	display: block;
+	height: 30px;
+	width: 61%;
+	background: rgba(102, 255, 241, 0.2);
+}
+
+.part .userList:after {
+	content: "";
+	display: block;
+	height: 0;
+	visibility: hidden;
+	clear: both;
+}
+
+.part .users {
+	float: left;
+	width: 50%;
+	box-sizing: border-box;
+}
+
+.part .users .user {
+	padding: 20px;
+}
+
+.part .users .user:after {
+	content: "";
+	display: block;
+	height: 0;
+	visibility: hidden;
+	clear: both;
+}
+
+.user .img {
+	float: left;
+	width: 60px;
+	padding: 0 10px 0 0;
+	cursor: pointer;
+}
+
+.user .user_right {
+	float: left;
+}
+
+.user .user_right .name {
+	font-size: 1em;
+	line-height: 20px;
+	color: #0c73c2;
+	cursor: pointer;
+	vertical-align: top;
+}
+
+.user .user_right .name:hover {
+	text-decoration: underline;
+}
+
+.user .user_right i {
+	color: #0c73c2;
+	font-size: 1.3em;
+	padding: 0 5px;
+}
+
+.user .user_right .dynamic_attention_fans_ {
+	font-size: 0.8em;
+	line-height: 20px;
+}
+
+.user .user_right .dynamic_attention_fans_ span {
+	cursor: pointer;
+}
+
+.user .user_right .dynamic_attention_fans_ span:hover {
+	text-decoration: underline;
+}
+
+.user .user_right .dynamic_attention_fans_ .num {
+	color: #0c73c2;
+	cursor: pointer;
+}
+
+.user .user_right .detail {
+	font-size: 0.8em;
+	color: #6b6b6b;
+	height: 15px;
+	overflow: hidden;
+}
+
+.user .user_rightF {
+	display: inline-block;
+	height: 30px;
+	background: #3282ce;
+	padding: 0 10px;
+	font-size: 0.8em;
+	color: #fff;
+	line-height: 30px;
+	border-radius: 3px;
+	cursor: pointer;
+	border: 1px #5b8fc1 solid;
+	box-sizing: border-box;
+	margin: 5px 0;
+	vertical-align: top;
+	float: right;
+}
+
+.user .user_rightF:hover {
+	opacity: 0.7;
+}
+
+.user .user_rightF i {
+	color: #fff;
+	font-size: 0.7em;
+	padding: 0 5px 0 0;
+	cursor: pointer;
+}
+
+.part .buttons {
+	text-align: center;
+	padding: 20px 0 0 0;
+}
+</style>
+<body>
+	<div class="head">
+		<div class="head_top">
+			<h1>
+				<a href="#">我的音乐网</a>
+			</h1>
+			<ul class="nav">
+				<li class="selected">发现音乐<i></i></li>
+				<li>我的音乐</li>
+				<li>朋友</li>
+				<li>下载客户端</li>
+			</ul>
+			<div class="search">
+				<i></i> <input id="search_global" class="search_input" type="input" name="song" placeholder="单曲/歌手/专辑/歌单/MV/用户">
+			</div>
+			<span class="msg"></span>
+			<div id="userDiv" class="user">
+				<span class="username"><img src="image/default.jpg">xiedacon<i></i></span>
+				<ul class="user_nav nav_login" style="display: none;">
+					<i></i>
+					<li>
+						<ul>
+							<li>我的主页</li>
+							<li>我的等级</li>
+							<li>付费音乐包</li>
+							<li>积分商城</li>
+						</ul>
+					</li>
+					<li>
+						<ul>
+							<li>个人设置</li>
+							<li>导入歌单</li>
+						</ul>
+					</li>
+					<li class="exit">退出</li>
+				</ul>
+				<ul class="user_nav nav_logout" style="display: none;">
+					<i></i>
+					<li>
+						<ul>
+							<li id="toLoginByPhoneDiv">手机号登录</li>
+							<li>微信登录</li>
+							<li>QQ登录</li>
+							<li>Github登录</li>
+						</ul>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<div class="head_bottom">
+			<ul class="subnav">
+				<li class="selected">推荐</li>
+				<li>排行榜</li>
+				<li>歌单</li>
+				<li>主播电台</li>
+				<li>歌手</li>
+				<li>新碟上架</li>
+			</ul>
+		</div>
+	</div>
+	<div class="body">
+		<div class="material">
+			<div>
+				<div id="user" class="entityMessage">
+					<div class=" entityMessage_left">
+						<img src="">
+					</div>
+					<div class="entityMessage_right">
+						<div class="right_top">
+							<h2></h2>
+							<span class="level"></span> 
+							<span class="attention"> 
+								<i class="icomoon"></i>关注
+							</span> 
+							<a href="javascript:void(0);" onclick="jump(this);" class="toSongerPage" style="display: none">查看歌手页</a>
+							<!-- <p class="authentication">
+							<s><i>v</i></s> <span>哈速度很快</span>
+						</p> -->
+						</div>
+						<div class="dynamic_attention_fans">
+							<!-- <p class="dynamic">
+							<span class="num">213</span> 动态
+						</p> -->
+							<p class="attention attentionNum">
+								<span class="num">213</span> 关注
+							</p>
+							<p class="fans">
+								<span class="num">213</span> 粉丝
+							</p>
+						</div>
+					</div>
+				</div>
+				<!-- <div class="part">
+					<h3>
+					<span style="">听歌排行</span> <span style="font-size: 0.7em; font-family: serif;">累计听歌1231首</span>
+					<div class="h3_right">
+						<span class="now">最近一周</span> <span>|</span> <span class="right_span">所有时间</span>
+					</div>
+				</h3>
+				<table class="songs">
+					<tr class="singular">
+						<td style="width: 7%;"><span class="num">1</span> <i class="play icomoon"></i></td>
+						<td style="width: 54%; color: #999;">
+							<p class="songName_songer">
+								<a class="songName" href="#">结啊苏联空军的</a>-<span class="songer">婚纱客户端看</span>
+							</p>
+						</td>
+						<td style="width: 39%;"><span class="hot"></span></td>
+					</tr>
+					<tr class="">
+						<td><span class="num">2</span> <i class="play icomoon"></i></td>
+						<td style="width: 54%; color: #999;">
+							<p class="songName_songer">
+								<a class="songName" href="#">结啊苏联空军的</a>-<span class="songer">婚纱客户端看</span>
+							</p>
+						</td>
+						<td><span class="hot"></span></td>
+					</tr>
+				</table>
+			</div> -->
+				<div class="part" style="display: none">
+					<h3 class="createSongMenu"></h3>
+					<ul class="songMenus entitys songMenuList">
+						<li class="songMenu entity prototype">
+							<div class="image">
+								<a href="javascript:void(0);" onclick="jump(this);"><img alt="" src="" title=""></a>
+								<div class="image_bottom">
+									<i></i> <span class="num"></span> <i class="playthis" title="播放"></i>
+								</div>
+							</div> <a class="name" href="javascript:void(0);" onclick="jump(this);" title=""></a>
+						</li>
+					</ul>
+				</div>
+				<div class="part" style="display: none">
+					<h3 class="collectionSongMenu"></h3>
+					<ul class="songMenus entitys">
+						<li class="songMenu entity prototype">
+							<div class="image">
+								<a href="javascript:void(0);" onclick="jump(this);"><img alt="" src="" title=""></a>
+								<div class="image_bottom">
+									<i></i> <span class="num"></span> <i class="playthis" title="播放"></i>
+								</div>
+							</div> <a class="name" href="javascript:void(0);" onclick="jump(this);" title=""></a>
+						</li>
+					</ul>
+				</div>
+			</div>
+			<div>
+				<div class="part" style="display: none">
+					<h3>关注（10）</h3>
+					<div class="userList">
+						<ul class="users" style="border-bottom: 1px #d5d5d5 solid; border-left: 1px #d5d5d5 solid; border-right: 1px #d5d5d5 solid;">
+							<li class="user"><img class="img" src="image/song/1374389535029843.jpg">
+								<div class="user_right">
+									<a href="#" class="name">贺卡收到咯</a><i class="icomoon"></i>
+									<p class="dynamic_attention_fans_">
+										<span class="dynamic">动态<span class="num">0</span></span> <span>|</span> <span class="attention">关注<span class="num">0</span></span> <span>|</span>
+										<span class="fans">粉丝<span class="num">0</span></span>
+									</p>
+									<p class="detail">哈哈哈</p>
+								</div> <span class="user_rightF"><i class="icomoon"></i>关注</span></li>
+							<li class="user"><img src="image/song/1374389535029843.jpg">
+								<div class="user_right">
+									<a href="#" class="name">贺卡收到咯</a><i class="icomoon"></i>
+									<p class="dynamic_attention_fans_">
+										<span class="dynamic">动态<span class="num">0</span></span> <span>|</span> <span class="attention">关注<span class="num">0</span></span> <span>|</span>
+										<span class="fans">粉丝<span class="num">0</span></span>
+									</p>
+								</div> <span class="user_rightF"><i class="icomoon"></i>关注</span></li>
+						</ul>
+						<ul class="users" style="border-bottom: 1px #d5d5d5 solid; border-right: 1px #d5d5d5 solid;">
+							<li class="user"><img src="image/song/1374389535029843.jpg">
+								<div class="user_right">
+									<a href="#" class="name">贺卡收到咯</a><i class="icomoon"></i>
+									<p class="dynamic_attention_fans_">
+										<span class="dynamic">动态<span class="num">0</span></span> <span>|</span> <span class="attention">关注<span class="num">0</span></span> <span>|</span>
+										<span class="fans">粉丝<span class="num">0</span></span>
+									</p>
+								</div> <span class="user_rightF"><i class="icomoon"></i>关注</span></li>
+							<li class="user"><img src="image/song/1374389535029843.jpg">
+								<div class="user_right">
+									<a href="#" class="name">贺卡收到咯</a><i class="icomoon"></i>
+									<p class="dynamic_attention_fans_">
+										<span class="dynamic">动态<span class="num">0</span></span> <span>|</span> <span class="attention">关注<span class="num">0</span></span> <span>|</span>
+										<span class="fans">粉丝<span class="num">0</span></span>
+									</p>
+								</div> <span class="user_rightF"><i class="icomoon"></i>关注</span></li>
+						</ul>
+					</div>
+					<ul class="buttons">
+						<li class="button unable">< 上一页</li>
+						<li class="button now">1</li>
+						<li class="button num">2</li>
+						<li class="button enable">下一页 ></li>
+					</ul>
+				</div>
+			</div>
+			<div>
+				<div class="part" style="display: none">
+					<h3>粉丝（10）</h3>
+					<div class="userList">
+						<ul class="users" style="border-bottom: 1px #d5d5d5 solid; border-left: 1px #d5d5d5 solid; border-right: 1px #d5d5d5 solid;">
+							<li class="user"><img class="img" src="image/song/1374389535029843.jpg">
+								<div class="user_right">
+									<a href="#" class="name">贺卡收到咯</a><i class="icomoon"></i>
+									<p class="dynamic_attention_fans_">
+										<span class="dynamic">动态<span class="num">0</span></span> <span>|</span> <span class="attention">关注<span class="num">0</span></span> <span>|</span>
+										<span class="fans">粉丝<span class="num">0</span></span>
+									</p>
+									<p class="detail">哈哈哈</p>
+								</div> <span class="user_rightF"><i class="icomoon"></i>关注</span></li>
+							<li class="user"><img src="image/song/1374389535029843.jpg">
+								<div class="user_right">
+									<a href="#" class="name">贺卡收到咯</a><i class="icomoon"></i>
+									<p class="dynamic_attention_fans_">
+										<span class="dynamic">动态<span class="num">0</span></span> <span>|</span> <span class="attention">关注<span class="num">0</span></span> <span>|</span>
+										<span class="fans">粉丝<span class="num">0</span></span>
+									</p>
+								</div> <span class="user_rightF"><i class="icomoon"></i>关注</span></li>
+						</ul>
+						<ul class="users" style="border-bottom: 1px #d5d5d5 solid; border-right: 1px #d5d5d5 solid;">
+							<li class="user"><img src="image/song/1374389535029843.jpg">
+								<div class="user_right">
+									<a href="#" class="name">贺卡收到咯</a><i class="icomoon"></i>
+									<p class="dynamic_attention_fans_">
+										<span class="dynamic">动态<span class="num">0</span></span> <span>|</span> <span class="attention">关注<span class="num">0</span></span> <span>|</span>
+										<span class="fans">粉丝<span class="num">0</span></span>
+									</p>
+								</div> <span class="user_rightF"><i class="icomoon"></i>关注</span></li>
+							<li class="user"><img class="img" src="image/song/1374389535029843.jpg">
+								<div class="user_right">
+									<a href="#" class="name">贺卡收到咯</a><i class="icomoon"></i>
+									<p class="dynamic_attention_fans_">
+										<span class="dynamic">动态<span class="num">0</span></span> <span>|</span> <span class="attention">关注<span class="num">0</span></span> <span>|</span>
+										<span class="fans">粉丝<span class="num">0</span></span>
+									</p>
+								</div> <span class="user_rightF"><i class="icomoon"></i>关注</span></li>
+						</ul>
+					</div>
+					<ul class="buttons">
+						<li class="button unable">< 上一页</li>
+						<li class="button now">1</li>
+						<li class="button num">2</li>
+						<li class="button enable">下一页 ></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="foot">
+		<p>@2016</p>
+	</div>
+</body>
+</html>

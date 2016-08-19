@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.xiedacon.dao.SingerDao">
+
+	<sql id="selectSimpleSingerVoSql">
+		SELECT
+		s.id id,
+		s.name name,
+		s.icon icon,
+		s.userId userId
+	</sql>
+
+	<sql id="selectSingerVoSql">
+		SELECT
+		s.id id,
+		s.name name,
+		s.icon icon,
+		s.remark remark,
+		s.userId userId
+	</sql>
+
+	<sql id="fromSingerSql">
+		FROM singer s
+	</sql>
+
+	<sql id="byClassifyIdSql">
+		WHERE
+		s.classifyId = #{classifyId}
+	</sql>
+
+	<sql id="byIdSql">
+		WHERE s.id = #{id}
+	</sql>
+
+	<sql id="orderByCollectionNumSql">
+		ORDER BY s.collectionNum DESC
+	</sql>
+
+	<sql id="limitSql">
+		LIMIT #{begin},#{limit}
+	</sql>
+
+	<select id="selectListByClassifyIdOrderByCollectionNumLimit"
+		resultType="cn.xiedacon.vo.SimpleSingerVo">
+		<include refid="selectSimpleSingerVoSql"></include>
+		<include refid="fromSingerSql"></include>
+		<include refid="byClassifyIdSql"></include>
+		<include refid="orderByCollectionNumSql"></include>
+		<include refid="limitSql"></include>
+	</select>
+
+	<select id="selectListOrderByCollectionNumLimit" resultType="cn.xiedacon.vo.SimpleSingerVo">
+		<include refid="selectSimpleSingerVoSql"></include>
+		<include refid="fromSingerSql"></include>
+		<include refid="orderByCollectionNumSql"></include>
+		<include refid="limitSql"></include>
+	</select>
+
+	<select id="selectListLimit" resultType="cn.xiedacon.vo.SimpleSingerVo">
+		<include refid="selectSimpleSingerVoSql"></include>
+		<include refid="fromSingerSql"></include>
+		<include refid="limitSql"></include>
+	</select>
+
+	<select id="selectById" resultType="cn.xiedacon.vo.SingerVo">
+		<include refid="selectSingerVoSql"></include>
+		<include refid="fromSingerSql"></include>
+		<include refid="byIdSql"></include>
+	</select>
+
+	<select id="selectIntroductionById" resultType="java.lang.String">
+		SELECT s.introduction
+		<include refid="fromSingerSql"></include>
+		<include refid="byIdSql"></include>
+	</select>
+
+</mapper>

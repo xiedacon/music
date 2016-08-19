@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.xiedacon.dao.UserDao">
+
+	<sql id="required_SELECT">
+		SELECT
+		u.id id,
+		u.name name,
+		u.icon icon,
+	</sql>
+	<sql id="min_simpleUserVo_SELECT">
+		<include refid="required_SELECT"></include>
+		u.introduction introduction
+	</sql>
+	<sql id="simpleUserVo_SELECT">
+		<include refid="required_SELECT"></include>
+		u.introduction introduction,
+		u.sex sex,
+		u.dynamicNum dynamicNum,
+		u.attentionNum attentionNum,
+		u.fansNum fansNum
+	</sql>
+	<sql id="userVo_SELECT">
+		<include refid="required_SELECT"></include>
+		ur.password password,
+		u.introduction introduction,
+		u.sex sex,
+		u.dynamicNum dynamicNum,
+		u.attentionNum attentionNum,
+		u.fansNum fansNum,
+		u.level level,
+		u.birthday birthday,
+		u.age age,
+		u.area area,
+		u.createSongMenuNum createSongMenuNum,
+		u.collectSongMenuNum
+		collectSongMenuNum,
+		u.singerId singerId,
+		u.lastSignDate lastSignDate
+	</sql>
+
+	<sql id="user_base_FROM">
+		FROM
+		user_base u
+	</sql>
+
+	<sql id="user_relation_JOIN">
+		INNER JOIN
+		user_relation ur ON u.id = ur.id
+	</sql>
+
+	<sql id="id_WHERE">
+		WHERE u.id = #{id}
+	</sql>
+	<sql id="phone_WHERE">
+		WHERE ur.phone = #{phone}
+	</sql>
+	<sql id="githubId_WHERE">
+		WHERE ur.githubId = #{githubId}
+	</sql>
+
+	<select id="selectUserListByIds" parameterType="java.lang.reflect.Array"
+		resultType="cn.xiedacon.vo.SimpleUserVo">
+		<include refid="min_simpleUserVo_SELECT"></include>
+		<include refid="user_base_FROM"></include>
+		WHERE u.id in
+		<foreach collection="userIds" open="(" separator="," close=")"
+			item="item">
+			#{item}
+		</foreach>
+	</select>
+
+	<insert id="insertUser_base" parameterType="cn.xiedacon.model.User">
+		INSERT INTO user_base
+		VALUES(
+		#{id},
+		#{name},
+		#{icon},
+		#{sex},
+		#{dynamicNum},
+		#{attentionNum},
+		#{fansNum},
+		#{introduction},
+		#{area},
+		#{age},
+		#{createSongMenuNum},
+		#{collectSongMenuNum},
+		#{birthday},
+		#{level},
+		#{experience},
+		#{singerId},
+		#{lastSignDate}
+		)
+	</insert>
+
+
+	<select id="insertUser_record" parameterType="cn.xiedacon.model.User">
+		INSERT INTO
+		user_relation
+		VALUES(
+		#{id},
+		#{qq},
+		#{phone},
+		#{weixin},
+		#{xinlangweibo},
+		#{renren},
+		#{douban},
+		#{password},
+		#{githubId}
+		)
+	</select>
+
+	<select id="selectByPhone" resultType="cn.xiedacon.model.User">
+		<include refid="userVo_SELECT"></include>
+		<include refid="user_base_FROM"></include>
+		<include refid="user_relation_JOIN"></include>
+		<include refid="phone_WHERE"></include>
+	</select>
+
+	<select id="selectById" resultType="cn.xiedacon.model.User">
+		<include refid="userVo_SELECT"></include>
+		<include refid="user_base_FROM"></include>
+		<include refid="user_relation_JOIN"></include>
+		<include refid="id_WHERE"></include>
+	</select>
+
+	<update id="updateUsername">
+		UPDATE user_base u
+		SET u.name = #{name}
+		<include refid="id_WHERE"></include>
+	</update>
+
+	<select id="selectByGitHubId" resultType="cn.xiedacon.model.User">
+		<include refid="userVo_SELECT"></include>
+		<include refid="user_base_FROM"></include>
+		<include refid="user_relation_JOIN"></include>
+		<include refid="githubId_WHERE"></include>
+	</select>
+
+	<update id="updatePassword" parameterType="cn.xiedacon.model.User">
+		UPDATE user_relation u
+		SET u.password = #{password}
+		<include refid="id_WHERE"></include>
+	</update>
+
+</mapper>

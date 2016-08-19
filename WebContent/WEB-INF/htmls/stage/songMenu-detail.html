@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" type="text/css" href="css/detail.css">
+<title>歌单详情页</title>
+</head>
+<style type="text/css">
+.creator_time .creator img {
+	display: inline-block;
+	width: 35px;
+	vertical-align: bottom;
+	cursor: pointer;
+}
+
+.creator_time .creator .creatorName {
+	line-height: 35px;
+	color: #0c73c2;
+	cursor: pointer;
+}
+
+.creator_time .creator .creatorName:hover {
+	text-decoration: underline;
+}
+</style>
+<body>
+	<div class="body">
+		<div class="material">
+			<div class="material_left">
+				<div id="songMenu" class="songMenuMessage entityMessage">
+					<div class="songMenuMessage_left entityMessage_left">
+						<img src="">
+					</div>
+					<div class="songMenuMessage_right entityMessage_right">
+						<div class="label">
+							<span class="content">歌单</span> <span class="triangle"><i></i></span>
+						</div>
+						<h2></h2>
+						<div class="creator_time">
+							<div class="creator">
+								<img data-href="" onclick="jump(this);" src="" /> <a class="creatorName" href="javascript:void(0);" data-href="" onclick="jump(this);"
+									title="creatorName"></a>
+							</div>
+							<span class="createTime"></span>
+						</div>
+						<div class="buttons">
+							<div class="play_addToPlayList">
+								<span class="play" title="播放">
+									<i class="icomoon"></i>
+									<span>播放</span>
+								</span> 
+								<span class="addToPlaylist icomoon" title="添加到播放列表"></span>
+							</div>
+							<span class="collection button"><i class="icomoon"></i></span> 
+							<span class="share button"><i class="icomoon"></i></span> 
+							<span class="download button"><i class="icomoon"></i>下载</span> 
+							<span class="comment button"><i class="icomoon"></i></span>
+						</div>
+						<div class="details">
+							<p class="tags">标签：</p>
+							<p class="introduction">介绍：无</p>
+						</div>
+					</div>
+				</div>
+				<div class="songList">
+					<div class="songList_top">
+						<h2>歌曲列表</h2>
+						<span class="songList_detail"></span>
+						<p class="top_right">
+							<span>播放：<i class="num"></i>次
+							</span>
+						</p>
+					</div>
+					<table>
+						<thead>
+							<tr>
+								<td class="first_td"></td>
+								<td class="songName_td">歌曲标题</td>
+								<td class="time_td">时长</td>
+								<td class="songer_td">歌手</td>
+								<td class="special_td">专辑</td>
+							</tr>
+						</thead>
+						<tbody id="songList">
+							<tr class="prototype">
+								<td>
+									<span class="num"></span> 
+									<i class="play icomoon"></i>
+								</td>
+								<td><a class="songName" href="javascript:void(0);" data-href="" onclick="jump(this);"></a></td>
+								<td><span class="time"></span>
+									<p class="hidden">
+										<span class="addToPlaylist icomoon"></span> 
+										<span class="collection icomoon"></span> 
+										<span class="share icomoon"></span> 
+										<span class="download icomoon"></span>
+									</p></td>
+								<td><a class="songer" href="javascript:void(0);" data-href="" onclick="jump(this);"></a></td>
+								<td><a class="special" href="javascript:void(0);" data-href="" onclick="jump(this);"></a></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<div class="commentList">
+					<div class="commentList_top">
+						<h2>评论列表</h2>
+						<span class="commentList_detail"></span>
+					</div>
+					<div class="commentList_middle">
+						<div class="newComment">
+							<img class="newComment_left" src="image/default.jpg">
+							<div class="newComment_right">
+								<s></s>
+								<textarea class="content"></textarea>
+								<div class="right_bottom">
+									<div class="left">
+										<i class="icomoon face"></i> <i class="icomoon at"></i>
+									</div>
+									<div class="right">
+										<span class="num">213</span> <span class="button">评论</span>
+									</div>
+								</div>
+							</div>
+						</div>
+						<ul id="commentList" class="comments">
+							<li class="comment prototype"><img src="image/song/1409573912061911.jpg" data-href="" onclick="jump(this);">
+								<div class="comment_left">
+									<p class="comment_material">
+										<a class="name" href="javascript:void(0);" data-href="" onclick="jump(this);"></a> <span class="content"></span>
+									</p>
+									<p class="comment_reply" style="display: none">
+										<i></i> <a class="name" href="javascript:void(0);" data-href="" onclick="jump(this);"></a> <span class="content"></span>
+									</p>
+									<div class="comment_bottom">
+										<span class="createTime"></span>
+										<div class="right">
+											<p>
+												<i class="icomoon"></i> <span class="num"></span>
+											</p>
+											<span class="interval">|</span> <span class="reply">回复</span>
+										</div>
+									</div>
+								</div></li>
+						</ul>
+					</div>
+					<div class="commentList_bottom">
+						<ul id="pages">
+						</ul>
+					</div>
+				</div>
+			</div>
+			<div class="material_right">
+				<ul class="likeIt">
+					<h3>喜欢这个歌单的人</h3>
+					<li class="user" title="a卡号"><img src="image/song/3416182631786344.jpg"></li>
+					<li class="user"><img src="image/song/3416182631786344.jpg"></li>
+					<li class="user"><img src="image/song/3416182631786344.jpg"></li>
+					<li class="user" style="margin: 0 0 10px 0;"><img src="image/song/3416182631786344.jpg"></li>
+					<li class="user"><img src="image/song/3416182631786344.jpg"></li>
+					<li class="user"><img src="image/song/3416182631786344.jpg"></li>
+					<li class="user"><img src="image/song/3416182631786344.jpg"></li>
+					<li class="user" style="margin: 0 0 10px 0;"><img src="image/song/3416182631786344.jpg"></li>
+				</ul>
+				<ul class="select">
+					<h3>热门歌单</h3>
+					<li class="option"><img title="哈克" src="image/song/3416182631786344.jpg">
+						<div class="option_right">
+							<span title="哈克斯阿三" class="name">哈克斯阿三</span> <span class="by">by</span> <a title="阿三" class="userName" href="#">阿三</a>
+						</div></li>
+					<li class="option"><img title="哈克" src="image/song/3416182631786344.jpg">
+						<div class="option_right">
+							<span title="哈克斯阿三" class="name">哈克斯阿三</span> <span class="by">by</span> <a title="阿三" class="userName" href="#">阿三</a>
+						</div></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+	<div class="foot">
+		<p>@2016</p>
+	</div>
+</body>
+</html>

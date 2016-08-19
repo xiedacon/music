@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" type="text/css" href="css/detail.css">
+<title>榜单页</title>
+</head>
+<style type="text/css">
+.material .material_left {
+	float: right;
+	border-left: 1px #D3D3D3 solid;
+}
+
+.material_left .entityMessage {
+	padding: 0 0 30px 0;
+}
+
+.entityMessage .entityMessage_left {
+	width: 24% !important;
+}
+
+.entityMessage .entityMessage_right {
+	width: 71.5% !important;
+}
+
+.entityMessage .entityMessage_right h2 {
+	text-indent: 0;
+}
+
+.entityMessage .entityMessage_right .createTime {
+	color: #5a5a5a;
+}
+
+.entityMessage .entityMessage_right .createTime i {
+	color: #999;
+	padding: 0 3px 0 0;
+}
+
+.entityMessage .entityMessage_right .createTime .frequency {
+	color: #999;
+}
+
+.songList thead .songName_td {
+	width: 61%;
+}
+
+.songList tbody .top3 {
+	height: 60px;
+}
+
+.songList tbody .num {
+	float: left;
+	width: 17px;
+}
+
+.songList tbody .riseOrDecline {
+	float: left;
+	padding: 0 10px 0 0;
+}
+
+.songList tbody .riseOrDecline i {
+	font-size: 0.7em;
+	color: inherit;
+}
+
+.songList tbody .rise {
+	color: #e60000;
+}
+
+.songList tbody .none {
+	color: #999;
+}
+
+.songList tbody .decline {
+	color: #00cacc;
+}
+
+.songList tbody .new {
+	color: #18a700;
+}
+
+.songList tbody img {
+    width: 40px;
+    display: inline-block;
+    vertical-align: middle;
+    cursor: pointer;
+    height: 40px;
+    padding: 0 10px 0 0;
+}
+
+.songList tbody .play {
+	float: none;
+	vertical-align: middle;
+}
+
+.songList tbody .remark {
+	color: #999;
+}
+
+.songList tbody .top3 .hidden {
+	padding: 15px 0 15px 10px;
+}
+
+.material .material_right {
+	padding: 20px 0 !important;
+	background: #f9f9f9;
+}
+
+.material_right .select {
+	
+}
+
+.select h3 {
+	text-indent: 10px;
+	border: 0;
+	margin: 0 0 10px 0;
+	font-size: 1.1em;
+}
+
+.select .option {
+	height: 60px;
+	padding: 10px 0 10px 20px;
+	box-sizing: border-box;
+	cursor: pointer;
+}
+
+.select .option:hover {
+	background: #f4f2f2;
+}
+
+.select .now {
+	background: #e6e6e6;
+}
+
+.select .now:hover {
+	background: #e6e6e6;
+}
+
+.option img {
+	width: 40px !important;
+}
+
+.option .option_right {
+	
+}
+
+.option .option_right .name:hover {
+	text-decoration: inherit !important;
+}
+
+.option .option_right .time {
+	cursor: pointer;
+}
+</style>
+<body>
+	<div class="head">
+		<div class="head_top">
+			<h1>
+				<a href="#">我的音乐网</a>
+			</h1>
+			<ul class="nav">
+				<li class="selected">发现音乐<i></i></li>
+				<li>我的音乐</li>
+				<li>朋友</li>
+				<li>下载客户端</li>
+			</ul>
+			<div class="search">
+				<i></i> <input id="search_global" class="search_input" type="input" name="song" placeholder="单曲/歌手/专辑/歌单/MV/用户">
+			</div>
+			<span class="msg"></span>
+			<div id="userDiv" class="user">
+				<span class="username"><img src="image/default.jpg">xiedacon<i></i></span>
+				<ul class="user_nav nav_login" style="display: none;">
+					<i></i>
+					<li>
+						<ul>
+							<li>我的主页</li>
+							<li>我的等级</li>
+							<li>付费音乐包</li>
+							<li>积分商城</li>
+						</ul>
+					</li>
+					<li>
+						<ul>
+							<li>个人设置</li>
+							<li>导入歌单</li>
+						</ul>
+					</li>
+					<li class="exit">退出</li>
+				</ul>
+				<ul class="user_nav nav_logout" style="display: none;">
+					<i></i>
+					<li>
+						<ul>
+							<li id="toLoginByPhoneDiv">手机号登录</li>
+							<li>微信登录</li>
+							<li>QQ登录</li>
+							<li>Github登录</li>
+						</ul>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<div class="head_bottom">
+			<ul class="subnav">
+				<li class="selected">推荐</li>
+				<li>排行榜</li>
+				<li>歌单</li>
+				<li>主播电台</li>
+				<li>歌手</li>
+				<li>新碟上架</li>
+			</ul>
+		</div>
+	</div>
+	<div class="body">
+		<div class="material">
+			<div class="material_left">
+				<div id="songList" class="entityMessage">
+					<div class="entityMessage_left">
+						<img src="">
+					</div>
+					<div class="entityMessage_right">
+						<h2></h2>
+						<p class="createTime">
+						</p>
+						<div class="buttons">
+							<div class="play_addToPlayList">
+								<span class="play"><i class="icomoon"></i><span>播放</span></span> <span class="addToPlaylist icomoon"></span>
+							</div>
+							<span class="collection button"><i class="icomoon"></i></span> <span class="share button"><i class="icomoon"></i></span> <span
+								class="download button"><i class="icomoon"></i>下载</span> <span class="comment button"><i class="icomoon"></i></span>
+						</div>
+					</div>
+				</div>
+				<div class="songList">
+					<div class="songList_top">
+						<h2>歌曲列表</h2>
+						<span class="songList_detail"></span>
+						<p class="top_right">
+							<span>播放：<i class="num"></i>次
+							</span>
+						</p>
+					</div>
+					<table>
+						<thead>
+							<tr>
+								<td class="first_td"></td>
+								<td class="songName_td">标题</td>
+								<td class="time_td">时长</td>
+								<td class="songer_td">歌手</td>
+							</tr>
+						</thead>
+						<tbody id="songs">
+							<tr class="prototype">
+								<td><span class="num"></span>
+									<div class="riseOrDecline"></div></td>
+								<td><i class="icomoon play"></i> <a class="songName" href="javascript:void(0);" onclick="jump(this);"></a> <span class="remark"></span>
+								</td>
+								<td><span class="time">03:13</span>
+									<p class="hidden">
+										<span class="addToPlaylist icomoon"></span> 
+										<span class="collection icomoon"></span> 
+										<span class="share icomoon"></span> 
+										<span class="download icomoon"></span>
+									</p></td>
+								<td><a class="songer" href="javascript:void(0);" onclick="jump(this);"></a></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<div class="commentList">
+					<div class="commentList_top">
+						<h2>评论</h2>
+						<span class="commentList_detail"></span>
+					</div>
+					<div class="commentList_middle">
+						<div class="newComment">
+							<img class="newComment_left" src="image/default.jpg">
+							<div class="newComment_right">
+								<s></s>
+								<textarea class="content"></textarea>
+								<div class="right_bottom">
+									<div class="left">
+										<i class="icomoon face"></i> <i class="icomoon at"></i>
+									</div>
+									<div class="right">
+										<span class="num">213</span> <span class="button">评论</span>
+									</div>
+								</div>
+							</div>
+						</div>
+						<ul id="commentList" class="comments">
+							<li class="comment prototype"><img src="" data-href="" onclick="jump(this);">
+								<div class="comment_left">
+									<p class="comment_material">
+										<a class="name" href="javascript:void(0);" data-href="" onclick="jump(this);"></a> <span class="content"></span>
+									</p>
+									<p class="comment_reply" style="display: none">
+										<i></i> <a class="name" href="javascript:void(0);" data-href="" onclick="jump(this);"></a> <span class="content"></span>
+									</p>
+									<div class="comment_bottom">
+										<span class="createTime"></span>
+										<div class="right">
+											<p>
+												<i class="icomoon"></i> <span class="num"></span>
+											</p>
+											<span class="interval">|</span> <span class="reply">回复</span>
+										</div>
+									</div>
+								</div></li>
+						</ul>
+					</div>
+					<div class="commentList_bottom">
+						<ul id="pages">
+						</ul>
+					</div>
+				</div>
+			</div>
+			<div class="material_right">
+				<ul id="specialList" class="select">
+					<h3>云音乐特色榜</h3>
+					<li class="option prototype" data-url="songList" data-href="" onclick="jump(this);"><img title="" src="">
+						<div class="option_right">
+							<span title="" class="name"></span> <span class="time"></span>
+						</div></li>
+				</ul>
+				<ul id="globeList" class="select">
+					<h3>全球媒体榜</h3>
+				</ul>
+			</div>
+		</div>
+	</div>
+	<div class="foot">
+		<p>@2016</p>
+	</div>
+</body>
+</html>

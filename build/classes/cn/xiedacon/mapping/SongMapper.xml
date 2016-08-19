@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.xiedacon.dao.SongDao">
+
+	<sql id="selectRequiredSql">
+		SELECT
+		sb.id id,
+		sb.name name,
+		sb.icon icon,
+		sb.time time,
+		sb.singerId singerId,
+		sb.singerName singerName,
+		sb.albumId albumId,
+		sb.albumName albumName,
+	</sql>
+	
+	<sql id="fromSong_baseSql">
+		FROM song_base sb
+	</sql>
+	
+	<sql id="orderByCollectionNumSql">
+		ORDER BY sr.collectionNum DESC
+	</sql>
+
+	<sql id="byIdSql">
+		WHERE sb.id = #{id}
+	</sql>
+	
+	<sql id="bySingerIdSql">
+		WHERE sb.singerId = #{singerId}
+	</sql>
+
+	<sql id="joinSong_recordSql">
+		INNER JOIN song_record sr ON sb.id = sr.id
+	</sql>
+
+	<sql id="limitSql">
+		LIMIT #{begin},#{limit}
+	</sql>
+
+	<select id="selectListBySongMenuIdOrderByRank" resultType="cn.xiedacon.vo.SimpleSongVo">
+		<include refid="selectRequiredSql"></include>
+		sgs.rank rank
+		<include refid="fromSong_baseSql"></include>
+		INNER JOIN
+		song_gl_songmenu sgs ON sgs.songId = sb.id
+		WHERE sgs.songMenuId = #{songMenuId}
+		ORDER BY sgs.rank ASC
+	</select>
+
+	<select id="selectListByAlbumIdOrderByRank" resultType="cn.xiedacon.vo.SimpleSongVo">
+		<include refid="selectRequiredSql"></include>
+		sga.rank rank
+		<include refid="fromSong_baseSql"></include>
+		INNER JOIN song_gl_album sga ON sga.songId = sb.id
+		WHERE sga.albumId = #{albumId}
+		ORDER BY sga.rank ASC
+	</select>
+
+	<select id="selectListBySongListIdOrderByRank" resultType="cn.xiedacon.vo.SimpleSongVo">
+		<include refid="selectRequiredSql"></include>
+		sgs.rank rank,
+		sgs.rankChange rankChange
+		<include refid="fromSong_baseSql"></include>
+		INNER JOIN song_gl_songlist sgs ON sgs.songId = sb.id
+		WHERE sgs.songListId = #{songListId}
+		ORDER BY sgs.rank ASC
+	</select>
+
+	<select id="selectById" resultType="cn.xiedacon.vo.SongVo">
+		<include refid="selectRequiredSql"></include>
+		sb.remark remark,
+		sr.commentNum commentNum
+		<include refid="fromSong_baseSql"></include>
+		<include refid="joinSong_recordSql"></include>
+		<include refid="byIdSql"></include>
+	</select>
+
+	<select id="selectLyricUriById" resultType="java.lang.String">
+		SELECT sb.lyricUri
+		<include refid="fromSong_baseSql"></include>
+		<include refid="byIdSql"></include>
+	</select>
+
+	<select id="selectListBySingerIdOrderByCollectionNumLimit" resultType="cn.xiedacon.vo.SongVo">
+		<include refid="selectRequiredSql"></include>
+		sr.collectionNum collectionNum
+		<include refid="fromSong_baseSql"></include>
+		<include refid="joinSong_recordSql"></include>
+		<include refid="bySingerIdSql"></include>
+		<include refid="orderByCollectionNumSql"></include>
+		<include refid="limitSql"></include>
+	</select>
+	
+	<select id="selectFileUriById" resultType="java.lang.String">
+		SELECT sb.fileUri
+		<include refid="fromSong_baseSql"></include>
+		<include refid="byIdSql"></include>
+	</select>
+</mapper>

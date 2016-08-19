@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.xiedacon.dao.CommentDao">
+
+	<resultMap type="cn.xiedacon.vo.CommentVo" id="commentVo">
+		<id property="id" column="id" />
+		<result property="content" column="content" />
+		<result property="createTime" column="createTime" />
+		<result property="agreeNum" column="agreeNum" />
+
+		<association property="creator" javaType="cn.xiedacon.vo.SimpleUserVo"
+			resultMap="simpleUserVo">
+		</association>
+	</resultMap>
+
+	<resultMap type="cn.xiedacon.vo.SimpleUserVo" id="simpleUserVo">
+		<result property="id" column="user_id" />
+		<result property="name" column="user_name" />
+		<result property="icon" column="user_icon" />
+	</resultMap>
+
+	<sql id="selectCommentVoSql">
+		SELECT
+		c.id id,
+		c.content content,
+		c.createTime createTime,
+		c.agreeNum agreeNum,
+		u.id user_id,
+		u.name user_name,
+		u.icon user_icon
+	</sql>
+
+	<sql id="selectCountSql">
+		SELECT
+		COUNT(c.id) count
+	</sql>
+
+	<sql id="joinUserSql">
+		LEFT JOIN user_base u ON c.creatorId = u.id
+	</sql>
+
+	<sql id="orderByCreateTimeSql">
+		ORDER BY c.createTime DESC
+	</sql>
+
+	<sql id="limitSql">
+		LIMIT #{begin},#{limit};
+	</sql>
+
+	<select id="selectListBySongMenuIdAndMINAgreeNum" resultMap="commentVo">
+		<include refid="selectCommentVoSql"></include>
+		FROM comment_songMenu c
+		<include refid="joinUserSql"></include>
+		WHERE c.songMenuId = #{songMenuId} AND c.agreeNum >= #{agreeNum}
+		<include refid="orderByCreateTimeSql"></include>
+	</select>
+
+	<select id="selectListBySongMenuId" resultMap="commentVo">
+		<include refid="selectCommentVoSql"></include>
+		FROM comment_songMenu c
+		<include refid="joinUserSql"></include>
+		WHERE c.songMenuId = #{songMenuId}
+		<include refid="orderByCreateTimeSql"></include>
+		<include refid="limitSql"></include>
+	</select>
+
+	<select id="selectCountBySongMenuId" resultType="java.lang.Integer">
+		<include refid="selectCountSql"></include>
+		FROM comment_songMenu c
+		WHERE c.songMenuId = #{songMenuId}
+	</select>
+
+	<select id="selectListByAlbumIdAndMINAgreeNum" resultMap="commentVo">
+		<include refid="selectCommentVoSql"></include>
+		FROM comment_album c
+		<include refid="joinUserSql"></include>
+		WHERE c.albumId = #{albumId} AND c.agreeNum >= #{agreeNum}
+		<include refid="orderByCreateTimeSql"></include>
+	</select>
+
+	<select id="selectListByAlbumId" resultMap="commentVo">
+		<include refid="selectCommentVoSql"></include>
+		FROM
+		comment_album c
+		<include refid="joinUserSql"></include>
+		WHERE
+		c.albumId = #{albumId}
+		<include refid="orderByCreateTimeSql"></include>
+		<include refid="limitSql"></include>
+	</select>
+
+	<select id="selectCountByAlbumId" resultType="java.lang.Integer">
+		<include refid="selectCountSql"></include>
+		FROM
+		comment_Album c
+		WHERE
+		c.albumId = #{albumId}
+	</select>
+
+	<select id="selectListBySongListId" resultMap="commentVo">
+		<include refid="selectCommentVoSql"></include>
+		FROM
+		comment_songlist c
+		<include refid="joinUserSql"></include>
+		WHERE c.songListId = #{songListId}
+		<include refid="orderByCreateTimeSql"></include>
+		<include refid="limitSql"></include>
+	</select>
+
+	<select id="selectCountBySongListId" resultType="java.lang.Integer">
+		<include refid="selectCountSql"></include>
+		FROM comment_songlist c
+		WHERE c.songListId = #{songListId}
+	</select>
+
+	<select id="selectListBySongListIdAndMINAgreeNum" resultMap="commentVo">
+		<include refid="selectCommentVoSql"></include>
+		FROM
+		comment_songlist c
+		<include refid="joinUserSql"></include>
+		WHERE c.songListId = #{songListId} AND c.agreeNum >= #{agreeNum}
+		<include refid="orderByCreateTimeSql"></include>
+	</select>
+	
+	<select id="selectListBySongId" resultMap="commentVo">
+		<include refid="selectCommentVoSql"></include>
+		FROM
+		comment_song c
+		<include refid="joinUserSql"></include>
+		WHERE c.songId = #{songId}
+		<include refid="orderByCreateTimeSql"></include>
+		<include refid="limitSql"></include>
+	</select>
+
+	<select id="selectCountBySongId" resultType="java.lang.Integer">
+		<include refid="selectCountSql"></include>
+		FROM comment_song c
+		WHERE c.songId = #{songId}
+	</select>
+
+	<select id="selectListBySongIdAndMINAgreeNum" resultMap="commentVo">
+		<include refid="selectCommentVoSql"></include>
+		FROM
+		comment_song c
+		<include refid="joinUserSql"></include>
+		WHERE c.songId = #{songId} AND c.agreeNum >= #{agreeNum}
+		<include refid="orderByCreateTimeSql"></include>
+	</select>
+</mapper>

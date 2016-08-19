@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<!-- 禁用缓存 -->
+<META HTTP-EQUIV="pragma" CONTENT="no-cache">
+<META HTTP-EQUIV="Cache-Control" CONTENT="no-store, must-revalidate">
+<META HTTP-EQUIV="expires" CONTENT="Wed, 26 Feb 1997 08:21:57 GMT">
+<META HTTP-EQUIV="expires" CONTENT="0">
+<link rel="stylesheet" type="text/css" href="css/reset.css">
+<link rel="stylesheet" type="text/css" href="css/common.css">
+<link rel="icon" href="image/web.jpg">
+<title></title>
+</head>
+<script type="text/javascript" src="js/jquery-1.12.1.js"></script>
+<script type="text/javascript" src="js/router.js"></script>
+<script type="text/javascript">
+	window.router.start({
+		view : '#body',
+		routerMap : {
+			'index' : {
+				templateUrl : 'html/index',
+				controller : 'js/index.js'
+			},
+			'songMenu' : {
+				templateUrl : 'html/songMenu-detail',
+				controller : 'js/songMenu-detail.js'
+			},
+			'album' : {
+				templateUrl : 'html/album-detail',
+				controller : 'js/album-detail.js'
+			},
+			'albums' : {
+				templateUrl : 'html/album-total',
+				controller : 'js/album-total.js'
+			},
+			'home' : {
+				templateUrl : 'html/homePage',
+				controller : 'js/homePage.js'
+			},
+			'myMessage' : {
+				templateUrl : 'html/myMessage',
+				controller : 'js/myMessage.js'
+			},
+			'myMusic' : {
+				templateUrl : 'html/myMusic',
+				controller : 'js/myMusic.js'
+			},
+			'personal' : {
+				templateUrl : 'html/personalPage',
+				controller : 'js/personalPage.js'
+			},
+			'song' : {
+				templateUrl : 'html/song-detail',
+				controller : 'js/song.js'
+			},
+			'singer' : {
+				templateUrl : 'html/singer-detail',
+				controller : 'js/singer-detail.js'
+			},
+			'singers' : {
+				templateUrl : 'html/singer-total',
+				controller : 'js/singer-total.js'
+			},
+			'songList' : {
+				templateUrl : 'html/songList',
+				controller : 'js/songList.js'
+			},
+			'songMenus' : {
+				templateUrl : 'html/songMenu-total',
+				controller : 'js/songMenu-total.js'
+			}
+		},
+		defaults : 'index'
+	})
+
+	function jump(ele) {
+		if ($(ele).hasClass(".selected")) {
+			return false;
+		}
+		var url = $(ele).attr("data-url");
+		$(".head .subnav li").removeClass("selected");
+		if (url) {
+			$(".head .subnav li[data-url=" + url + "]").addClass("selected");
+		}
+
+		var href = $(ele).attr("data-href");
+
+		if (!href) {
+			href = url;
+		}
+		if (href) {
+			router.startRouter(href);
+		}
+	}
+</script>
+<body>
+	<div id="hiddenDiv" class="hiddenDiv" style="visibility: hidden; -webkit-user-select: none;">
+		<div id="loginDiv" class="loginDiv" style="display: none;">
+			<p class="login_head">
+				<span>登录</span> <i class="exit"></i>
+			</p>
+			<div class="login_material">
+				<div class="left">
+					<img src="image/platform.png"> <span id="toLoginByPhone" class="login">手机号登录</span> <span id="toRegistByPhone" class="regist">注
+						册</span>
+				</div>
+				<div class="right">
+					<a href="#"><i class="login_weixin"></i><span>微信登录</span></a> <a href="#"><i class="login_qq"></i><span>qq登录</span></a> <a href="#"><i
+						class="login_weibo"></i><span>微博登录</span></a> <a
+						href="https://github.com/login/oauth/authorize?client_id=59f4ab7b27a8f27766a3&redirect_uri=http://127.0.0.1:8080/music/user/oAuth_github&state=1&scope=user%20public_repo&allow_signup=false"><i
+						class="login_github"></i><span>Github登录</span></a>
+				</div>
+			</div>
+			<div class="login_foot"></div>
+		</div>
+		<div id="loginByPhoneDiv" class="loginByPhone loginDiv" style="display: none;">
+			<p class="login_head">
+				<span>手机号登录</span> <i class="exit"></i>
+			</p>
+			<div class="login_material">
+				<input onkeyup="this.value = this.value.replace(/\D/g,'')" type="text" name="phone" placeholder="请输入手机号"> <input type="password"
+					name="password" placeholder="请输入密码"> <span class="message errorMessage" style="display: none"><i></i>手机号或密码错误</span>
+				<p class="desc">
+					<input type="checkbox" name="login_auto" checked="checked"> <span class="auto">自动登录</span> <span class="forget">忘记密码？</span>
+				</p>
+				<span class="login">登 录</span>
+			</div>
+			<div class="login_foot">
+				<span class="foot_left otherway">&lt; 其他登录方式</span> <span class="foot_right toRegistByPhone">没有账号？免费注册 ></span>
+			</div>
+		</div>
+		<div id="registByPhoneDiv" class="registByPhone loginDiv" style="display: none;">
+			<p class="login_head">
+				<span>手机号注册</span> <i class="exit"></i>
+			</p>
+			<div class="login_material">
+				<span class="name">手机号：</span>
+				<div>
+					<i class="area">+86</i> <input onkeyup="this.value = this.value.replace(/\D/g,'')" class="phonenum" type="text" name="phone"
+						placeholder="请输入手机号">
+				</div>
+				<span class="name">密码：</span> <input type="password" name="password" placeholder="设置登录密码，不少于6位"> <span class="message errorMessage"
+					style="display: none"><i></i>手机号或密码错误</span> <span class="login">下一步</span>
+			</div>
+			<div class="login_foot">
+				<span class="toLogin foot_left">&lt; 返回登录</span>
+			</div>
+		</div>
+		<div id="checkCaptchaDiv" class="checkCaptcha loginDiv" style="display: none;">
+			<p class="login_head">
+				<span>手机号注册</span> <i class="exit"></i>
+			</p>
+			<div class="login_material">
+				<p>
+					你的手机号：<span class="phonenum">111****1231</span> <span class="regist_message">为了安全，我们会给你发送短信验证码</span>
+				</p>
+				<p>
+					<input type="text" name="captcha" onkeyup="this.value = this.value.replace(/\D/g,'')" placeholder="请输入验证码"> <span class="regist">重新发送</span>
+					<!-- <span class="regist_send">00:00</span> -->
+					<span class="message errorMessage" style="display: none"><i></i>请输入验证码</span>
+				</p>
+				<span class="login">下一步</span>
+			</div>
+			<div class="login_foot">
+				<span class="foot_left toLogin">&lt; 返回登录</span>
+			</div>
+		</div>
+		<div id="usernameDiv" class="msg loginDiv" style="display: none;">
+			<div class="login_head">
+				<span>手机号注册</span> <i class="exit"></i>
+			</div>
+			<div class="login_material">
+				<p>取一个昵称，让大家记住你</p>
+				<input name="username" type="text" class="name" placeholder="昵称不少于4个字母或汉字"> <span class="message errorMessage"
+					style="display: none; margin: 10px auto 0 auto; width: 70%;"><i></i>该昵称已被占用</span> <span style="width: 70%;" class="login">开启云音乐</span>
+			</div>
+		</div>
+		<div id="msgDiv" class="msg loginDiv" style="display: none;">
+			<div class="login_head">
+				<span></span> <i class="exit"></i>
+			</div>
+			<div class="login_material">
+				<p></p>
+				<span class="login">知道了</span>
+			</div>
+		</div>
+		<div id="collectionDiv" class="collectionDiv loginDiv" style="display: none">
+			<div class="login_head">
+				<span>添加到歌单</span> <i class="exit"></i>
+			</div>
+			<div class="login_material">
+				<p class="newMenu menu">
+					<i class="icomoon"></i> <span class="new">新歌单</span>
+				</p>
+				<p class="menu prototype">
+					<img src=""> 
+					<span class="menu_right"> 
+						<span class="name"></span> 
+						<span class="num"></span>
+					</span>
+				</p>
+			</div>
+		</div>
+		<div id="addMenuDiv" class="addMenuDiv loginDiv" style="display: none">
+			<div class="login_head">
+				<span>新建歌单</span> <i class="exit"></i>
+			</div>
+			<div class="login_material">
+				<p class="material">
+					<span class="">歌单名：</span> <input class="name" type="text" name="name"> <span class="message errorMessage" style="display: none"><i></i>手机号或密码错误</span>
+				</p>
+				<p class="desc">可通过“收藏”将音乐添加到新歌单中</p>
+				<div class="buttons">
+					<span class="login">新建</span> <span class="regist">取消</span>
+				</div>
+			</div>
+		</div>
+		<div id="simpleMsgDiv" style="display: none; visibility: visible;">
+			<p>
+				<i class="icomoon"></i><span></span>
+			</p>
+		</div>
+		<div id="musicDiv" class="music" style="visibility: visible; -webkit-user-select: none;">
+			<audio id="music"></audio>
+			<div class="music_left">
+				<span class="previous" title="上一首(ctrl+←)"></span> <span class="middle" title="播放/暂停(p)"></span> <span class="next" title="下一首(ctrl+→)"></span>
+			</div>
+			<audio src="" autoplay="autoplay"></audio>
+			<div class="music_middle">
+				<a href="javascript:void(0);" onclick="jump(this);"><img src="image/default_album.jpg"></a>
+				<div class="song">
+					<div class="song_top">
+						<a href="javascript:void(0);" onclick="jump(this);" class="song_name song_span" title=""></a> <a href="javascript:void(0);"
+							onclick="jump(this);" class="songer song_span" title=""></a> <a href="javascript:void(0);" onclick="jump(this);" class="from icomoon"
+							title="来自榜单" style="display: none"></a>
+					</div>
+					<div class="song_bottom">
+						<div class="progress">
+							<div class="downloading"></div>
+							<div class="playing"></div>
+							<div class="point">
+								<div class="inner"></div>
+							</div>
+						</div>
+						<span class="time" style="display: none"> <span class="now">00:00</span>/<span class="total">00:00</span>
+						</span>
+					</div>
+				</div>
+				<span class="collection" title="收藏" onclick="hiddenDiv.showDiv('collectionDiv')"></span> <span class="share icomoon" title="分享"></span>
+			</div>
+			<div class="music_right">
+				<div class="volumeDiv">
+					<span class="volume" title="音量"></span>
+					<div id="volumeDiv" class="volume_hidden" style="display: none">
+						<div class="max">
+							<div class="now"></div>
+							<div class="point">
+								<div class="inner"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="playModeDiv">
+					<span class="playMode" title="循环"></span> <i style="display: none">循环</i>
+				</div>
+				<div class="playListDiv">
+					<div class="playList" title="播放列表">
+						<span class="songList icomoon"></span> <span class="num">0</span>
+						<p class="message" style="display: none;">
+							<span class="content"></span><i></i>
+						</p>
+					</div>
+				</div>
+			</div>
+			<span class="show"><i class="icomoon"></i></span>
+		</div>
+		<div id="playListDiv" class="playList_hidden" style="display: none;">
+			<div class="playList_hidden_top">
+				<div class="list_head">
+					<p class="head_left">
+						播放列表(<span class="num"></span>)
+					</p>
+					<p class="head_right">
+						<span class="collectionAllSpan"> <i class="icomoon"></i> <span class="collectionAll">收藏全部</span>
+						</span> <span class="clearSpan"> <i class="icomoon"></i> <span class="clear">清除</span>
+						</span>
+					</p>
+				</div>
+				<div class="song_head">
+					<span class="songName">歌名</span> <i class="icomoon"></i>
+				</div>
+			</div>
+			<div class="playList_hidden_bottom">
+				<ul class="list_body">
+					<li class="none" style="display: none">
+						<p>你还没有添加任何歌曲</p>
+						<p>
+							去首页<span>发现音乐</span>，或在<span>我的音乐</span>收听自己收藏的歌单
+						</p>
+					</li>
+					<li class="song prototype"><a href="javascript:void(0);" class="songName"></a>
+						<p class="song_hidden">
+							<i class="collection icomoon" onclick="hiddenDiv.collection();" title="收藏"></i> <i class="share icomoon" title="分享"></i> <i
+								class="download icomoon" title="下载"></i> <i class="delete icomoon" title="删除"></i>
+						</p> <a href="javascript:void(0);" onclick="jump(this);" class="songer"></a> <span class="time"></span> <i class="icomoon from"
+						onclick="jump(this);" style="display: none;"></i></li>
+				</ul>
+				<div id="listScrollDiv" class="barrier scroll">
+					<div class="vernier"></div>
+				</div>
+				<div class="song_body">
+					<div class="lrc">
+						<p>大火烧开电话卡</p>
+						<p>大火烧开电话卡</p>
+						<p>大火烧开电话卡</p>
+						<p>大火烧开电话卡</p>
+						<p>大火烧开电话卡</p>
+						<p>大火烧开电话卡</p>
+						<p class="now">大火烧开电话卡</p>
+						<p>大火烧开电话卡</p>
+						<p>大火烧开电话卡</p>
+						<p>大火烧开电话卡</p>
+						<p>大火烧开电话卡</p>
+						<p>大火烧开电话卡</p>
+						<p>大火烧开电话卡</p>
+						<p>大火烧开电话卡</p>
+						<p>大火烧开电话卡</p>
+						<p>大火烧开电话卡</p>
+						<p>大火烧开电话卡</p>
+					</div>
+					<div class="fullScreen icomoon"></div>
+					<div class="exitFullScreen icomoon"></div>
+					<div id="songScrollDiv" class="scroll">
+						<div class="vernier"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="head">
+		<div class="head_top">
+			<h1>
+				<a href="index">我的音乐网</a>
+			</h1>
+			<ul class="nav">
+				<li id="findMusic" data-url="index" onclick="jump(this);" class="selected">发现音乐<i></i></li>
+				<li id="myMusic" data-url="myMusic" onclick="jump(this);">我的音乐</li>
+				<li onclick="alert('暂无')">朋友</li>
+				<li onclick="alert('暂无')">下载客户端</li>
+			</ul>
+			<div class="search">
+				<i></i> <input id="search_global" class="search_input" type="text" name="song" placeholder="单曲/歌手/专辑/歌单/MV/用户">
+			</div>
+			<span data-url="myMessage" onclick="jump(this);" class="msg"></span>
+			<div id="userDiv" class="user">
+				<span class="username"><img src=""><i></i></span>
+				<ul class="user_nav nav_login" style="display: none;">
+					<i></i>
+					<li>
+						<ul>
+							<li data-url="home" onclick="jump(this);">我的主页</li>
+							<li onclick="alert('暂无');">我的等级</li>
+							<li onclick="alert('暂无');">付费音乐包</li>
+							<li onclick="alert('暂无');">积分商城</li>
+						</ul>
+					</li>
+					<li>
+						<ul>
+							<li data-url="personal" onclick="jump(this);">个人设置</li>
+							<li onclick="alert('暂无');">导入歌单</li>
+						</ul>
+					</li>
+					<li class="exit" onclick="userDiv.logout();">退出</li>
+				</ul>
+				<ul class="user_nav nav_logout" style="display: none;">
+					<i></i>
+					<li>
+						<ul>
+							<li onclick="hiddenDiv.showDiv('loginByPhoneDiv')">手机号登录</li>
+							<li>微信登录</li>
+							<li>QQ登录</li>
+							<li><a
+								href="https://github.com/login/oauth/authorize?client_id=59f4ab7b27a8f27766a3&redirect_uri=http://127.0.0.1:8080/music/user/oAuth_github&state=1&scope=user%20public_repo&allow_signup=false">Github登录</a></li>
+						</ul>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<div class="head_bottom">
+			<ul class="subnav">
+				<li class="selected" data-url="index" onclick="jump(this);">推荐</li>
+				<li data-url="songList" data-href="songList/{1}" onclick="jump(this);">排行榜</li>
+				<li data-url="songMenus" onclick="jump(this);">歌单</li>
+				<li onclick="alert('暂无')"">主播电台</li>
+				<li data-url="singers" data-href="singers/hot" onclick="jump(this);">歌手</li>
+				<li data-url="albums" onclick="jump(this);">新碟上架</li>
+			</ul>
+		</div>
+	</div>
+	<div id="body" class="body"></div>
+	<div class="foot">
+		<p>&copy;2016</p>
+	</div>
+	<div id="back" title="返回上一页" style="display: block" onclick="router.back();"><</div>
+	<div id="top" title="返回顶部">Top</div>
+</body>
+<script type="text/javascript" src="js/common.js"></script>
+<script type="text/javascript" src="js/md5.js"></script>
+<script type="text/javascript">
+	$(".head_top .nav").children("li[id]").click(function() {
+		$(this).addClass("selected") //
+		.siblings().removeClass("selected");
+		
+		if($(this).attr("id") === "findMusic"){
+			$(".head_bottom .subnav").css("display","inherit");
+		}else{
+			$(".head_bottom .subnav").css("display","none");
+		}
+	})
+</script>
+</html>

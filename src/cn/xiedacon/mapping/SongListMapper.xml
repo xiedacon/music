@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.xiedacon.dao.SongListDao">
+
+	<resultMap type="cn.xiedacon.vo.SimpleSongVo" id="simpleSongResultMap">
+		<id property="id" column="song_id" />
+		<result property="name" column="song_name" />
+		<result property="icon" column="song_icon" />
+		<result property="time" column="song_time" />
+		<result property="singerId" column="song_singerId" />
+		<result property="singerName" column="song_singerName" />
+		<result property="albumId" column="song_albumId" />
+		<result property="albumName" column="song_albumName" />
+		<result property="rank" column="song_rank" />
+	</resultMap>
+	
+	<resultMap type="cn.xiedacon.vo.SimpleSongListVo" id="simpleSongListResultMap">
+		<id property="id" column="songList_id"/>
+		<result property="name" column="songList_name" />
+		<result property="icon" column="songList_icon" />
+
+		<collection property="songs" javaType="java.util.ArrayList"
+			ofType="cn.xiedacon.vo.SimpleSongVo" resultMap="simpleSongResultMap" />
+	</resultMap>
+
+
+	<select id="selectSongListsByIds" parameterType="java.lang.reflect.Array"
+		resultMap="simpleSongListResultMap">
+		SELECT
+		slb.id songList_id,
+		slb.name songList_name,
+		slb.icon songList_icon,
+		sb.id song_id,
+		sb.name song_name,
+		sb.icon song_icon,
+		sb.time song_time,
+		sb.singerId song_singerId,
+		sb.singerName song_singerName,
+		sb.albumId song_albumId,
+		sb.albumName song_albumName,
+		sgs.rank song_rank
+		FROM
+		songList_base
+		slb
+		LEFT JOIN song_gl_songList sgs ON sgs.songListId = slb.id
+		LEFT JOIN
+		song_base sb ON sb.id = sgs.songId
+		WHERE
+		slb.id in
+		<foreach collection="songListIds" open="(" separator="," close=")"
+			item="item">
+			#{item}
+		</foreach>
+		ORDER BY slb.id ASC, sgs.rank ASC
+	</select>
+	
+	<select id="selectById"
+		resultType="cn.xiedacon.vo.SongListVo">
+		SELECT
+		s.id id,
+		s.name name,
+		s.icon icon,
+		s.refreshRate refreshRate,
+		s.refreshDate refreshDate,
+		s.songNum songNum,
+		sr.collectionNum collectionNum,
+		sr.shareNum shareNum,
+		sr.commentNum commentNum,
+		sr.playNum playNum
+		FROM
+		songList_base s
+		INNER JOIN songlist_record sr ON s.id = sr.id
+		WHERE s.id = #{id}
+	</select>
+	
+	<select id="selectList"
+		resultType="cn.xiedacon.vo.SongListVo">
+		SELECT
+		s.id id,
+		s.name name,
+		s.icon icon,
+		s.refreshRate refreshRate,
+		s.globe globe
+		FROM
+		songList_base s
+	</select>
+
+</mapper>

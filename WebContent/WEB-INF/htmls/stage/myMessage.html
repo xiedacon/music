@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <link rel="stylesheet" type="text/css" href="css/reset.css">
+        <link rel="stylesheet" type="text/css" href="css/common.css">
+        <title>我的消息</title>
+    </head>
+    <style type="text/css">
+.material .material_left{
+    width: 18%;
+    background: #fbfbfb;
+    padding: 20px 0;
+}
+.material .material_left h2{
+    font-size: 1.2em;
+    font-family: "Microsoft Yahei", Arial, Helvetica, sans-serif;
+    padding: 0 0 0 30px;
+    line-height: 40px;
+}
+.material .material_left .select{
+    background: #f7f7f7;
+    border-top: 1px #D3D3D3 solid;
+    font-size: 0.8em;
+    color: #333;
+}
+.material_left .select .option{
+    border-bottom: 1px #D3D3D3 solid;
+    line-height: 55px;
+    height: 55px;
+    box-sizing: border-box;
+    padding: 0 0 0 30px;
+    cursor: pointer;
+}
+.material_left .select .option:hover{
+    background: #fff;
+}
+.material_left .select .now{
+    position: relative;
+    background: #fff;
+    transform: translate(1px,0);
+}
+.material_left .select .option i{
+    cursor: pointer;
+    font-size: 1.7em;
+    vertical-align: bottom;
+    color: #999;
+    padding: 0 5px 0 0;
+}
+.material .material_right{
+    width: 82%;
+    padding: 40px;
+}
+.material .material_right .material_right_top{
+    font-size: 0.9em;
+    font-weight: bolder;
+    line-height: 30px;
+    border-bottom: 2px #e60000 solid;
+    font-family: Arial, Helvetica, sans-serif;
+}
+.material_right_top .sendMessage{
+    float: right;
+    font-weight: 100;
+    height: 26px;
+    padding: 0 10px;
+    border: 1px #d6d6d6 solid;
+    box-sizing: border-box;
+    border-radius: 3px;
+    font-size: 0.8em;
+    line-height: 26px;
+    box-shadow: 0 1px #d6d6d6;
+    cursor: pointer;
+}
+.material .material_right .messages{
+
+}
+.messages .message{
+    border: 0;
+    border-bottom: 1px #ececec solid;
+    padding: 17px 10px;
+    cursor: pointer;
+}
+.messages .message:hover{
+    background: #f5f5f5;
+}
+.messages .message:hover .message_rightF .delete{
+    display: block;
+}
+.messages .message:hover .message_rightF .link{
+    display: block;
+}
+.message img{
+    width: 50px;
+    height: 50px;
+    vertical-align: top;
+    cursor: pointer;
+}
+.message .message_midde{
+    display: inline-block;
+    width: 80%;
+    cursor: pointer;
+}
+.message .message_midde .name{
+    line-height: 20px;
+    border: 0;
+    font-size: 0.9em;
+    font-weight: bolder;
+    cursor: pointer;
+}
+.message .message_midde .name:hover{
+    text-decoration: underline;
+}
+.message .message_midde .content{
+    font-size: 0.8em;
+    color: #888;
+    line-height: 20px;
+    border: 0;
+    cursor: pointer;
+}
+.message .message_rightF{
+    float: right;
+    line-height: 20px;
+    border: 0;
+    font-weight: 100;
+    color: #999;
+    cursor: pointer;
+}
+.message .message_rightF .time{
+    cursor: pointer;
+    font-size: 0.8em;
+}
+.message .message_rightF .time i{
+    color: #999;
+    padding: 0 0 0 5px;
+    font-size: 1.2em;
+    cursor: pointer;
+}
+.message .message_rightF .delete{
+    float: right;
+    color: #0c73c2;
+    cursor: pointer;
+    display: none;
+    font-size: 0.8em;
+}
+.message .message_rightF .link{
+    float: right;
+    color: #0c73c2;
+    cursor: pointer;
+    display: none;
+    font-size: 0.8em;
+}
+.message .message_rightF .link:hover{
+    text-decoration: underline;
+}
+.message .message_rightF .delete:hover{
+    text-decoration: underline;
+}
+
+
+
+
+
+
+
+
+
+    </style>
+    <script type="text/javascript" src="js/jquery-1.12.1.js"></script>
+    <script type="text/javascript" src="js/common.js"></script>
+    <script type="text/javascript">
+    $(document).ready(function(){
+        userDiv.init()
+        hiddenDiv.init();
+    })
+    </script>
+    <body>
+        <div id="hiddenDiv" class="hiddenDiv" style="visibility: hidden;-webkit-user-select: none;">
+            <div id="loginDiv" class="loginDiv" style="display: none;">
+                <p class="login_head">
+                    <span>登录</span>
+                    <i class="exit"></i>
+                </p>
+                <div class="login_material">
+                    <div class="left">
+                        <img src="image/platform.png">
+                        <span id="toLoginByPhone" class="login">手机号登录</span>
+                        <span id="toRegistByPhone" class="regist">注  册</span>
+                    </div>
+                    <div class="right">
+                        <a href="#"><i class="login_weixin"></i><span>微信登录</span></a>
+                        <a href="#"><i class="login_qq"></i><span>qq登录</span></a>
+                        <a href="#"><i class="login_weibo"></i><span>微博登录</span></a>
+                        <a href="#"><i class="login_github"></i><span>Github登录</span></a>
+                    </div>
+                </div>
+                <div class="login_foot">
+                </div>
+            </div>
+
+            <div id="loginByPhoneDiv" class="loginByPhone loginDiv" style="display: none;">
+                <p class="login_head">
+                    <span>手机号登录</span>
+                    <i class="exit"></i>
+                </p>
+                <div class="login_material">
+                    <input type="text" name="phone" placeholder="请输入手机号">
+                    <input type="password" name="password" placeholder="请输入密码">
+                    <span class="message errorMessage" style="display: none"><i></i>手机号或密码错误</span>
+                    <p class="desc">
+                        <input type="checkbox" name="login_auto" checked="checked">
+                        <span class="auto">自动登录</span>
+                        <span class="forget">忘记密码？</span>
+                    </p>
+                    <span class="login" name="submit">登 录</span>
+                </div>
+                <div class="login_foot">
+                    <span class="foot_left otherway">< 其他登录方式</span>
+                    <span class="foot_right toRegistByPhone">没有账号？免费注册 ></span>
+                </div>
+            </div>
+
+                <div id="registByPhoneDiv" class="registByPhone loginDiv" style="display: none;">
+                    <p class="login_head">
+                        <span>手机号注册</span>
+                        <i class="exit"></i>
+                    </p>
+                    <div class="login_material">
+                        <span class="name">手机号：</span>
+                        <div>
+                            <i class="area">+86</i>
+                            <input class="phonenum" type="text" name="phone" placeholder="请输入手机号">
+                        </div>
+                        <span class="name">密码：</span>
+                        <input type="password" name="password" placeholder="设置登录密码，不少于6位" ">
+                        <span class="message errorMessage" style="display: none"><i></i>手机号或密码错误</span>
+                        <span class="login">下一步</span>
+                    </div>
+                    <div class="login_foot">
+                        <span class="toLogin foot_left">< 返回登录</span>
+                    </div>
+                </div>
+
+                <div id="checkCaptchaDiv" class="checkCaptcha loginDiv" style="display: none;">
+                    <p class="login_head">
+                        <span>手机号注册</span>
+                        <i class="exit"></i>
+                    </p>
+                    <div class="login_material">
+                        <p>你的手机号：<span class="phonenum">111****1231</span>
+                        <span class="regist_message">为了安全，我们会给你发送短信验证码</span></p>
+                        <p>
+                            <input type="text" name="captcha" placeholder="请输入验证码">
+                            <span class="regist">重新发送</span>
+                            <!-- <span class="regist_send">00:00</span> -->
+                            <span class="message errorMessage" style="display: none"><i></i>请输入验证码</span>
+                        </p>
+                        <span class="login">下一步</span>
+                    </div>
+                    <div class="login_foot">
+                        <span class="foot_left toLogin">< 返回登录</span>
+                    </div>
+                </div>
+
+
+                <div id="msgDiv" class="msg loginDiv" style="display: none;">
+                    <div class="login_head">
+                        <span>手机号注册</span>
+                        <i class="exit"></i>
+                    </div>
+                    <div class="login_material">
+                        <p>该手机号已与云音乐帐号<span> xiedacon </span>绑定，<br/>以后你可以直接用该手机号+密码登录</p>
+                        <span class="login">知道了</span>
+                    </div>
+                </div>
+
+                <div id="collectionDiv" class="collectionDiv loginDiv" style="display: none">
+                    <div class="login_head">
+                        <span>添加到歌单</span>
+                        <i class="exit"></i>
+                    </div>
+                    <div class="login_material">
+                        <p class="newMenu menu">
+                            <i class="icomoon"></i>
+                            <span class="new">新歌单</span>
+                        </p>
+                        <p class="love menu">
+                            <i class="icomoon"></i>
+                            <img src="image/song/1373290027359153.jpg">
+                            <span class="menu_right">
+                                <span class="name">我喜欢的音乐</span>
+                                <span class="num">0首</span>
+                            </span>
+                        </p>
+                        <p class="menu">
+                            <img src="image/song/1373290027359153.jpg">
+                            <span class="menu_right">
+                                <span class="name">哈哈哈</span>
+                                <span class="num">0首</span>
+                            </span>
+                        </p>
+                    </div>
+                </div>
+
+                <div id="addMenuDiv" class="addMenuDiv loginDiv" style="display: none">
+                    <div class="login_head">
+                        <span>新建歌单</span>
+                        <i class="exit"></i>
+                    </div>
+                    <div class="login_material">
+                        <p class="material">
+                            <span class="">歌单名：</span>
+                            <input class="name" type="text" name="name">
+                            <span class="message errorMessage" style="display: none"><i></i>手机号或密码错误</span>
+                        </p>
+                        <p class="desc">可通过“收藏”将音乐添加到新歌单中</p>
+                        <div class="buttons">
+                            <span class="login">新建</span>
+                            <span class="regist">取消</span>
+                        </div>
+                    </div>
+                </div>
+
+            <div id="musicDiv" class="music" style="visibility: visible;-webkit-user-select: none;">
+                <div class="music_left">
+                    <span class="previous" title="上一首(ctrl+←)"></span>
+                    <span class="middle" title="播放/暂停(p)"></span>
+                    <span class="next" title="下一首(ctrl+→)"></span>
+                </div>
+                <div class="music_middle">
+                    <img src="image/default_album.jpg">
+                    <div class="song">
+                        <div class="song_top">
+                            <span class="song_name song_span" title="歌名">歌名</span>
+                            <span class="songer song_span" title="歌手">歌手</span>
+                            <span class="from icomoon" title="来自榜单"></span>
+                        </div>
+                        <div class="song_bottom">
+                            <div class="progress">
+                                <div class="downloading"></div>
+                                <div class="playing"></div>
+                                <div class="point">
+                                    <div class="inner"></div>
+                                </div>
+                            </div>
+                            <span class="time"><span class="now">00:00</span>/00:00</span>
+                        </div>
+                    </div>
+                    <span class="collection" title="收藏"></span>
+                    <span class="share icomoon" title="分享"></span>
+                </div>
+                <div class="music_right">
+                    <div class="volumeDiv">
+                        <span class="volume" title="音量"></span>
+                        <div id="volumeDiv" class="volume_hidden" style="display: none">
+                            <div class="max">
+                                <div class="now"></div>
+                                <div class="point">
+                                    <div class="inner"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="playModeDiv">
+                        <span class="playMode" title="循环"></span>
+                        <i style="display: none">循环</i>
+                    </div>
+                    <div class="playListDiv">
+                        <div class="playList" title="播放列表">
+                            <span class="songList icomoon"></span>
+                            <span class="num">0</span>
+                        </div>
+                    </div>
+                </div>
+                <span class="show"><i class="icomoon"></i></span>
+            </div>
+
+    <div id="playListDiv" class="playList_hidden" style="display: none;">
+                <div class="playList_hidden_top">
+                    <div class="list_head">
+                        <p class="head_left">播放列表(3)</p>
+                        <p class="head_right">
+                            <span class="collectionAllSpan"><i class="icomoon"></i><span class="collectionAll">收藏全部</span></span>
+                            <span class="clearSpan"><i class="icomoon"></i><span class="clear">清除</span></span>
+                        </p>
+                    </div>
+                    <div class="song_head">
+                        <span class="songName">歌名</span>
+                        <i class="icomoon"></i>
+                    </div>
+                </div>
+                <div class="playList_hidden_bottom">
+                    <ul class="list_body">
+                        <li class="none" style="display: none">
+                            <p>你还没有添加任何歌曲</p>
+                            <p>去首页<span>发现音乐</span>，或在<span>我的音乐</span>收听自己收藏的歌单</p>
+                        </li>
+                        <li class="song clone" style="display: none">
+                            <span class="songName">逆战</span>
+                            <p class="song_hidden">
+                                <i class="collection icomoon" title="收藏"></i>
+                                <i class="share icomoon" title="分享"></i>
+                                <i class="download icomoon" title="下载"></i>
+                                <i class="delete icomoon" title="删除"></i>
+                            </p>
+                            <span class="songer">张杰</span>
+                            <span class="time">03:49</span>
+                            <i class="icomoon from"></i>
+                        </li>
+                        <li class="song now">
+                            <s class="icomoon"></s>
+                            <span class="songName">逆战</span>
+                            <p class="song_hidden">
+                                <i class="collection icomoon" title="收藏"></i>
+                                <i class="share icomoon" title="分享"></i>
+                                <i class="download icomoon" title="下载"></i>
+                                <i class="delete icomoon" title="删除"></i>
+                            </p>
+                            <span class="songer">张杰</span>
+                            <span class="time">03:49</span>
+                            <i class="icomoon from"></i>
+                        </li>
+                    </ul>
+                    <div id="listScrollDiv" class="barrier scroll">
+                        <div class="vernier"></div>
+                    </div>
+                    <div class="song_body">
+                        <div class="lrc">
+                            <p>大火烧开电话卡</p>
+                            <p>大火烧开电话卡</p>
+                            <p>大火烧开电话卡</p>
+                            <p>大火烧开电话卡</p>
+                            <p>大火烧开电话卡</p>
+                            <p>大火烧开电话卡</p>
+                            <p class="now">大火烧开电话卡</p>
+                            <p>大火烧开电话卡</p>
+                            <p>大火烧开电话卡</p>
+                            <p>大火烧开电话卡</p>
+                            <p>大火烧开电话卡</p>
+                            <p>大火烧开电话卡</p>
+                            <p>大火烧开电话卡</p>
+                            <p>大火烧开电话卡</p>
+                            <p>大火烧开电话卡</p>
+                            <p>大火烧开电话卡</p>
+                            <p>大火烧开电话卡</p>
+                        </div>
+                        <div class="fullScreen icomoon"></div>
+                            <div class="exitFullScreen icomoon"></div>
+                        <div id="songScrollDiv" class="scroll">
+                            <div class="vernier"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="head">
+            <div class="head_top">
+                <h1><a href="#">我的音乐网</a></h1>
+                <ul class="nav">
+                    <li class="selected">发现音乐<i></i></li>
+                    <li>我的音乐</li>
+                    <li>朋友</li>
+                    <li>下载客户端</li>
+                </ul>
+                <div class="search">
+                    <i></i>
+                    <input id="search_global" class="search_input" type="input" name="song" placeholder="单曲/歌手/专辑/歌单/MV/用户">
+                </div>
+                <span class="msg"></span>
+                <div id="userDiv" class="user">
+                    <span class="username"><img src="image/default.jpg">xiedacon<i></i></span>
+                    <ul class="user_nav nav_login" style="display:none;">
+                        <i></i>
+                        <li>
+                            <ul>
+                                <li>我的主页</li>
+                                <li>我的等级</li>
+                                <li>付费音乐包</li>
+                                <li>积分商城</li>
+                            </ul>
+                        </li>
+                        <li>
+                            <ul>
+                                <li>个人设置</li>
+                                <li>导入歌单</li>
+                            </ul>
+                        </li>
+                        <li class="exit">退出</li>
+                    </ul>
+                    <ul class="user_nav nav_logout" style="display:none;">
+                        <i></i>
+                        <li>
+                            <ul>
+                                <li id="toLoginByPhoneDiv">手机号登录</li>
+                                <li>微信登录</li>
+                                <li>QQ登录</li>
+                                <li>Github登录</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="head_bottom">
+                <ul class="subnav">
+                    <li class="selected">推荐</li>
+                    <li>排行榜</li>
+                    <li>歌单</li>
+                    <li>主播电台</li>
+                    <li>歌手</li>
+                    <li>新碟上架</li>
+                </ul>
+            </div>
+        </div>
+        <div class="body">
+            <div class="material">
+                <div class="material_left">
+                    <h2>我的消息</h2>
+                    <ul class="select">
+                        <li class="option"><i class="icomoon"></i>我的</li>
+                        <li class="option now"><i class="icomoon"></i>私信</li>
+                        <li class="option"><i class="icomoon"></i>评论</li>
+                        <li class="option"><i class="icomoon"></i>通知</li>
+                    </ul>
+                </div>
+                <div class="material_right atDiv" style="display: none">
+                    <p class="material_right_top">
+                        <span>@我的</span>
+                    </p>
+                    <ul class="messages">
+                        <li class="message">
+                            <img src="image/1.jpg">
+                            <div class="message_midde">
+                            <p class="name">斯柯达还是</p>
+                                <p class="content">啥接口的理解啊多久啊去我饿我饿强强强强强强强强强强强强哇哇噩噩噩噩噩了了了了了了了了和经济界斤斤计较暑假事实是事实</p>
+                            </div>
+                            <p class="message_rightF">
+                                <span class="time">1月2号<i class="icomoon"></i></span><br>
+                                <a class="link" href="#">查看</a><br/>
+                                <span class="delete">删除</span>
+                            </p>
+                        </li>
+                        <li class="message">
+                            <img src="image/1.jpg">
+                            <div class="message_midde">
+                                <p class="name">斯柯达还是</p>
+                                <p class="content"></p>
+                            </div>
+                            <p class="message_rightF">
+                                <span class="time">1月2号<i class="icomoon"></i></span><br>
+                                <a class="link" href="#">查看</a><br/>
+                                <span class="delete">删除</span>
+                            </p>
+                        </li>
+                    </ul>
+                </div>
+                <div class="material_right privateMessageDiv" style="display: none">
+                    <p class="material_right_top">
+                        <span>私信</span>
+                        <span class="sendMessage">发送私信</span>
+                    </p>
+                    <ul class="messages">
+                        <li class="message">
+                            <img src="image/1.jpg">
+                            <div class="message_midde">
+                                <p class="name">斯柯达还是</p>
+                                <p class="content">啥接口的理解啊多久啊去我饿我饿强强强强强强强强强强强强哇哇噩噩噩噩噩了了了了了了了了和经济界斤斤计较暑假事实是事实</p>
+                            </div>
+                            <p class="message_rightF">
+                                <span class="time">1月2号<i class="icomoon"></i></span><br>
+                                <span class="delete">删除</span>
+                            </p>
+                        </li>
+                        <li class="message">
+                            <img src="image/1.jpg">
+                            <div class="message_midde">
+                                <p class="name">斯柯达还是</p>
+                                <p class="content"></p>
+                            </div>
+                            <p class="message_rightF">
+                                <span class="time">1月2号<i class="icomoon"></i></span><br>
+                                <span class="delete">删除</span>
+                            </p>
+                        </li>
+                    </ul>
+                </div>
+                <div class="material_right commentDiv" style="display: none">
+                    <p class="material_right_top">
+                        <span>评论</span>
+                    </p>
+                    <ul class="messages">
+                        <li class="message">
+                            <img src="image/1.jpg">
+                            <div class="message_midde">
+                            <p class="name">斯柯达还是</p>
+                                <p class="content">啥接口的理解啊多久啊去我饿我饿强强强强强强强强强强强强哇哇噩噩噩噩噩了了了了了了了了和经济界斤斤计较暑假事实是事实</p>
+                            </div>
+                            <p class="message_rightF">
+                                <span class="time">1月2号<i class="icomoon"></i></span><br>
+                                <a class="link" href="#">查看</a><br/>
+                                <span class="delete">删除</span>
+                            </p>
+                        </li>
+                        <li class="message">
+                            <img src="image/1.jpg">
+                            <div class="message_midde">
+                                <p class="name">斯柯达还是</p>
+                                <p class="content"></p>
+                            </div>
+                            <p class="message_rightF">
+                                <span class="time">1月2号<i class="icomoon"></i></span><br>
+                                <a class="link" href="#">查看</a><br/>
+                                <span class="delete">删除</span>
+                            </p>
+                        </li>
+                    </ul>
+                </div>
+                <div class="material_right informationDiv">
+                    <p class="material_right_top">
+                        <span>通知</span>
+                    </p>
+                    <ul class="messages">
+                        <li class="message">
+                            <img src="image/1.jpg">
+                            <div class="message_midde">
+                                <p class="name">斯柯达还是</p>
+                                <p class="content">啥接口的理解啊多久啊去我饿我饿强强强强强强强强强强强强哇哇噩噩噩噩噩了了了了了了了了和经济界斤斤计较暑假事实是事实</p>
+                            </div>
+                            <p class="message_rightF">
+                                <span class="time">1月2号<i class="icomoon"></i></span><br>
+                                <span class="delete">删除</span>
+                            </p>
+                        </li>
+                        <li class="message">
+                            <img src="image/1.jpg">
+                            <div class="message_midde">
+                                <p class="name">斯柯达还是</p>
+                                <p class="content"></p>
+                            </div>
+                            <p class="message_rightF">
+                                <span class="time">1月2号<i class="icomoon"></i></span><br>
+                                <span class="delete">删除</span>
+                            </p>
+                        </li>
+                    </ul>
+                </div>
+        </div>
+    </div>
+    <div class="foot">
+        <p>@2016</p>
+    </div>
+</body>
+</html>

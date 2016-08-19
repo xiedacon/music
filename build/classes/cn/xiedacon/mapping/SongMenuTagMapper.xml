@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.xiedacon.dao.SongMenuTagDao">
+	
+	<resultMap type="cn.xiedacon.vo.SongMenuTagVo" id="songMenuTagVoResultMap">
+		<id column="tag_id" property="id"/>
+		<result column="tag_name" property="name"/>
+		
+		<collection property="secondTagList" javaType="java.util.List" ofType="cn.xiedacon.vo.SongMenuSecondTagVo">
+			<result column="secondTag_id" property="id"/>
+			<result column="secondTag_name" property="name"/>
+		</collection>
+	</resultMap>
+
+	<select id="selectAll" resultMap="songMenuTagVoResultMap">
+		SELECT
+		tf.id tag_id,
+		tf.name tag_name,
+		ts.id secondTag_id,
+		ts.name secondTag_name
+		FROM
+		tag_songmenu_first tf
+		RIGHT JOIN tag_songmenu_second ts ON tf.id = ts.fid
+		ORDER BY tf.id ASC,ts.id ASC
+	</select>
+
+</mapper>

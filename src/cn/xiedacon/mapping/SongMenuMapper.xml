@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.xiedacon.dao.SongMenuDao">
+
+	<resultMap type="cn.xiedacon.vo.SongMenuVo" id="songMenuVo">
+		<id property="id" column="id" />
+		<result property="name" column="name" />
+		<result property="icon" column="icon" />
+		<result property="creatorId" column="creatorId" />
+		<result property="userId" column="userId" />
+		<result property="creatorName" column="creatorName" />
+		<result property="creatorIcon" column="creatorIcon" />
+		<result property="createTime" column="createTime" />
+		<result property="introduction" column="introduction" />
+		<result property="songNum" column="songNum" />
+		<result property="collectionNum" column="collectionNum" />
+		<result property="shareNum" column="shareNum" />
+		<result property="commentNum" column="commentNum" />
+		<result property="playNum" column="playNum" />
+
+		<collection property="songMenuSecondTagList" javaType="java.util.List"
+			ofType="cn.xiedacon.vo.SongMenuSecondTagVo" resultMap="songMenuSecondTagVo"></collection>
+	</resultMap>
+
+	<resultMap type="cn.xiedacon.vo.SongMenuSecondTagVo" id="songMenuSecondTagVo">
+		<id property="id" column="secondTagId" />
+		<result property="name" column="secondTagName" />
+	</resultMap>
+
+	<sql id="required_SELECTSQL">
+		SELECT
+		s.id id,
+		s.name name,
+		s.icon icon,
+	</sql>
+	<sql id="min_simpleSongMenuVo_SELECTSQL">
+		<include refid="required_SELECTSQL"></include>
+		r.playNum playNum
+	</sql>
+	<sql id="simpleSongMenuVo_SELECTSQL">
+		<include refid="required_SELECTSQL"></include>
+		r.playNum playNum,
+		s.creatorId creatorId,
+		s.creatorName creatorName,
+		s.userId userId,
+		s.songNum songNum
+	</sql>
+	<sql id="songMenuVo_SELECTSQL">
+		<include refid="required_SELECTSQL"></include>
+		s.createTime createTime,
+		s.introduction introduction,
+		s.songnum songNum,
+		u.id creatorId,
+		u.name creatorName,
+		u.icon creatorIcon,
+		r.shareNum
+		shareNum,
+		r.commentNum commentNum,
+		r.playNum playNum,
+		r.collectionNum
+		collectionNum,
+		tss.id secondTagId,
+		s.userId userId,
+		tss.name secondTagName
+	</sql>
+	<sql id="count_SELECTSQL">
+		SELECT COUNT(s.id) count
+	</sql>
+
+	<sql id="songMenu_base_FROMSQL">
+		FROM songMenu_base s
+	</sql>
+
+	<sql id="songMenu_recored_JOINSQL">
+		INNER JOIN songMenu_record r ON s.id = r.id
+	</sql>
+	<sql id="smi_gl_rsms_JOINSQL">
+		LEFT JOIN smi_gl_rsms sgr ON s.id = sgr.songMenuId
+	</sql>
+	<sql id="user_base_JOINSQL">
+		INNER JOIN user_base u ON s.creatorId = u.id
+	</sql>
+	<sql id="tag_songmenu_second_JOINSQL">
+		LEFT JOIN tag_songmenu_second tss ON
+		sgr.tag_songMenu_secondId = tss.id
+	</sql>
+	<sql id="user_gl_songmenu_JOINSQL">
+		LEFT JOIN user_gl_songmenu ugs ON
+		ugs.songMenuId = s.id
+	</sql>
+
+	<sql id="id_WHERESQL">
+		<where>s.id = #{id}</where>
+	</sql>
+	<sql id="secondTagId_WHERESQL">
+		<where>sgr.tag_songMenu_secondId = #{secondTagId}</where>
+	</sql>
+	<sql id="createId_WHERESQL">
+		<where>s.creatorId = #{creatorId}</where>
+	</sql>
+	<sql id="collectorId_WHERESQL">
+		<where>ugs.collectorId = #{collectorId}</where>
+	</sql>
+	<sql id="exceptLove_WHERE">
+		<where>s.userId is null</where>
+	</sql>
+
+	<sql id="collectionNum_ORDERBYSQL">
+		ORDER BY r.collectionNum DESC, s.createTime DESC
+	</sql>
+	<sql id="createTime_ORDERBYSQL">
+		ORDER BY s.createTime DESC
+	</sql>
+	<sql id="userId_ORDERBY">
+		ORDER BY s.userId DESC
+	</sql>
+
+	<sql id="LIMITSQL">
+		LIMIT #{begin},#{limit}
+	</sql>
+
+	<select id="selectSongMenuListByIds" parameterType="java.lang.reflect.Array"
+		resultType="cn.xiedacon.vo.SimpleSongMenuVo">
+		<include refid="min_simpleSongMenuVo_SELECTSQL"></include>
+		<include refid="songMenu_base_FROMSQL"></include>
+		<include refid="songMenu_recored_JOINSQL"></include>
+		WHERE s.id in
+		<foreach collection="songMenuIds" open="(" separator=","
+			close=")" item="item">
+			#{item}
+		</foreach>
+		AND s.userId is null
+	</select>
+
+	<select id="selectSongMenuByid" resultMap="songMenuVo">
+		<include refid="songMenuVo_SELECTSQL"></include>
+		<include refid="songMenu_base_FROMSQL"></include>
+		<include refid="songMenu_recored_JOINSQL"></include>
+		<include refid="smi_gl_rsms_JOINSQL"></include>
+		<include refid="user_base_JOINSQL"></include>
+		<include refid="tag_songmenu_second_JOINSQL"></include>
+		<include refid="id_WHERESQL"></include>
+	</select>
+
+	<select id="selectByLimit" resultType="cn.xiedacon.vo.SimpleSongMenuVo">
+		<include refid="simpleSongMenuVo_SELECTSQL"></include>
+		<include refid="songMenu_base_FROMSQL"></include>
+		<include refid="songMenu_recored_JOINSQL"></include>
+		<include refid="exceptLove_WHERE"></include>
+		<include refid="createTime_ORDERBYSQL"></include>
+		<include refid="LIMITSQL"></include>
+	</select>
+
+	<select id="selectByLimitOrderByCollectionNum" resultType="cn.xiedacon.vo.SimpleSongMenuVo">
+		<include refid="simpleSongMenuVo_SELECTSQL"></include>
+		<include refid="songMenu_base_FROMSQL"></include>
+		<include refid="songMenu_recored_JOINSQL"></include>
+		<include refid="exceptLove_WHERE"></include>
+		<include refid="collectionNum_ORDERBYSQL"></include>
+		<include refid="LIMITSQL"></include>
+	</select>
+
+	<select id="selectCount" resultType="int">
+		<include refid="count_SELECTSQL"></include>
+		<include refid="songMenu_base_FROMSQL"></include>
+		<include refid="exceptLove_WHERE"></include>
+	</select>
+
+	<select id="selectBySecondTagIdOrderByCollectionNumLimit"
+		resultType="cn.xiedacon.vo.SimpleSongMenuVo">
+		<include refid="simpleSongMenuVo_SELECTSQL"></include>
+		<include refid="songMenu_base_FROMSQL"></include>
+		<include refid="songMenu_recored_JOINSQL"></include>
+		<include refid="smi_gl_rsms_JOINSQL"></include>
+		<include refid="secondTagId_WHERESQL"></include>
+		<include refid="exceptLove_WHERE"></include>
+		<include refid="collectionNum_ORDERBYSQL"></include>
+		<include refid="LIMITSQL"></include>
+	</select>
+
+	<select id="selectBySecondTagIdLimit" resultType="cn.xiedacon.vo.SimpleSongMenuVo">
+		<include refid="simpleSongMenuVo_SELECTSQL"></include>
+		<include refid="songMenu_base_FROMSQL"></include>
+		<include refid="songMenu_recored_JOINSQL"></include>
+		<include refid="smi_gl_rsms_JOINSQL"></include>
+		<include refid="secondTagId_WHERESQL"></include>
+		<include refid="exceptLove_WHERE"></include>
+		<include refid="createTime_ORDERBYSQL"></include>
+		<include refid="LIMITSQL"></include>
+	</select>
+
+	<select id="selectCountBySecondTagId" resultType="int">
+		<include refid="count_SELECTSQL"></include>
+		<include refid="songMenu_base_FROMSQL"></include>
+		<include refid="smi_gl_rsms_JOINSQL"></include>
+		<include refid="secondTagId_WHERESQL"></include>
+		<include refid="exceptLove_WHERE"></include>
+	</select>
+
+	<select id="selectListByCreatorId" resultType="cn.xiedacon.vo.SimpleSongMenuVo">
+		<include refid="simpleSongMenuVo_SELECTSQL"></include>
+		<include refid="songMenu_base_FROMSQL"></include>
+		<include refid="songMenu_recored_JOINSQL"></include>
+		<include refid="createId_WHERESQL"></include>
+		<include refid="userId_ORDERBY"></include>
+	</select>
+
+	<select id="selectListByCollectorId" resultType="cn.xiedacon.vo.SimpleSongMenuVo">
+		<include refid="simpleSongMenuVo_SELECTSQL"></include>
+		<include refid="songMenu_base_FROMSQL"></include>
+		<include refid="songMenu_recored_JOINSQL"></include>
+		<include refid="user_gl_songmenu_JOINSQL"></include>
+		<include refid="collectorId_WHERESQL"></include>
+	</select>
+	
+	<insert id="insertSongMenu_base" parameterType="cn.xiedacon.model.SongMenu">
+		INSERT INTO songMenu_base VALUES(
+		#{id},
+		#{name},
+		#{icon},
+		#{creatorName},
+		#{createTime},
+		#{songNum},
+		#{introduction},
+		#{isPublic},
+		#{creatorId},
+		#{userId}
+		)
+	</insert>
+	
+	<insert id="insertSongMenu_record" parameterType="cn.xiedacon.model.SongMenu">
+		INSERT INTO songMenu_record VALUES(
+		#{id},
+		#{collectionNum},
+		#{shareNum},
+		#{commentNum},
+		#{playNum}
+		)
+	</insert>
+	
+	<update id="updateCreatorName" parameterType="cn.xiedacon.model.User">
+		UPDATE songMenu_base s SET s.creatorName = #{name}
+		WHERE s.creatorId = #{id}
+	</update>
+</mapper>

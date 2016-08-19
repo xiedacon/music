@@ -1,0 +1,799 @@
+.body .images {
+	position: relative;
+	padding: 10px 0;
+}
+
+.images .after {
+	font-size: 64px;
+	display: block;
+	width: 34px;
+	height: 73px;
+	color: #969696;
+	position: absolute;
+	top: 50%;
+	left: 100%;
+	transform: translate(-100%, -50%);
+	cursor: pointer;
+	-webkit-user-select: none;
+}
+
+.images .after:hover {
+	background: #dedede;
+}
+
+.images .before {
+	font-size: 64px;
+	display: block;
+	width: 34px;
+	height: 73px;
+	color: #969696;
+	position: absolute;
+	top: 50%;
+	transform: translate(0, -50%);
+	cursor: pointer;
+	-webkit-user-select: none;
+}
+
+.images .before:hover {
+	background: #dedede;
+}
+
+.images ul {
+	padding-bottom: 41%;
+}
+
+.images img {
+	position: absolute;
+	visibility: hidden;
+	transform: translate(-50%, -50%);
+	z-index: 2;
+	width: 20%;
+	top: 50%;
+	left: 50%;
+	opacity: 0.5;
+	-webkit-user-select: none;
+}
+
+.images .now img {
+	visibility: visible;
+	left: 50%;
+	top: 50%;
+	width: 41%;
+	z-index: 3;
+	cursor: pointer;
+	opacity: 1;
+}
+
+.images .next img {
+	visibility: visible;
+	left: 80%;
+	top: 50%;
+	z-index: 2;
+	opacity: 0.5;
+	width: 31%;
+}
+
+.images .previous img {
+	visibility: visible;
+	left: 20%;
+	top: 50%;
+	z-index: 2;
+	opacity: 0.5;
+	width: 31%;
+}
+
+.images .points {
+	position: absolute;
+	left: 50%;
+	top: 100%;
+	transform: translate(-50%, -150%);
+	z-index: 5;
+	padding: 1%;
+	width: 25%;
+	text-align: center;
+	-webkit-user-select: none;
+}
+
+.points li {
+	display: inline-block;
+	margin: 0 4%;
+	border: 3px #fff solid;
+	border-radius: 3px;
+}
+
+.points .point_now {
+	border: 3px #d60002 solid;
+}
+
+.material_left .top {
+	position: relative;
+	height: 50px;
+	border-bottom: 3px #e60000 solid;
+}
+
+.material_left .top:after {
+	content: "";
+	display: block;
+	height: 0;
+	visibility: hidden;
+	clear: both;
+}
+
+.top h2 {
+	float: left;
+	padding: 0 10px;
+}
+
+h2 a {
+	display: inline-block;
+	font-size: 1.5em;
+	font-family: 'microsoft yahei', 'simhei sans-serif';
+	line-height: 50px;
+	padding: 0 10px;
+}
+
+h2 i {
+	border: 7px #e60000 solid;
+	border-radius: 10px;
+	position: relative;
+	display: inline-block;
+}
+
+h2 i i {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	border: 3px #fff solid;
+	border-radius: 5px;
+}
+
+.top li {
+	float: left;
+	display: inline-block;
+	line-height: 50px;
+	font-size: 0.8em;
+	margin: 0 10px;
+	cursor: pointer;
+}
+
+.top li:hover {
+	text-decoration: underline;
+}
+
+.top .more {
+	position: absolute;
+	top: 50%;
+	left: 90%;
+	transform: translate(30%, -50%);
+	font-size: 0.8em;
+	cursor: pointer;
+}
+
+.top .more i {
+    content: " ";
+    font-family: icomoon;
+    color: rgb(230, 0, 0);
+    font-size: 0.8em;
+    cursor: pointer;
+}
+
+.material_left .bottom {
+	margin: 0 0 30px 0;
+}
+
+.material_left .bottom:after {
+	content: "";
+	display: block;
+	height: 0;
+	visibility: hidden;
+	clear: both;
+}
+
+.songs .bottom {
+    min-height: 440px;
+}
+
+.songs .bottom .song {
+	float: left;
+	margin: 2.5%;
+	width: 20%;
+}
+
+.song .image {
+	width: 100%;
+	height: 0;
+	padding-bottom: 100%;
+	position: relative;
+}
+
+.image img {
+	width: 100%;
+	cursor: pointer;
+}
+
+.image .image_bottom {
+	position: absolute;
+	display: block;
+	top: 100%;
+	width: 100%;
+	transform: translate(0, -100%);
+	background: #000;
+	vertical-align: middle;
+	line-height: 25px;
+	background-color: rgba(0, 0, 0, 0.5);
+}
+
+.image_bottom i {
+	float: left;
+	font-family: "icomoon";
+	color: #fff;
+	font-size: 0.7em;
+	padding: 0 7%;
+	opacity: 0.7;
+}
+
+.image_bottom .num {
+	float: left;
+	color: #fff;
+	font-size: 0.8em;
+	opacity: 0.7;
+}
+
+.image_bottom .playthis {
+	float: right;
+	cursor: pointer;
+}
+
+.image_bottom .playthis:hover {
+	opacity: 1;
+}
+
+.song .name {
+    font-size: 0.8em;
+    margin: 5% 0 0 0;
+    display: block;
+    height: 30px;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.song .name:hover {
+	text-decoration: underline;
+}
+
+.albums .bottom {
+	margin: 2.5% 2.5% 30px 2.5%;
+	border: 1px #D3D3D3 solid;
+}
+
+.albums .bottom .albumDiv {
+	background: #F5F5F5;
+	border: 1px #fff solid;
+	position: relative;
+	padding: 0 2%;
+	height: 178px;
+}
+
+.albums .bottom .albumDiv:after {
+	content: "";
+	display: block;
+	height: 0;
+	visibility: hidden;
+	clear: both;
+}
+
+.albums .bottom .albumDiv .album_hidden {
+	position: relative;
+	width: 100%;
+	height: 100%;
+	overflow: hidden;
+}
+
+.albums .bottom .albumDiv ul {
+	position: absolute;
+	width: 100%;
+}
+
+.albums .album {
+	float: left;
+	width: 20%;
+	padding: 20px 3.3% 10px 1.3%;
+	box-sizing: border-box;
+}
+
+.album .image {
+	display: block;
+	position: relative;
+	height: 0;
+	padding-bottom: 100%;
+	cursor: pointer;
+	margin: 0 0 10px 0;
+}
+
+.album .image img {
+    width: 100%;
+    position: absolute;
+    z-index: 1;
+    height: 100%;
+    background: #fff;
+}
+
+.album .image .image_left {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	top: 0;
+	z-index: 0;
+	left: 16%;
+	overflow: hidden;
+}
+
+.image_left .circle {
+	display: block;
+	position: absolute;
+	border: 50px #000 solid;
+	border-radius: 50px;
+	opacity: 0.8;
+	z-index: 3;
+	left: 50%;
+	top: 50%;
+	transform: translate(-53%, -50%);
+}
+
+.image_left .rectangle {
+	height: 91%;
+	width: 20px;
+	position: absolute;
+	top: 50%;
+	left: 100%;
+	border: 1px #ACACAC solid;
+	transform: translate(-150%, -50%);
+	background: #fff;
+	z-index: 1;
+}
+
+.image_left .triangle {
+	border: 7px #fff solid;
+	position: absolute;
+	display: block;
+	border-right-color: #000;
+	top: 50%;
+	left: 100%;
+	transform: translate(-185%, -50%);
+	z-index: 2;
+}
+
+.album .image i {
+	cursor: pointer;
+	position: absolute;
+	font-family: "icomoon";
+	color: #fff;
+	opacity: 0.7;
+	top: 100%;
+	left: 100%;
+	transform: translate(-140%, -140%);
+	font-size: 1.3em;
+	z-index: 3;
+	visibility: hidden;
+}
+
+.album .image:hover i {
+	visibility: visible;
+}
+
+.album .name {
+	display: block;
+	font-size: 0.8em;
+	padding: 0 0 5px 0;
+	cursor: pointer;
+}
+
+.album .name:hover {
+	text-decoration: underline;
+}
+
+.album .songer {
+	display: block;
+	font-size: 0.8em;
+	color: #737373;
+	cursor: pointer;
+}
+
+.album .songer:hover {
+	text-decoration: underline;
+}
+
+.albums .previous {
+	position: absolute;
+	top: 50%;
+	transform: translate(-100%, -100%);
+	cursor: pointer;
+}
+
+.albums .previous:hover {
+	font-weight: bolder;
+}
+
+.albums .next {
+	position: absolute;
+	top: 50%;
+	left: 100%;
+	transform: translate(-150%, -100%);
+	cursor: pointer;
+}
+
+.albums .next:hover {
+	font-weight: bolder;
+}
+
+.lists .bottom {
+	margin: 2.5% 2.5% 30px 2.5%;
+	border: 1px #D3D3D3 solid;
+}
+
+.lists .bottom>ul>li {
+	border-right: 1px #D3D3D3 solid;
+	float: left;
+	display: block;
+	width: 33.33%;
+	background: #F5F5F5;
+	box-sizing: border-box;
+}
+
+.lists .bottom>ul>li:last-child {
+	border-right: 0;
+}
+
+.lists .bottom ul ul {
+	border: 1px #fff solid;
+	box-sizing: border-box;
+}
+
+.lists .bottom li li:after {
+	content: "";
+	display: block;
+	height: 0;
+	visibility: hidden;
+	clear: both;
+}
+
+.lists li li:first-child h3 {
+	font-size: 0.9em;
+	line-height: 30px;
+	font-weight: bolder;
+	cursor: pointer;
+}
+
+.lists li li:first-child h3:hover {
+	text-decoration: underline;
+}
+
+.lists li li:first-child .right {
+	float: left;
+	margin: 7% 0 0 0;
+}
+
+.lists li li:first-child .right i {
+	font-family: "icomoon";
+	font-size: 1.2em;
+	opacity: 0.7;
+	line-height: 30px;
+	padding: 0;
+	float: none;
+	visibility: visible;
+}
+
+.lists li li:first-child img {
+	float: left;
+	margin: 7%;
+	width: 40%;
+	cursor: pointer;
+}
+
+.lists .bottom li li {
+	width: 100%;
+}
+
+.lists .bottom li li:hover i {
+	visibility: visible;
+}
+
+.lists .bottom .odd {
+	background: #E8E8E8;
+}
+
+.lists .bottom .even {
+	
+}
+
+.lists .bottom li li .num {
+	font-size: 1em;
+	font-weight: bolder;
+	color: #e60000;
+	line-height: 30px;
+	float: left;
+	padding: 0 6% 0 10%;
+	margin: -1% 0 0 0;
+	cursor: default;
+	visibility: visible;
+}
+
+.lists .bottom li li .name {
+    line-height: 30px;
+    font-size: 0.8em;
+    float: left;
+    cursor: pointer;
+}
+
+.lists .bottom li li .name:hover {
+	text-decoration: underline;
+}
+
+.lists .bottom li li i {
+	font-family: "icomoon";
+	line-height: 30px;
+	float: right;
+	opacity: 0.7;
+	padding: 0 5% 0 0;
+	font-size: 1em;
+	cursor: pointer;
+	visibility: hidden;
+}
+
+.lists .bottom li li i:hover {
+	opacity: 1;
+}
+
+.lists .bottom li li:last-child {
+	background: #E8E8E8;
+	line-height: 30px;
+}
+
+.lists .bottom li li:last-child .all {
+	font-size: 0.8em;
+	float: right;
+	padding: 0 15% 0 0;
+	cursor: pointer;
+}
+
+.lists .bottom li li:last-child .all:hover {
+	text-decoration: underline;
+}
+
+.material_right .userDiv {
+	height: 150px;
+	background: linear-gradient(#fff, #E0E0E0);
+	border: 1px #fff solid;
+	box-sizing: border-box;
+}
+
+.userDiv p {
+	display: block;
+	padding: 5%;
+	font-size: 0.9em;
+	color: #666666;
+	line-height: 25px;
+}
+
+.userDiv .userLogin {
+	display: block;
+	color: #fff;
+	background: #e60000;
+	width: 34%;
+	height: 20%;
+	text-align: center;
+	line-height: 30px;
+	font-size: 0.9em;
+	border: 1px #d80101 solid;
+	border-radius: 2px;
+	margin: 10% auto;
+	cursor: pointer;
+}
+
+.userDiv .userLogin:hover {
+	background: red;
+}
+
+.material_right .message {
+	border-top: 1px #d3d3d3 solid;
+	padding: 5% 7%;
+}
+
+.message p {
+	display: block;
+	line-height: 30px;
+	border-bottom: 1px #d3d3d3 solid;
+}
+
+.message p span {
+    font-size: 0.8em;
+    font-weight: bolder;
+    cursor: pointer;
+}
+
+.message p .all {
+	float: right;
+	font-weight: normal;
+	cursor: pointer;
+}
+
+.message p .all:hover {
+	text-decoration: underline;
+}
+
+.message .singers {
+	padding: 10px 0;
+}
+
+.message .singers li {
+	margin: 10px 0;
+	background: #FAFAFA;
+	cursor: pointer;
+}
+
+.message .singers li:hover {
+	background: #F4F4F4;
+}
+
+.message .singers li:after {
+	content: "";
+	display: block;
+	height: 0;
+	visibility: hidden;
+	clear: both;
+}
+
+.singers li img {
+	float: left;
+	width: 29.5%;
+}
+
+.singers li p {
+    float: left;
+    padding: 0 0 28.5% 10px;
+    border: 1px #d3d3d3 solid;
+    border-left: 0;
+    color: black;
+    box-sizing: border-box;
+    width: 70.5%;
+    height: 0;
+    cursor: pointer;
+}
+
+.singers li .singerName {
+	font-size: 0.9em;
+	display: block;
+}
+
+.singers li .desc {
+    display: block;
+    font-weight: normal;
+    color: #999;
+    cursor: pointer;
+}
+
+.singers .applySinger {
+	background: #fff !important;
+}
+
+.applySinger .button {
+	display: block;
+	line-height: 30px;
+	border: 1px #DEDDDD solid;
+	border-radius: 5px;
+	text-align: center;
+	margin: 0 10%;
+	font-size: 0.9em;
+	font-weight: bolder;
+	background: #f1f1f1;
+	box-shadow: 0 1px #DEDDDD;
+}
+
+.applySinger .button:hover {
+	background: #fff;
+}
+
+.userDiv .image {
+    float: left;
+    padding: 3px;
+    border: 1px #d3d3d3 solid;
+    line-height: 0;
+    box-sizing: border-box;
+    margin: 10px;
+}
+
+.userDiv .image img{
+    height: 80px;
+    width: 80px;
+    cursor: pointer;
+}
+
+.userDiv .image_left{
+    height: 88px;
+    line-height: 25px;
+    padding: 10px 0 10px 108px;
+}
+
+.userDiv .image_left .name{
+    font-weight: bolder;
+    font-size: 0.9em;
+    font-family: Arial, Helvetica, sans-serif;
+    cursor: pointer;
+}
+
+.userDiv .image_left .name:hover{
+	text-decoration: underline;
+}
+
+.userDiv .image_left .level{
+    display: inline-block;
+    border: 1px #949494 solid;
+    height: 14px;
+    margin: 5px 0;
+    border-radius: 10px;
+    line-height: 14px;
+    text-align: center;
+    font-size: 0.5em;
+    padding: 0 7px;
+    color: #949494;
+    font-weight: bolder;
+    cursor: pointer;
+    opacity: 0.7;
+}
+
+.userDiv .image_left .level:hover{
+	opacity: 1;
+}
+
+.userDiv .image_left .button{
+    display: block;
+    width: 60px;
+    height: 25px;
+    border: 1px #5a86ff solid;
+    line-height: 25px;
+    text-align: center;
+    font-size: 0.8em;
+    border-radius: 5px;
+    background: #6578ff;
+    color: #fff;
+    cursor: pointer;
+}
+
+.userDiv .image_left .button:hover{
+    border: 1px #7398ff solid;
+	background: #7b8bff;
+}
+
+.userDiv .userDiv_bottom{
+}
+
+.userDiv .userDiv_bottom li{
+    float: left;
+    height: 40px;
+    font-size: 0.8em;
+    
+    font-family: Arial, Helvetica, sans-serif;
+    width: 40px;
+    padding: 0 0 0 10px;
+    border-right: 1px #d3d3d3 solid;
+    margin: 5px 0;
+}
+
+.userDiv .userDiv_bottom .num{
+    font-size: 1.5em;
+    font-weight: bolder;
+    cursor: pointer;
+}
+
+.userDiv .userDiv_bottom span{
+    cursor: pointer;
+}
+
+.userDiv .userDiv_bottom a{
+	color: #929292;
+}
+
+.userDiv .userDiv_bottom a:hover{
+	color: #859eff;
+}

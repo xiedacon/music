@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.xiedacon.dao.AlbumDao">
+
+	<sql id="selectRequiredSql">
+		SELECT
+		a.id id,
+		a.name name,
+		a.icon icon,
+		a.singerId singerId,
+		a.singerName singerName,
+	</sql>
+	
+	<sql id="selectSimpleAlbumVoSql">
+		<include refid="selectRequiredSql"></include>
+		a.createTime createTime
+	</sql>
+	
+	<sql id="selectAlbumVoSql">
+		<include refid="selectRequiredSql"></include>
+		a.createTime createTime,
+		a.remark remark,
+		a.createCompany
+		createCompany,
+		ar.shareNum shareNum,
+		ar.commentNum commentNum,
+		a.introduction
+		introduction,
+		a.songNum songNum
+	</sql>
+
+	<sql id="selectCountSql">
+		SELECT
+		COUNT(a.id)
+	</sql>
+	
+	<sql id="fromAlbum_baseSql">
+		FROM album_base a
+	</sql>
+	
+	<sql id="joinAlbum_recordSql">
+		INNER JOIN album_record ar ON a.id = ar.id
+	</sql>
+	
+	<sql id="byId">
+		WHERE a.id = #{id}
+	</sql>
+	
+	<sql id="bytagIdSql">
+		WHERE a.tagId = #{tagId}
+	</sql>
+
+	<sql id="bySingerIdSql">
+		WHERE a.singerId = #{singerId}
+	</sql>
+	
+	<sql id="orderByCreateTimeSql">
+		ORDER BY a.createTime DESC
+	</sql>
+
+	<sql id="limitSql">
+		LIMIT #{begin},#{limit}
+	</sql>
+
+	<select id="selectAblumListByIds" parameterType="java.lang.reflect.Array"
+		resultType="cn.xiedacon.vo.SimpleAlbumVo">
+		<include refid="selectSimpleAlbumVoSql"></include>
+		<include refid="fromAlbum_baseSql"></include>
+		WHERE
+		a.id in
+		<foreach collection="albumIds" open="(" separator="," close=")"
+			item="item">
+			#{item}
+		</foreach>
+	</select>
+
+	<select id="selectById" resultType="cn.xiedacon.vo.AlbumVo">
+		<include refid="selectAlbumVoSql"></include>
+		<include refid="fromAlbum_baseSql"></include>
+		<include refid="joinAlbum_recordSql"></include>
+		<include refid="byId"></include>
+	</select>
+
+	<select id="selectCountByTagId" resultType="int">
+		<include refid="selectCountSql"></include>
+		<include refid="fromAlbum_baseSql"></include>
+		<if test="tagId != null">
+			<include refid="bytagIdSql"></include>
+		</if>
+	</select>
+
+	<select id="selectListByTagIdOrderByCreateTimeLimit" resultType="cn.xiedacon.vo.SimpleAlbumVo">
+		<include refid="selectSimpleAlbumVoSql"></include>
+		<include refid="fromAlbum_baseSql"></include>
+		<if test="tagId != null">
+			<include refid="bytagIdSql"></include>
+		</if>
+		<include refid="orderByCreateTimeSql"></include>
+		<include refid="limitSql"></include>
+	</select>
+
+	<select id="selectCountBySingerId" resultType="int">
+		<include refid="selectCountSql"></include>
+		<include refid="fromAlbum_baseSql"></include>
+		<include refid="bySingerIdSql"></include>
+	</select>
+
+	<select id="selectListBySingerIdOrderByCreateTimeLimit"
+		resultType="cn.xiedacon.vo.SimpleAlbumVo">
+		<include refid="selectSimpleAlbumVoSql"></include>
+		<include refid="fromAlbum_baseSql"></include>
+		<include refid="bySingerIdSql"></include>
+		<include refid="orderByCreateTimeSql"></include>
+		<include refid="limitSql"></include>
+	</select>
+</mapper>

@@ -1,0 +1,1672 @@
+@font-face {
+	font-family: 'icomoon';
+	src: url('../fonts/icomoon.eot?uu49li');
+	src: url('../fonts/icomoon.eot?uu49li#iefix')
+		format('embedded-opentype'), url('../fonts/icomoon.ttf?uu49li')
+		format('truetype'), url('../fonts/icomoon.woff?uu49li') format('woff'),
+		url('../fonts/icomoon.svg?uu49li#icomoon') format('svg');
+	font-weight: normal;
+	font-style: normal;
+}
+
+.icomoon {
+	font-family: "icomoon";
+}
+
+.prototype {
+	display: none !important;
+}
+
+body {
+	background: #f5f5f5;
+	color: #333;
+}
+
+.head {
+	background: #545454;
+	line-height: 0;
+	font-size: 1em;
+}
+
+.head .head_top {
+	padding: 0 13.68%;
+}
+
+.head_top h1 {
+	display: inline-block;
+	vertical-align: top;
+	width: 13%;
+}
+
+.head_top h1 a {
+	font-size: 1.5em;
+	color: #cec7c7;
+	line-height: 65px;
+	font-family: 'microsoft yahei', 'simhei sans-serif';
+	cursor: pointer;
+}
+
+.head_top .nav {
+	display: inline-block;
+	line-height: 65px;
+	padding: 0 0 0 1%;
+	width: 41%;
+}
+
+.head_top .nav li {
+	float: left;
+	color: #ccc;
+	display: block;
+	padding: 0 4%;
+	cursor: pointer;
+	position: relative;
+}
+
+.head_top .nav .selected {
+	background: #313131;
+	cursor: default;
+}
+
+.head_top .nav .selected:hover {
+	background: #313131;
+}
+
+.head_top .nav li:hover {
+	background: #5f5f5f;
+}
+
+.selected i {
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translate(-50%, -100%);
+    border: 5px rgba(0,0,0,0) solid;
+    border-bottom-color: #e60000;
+    cursor: pointer;
+}
+
+.head_top .nav:after {
+	content: "";
+	display: block;
+	height: 0;
+	visibility: hidden;
+	clear: both;
+}
+
+.head_top .search {
+	display: inline-block;
+	vertical-align: top;
+	margin: 17px 0 16px 0;
+	position: relative;
+	width: 22%;
+}
+
+.search .search_input {
+	line-height: 30px;
+	border: 1px #000 solid;
+	border-radius: 30px;
+	padding: 0 0 0 15%;
+	font-size: 0.4em;
+	color: #000;
+	width: 80%;
+}
+
+.search i {
+	position: absolute;
+	font-family: 'icomoon' !important;
+	top: 16px;
+	left: 12px;
+}
+
+.head .msg {
+	display: inline-block;
+	vertical-align: top;
+	font-family: 'icomoon' !important;
+	font-size: 1.5em;
+	padding: 0 1%;
+	line-height: 65px;
+	color: #ccc;
+	width: 3%;
+	cursor: pointer;
+	opacity: 0.7;
+}
+
+.head .msg:hover {
+	opacity: 1;
+}
+
+.head .user {
+	display: inline-block;
+	vertical-align: top;
+	line-height: 65px;
+	font-size: 1em;
+	color: #adabab;
+	position: absolute;
+}
+
+.head .username:hover {
+	color: #e4e0e0;
+}
+
+.user .username {
+	cursor: pointer;
+	font-size: 0.8em;
+}
+
+.username img {
+	width: 25px;
+	height: 25px;
+	vertical-align: middle;
+	margin: 0 10px 0 0;
+	border: 1px #7b7b7b solid;
+	line-height: 0;
+}
+
+.username i {
+	border: 6px #545454 solid;
+	border-top-color: #000;
+	width: 0;
+	height: 0;
+	display: inline-block;
+	position: absolute;
+	top: 50%;
+	left: 100%;
+	transform: translate(50%, -25%);
+}
+
+.user .user_nav {
+	z-index: 10;
+	position: absolute;
+	background: #3a3939;
+	border-radius: 5px;
+	top: 85%;
+	left: 55%;
+	width: 100px;
+	line-height: 30px;
+	font-size: 0.8em;
+	transform: translate(-50%, 0);
+}
+
+.user_nav i {
+	position: absolute;
+	left: 50%;
+	transform: translate(-50%, -100%);
+	border: 7px #545454 solid;
+	border-bottom-color: #3a3939;
+}
+
+.user_nav li {
+	text-align: center;
+	cursor: pointer;
+}
+
+.user_nav ul li:hover {
+	background: #545454;
+}
+
+.user_nav ul {
+	border-bottom: 1px #4e4e4e solid;
+	padding: 1px 0;
+}
+
+.user_nav .exit:hover {
+	background: #545454;
+	border-radius: 5px;
+}
+
+.head .head_bottom {
+	min-height: 5px;
+	background: #e60000;
+	border-bottom: 1px #000 solid;
+}
+
+.head_bottom .subnav {
+	height: 30px;
+	padding: 0 13.68%;
+}
+
+.subnav li {
+	float: left;
+	display: inline-block;
+	line-height: 20px;
+	font-size: 0.5em;
+	color: #fff;
+	padding: 0 1%;
+	margin: 4px 1%;
+	cursor: pointer;
+	border: 1px #e60000 solid;
+}
+
+.subnav .selected {
+	border: 1px #b71414 solid;
+	border-radius: 30px;
+	background: #b71414;
+}
+
+.subnav li:hover {
+	border: 1px #b71414 solid;
+	border-radius: 30px;
+	background: #b71414;
+}
+
+.head_bottom .subnav:after {
+	content: "";
+	display: block;
+	height: 0;
+	visibility: hidden;
+	clear: both;
+}
+
+.body {
+	margin: 0 13.68%;
+	border-left: 1px #d3d3d3 solid;
+	border-right: 1px #d3d3d3 solid;
+	background: #fff;
+}
+
+.body .material {
+	border-top: 1px #d3d3d3 solid;
+}
+
+.body .material:after {
+	content: "";
+	display: block;
+	height: 0;
+	visibility: hidden;
+	clear: both;
+}
+
+.material .material_left {
+	float: left;
+	width: 75%;
+	box-sizing: border-box;
+	border-right: 1px #D3D3D3 solid;
+}
+
+.material .material_right {
+	float: left;
+	width: 25%;
+	box-sizing: border-box;
+}
+
+body .foot {
+	width: 100%;
+	height: 100px;
+	border-top: 1px #D3D3D3 solid;
+	background: #f9f9f9;
+}
+
+.foot p {
+	text-align: center;
+	line-height: 100px;
+	font-size: 2em;
+}
+
+.loginDiv {
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	z-index: 100;
+	width: 530px;
+	transform: translate(-50%, -50%);
+	background: #fff;
+	border-radius: 5px;
+	box-shadow: #000 1px 3px 10px, #000 -1px 1px 10px;
+}
+
+.loginDiv .login_head {
+	padding: 0 3%;
+	background: #2D2D2D;
+	border-top-left-radius: 5px;
+	border-top-right-radius: 5px;
+	height: 40px;
+	line-height: 40px;
+}
+
+.loginDiv .login_head span {
+	font-size: 1em;
+	color: #fff;
+	font-weight: bolder;
+}
+
+.loginDiv .login_head .exit {
+	font-family: "icomoon";
+	color: #fff;
+	float: right;
+	cursor: pointer;
+	-webkit-transition: transform 2s;
+}
+
+.loginDiv .login_head .exit :hover {
+	transform: rotate(150deg);
+}
+
+.loginDiv .login_material {
+	background: #fff;
+	padding: 7% 0;
+	box-sizing: border-box;
+}
+
+.loginDiv .login_material:after {
+	content: "";
+	display: block;
+	height: 0;
+	visibility: hidden;
+	clear: both;
+}
+
+.loginDiv .login_material .left {
+	float: left;
+	border-right: 1px #868686 dashed;
+	height: 100%;
+	width: 55.5%;
+	box-sizing: border-box;
+	padding: 0 7%;
+}
+
+.login_material .left img {
+	width: 100%;
+}
+
+.login_material .login {
+	display: block;
+	line-height: 30px !important;
+	background: #3C8BD6;
+	border: 1px #3984CE solid !important;
+	border-radius: 3px !important;
+	color: #fff;
+	text-align: center;
+	font-size: 0.8em !important;
+	margin: 5% 0 !important;
+	cursor: pointer;
+	width: 100%;
+	height: 30px !important;
+	padding: 0 !important
+}
+
+.login_material .login:hover {
+	opacity: 0.9;
+}
+
+.login_material .regist {
+	display: block;
+	line-height: 30px;
+	background: #F3F3F3;
+	border: 1px #C4C4C4 solid;
+	border-radius: 3px;
+	color: #000;
+	text-align: center;
+	font-size: 0.8em;
+	cursor: pointer;
+	width: 100%;
+}
+
+.login_material .regist:hover {
+	opacity: 0.7;
+}
+
+.loginDiv .login_material .right {
+	float: right;
+	width: 44.5%;
+	height: 100%;
+	box-sizing: border-box;
+	padding: 0 7%;
+}
+
+.login_material .right a {
+	display: block;
+	padding: 5% 0;
+}
+
+.login_material .right span {
+	display: inline-block;
+	line-height: 40px;
+	font-size: 0.8em;
+	padding: 0 0 0 7%;
+	cursor: pointer;
+}
+
+.login_material .right span:hover {
+	text-decoration: underline;
+}
+
+.login_material .right .login_weixin {
+	width: 38px;
+	height: 38px;
+	background: url(../image/logo.png) no-repeat -150px -670px;
+	display: inline-block;
+	vertical-align: middle;
+	cursor: pointer;
+}
+
+.login_material .right .login_qq {
+	width: 38px;
+	height: 38px;
+	background: url(../image/logo.png) no-repeat -190px -670px;
+	display: inline-block;
+	vertical-align: middle;
+	cursor: pointer;
+}
+
+.login_material .right .login_weibo {
+	width: 38px;
+	height: 38px;
+	background: url(../image/logo.png) no-repeat -231px -670px;
+	display: inline-block;
+	vertical-align: middle;
+	cursor: pointer;
+}
+
+.login_material .right .login_github {
+	width: 38px;
+	height: 38px;
+	background: url(../image/logo.png) no-repeat -150px -710px;
+	display: inline-block;
+	vertical-align: middle;
+	cursor: pointer;
+}
+
+.loginDiv .login_foot {
+	background: #F7F7F7;
+	border-top: 1px #C6C6C6 solid;
+	height: 50px;
+	border-bottom-right-radius: 5px;
+	border-bottom-left-radius: 5px;
+	box-sizing: border-box;
+	line-height: 50px;
+}
+
+.loginDiv .login_foot .foot_left {
+	float: left;
+	font-size: 0.8em;
+	padding: 0 0 0 5%;
+	color: #0b62a7;
+	cursor: pointer;
+}
+
+.loginDiv .login_foot .foot_right {
+	float: right;
+	font-size: 0.8em;
+	padding: 0 5% 0 0;
+	color: #999;
+	cursor: pointer;
+}
+
+.loginByPhone {
+	
+}
+
+.loginByPhone .login_material {
+	padding: 5% 30%;
+}
+
+.loginByPhone .login_material input {
+	display: block;
+	border: 1px #CDCDCD solid;
+	border-radius: 3px;
+	width: 100%;
+	height: 32px;
+	font-size: 0.8em;
+	line-height: 30px;
+	padding: 5px;
+	margin: 0 0 10px 0;
+	box-sizing: border-box;
+}
+
+.loginByPhone .login_material .desc {
+	display: block;
+	line-height: 20px;
+	padding: 0 0 10px 0;
+}
+
+.login_material .desc input {
+	display: inline-block;
+	width: inherit;
+	height: inherit;
+	padding: 0;
+	margin: 0;
+	vertical-align: middle;
+}
+
+.login_material .desc .auto {
+	display: inline-block;
+	font-size: 0.8em;
+}
+
+.login_material .desc .forget {
+	display: inline-block;
+	float: right;
+	font-size: 0.8em;
+	cursor: pointer;
+}
+
+.login_material .desc .forget:hover {
+	text-decoration: underline;
+}
+
+.login_material .message {
+	display: block;
+	color: red;
+	font-size: 0.8em;
+	padding: 0;
+	border: 0;
+	margin: 0 0 10px 0;
+}
+
+.login_material .message i {
+	font-family: "icomoon";
+	color: red;
+	padding: 0 5px 0 0;
+}
+
+.registByPhone .login_material {
+	padding: 5% 30%;
+}
+
+.registByPhone .login_material .name {
+	display: block;
+	font-size: 0.8em;
+	line-height: 30px;
+}
+
+.registByPhone .login_material input {
+	display: block;
+	border: 1px #CDCDCD solid;
+	border-radius: 3px;
+	width: 100%;
+	height: 32px;
+	font-size: 0.8em;
+	line-height: 30px;
+	padding: 5px;
+	margin: 0 0 10px 0;
+	box-sizing: border-box;
+}
+
+.registByPhone .login_material .phonenum {
+	padding-left: 30px;
+}
+
+.registByPhone .login_material .area {
+	position: absolute;
+	line-height: 32px;
+	font-size: 0.8em;
+	padding: 0 0 0 1%;
+}
+
+.checkCaptcha .login_material {
+	padding: 5% 30%;
+}
+
+.checkCaptcha .login_material input {
+	display: inline-block;
+	border: 1px #CDCDCD solid;
+	border-radius: 3px;
+	width: 60%;
+	height: 32px;
+	font-size: 0.8em;
+	line-height: 30px;
+	padding: 5px;
+	margin: 0 0 10px 0;
+	box-sizing: border-box;
+}
+
+.checkCaptcha .login_material .regist {
+	display: inline-block;
+	width: 36%;
+	box-sizing: border-box;
+}
+
+.checkCaptcha .login_material .regist_send {
+	display: inline-block;
+	width: 36%;
+	box-sizing: border-box;
+	line-height: 30px;
+	background: #eee;
+	border: 1px #C4C4C4 solid;
+	border-radius: 3px;
+	color: #bbb;
+	text-align: center;
+	font-size: 0.8em;
+}
+
+.checkCaptcha .login_material .phonenum {
+	display: inline-block;
+	font-weight: bolder;
+}
+
+.checkCaptcha .login_material p {
+	display: block;
+	padding: 0 0 15px 0;
+	font-size: 0.8em;
+	line-height: 25px;
+}
+
+.checkCaptcha .login_material .regist_message {
+	display: block;
+	font-size: 0.8em;
+	color: #999;
+	margin: -5px 0 0 0;
+}
+
+.checkCaptcha .login_material .login {
+	margin: -10px 0 0 0 !important;
+}
+
+.msg .login_material {
+	padding: 5% 20%;
+}
+
+.msg .login_material p {
+	text-align: center;
+	font-size: 0.9em;
+	line-height: 30px;
+	color: #333;
+}
+
+.msg .login_material p span {
+	font-weight: bolder;
+}
+
+.msg .login_material .login {
+	width: 30%;
+	margin: 5% auto !important;
+}
+
+.hiddenDiv {
+	z-index: 100;
+	position: absolute;
+	height: 0;
+}
+
+.music {
+	position: fixed;
+	top: 100%;
+	width: 100%;
+	background: rgba(0, 0, 0, 0.94);
+	transform: translate(0, -100%);
+	border-top: 1px #000 solid;
+	box-shadow: 0 -1px 5px #000;
+	padding: 0 13.68%;
+	height: 46px;
+	box-sizing: border-box;
+	z-index: 100;
+}
+
+.music .music_left {
+	float: left;
+	font-family: "icomoon";
+	color: #fff;
+	font-size: 1.5em;
+	line-height: 45px;
+	height: 100%;
+	cursor: default;
+	padding: 0 0 0 1.5%;
+}
+
+.music_left .previous {
+	opacity: 0.7;
+	vertical-align: top;
+	cursor: pointer;
+}
+
+.music_left .previous:hover {
+	opacity: 1;
+}
+
+.music_left .middle {
+	opacity: 0.7;
+	font-size: 1.3em;
+	cursor: pointer;
+}
+
+.music_left .middle:hover {
+	opacity: 1;
+}
+
+.music_left .next {
+	opacity: 0.7;
+	vertical-align: top;
+	cursor: pointer;
+}
+
+.music_left .next:hover {
+	opacity: 1;
+}
+
+.music .music_middle {
+	position: absolute;
+	left: 50%;
+	transform: translate(-50%, 0);
+	width: 50%;
+	height: 100%;
+}
+
+.music_middle img {
+	float: left;
+	width: 35px;
+	height: 35px;
+	border: 1px #000 solid;
+	border-radius: 3px;
+	margin: 4px 0 0 0;
+	cursor: pointer;
+}
+
+.music_middle .song {
+	float: left;
+	width: 83%;
+	height: 100%;
+	padding: 0 0 0 2%;
+}
+
+.music_middle .song .song_top {
+	display: block;
+	height: 50%;
+}
+
+.song .song_top .song_span {
+	color: #c7c7c7;
+	font-size: 0.8em;
+	line-height: 22.5px;
+	padding: 0 10px 0 0;
+	cursor: pointer;
+}
+
+.song .song_top .song_span:hover {
+	text-decoration: underline;
+}
+
+.song .song_top .songer {
+	color: #949494;
+}
+
+.song .song_top .from {
+	color: #fff;
+	font-size: 0.8em;
+	line-height: 22.5px;
+	padding: 0 10px 0 0;
+	opacity: 0.7;
+	cursor: pointer;
+}
+
+.song .song_top .from:hover {
+	opacity: 1;
+}
+
+.music_middle .song .song_bottom {
+	display: block;
+	height: 50%;
+}
+
+.song .song_bottom .progress {
+	position: relative;
+	display: inline-block;
+	width: 85%;
+	height: 10px;
+	background: #181818;
+	border-radius: 5px;
+	vertical-align: top;
+}
+
+.progress .downloading {
+	position: absolute;
+	width: 0;
+	height: 100%;
+	background: #535353;
+	border-radius: 5px;
+}
+
+.progress .playing {
+	position: absolute;
+	width: 0;
+	height: 100%;
+	background: #e60000;
+	border-radius: 5px;
+}
+
+.progress .point {
+	position: absolute;
+	width: 16px;
+	height: 16px;
+	background: #fff;
+	border-radius: 15px;
+	left: 0;
+	top: 50%;
+	transform: translate(-50%, -50%);
+	cursor: pointer;
+}
+
+.progress .point:hover {
+	border: 1px #888 solid;
+}
+
+.progress .point .inner {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	width: 6px;
+	height: 6px;
+	background: #e60000;
+	transform: translate(-50%, -50%);
+	border-radius: 6px;
+}
+
+.song .song_bottom .time {
+	float: right;
+	color: #6b6b6b;
+	font-size: 0.8em;
+	margin: -2px 0 0 0;
+}
+
+.song .song_bottom .time .now {
+	color: #a5a5a5;
+}
+
+.music_middle .collection {
+	display: inline-block;
+	font-family: "icomoon";
+	color: #fff;
+	opacity: 0.7;
+	line-height: 45px;
+	padding: 0 0 0 2%;
+	cursor: pointer;
+}
+
+.music_middle .collection:hover {
+	opacity: 1;
+}
+
+.music_middle .share {
+	display: inline-block;
+	font-family: "icomoon";
+	color: #fff;
+	opacity: 0.7;
+	line-height: 45px;
+	cursor: pointer;
+}
+
+.music_middle .share:hover {
+	opacity: 1;
+}
+
+.music .music_right {
+	float: right;
+	color: #fff;
+	line-height: 45px;
+	font-size: 1.1em;
+}
+
+.music_right .volume {
+	font-family: "icomoon";
+	cursor: pointer;
+	opacity: 0.7;
+}
+
+.music_right .volume:hover {
+	opacity: 1;
+}
+
+.music_right .volumeDiv {
+	position: relative;
+	display: inline-block;
+	vertical-align: top;
+}
+
+.music_right .volumeDiv .volume_hidden {
+	position: absolute;
+	width: 25px;
+	height: 100px;
+	left: 50%;
+	transform: translate(-50%, -100%);
+	top: 0;
+	background: rgba(0, 0, 0, 0.94);
+}
+
+.volume_hidden .max {
+	width: 4px;
+	height: 80%;
+	background: #181818;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	border-radius: 3px;
+}
+
+.volume_hidden .now {
+	width: 4px;
+	height: 0;
+	background: #e60000;
+	position: absolute;
+	top: 80px;
+	left: 50%;
+	transform: translate(-50%, -100%);
+	border-radius: 3px
+}
+
+.volume_hidden .point {
+	position: absolute;
+	width: 10px;
+	height: 10px;
+	background: #fff;
+	border-radius: 15px;
+	left: 50%;
+	top: 100%;
+	transform: translate(-50%, -50%);
+	cursor: pointer;
+}
+
+.volume_hidden .point .inner {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	width: 4px;
+	height: 4px;
+	background: #e60000;
+	transform: translate(-50%, -50%);
+	border-radius: 4px;
+}
+
+.music_right .playModeDiv {
+	display: inline-block;
+	vertical-align: top;
+	position: relative;
+}
+
+.music_right .playMode {
+	font-family: "icomoon";
+	cursor: pointer;
+	opacity: 0.7;
+}
+
+.music_right .playMode:hover {
+	opacity: 1;
+}
+
+.playModeDiv i {
+	position: absolute;
+	top: 0;
+	left: 50%;
+	height: 25px;
+	line-height: 25px;
+	transform: translate(-50%, -110%);
+	border: 1px #000 solid;
+	border-radius: 3px;
+	background: rgba(0, 0, 0, 0.94);
+	font-size: 0.7em;
+	text-align: center;
+	padding: 0 10px;
+	min-width: 60px;
+	color: #b3b3b3;
+}
+
+.music_right .playListDiv {
+	display: inline-block;
+	position: relative;
+}
+
+.music_right .playList {
+	cursor: pointer;
+}
+
+.music_right .playList:hover .songList {
+	opacity: 1;
+}
+
+.music_right .playList .songList {
+	font-family: "icomoon";
+	float: left;
+	opacity: 0.7;
+	cursor: pointer;
+}
+
+.music_right .playList .num {
+	float: left;
+	background: #080808;
+	width: 30px;
+	height: 14px;
+	margin: 15px 0 0 0;
+	line-height: 14px;
+	font-size: 0.5em;
+	border-top-right-radius: 14px;
+	border-bottom-right-radius: 14px;
+	border-top: 1px #000 solid;
+	border-right: 1px #000 solid;
+	border-bottom: 1px #000 solid;
+	color: #6b6b6b;
+	cursor: pointer;
+	text-align: center;
+}
+
+.playList .message {
+    position: absolute;
+    top: 0;
+    left: 0;
+    transform: translate(-60%, -130%);
+    color: #b4b4b4;
+    font-size: 12px;
+    line-height: 30px;
+    width: 130px;
+    background: #0f0f0f;
+    border-radius: 5px;
+    text-align: center;
+    box-shadow: 0 0 3px 0 #000;
+}
+
+.playList .message i {
+	position: absolute;
+	width: 0;
+	height: 0;
+	border: 10px rgba(0, 0, 0, 0) solid;
+	border-top-color: #000;
+	top: 90%;
+	left: 70%;
+}
+
+.music .show {
+	position: absolute;
+	top: 0;
+	left: 95%;
+	transform: translate(0, -100%);
+	border: 15px rgba(0, 0, 0, 0) solid;
+	border-bottom-color: #0e0e0e;
+	width: 20px;
+}
+
+.music .show i {
+	position: absolute;
+	cursor: pointer;
+	font-size: 0.8em;
+	top: 100%;
+	left: 50%;
+	transform: translate(-50%, 10%);
+	color: #fff;
+	opacity: 0.7;
+}
+
+.music .show i:hover {
+	opacity: 1;
+}
+
+.hiddenDiv .playList_hidden {
+	position: fixed;
+	width: 73%;
+	background: #333;
+	top: 100%;
+	left: 50%;
+	transform: translate(-50%, -100%) translate(0, -46px);
+	border-top-right-radius: 10px;
+	border-top-left-radius: 10px;
+}
+
+.playList_hidden .playList_hidden_top {
+	line-height: 40px;
+	background: #444;
+	border-top-left-radius: 10px;
+	border-top-right-radius: 10px;
+}
+
+.playList_hidden .playList_hidden_top:after {
+	content: "";
+	display: block;
+	height: 0;
+	visibility: hidden;
+	clear: both;
+}
+
+.playList_hidden .playList_hidden_top .list_head {
+	float: left;
+	width: 55%;
+	border-right: 1px #525252 solid;
+	box-sizing: border-box;
+}
+
+.playList_hidden_top .list_head .head_left {
+	float: left;
+	color: #e0e0e0;
+	font-weight: bolder;
+	padding: 0 0 0 5%;
+	font-size: 0.9em;
+}
+
+.playList_hidden_top .list_head .head_right {
+	float: right;
+	color: #e0e0e0;
+	font-size: 0.8em;
+}
+
+.playList_hidden_top .list_head .head_right i {
+	color: #fff;
+	opacity: 0.7;
+	cursor: pointer;
+}
+
+.playList_hidden_top .list_head .head_right .collectionAllSpan:hover .collectionAll
+	{
+	text-decoration: underline;
+}
+
+.playList_hidden_top .list_head .head_right .collectionAllSpan:hover i {
+	opacity: 1;
+}
+
+.playList_hidden_top .list_head .head_right .clearSpan:hover .clear {
+	text-decoration: underline;
+}
+
+.playList_hidden_top .list_head .head_right .clearSpan:hover i {
+	opacity: 1;
+}
+
+.playList_hidden_top .list_head .head_right .collectionAll {
+	padding: 0 10px;
+	cursor: pointer;
+}
+
+.playList_hidden_top .list_head .head_right .clear {
+	padding: 0 10px;
+	cursor: pointer;
+}
+
+.playList_hidden .playList_hidden_top .song_head {
+	float: left;
+	width: 45%;
+	position: relative;
+}
+
+.playList_hidden_top .song_head .songName {
+	text-align: center;
+	width: 100%;
+	display: inline-block;
+	color: #fff;
+	font-size: 0.9em;
+}
+
+.playList_hidden_top .song_head i {
+	position: absolute;
+	top: 0;
+	left: 90%;
+	color: #fff;
+	opacity: 0.7;
+	width: 40px;
+	height: 40px;
+	text-align: center;
+	cursor: pointer;
+	transition: transform 0.5s;
+}
+
+.playList_hidden_top .song_head i:hover {
+	opacity: 1;
+	transform: rotate(360deg);
+}
+
+.playList_hidden .playList_hidden_bottom {
+	border-top: 1px #2d2d2d solid;
+	height: 259px;
+	box-sizing: border-box;
+}
+
+.playList_hidden .playList_hidden_bottom .list_body {
+	float: left;
+	width: 54.5%;
+	height: 100%;
+	overflow: hidden;
+}
+
+.playList_hidden_bottom .list_body .song {
+	height: 30px;
+	line-height: 30px;
+	cursor: pointer;
+}
+
+.playList_hidden_bottom .list_body .song:hover {
+	background: #232323;
+}
+
+.playList_hidden_bottom .list_body .now {
+	background: #232323;
+	position: relative;
+}
+
+.playList_hidden_bottom .list_body .now s {
+	display: block;
+	position: absolute;
+	color: red;
+	padding: 0 5px 0 9px;
+}
+
+.playList_hidden_bottom .list_body .now .songName {
+	color: #fff;
+}
+
+.playList_hidden_bottom .list_body .now .songer {
+	color: #fff;
+}
+
+.playList_hidden_bottom .list_body .now .time {
+	color: #fff;
+}
+
+.playList_hidden_bottom .list_body .song:hover .songName {
+	color: #fff;
+}
+
+.playList_hidden_bottom .list_body .song:hover .songer {
+	color: #fff;
+}
+
+.playList_hidden_bottom .list_body .song:hover .time {
+	color: #fff;
+}
+
+.playList_hidden_bottom .list_body .song:hover .song_hidden {
+	visibility: visible;
+}
+
+.list_body .song .songName {
+	margin: 0;
+	padding: 0 0 0 30px;
+	display: inline-block;
+	vertical-align: top;
+	color: #d0d0d0;
+	font-size: 0.8em;
+	width: 43%;
+	cursor: pointer;
+}
+
+.list_body .song .songName:hover {
+	text-decoration: underline;
+}
+
+.list_body .song .song_hidden {
+	display: inline-block;
+	cursor: pointer;
+	visibility: hidden;
+}
+
+.list_body .song .song_hidden i {
+	color: #fff;
+	opacity: 0.7;
+	font-size: 0.9em;
+	cursor: pointer;
+}
+
+.list_body .song .song_hidden i:hover {
+	opacity: 1;
+}
+
+.list_body .song .songer {
+	display: inline-block;
+	color: #a5a5a5;
+	font-size: 0.8em;
+	vertical-align: top;
+	cursor: pointer;
+	width: 10%;
+}
+
+.list_body .song .songer:hover {
+	text-decoration: underline;
+}
+
+.list_body .song .time {
+	color: #6b6b6b;
+	font-size: 0.9em;
+	vertical-align: top;
+	display: inline-block;
+}
+
+.list_body .song .from {
+	float: right;
+	font-size: 0.9em;
+	margin: 0 10px;
+	cursor: pointer;
+	color: #fff;
+	opacity: 0.7;
+}
+
+.list_body .song .from:hover {
+	opacity: 1;
+}
+
+.list_body .none {
+	width: 100%;
+	height: 100%;
+	box-sizing: border-box;
+	padding: 70px 0;
+}
+
+.list_body .none p {
+	line-height: 59px;
+	text-align: center;
+	font-size: 0.8em;
+	color: #e0e0e0;
+}
+
+.list_body .none span {
+	text-decoration: underline;
+	cursor: pointer;
+}
+
+.playList_hidden .playList_hidden_bottom .barrier {
+	float: left;
+	width: 1%;
+	height: 100%;
+	background: #383838;
+	position: relative;
+}
+
+.playList_hidden .playList_hidden_bottom .scroll {
+	float: left;
+	width: 1%;
+	height: 100%;
+	background: #383838;
+	position: relative;
+}
+
+.playList_hidden_bottom .vernier {
+	position: absolute;
+	width: 100%;
+	height: 10%;
+	background: #9c9c9c;
+	border-radius: 10px;
+	top: 0;
+	cursor: pointer;
+}
+
+.playList_hidden .playList_hidden_bottom .song_body {
+	float: left;
+	width: 44.5%;
+	height: 100%;
+	position: relative;
+	font-size: 0;
+}
+
+.playList_hidden .playList_hidden_bottom .song_body .scroll {
+	height: 100%;
+	width: 2%;
+	position: absolute;
+	background: #383838;
+	display: inline-block;
+	float: none;
+}
+
+.playList_hidden_bottom .song_body .lrc {
+	width: 98%;
+	height: 100%;
+	overflow: hidden;
+	display: inline-block;
+	font-size: 14px;
+	position: relative;
+}
+
+.song_body .fullScreen {
+	position: absolute;
+	left: 95%;
+	transform: translate(-100%, 50%);
+	font-size: 16px;
+	cursor: pointer;
+	color: #000;
+	opacity: 0.7;
+	top: 0;
+}
+
+.song_body .fullScreen:hover {
+	opacity: 1;
+}
+
+.song_body .exitFullScreen {
+	position: absolute;
+	left: 95%;
+	top: 100%;
+	transform: translate(-100%, -150%);
+	font-size: 16px;
+	cursor: pointer;
+	color: #000;
+	opacity: 0.7;
+}
+
+.song_body .exitFullScreen:hover {
+	opacity: 1;
+}
+
+.song_body .lrc .now {
+	font-size: 1em;
+	color: #fff;
+}
+
+.song_body .lrc p {
+	line-height: 35px;
+	text-align: center;
+	font-size: 0.8em;
+	color: #e0e0e0;
+}
+
+.collectionDiv .login_material {
+	padding: 0;
+	min-height: 300px;
+}
+
+.collectionDiv .login_material .menu {
+	display: block;
+	width: 100%;
+	height: 60px;
+	position: relative;
+	cursor: pointer;
+}
+
+.collectionDiv .login_material .menu:hover {
+	background: #ececec;
+}
+
+.collectionDiv .login_material .newMenu {
+	background: #e6e6e6;
+}
+
+.collectionDiv .login_material .newMenu:hover {
+	background: #e6e6e6;
+}
+
+.collectionDiv .login_material .menu i {
+	position: absolute;
+	line-height: 60px;
+	font-size: 2.5em;
+	color: #6c6c6c;
+	left: 35px;
+	transform: translate(-50%, 0);
+	z-index: 1;
+	cursor: pointer;
+}
+
+.collectionDiv .login_material .menu .menu_right {
+	display: block;
+	padding: 0 0 0 70px;
+	font-size: 0.8em;
+	cursor: pointer;
+}
+
+.collectionDiv .login_material .menu .new {
+	line-height: 60px;
+	vertical-align: bottom;
+	font-size: 0.8em;
+	padding: 0 0 0 70px;
+	cursor: pointer;
+}
+
+.collectionDiv .login_material .menu img {
+	width: 50px;
+	position: absolute;
+	left: 35px;
+	transform: translate(-50%, 0);
+	padding: 5px 0;
+}
+
+.collectionDiv .login_material .menu .name {
+	line-height: 35px;
+	display: block;
+	cursor: pointer;
+}
+
+.collectionDiv .login_material .menu .num {
+	color: #6c6c6c;
+	cursor: pointer;
+}
+
+.collectionDiv .login_material .love i {
+	color: #fff;
+	display: block;
+	width: 50px;
+	height: 50px;
+	line-height: 50px;
+	margin: 5px 0;
+	text-align: center;
+	background: rgba(0, 0, 0, 0.7);
+}
+
+.addMenuDiv .login_material {
+	
+}
+
+.addMenuDiv .login_material .material {
+	line-height: 30px;
+	padding: 0 0 0 25px;
+	font-size: 0.8em;
+}
+
+.addMenuDiv .login_material .material .name {
+	border: 1px #CDCDCD solid;
+	border-radius: 3px;
+	height: 30px;
+	box-sizing: border-box;
+	padding: 0 0 0 5px;
+	width: 70%;
+}
+
+.addMenuDiv .login_material .desc {
+	font-size: 0.8em;
+	color: #999;
+	padding: 30px 0 0 80px;
+}
+
+.addMenuDiv .login_material .buttons {
+	padding: 15px 80px 0 80px;
+}
+
+.addMenuDiv .login_material .buttons .login {
+	margin: 0 10px 0 0 !important;
+	display: inline-block;
+	width: 20%;
+}
+
+.addMenuDiv .login_material .buttons .regist {
+	display: inline-block;
+	width: 20%;
+}
+
+.addMenuDiv .login_material .material .message {
+	padding: 0 0 0 55px;
+}
+
+#back {
+	position: fixed;
+	width: 50px;
+	height: 50px;
+	top: 10px;
+	left: 10px;
+	font-size: 48px;
+	border: 1px #d3d3d3 solid;
+	box-sizing: border-box;
+	line-height: 50px;
+	text-align: center;
+	-webkit-user-select: none;
+	cursor: pointer;
+	border-radius: 5px;
+	color: #d3d3d3;
+	display: none;
+}
+
+#back:hover {
+	border: 1px #e60000 solid;
+	color: #e60000;
+}
+
+#top {
+	position: fixed;
+	top: 70%;
+	left: 90%;
+	width: 40px;
+	height: 40px;
+	line-height: 38px;
+	border: 1px #d3d3d3 solid;
+	text-align: center;
+	color: #d3d3d3;
+	background: #fff;
+	border-radius: 5px;
+	-webkit-user-select: none;
+	cursor: pointer;
+	box-sizing: border-box;
+	display: none;
+}
+
+#top:hover {
+	border: 1px #00a905 solid;
+	color: #00a905;
+}
+
+#usernameDiv .name {
+	display: block;
+	border: 1px #CDCDCD solid;
+	border-radius: 3px;
+	width: 70%;
+	height: 32px;
+	font-size: 0.8em;
+	line-height: 30px;
+	padding: 5px;
+	box-sizing: border-box;
+	margin: 0 auto;
+}
+
+#simpleMsgDiv {
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	background: #fff;
+	line-height: 36px;
+	padding: 0 15px 0 35px;
+	border-radius: 5px;
+	font-size: 0.9em;
+	box-shadow: 0 0 7px 0 #000;
+	border: 1px #000 solid;
+	font-family: Arial, Helvetica, sans-serif;
+}
+
+#simpleMsgDiv i {
+	height: 20px;
+	width: 20px;
+	line-height: 20px;
+	position: absolute;
+	top: 50%;
+	transform: translate(-130%, -50%);
+	font-size: 0.1em;
+	border-radius: 10px;
+	text-align: center;
+	color: #fff;
+}
+
+#simpleMsgDiv .success {
+	background: #21d800;
+}
+
+#simpleMsgDiv .info {
+	background: #0043ff;
+}
+
+#simpleMsgDiv .error {
+	background: #ff0000;
+}
+.disable{
+	color: #9a9a9a !important;
+    border-color: #9a9a9a !important;
+}
+.disable:hover{
+	opacity: inherit !important;
+}
