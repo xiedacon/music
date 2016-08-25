@@ -1,32 +1,24 @@
 (function() {
-	var _realUrl = document.getElementById("realUrl").innerHTML;
-	var pageScope = router.getPageScope(_realUrl);
-	var orderBy = "hot";
-
-	var rootRealUrl = _realUrl.split("/")[0];
-	var realUrl = _realUrl;
-
-	if (rootRealUrl !== _realUrl) {
-		$("#tagName").text(_realUrl.split("?")[1]);
-		realUrl = _realUrl.split("?")[0];
+	PageScope["orderBy"] = "hot";
+	if (PageScope.params["secondTagId"]) {
+		PageScope["supplement"] = "/secondTagId_" + PageScope.params["secondTagId"];
+	} else {
+		PageScope["supplement"] = "";
 	}
-	router.getPageScope(_realUrl).setAttribute("orderBy", orderBy);
-	router.getPageScope(_realUrl).setAttribute("tagId", realUrl.split("/")[1]);
-
-	var ajaxConfigs = new router.AjaxConfigs(_realUrl);
-	ajaxConfigs.setAjaxConfigs({
-		url : realUrl + "/" + orderBy + "/1",
+	console.log(PageScope)
+	AJAX({
+		url : "songMenu/s/" + PageScope["orderBy"] + "_1" + PageScope["supplement"],
 		success : loadSongMenuList
-	}, {
-		url : rootRealUrl + "/tags",
+	});
+	AJAX({
+		url : "songMenuTag/s",
 		success : loadSongMenuSecondTag
 	});
-
-	ajaxConfigs.startAjaxs();
 
 	init();
 
 	function init() {
+		$("#tagName").text(PageScope.params["secondTagName"]);
 		$("#select").click(function() {
 			var flag = $(this).attr("data-flag");
 			if (flag === "hidden") {
@@ -42,16 +34,11 @@
 			$(this).siblings().removeClass("now");
 
 			var orderBy = $(this).attr("data-orderBy");
-			pageScope.setAttribute("orderBy", orderBy);
-
-			if (!ajaxConfigs.hasAjaxConfig(realUrl + "/" + orderBy + "/1")) {
-				ajaxConfigs.setAjaxConfig({
-					url : realUrl + "/" + orderBy + "/1",
-					success : loadSongMenuList
-				});
-			}
-
-			ajaxConfigs.startAjax(realUrl + "/" + orderBy + "/1");
+			PageScope["orderBy"] = orderBy;
+			AJAX({
+				url : "songMenu/s/" + orderBy + "_1" + PageScope["supplement"],
+				success : loadSongMenuList
+			});
 		})
 	}
 
@@ -77,11 +64,11 @@
 				$secondTagEle = $_prototype.clone();
 
 				$secondTagEle.attr({
-					"data-href" : "songMenus/{" + secondTag.id + "}?" + secondTag.name,
+					"data-href" : "songMenus?secondTagId=" + secondTag.id + "&secondTagName=" + secondTag.name,
 					"title" : secondTag.name
 				}).text(secondTag.name)
 
-				if (secondTag.id == pageScope.getAttribute("tagId")) {
+				if (secondTag.id == PageScope.params["secondTagId"]) {
 					$secondTagEle.addClass("select");
 				}
 
@@ -104,89 +91,24 @@
 		var $prototype = $songMenuListEle.find(".prototype").clone().removeClass("prototype");
 		var songMenu, $songMenuEle;
 
-		for (var i = 0; i < songMenuList.length; i++) {
-			songMenu = songMenuList[i];
-			$songMenuEle = $prototype.clone();
-
-			$songMenuEle.find("img").attr({
-				"src" : songMenu.icon,
-				"alt" : songMenu.name,
-				"title" : songMenu.name,
-				"data-href" : "songMenu/{" + songMenu.id + "}"
-			});
-			$songMenuEle.find(".num").text(songMenu.playNum);
-			$songMenuEle.find(".playthis").attr({
-				"onclick" : "hiddenDiv.playFromSongMenu('" + songMenu.id + "')"
-			});
-			$songMenuEle.find(".name").attr({
-				"title" : songMenu.name,
-				"data-href" : "songMenu/{" + songMenu.id + "}"
-			}).text(songMenu.name);
-			$songMenuEle.find(".songer").attr({
-				"title" : songMenu.creatorName,
-				"data-href" : "home/{" + songMenu.creatorId + "}"
-			}).text(songMenu.creatorName);
-			if ((i + 1) % 5 === 0) {
-				$songMenuEle.css("padding-right", 0);
-			}
-
-			$songMenuListEle.append($songMenuEle);
-		}
-
-		var $pagesEle = $("#pages");
-		$pagesEle.empty();
-
-		if (pageBean.totalPage !== 0 && pageBean.totalPage !== 1) {
-			var begin = pageBean.page - 2;
-			var end = pageBean.page + 2;
-			if (pageBean.page < 3) {
-				begin = 1;
-				end = 5;
-			}
-			if (pageBean.totalPage < 5) {
-				end = pageBean.totalPage;
-			} else if (end > pageBean.totalPage) {
-				end = pageBean.totalPage;
-			}
-
-			var $previousPage = $("<li class='button' data-page='" + (pageBean.page - 1) + "'>< 上一页</li>");
-			if (pageBean.page === 1) {
-				$previousPage.addClass("unable");
-			} else {
-				$previousPage.addClass("enable");
-			}
-			$pagesEle.append($previousPage);
-
-			var $pageEle;
-			for (var i = begin; i < end + 1; i++) {
-				$pageEle = $("<li class='button num' data-page='" + i + "'>" + i + "</li>");
-				if (i === pageBean.page) {
-					$pageEle.removeClass("num").addClass("now");
+		FUNCTION.loadPageBean({
+			pageBean : pageBean,
+			$pagesEle : $("#pages"),
+			loadBeans : function() {
+				for (var i = 0; i < songMenuList.length; i++) {
+					songMenu = songMenuList[i];
+					$songMenuEle = $prototype.clone();
+					FUNCTION.loadSongMenu(songMenu, $songMenuEle, i);
+					$songMenuListEle.append($songMenuEle);
 				}
-				$pagesEle.append($pageEle);
+			},
+			click : function(page) {
+				var orderBy = PageScope["orderBy"];
+				AJAX({
+					url : "songMenu/s/" + orderBy + "_" + page + PageScope["supplement"],
+					success : loadSongMenuList
+				});
 			}
-
-			var $nextPage = $("<li class='button' data-page='" + (pageBean.page + 1) + "'>下一页 ></li>");
-			if (pageBean.page === pageBean.totalPage) {
-				$nextPage.addClass("unable");
-			} else {
-				$nextPage.addClass("enable");
-			}
-			$pagesEle.append($nextPage);
-
-			$pagesEle.find(".button").not(".unable").not(".now").click(function() {
-				var page = $(this).attr("data-page");
-
-				if (!ajaxConfigs.hasAjaxConfig(realUrl + "/" + orderBy + "/" + page)) {
-					var orderBy = pageScope.getAttribute("orderBy");
-					ajaxConfigs.setAjaxConfig({
-						url : realUrl + "/" + orderBy + "/" + page,
-						success : loadSongMenuList
-					});
-				}
-
-				ajaxConfigs.startAjax(realUrl + "/" + orderBy + "/" + page);
-			})
-		}
+		});
 	}
 }())

@@ -2,27 +2,26 @@ package cn.xiedacon.service;
 
 import java.util.List;
 
+import cn.xiedacon.model.SongMenu;
 import cn.xiedacon.util.PageBean;
-import cn.xiedacon.vo.SimpleSongMenuVo;
-import cn.xiedacon.vo.SongMenuVo;
 
 
 public interface SongMenuService {
 
-	List<SimpleSongMenuVo> selectForIndex();
+	SongMenu selectById(String id);
 
-	SongMenuVo selectSongMenuById(String id);
+	PageBean<SongMenu> selectPageBean(Integer page);
 
-	PageBean<SimpleSongMenuVo> selectPageBean(Integer page);
+	PageBean<SongMenu> selectPageBeanOrderByCollectionNum(Integer page);
 
-	PageBean<SimpleSongMenuVo> selectPageBeanOrderByCollectionNum(Integer page);
+	PageBean<SongMenu> selectPageBeanBySecondTagId(String secondTagId, Integer page);
 
-	PageBean<SimpleSongMenuVo> selectPageBeanBySecondTagId(String secondTagId, Integer page);
+	PageBean<SongMenu> selectPageBeanBySecondTagIdOrderByCollectionNum(String secondTagId, Integer page);
 
-	PageBean<SimpleSongMenuVo> selectPageBeanBySecondTagIdOrderByCollectionNum(String secondTagId, Integer page);
+	List<SongMenu> selectListByCreatorId(String userId);
 
-	List<SimpleSongMenuVo> selectListByCreatorId(String userId);
+	List<SongMenu> selectListByCollectorId(String collectorId);
 
-	List<SimpleSongMenuVo> selectListByCollectorId(String collectorId);
+	void insertSongMenu(SongMenu songMenu);
 
 }

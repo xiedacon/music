@@ -2,22 +2,21 @@ package cn.xiedacon.service;
 
 import java.util.List;
 
-import cn.xiedacon.vo.SimpleSongVo;
-import cn.xiedacon.vo.SongVo;
+import cn.xiedacon.model.Song;
 
 public interface SongService {
 
-	List<SimpleSongVo> selectListBySongMenuIdOrderByRank(String songMenuId);
+	List<Song> selectListBySongMenuIdOrderByRank(String songMenuId);
 
-	List<SimpleSongVo> selectListByAlbumIdOrderByRank(String albumId);
+	List<Song> selectListByAlbumIdOrderByRank(String albumId);
 
-	List<SimpleSongVo> selectListBySongListIdOrderByRank(String songListId);
+	List<Song> selectListBySongListIdOrderByRank(String songListId);
 
-	SongVo selectById(String id);
+	Song selectById(String id);
 
 	String selectLyricUriById(String songId);
 
-	List<SongVo> selectListBySingerIdOrderByCollectionNumLimit(String singerId, Integer begin, Integer limit);
+	List<Song> selectListBySingerIdOrderByCollectionNumLimit(String singerId, Integer begin, Integer limit);
 
 	String selectFileUriById(String songId);
 

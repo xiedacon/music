@@ -5,7 +5,7 @@
 
 <mapper namespace="cn.xiedacon.dao.SongDao">
 
-	<sql id="selectRequiredSql">
+	<sql id="required_SELECT">
 		SELECT
 		sb.id id,
 		sb.name name,
@@ -17,87 +17,86 @@
 		sb.albumName albumName,
 	</sql>
 	
-	<sql id="fromSong_baseSql">
+	<sql id="song_base_FROM">
 		FROM song_base sb
 	</sql>
-	
-	<sql id="orderByCollectionNumSql">
-		ORDER BY sr.collectionNum DESC
-	</sql>
 
-	<sql id="byIdSql">
+	<sql id="aong_record_JOIN">
+		INNER JOIN song_record sr ON sb.id = sr.id
+	</sql>
+	
+	<sql id="id_WHERE">
 		WHERE sb.id = #{id}
 	</sql>
-	
-	<sql id="bySingerIdSql">
+	<sql id="singerId_WHERE">
 		WHERE sb.singerId = #{singerId}
 	</sql>
 
-	<sql id="joinSong_recordSql">
-		INNER JOIN song_record sr ON sb.id = sr.id
+	<sql id="collectionNum_ORDERBY">
+		ORDER BY sr.collectionNum DESC
 	</sql>
 
-	<sql id="limitSql">
+	<sql id="LIMIT">
 		LIMIT #{begin},#{limit}
 	</sql>
 
-	<select id="selectListBySongMenuIdOrderByRank" resultType="cn.xiedacon.vo.SimpleSongVo">
-		<include refid="selectRequiredSql"></include>
+	<select id="selectListBySongMenuIdOrderByRank" resultType="cn.xiedacon.model.Song">
+		<include refid="required_SELECT"></include>
 		sgs.rank rank
-		<include refid="fromSong_baseSql"></include>
+		<include refid="song_base_FROM"></include>
 		INNER JOIN
 		song_gl_songmenu sgs ON sgs.songId = sb.id
 		WHERE sgs.songMenuId = #{songMenuId}
 		ORDER BY sgs.rank ASC
 	</select>
 
-	<select id="selectListByAlbumIdOrderByRank" resultType="cn.xiedacon.vo.SimpleSongVo">
-		<include refid="selectRequiredSql"></include>
+	<select id="selectListByAlbumIdOrderByRank" resultType="cn.xiedacon.model.Song">
+		<include refid="required_SELECT"></include>
 		sga.rank rank
-		<include refid="fromSong_baseSql"></include>
+		<include refid="song_base_FROM"></include>
 		INNER JOIN song_gl_album sga ON sga.songId = sb.id
 		WHERE sga.albumId = #{albumId}
 		ORDER BY sga.rank ASC
 	</select>
 
-	<select id="selectListBySongListIdOrderByRank" resultType="cn.xiedacon.vo.SimpleSongVo">
-		<include refid="selectRequiredSql"></include>
+	<select id="selectListBySongListIdOrderByRank" resultType="cn.xiedacon.model.Song">
+		<include refid="required_SELECT"></include>
 		sgs.rank rank,
 		sgs.rankChange rankChange
-		<include refid="fromSong_baseSql"></include>
+		<include refid="song_base_FROM"></include>
 		INNER JOIN song_gl_songlist sgs ON sgs.songId = sb.id
 		WHERE sgs.songListId = #{songListId}
 		ORDER BY sgs.rank ASC
 	</select>
 
-	<select id="selectById" resultType="cn.xiedacon.vo.SongVo">
-		<include refid="selectRequiredSql"></include>
+	<select id="selectById" resultType="cn.xiedacon.model.Song">
+		<include refid="required_SELECT"></include>
 		sb.remark remark,
 		sr.commentNum commentNum
-		<include refid="fromSong_baseSql"></include>
-		<include refid="joinSong_recordSql"></include>
-		<include refid="byIdSql"></include>
+		<include refid="song_base_FROM"></include>
+		<include refid="aong_record_JOIN"></include>
+		<include refid="id_WHERE"></include>
 	</select>
 
 	<select id="selectLyricUriById" resultType="java.lang.String">
 		SELECT sb.lyricUri
-		<include refid="fromSong_baseSql"></include>
-		<include refid="byIdSql"></include>
+		<include refid="song_base_FROM"></include>
+		<include refid="id_WHERE"></include>
 	</select>
 
-	<select id="selectListBySingerIdOrderByCollectionNumLimit" resultType="cn.xiedacon.vo.SongVo">
-		<include refid="selectRequiredSql"></include>
+	<select id="selectListBySingerIdOrderByCollectionNumLimit" resultType="cn.xiedacon.model.Song">
+		<include refid="required_SELECT"></include>
 		sr.collectionNum collectionNum
-		<include refid="fromSong_baseSql"></include>
-		<include refid="joinSong_recordSql"></include>
-		<include refid="bySingerIdSql"></include>
-		<include refid="orderByCollectionNumSql"></include>
-		<include refid="limitSql"></include>
+		<include refid="song_base_FROM"></include>
+		<include refid="aong_record_JOIN"></include>
+		<include refid="singerId_WHERE"></include>
+		<include refid="collectionNum_ORDERBY"></include>
+		<include refid="LIMIT"></include>
 	</select>
 	
 	<select id="selectFileUriById" resultType="java.lang.String">
 		SELECT sb.fileUri
-		<include refid="fromSong_baseSql"></include>
-		<include refid="byIdSql"></include>
+		<include refid="song_base_FROM"></include>
+		<include refid="id_WHERE"></include>
 	</select>
 </mapper>

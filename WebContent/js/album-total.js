@@ -1,23 +1,19 @@
 (function() {
 
-	var realUrl = document.getElementById("realUrl").innerHTML;
-	var pageScope = router.getPageScope(realUrl);
-	var ajaxConfigs = new router.AjaxConfigs(realUrl);
+	PageScope["tagId"] = "all";
 
-	pageScope.setAttribute("tagId", "all");
-
-	ajaxConfigs.setAjaxConfigs({
-		url : realUrl + "/hot",
+	AJAX({
+		url : "json/index",
 		success : loadHotAlbumList
-	}, {
-		url : realUrl + "/" + pageScope.getAttribute("tagId") + "/1",
+	});
+	AJAX({
+		url : "album/s/tagId_" + PageScope["tagId"] + "/1",
 		success : loadAlbumList
-	}, {
-		url : realUrl + "/tags",
+	});
+	AJAX({
+		url : "albumTag/s",
 		success : loadTagList
 	});
-
-	ajaxConfigs.startAjaxs();
 
 	function loadTagList(tagList) {
 		var $tagListEle = $("#tags");
@@ -53,31 +49,41 @@
 			var name = $(this).text();
 			$("#tags").siblings().text(name);
 
-			pageScope.setAttribute("tagId", id);
+			PageScope["tagId"] = id;
 
-			if (!ajaxConfigs.hasAjaxConfig(realUrl + "/" + pageScope.getAttribute("tagId") + "/1")) {
-				ajaxConfigs.setAjaxConfig({
-					url : realUrl + "/" + pageScope.getAttribute("tagId") + "/1",
-					success : function(pageBean) {
-						loadAlbumList(pageBean);
-					}
-				});
-			}
-
-			ajaxConfigs.startAjax(realUrl + "/" + pageScope.getAttribute("tagId") + "/1");
+			AJAX({
+				url : "album/s/tagId_" + PageScope["tagId"] + "/1",
+				success : function(pageBean) {
+					loadAlbumList(pageBean);
+				}
+			});
 		})
 	}
 
-	function loadHotAlbumList(albumList) {
+	function loadHotAlbumList(data) {
 		var $hotListEle = $("#hotList");
-		loadAlbumList_base($hotListEle, albumList);
+		loadAlbumList_base($hotListEle, data.albums);
 	}
 
 	function loadAlbumList(pageBean) {
 		var $albumListEle = $("#albumList");
 		$albumListEle.children().not(".prototype").remove();
-		loadAlbumList_base($albumListEle, pageBean.beans);
-		loadPage(pageBean);
+		
+		FUNCTION.loadPageBean({
+			pageBean : pageBean,
+			$pagesEle : $("#pages"),
+			loadBeans : function() {
+				loadAlbumList_base($albumListEle, pageBean.beans);
+			},
+			click : function(page) {
+				AJAX({
+					url : "album/s/tagId_" + PageScope["tagId"] + "/" + page,
+					success : function(pageBean) {
+						loadAlbumList(pageBean);
+					}
+				});
+			}
+		});
 	}
 
 	function loadAlbumList_base($albumListEle, albumList) {
@@ -87,84 +93,9 @@
 		for (var i = 0; i < albumList.length; i++) {
 			album = albumList[i];
 			$albumEle = $prototype.clone();
-
-			$albumEle.find("img").attr({
-				"src" : album.icon,
-				"title" : album.name,
-				"data-href" : "album/{" + album.id + "}"
-			});
-			$albumEle.find(".play").attr({
-				"onclick" : "hiddenDiv.playFromAlbum('" + album.id + "')"
-			});
-			$albumEle.find(".name").attr({
-				"title" : album.name,
-				"data-href" : "album/{" + album.id + "}"
-			}).text(album.name);
-			$albumEle.find(".songer").attr({
-				"title" : album.singerName,
-				"data-href" : "singer/{" + album.singerId + "}"
-			}).text(album.singerName);
-
+			FUNCTION.loadAlbum(album, $albumEle);
 			$albumListEle.append($albumEle);
 		}
 	}
 
-	function loadPage(pageBean) {
-		var $pagesEle = $("#pages");
-		$pagesEle.empty();
-
-		if (pageBean.totalPage !== 0 && pageBean.totalPage !== 1) {
-			var begin = pageBean.page - 2;
-			var end = pageBean.page + 2;
-			if (pageBean.page < 3) {
-				begin = 1;
-				end = 5;
-			}
-			if (pageBean.totalPage < 5) {
-				end = pageBean.totalPage;
-			} else if (end > pageBean.totalPage) {
-				end = pageBean.totalPage;
-			}
-
-			var $previousPage = $("<li class='button' data-page='" + (pageBean.page - 1) + "'>< 上一页</li>");
-			if (pageBean.page === 1) {
-				$previousPage.addClass("unable");
-			} else {
-				$previousPage.addClass("enable");
-			}
-			$pagesEle.append($previousPage);
-
-			var $pageEle;
-			for (var i = begin; i < end + 1; i++) {
-				$pageEle = $("<li class='button num' data-page='" + i + "'>" + i + "</li>");
-				if (i === pageBean.page) {
-					$pageEle.removeClass("num").addClass("now");
-				}
-				$pagesEle.append($pageEle);
-			}
-
-			var $nextPage = $("<li class='button' data-page='" + (pageBean.page + 1) + "'>下一页 ></li>");
-			if (pageBean.page === pageBean.totalPage) {
-				$nextPage.addClass("unable");
-			} else {
-				$nextPage.addClass("enable");
-			}
-			$pagesEle.append($nextPage);
-
-			$pagesEle.find(".button").not(".unable").not(".now").click(function() {
-				var page = $(this).attr("data-page");
-
-				if (!ajaxConfigs.hasAjaxConfig(realUrl + "/" + pageScope.getAttribute("tagId") + "/" + page)) {
-					ajaxConfigs.setAjaxConfig({
-						url : realUrl + "/" + pageScope.getAttribute("tagId") + "/" + page,
-						success : function(pageBean) {
-							loadAlbumList(pageBean);
-						}
-					});
-				}
-
-				ajaxConfigs.startAjax(realUrl + "/" + pageScope.getAttribute("tagId") + "/" + page);
-			})
-		}
-	}
 }())

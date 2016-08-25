@@ -4,28 +4,19 @@ import java.util.List;
 
 import org.junit.Test;
 
+import cn.xiedacon.model.SongMenu;
 import cn.xiedacon.service.SongMenuService;
+import cn.xiedacon.test.base.BaseTest;
 import cn.xiedacon.util.PageBean;
-import cn.xiedacon.vo.SimpleSongMenuVo;
-import cn.xiedacon.vo.SongMenuVo;
 
 public class SongMenuServiceTest extends BaseTest {
-
-	@Test
-	public void testSelectForIndex() {
-		SongMenuService songMenuService = this.getApplicationContext().getBean(SongMenuService.class);
-
-		List<SimpleSongMenuVo> list = songMenuService.selectForIndex();
-
-		System.out.println(list);
-	}
 
 	@Test
 	public void testSelectSongMenuById() {
 		SongMenuService songMenuService = this.getApplicationContext().getBean(SongMenuService.class);
 
 		String id = "7";
-		SongMenuVo songMenu = songMenuService.selectSongMenuById(id);
+		SongMenu songMenu = songMenuService.selectById(id);
 
 		System.out.println(songMenu);
 	}
@@ -35,7 +26,7 @@ public class SongMenuServiceTest extends BaseTest {
 		SongMenuService songMenuService = this.getApplicationContext().getBean(SongMenuService.class);
 
 		Integer page = 1;
-		PageBean<SimpleSongMenuVo> pageBean = songMenuService.selectPageBean(page);
+		PageBean<SongMenu> pageBean = songMenuService.selectPageBean(page);
 
 		System.out.println(pageBean);
 	}
@@ -45,7 +36,7 @@ public class SongMenuServiceTest extends BaseTest {
 		SongMenuService songMenuService = this.getApplicationContext().getBean(SongMenuService.class);
 
 		Integer page = 1;
-		PageBean<SimpleSongMenuVo> pageBean = songMenuService.selectPageBeanOrderByCollectionNum(page);
+		PageBean<SongMenu> pageBean = songMenuService.selectPageBeanOrderByCollectionNum(page);
 
 		System.out.println(pageBean);
 	}
@@ -56,7 +47,7 @@ public class SongMenuServiceTest extends BaseTest {
 
 		String secondTagId = "1";
 		Integer page = 1;
-		PageBean<SimpleSongMenuVo> pageBean = songMenuService.selectPageBeanBySecondTagId(secondTagId, page);
+		PageBean<SongMenu> pageBean = songMenuService.selectPageBeanBySecondTagId(secondTagId, page);
 
 		System.out.println(pageBean);
 	}
@@ -67,7 +58,7 @@ public class SongMenuServiceTest extends BaseTest {
 
 		String secondTagId = "1";
 		Integer page = 1;
-		PageBean<SimpleSongMenuVo> pageBean = songMenuService
+		PageBean<SongMenu> pageBean = songMenuService
 				.selectPageBeanBySecondTagIdOrderByCollectionNum(secondTagId, page);
 
 		System.out.println(pageBean);
@@ -77,7 +68,7 @@ public class SongMenuServiceTest extends BaseTest {
 	public void testSelectListByUserId() {
 		SongMenuService songMenuService = this.getApplicationContext().getBean(SongMenuService.class);
 
-		List<SimpleSongMenuVo> bean = songMenuService.selectListByCollectorId("1");
+		List<SongMenu> bean = songMenuService.selectListByCollectorId("1");
 
 		System.out.println(bean);
 	}
@@ -86,7 +77,7 @@ public class SongMenuServiceTest extends BaseTest {
 	public void testSelectListByCreatorId() {
 		SongMenuService songMenuService = this.getApplicationContext().getBean(SongMenuService.class);
 
-		List<SimpleSongMenuVo> bean = songMenuService.selectListByCreatorId("1");
+		List<SongMenu> bean = songMenuService.selectListByCreatorId("1");
 
 		System.out.println(bean);
 	}

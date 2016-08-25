@@ -2,15 +2,20 @@ package cn.xiedacon.model;
 
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+
+@JsonInclude(Include.NON_NULL)
 public class Comment {
 
 	private String id;
-	private String creatorName;
-	private String creatorId;
-	private String creatorIcon;
 	private String content;
 	private Date createTime;
 	private Integer agreeNum;
+	
+	private String creatorId;
+	private String creatorName;
+	private String creatorIcon;
 	public String getId() {
 		return id;
 	}

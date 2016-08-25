@@ -4,9 +4,9 @@ import java.util.List;
 
 import org.junit.Test;
 
+import cn.xiedacon.model.Singer;
 import cn.xiedacon.service.SingerService;
-import cn.xiedacon.vo.SimpleSingerVo;
-import cn.xiedacon.vo.SingerVo;
+import cn.xiedacon.test.base.BaseTest;
 
 public class SingerServiceTest extends BaseTest{
 
@@ -14,7 +14,7 @@ public class SingerServiceTest extends BaseTest{
 	public void testSelectListLimit(){
 		SingerService singerService = this.getApplicationContext().getBean(SingerService.class);
 		
-		List<SimpleSingerVo> list = singerService.selectListLimit(0,30);
+		List<Singer> list = singerService.selectListLimit(0,30);
 		
 		System.out.println(list);
 	}
@@ -23,7 +23,7 @@ public class SingerServiceTest extends BaseTest{
 	public void testSelectListOrderByCollectionNumLimit(){
 		SingerService singerService = this.getApplicationContext().getBean(SingerService.class);
 		
-		List<SimpleSingerVo> list = singerService.selectListOrderByCollectionNumLimit(0,100);
+		List<Singer> list = singerService.selectListOrderByCollectionNumLimit(0,100);
 		
 		System.out.println(list);
 	}
@@ -32,7 +32,7 @@ public class SingerServiceTest extends BaseTest{
 	public void testSelectListByClassifyIdOrderByCollectionNumLimit(){
 		SingerService singerService = this.getApplicationContext().getBean(SingerService.class);
 		
-		List<SimpleSingerVo> list = singerService.selectListByClassifyIdOrderByCollectionNumLimit(1001,0,30);
+		List<Singer> list = singerService.selectListByClassifyIdOrderByCollectionNumLimit(1001,0,30);
 		
 		System.out.println(list);
 	}
@@ -41,7 +41,7 @@ public class SingerServiceTest extends BaseTest{
 	public void testSelectById(){
 		SingerService singerService = this.getApplicationContext().getBean(SingerService.class);
 		
-		SingerVo bean = singerService.selectById("1");
+		Singer bean = singerService.selectById("1");
 		
 		System.out.println(bean);
 	}

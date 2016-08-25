@@ -2,11 +2,13 @@ package cn.xiedacon.vo;
 
 import java.util.List;
 
+import cn.xiedacon.model.SongMenuSecondTag;
+
 public class SongMenuTagVo {
 
 	private String id;
 	private String name;
-	private List<SongMenuSecondTagVo> secondTagList;
+	private List<SongMenuSecondTag> secondTagList;
 	@Override
 	public String toString() {
 		return "SongMenuTagVo [id=" + id + ", name=" + name + ", secondTagList=" + secondTagList + "]";
@@ -23,10 +25,10 @@ public class SongMenuTagVo {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public List<SongMenuSecondTagVo> getSecondTagList() {
+	public List<SongMenuSecondTag> getSecondTagList() {
 		return secondTagList;
 	}
-	public void setSecondTagList(List<SongMenuSecondTagVo> secondTagList) {
+	public void setSecondTagList(List<SongMenuSecondTag> secondTagList) {
 		this.secondTagList = secondTagList;
 	}
 }

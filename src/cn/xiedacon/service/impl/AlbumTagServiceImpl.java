@@ -7,8 +7,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import cn.xiedacon.dao.AlbumTagDao;
+import cn.xiedacon.model.AlbumTag;
 import cn.xiedacon.service.AlbumTagService;
-import cn.xiedacon.vo.AlbumTagVo;
 
 @Service
 @Transactional
@@ -18,7 +18,7 @@ public class AlbumTagServiceImpl implements AlbumTagService {
 	private AlbumTagDao ablumTagDao;
 	
 	@Override
-	public List<AlbumTagVo> selectList() {
+	public List<AlbumTag> selectList() {
 		return ablumTagDao.selectList();
 	}
 

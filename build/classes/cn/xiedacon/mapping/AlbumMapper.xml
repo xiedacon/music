@@ -5,7 +5,7 @@
 
 <mapper namespace="cn.xiedacon.dao.AlbumDao">
 
-	<sql id="selectRequiredSql">
+	<sql id="required_SELECT">
 		SELECT
 		a.id id,
 		a.name name,
@@ -14,13 +14,13 @@
 		a.singerName singerName,
 	</sql>
 	
-	<sql id="selectSimpleAlbumVoSql">
-		<include refid="selectRequiredSql"></include>
+	<sql id="simpleAlbumVo_SELECT">
+		<include refid="required_SELECT"></include>
 		a.createTime createTime
 	</sql>
 	
-	<sql id="selectAlbumVoSql">
-		<include refid="selectRequiredSql"></include>
+	<sql id="albumVo_SELECT">
+		<include refid="required_SELECT"></include>
 		a.createTime createTime,
 		a.remark remark,
 		a.createCompany
@@ -32,88 +32,76 @@
 		a.songNum songNum
 	</sql>
 
-	<sql id="selectCountSql">
+	<sql id="count_SELECT">
 		SELECT
 		COUNT(a.id)
 	</sql>
 	
-	<sql id="fromAlbum_baseSql">
+	<sql id="album_base_FROM">
 		FROM album_base a
 	</sql>
 	
-	<sql id="joinAlbum_recordSql">
+	<sql id="album_record_JOIN">
 		INNER JOIN album_record ar ON a.id = ar.id
 	</sql>
 	
-	<sql id="byId">
-		WHERE a.id = #{id}
+	<sql id="id_WHERE">
+		<where>a.id = #{id}</where>
 	</sql>
 	
-	<sql id="bytagIdSql">
-		WHERE a.tagId = #{tagId}
+	<sql id="tagId_WHERE">
+		<where>a.tagId = #{tagId}</where>
 	</sql>
 
-	<sql id="bySingerIdSql">
-		WHERE a.singerId = #{singerId}
+	<sql id="singerId_WHERE">
+		<where>a.singerId = #{singerId}</where>
 	</sql>
 	
-	<sql id="orderByCreateTimeSql">
+	<sql id="createTime_ORDERBY">
 		ORDER BY a.createTime DESC
 	</sql>
 
-	<sql id="limitSql">
+	<sql id="LIMIT">
 		LIMIT #{begin},#{limit}
 	</sql>
 
-	<select id="selectAblumListByIds" parameterType="java.lang.reflect.Array"
-		resultType="cn.xiedacon.vo.SimpleAlbumVo">
-		<include refid="selectSimpleAlbumVoSql"></include>
-		<include refid="fromAlbum_baseSql"></include>
-		WHERE
-		a.id in
-		<foreach collection="albumIds" open="(" separator="," close=")"
-			item="item">
-			#{item}
-		</foreach>
-	</select>
-
-	<select id="selectById" resultType="cn.xiedacon.vo.AlbumVo">
-		<include refid="selectAlbumVoSql"></include>
-		<include refid="fromAlbum_baseSql"></include>
-		<include refid="joinAlbum_recordSql"></include>
-		<include refid="byId"></include>
+	<select id="selectById" resultType="cn.xiedacon.model.Album">
+		<include refid="albumVo_SELECT"></include>
+		<include refid="album_base_FROM"></include>
+		<include refid="album_record_JOIN"></include>
+		<include refid="id_WHERE"></include>
 	</select>
 
 	<select id="selectCountByTagId" resultType="int">
-		<include refid="selectCountSql"></include>
-		<include refid="fromAlbum_baseSql"></include>
+		<include refid="count_SELECT"></include>
+		<include refid="album_base_FROM"></include>
 		<if test="tagId != null">
-			<include refid="bytagIdSql"></include>
+			<include refid="tagId_WHERE"></include>
 		</if>
 	</select>
 
-	<select id="selectListByTagIdOrderByCreateTimeLimit" resultType="cn.xiedacon.vo.SimpleAlbumVo">
-		<include refid="selectSimpleAlbumVoSql"></include>
-		<include refid="fromAlbum_baseSql"></include>
+	<select id="selectListByTagIdOrderByCreateTimeLimit" resultType="cn.xiedacon.model.Album">
+		<include refid="simpleAlbumVo_SELECT"></include>
+		<include refid="album_base_FROM"></include>
 		<if test="tagId != null">
-			<include refid="bytagIdSql"></include>
+			<include refid="tagId_WHERE"></include>
 		</if>
-		<include refid="orderByCreateTimeSql"></include>
-		<include refid="limitSql"></include>
+		<include refid="createTime_ORDERBY"></include>
+		<include refid="LIMIT"></include>
 	</select>
 
 	<select id="selectCountBySingerId" resultType="int">
-		<include refid="selectCountSql"></include>
-		<include refid="fromAlbum_baseSql"></include>
-		<include refid="bySingerIdSql"></include>
+		<include refid="count_SELECT"></include>
+		<include refid="album_base_FROM"></include>
+		<include refid="singerId_WHERE"></include>
 	</select>
 
 	<select id="selectListBySingerIdOrderByCreateTimeLimit"
-		resultType="cn.xiedacon.vo.SimpleAlbumVo">
-		<include refid="selectSimpleAlbumVoSql"></include>
-		<include refid="fromAlbum_baseSql"></include>
-		<include refid="bySingerIdSql"></include>
-		<include refid="orderByCreateTimeSql"></include>
-		<include refid="limitSql"></include>
+		resultType="cn.xiedacon.model.Album">
+		<include refid="simpleAlbumVo_SELECT"></include>
+		<include refid="album_base_FROM"></include>
+		<include refid="singerId_WHERE"></include>
+		<include refid="createTime_ORDERBY"></include>
+		<include refid="LIMIT"></include>
 	</select>
 </mapper>

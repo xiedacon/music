@@ -7,7 +7,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import cn.xiedacon.dao.SongMenuTagDao;
-import cn.xiedacon.vo.SongMenuTagVo;
+import cn.xiedacon.model.SongMenuFirstTag;
+import cn.xiedacon.model.SongMenuSecondTag;
 
 @Service
 @Transactional
@@ -17,8 +18,13 @@ public class SongMenuTagService implements cn.xiedacon.service.SongMenuTagServic
 	private SongMenuTagDao tagDao;
 	
 	@Override
-	public List<SongMenuTagVo> selectAll() {
-		return tagDao.selectAll();
+	public List<SongMenuFirstTag> selectList() {
+		return tagDao.selectList();
+	}
+
+	@Override
+	public SongMenuSecondTag selectSecondTagById(String id) {
+		return tagDao.selectSecondTagById(id);
 	}
 
 }

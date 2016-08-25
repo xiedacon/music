@@ -5,17 +5,21 @@
 
 <mapper namespace="cn.xiedacon.dao.SongMenuTagDao">
 	
-	<resultMap type="cn.xiedacon.vo.SongMenuTagVo" id="songMenuTagVoResultMap">
+	<resultMap type="cn.xiedacon.model.SongMenuFirstTag" id="songMenuTagVoResultMap">
 		<id column="tag_id" property="id"/>
 		<result column="tag_name" property="name"/>
 		
-		<collection property="secondTagList" javaType="java.util.List" ofType="cn.xiedacon.vo.SongMenuSecondTagVo">
+		<collection property="secondTagList" javaType="java.util.List" ofType="cn.xiedacon.model.SongMenuSecondTag">
 			<result column="secondTag_id" property="id"/>
 			<result column="secondTag_name" property="name"/>
 		</collection>
 	</resultMap>
 
-	<select id="selectAll" resultMap="songMenuTagVoResultMap">
+	<sql id="">
+		
+	</sql>
+
+	<select id="selectList" resultMap="songMenuTagVoResultMap">
 		SELECT
 		tf.id tag_id,
 		tf.name tag_name,
@@ -25,6 +29,15 @@
 		tag_songmenu_first tf
 		RIGHT JOIN tag_songmenu_second ts ON tf.id = ts.fid
 		ORDER BY tf.id ASC,ts.id ASC
+	</select>
+	
+	<select id="selectSecondTagById" resultType="cn.xiedacon.model.SongMenuSecondTag">
+		SELECT
+		ts.id id,
+		ts.name name
+		FROM
+		tag_songmenu_second ts
+		WHERE ts.id = #{id}
 	</select>
 
 </mapper>

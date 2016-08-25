@@ -7,9 +7,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import cn.xiedacon.dao.SingerDao;
+import cn.xiedacon.model.Singer;
 import cn.xiedacon.service.SingerService;
-import cn.xiedacon.vo.SimpleSingerVo;
-import cn.xiedacon.vo.SingerVo;
 
 @Service
 @Transactional
@@ -19,23 +18,23 @@ public class SingerServiceImpl implements SingerService {
 	private SingerDao singerDao;
 	
 	@Override
-	public List<SimpleSingerVo> selectListLimit(Integer begin, Integer limit) {
+	public List<Singer> selectListLimit(Integer begin, Integer limit) {
 		return singerDao.selectListLimit(begin, limit);
 	}
 
 	@Override
-	public List<SimpleSingerVo> selectListOrderByCollectionNumLimit(Integer begin, Integer limit) {
+	public List<Singer> selectListOrderByCollectionNumLimit(Integer begin, Integer limit) {
 		return singerDao.selectListOrderByCollectionNumLimit(begin,limit);
 	}
 
 	@Override
-	public List<SimpleSingerVo> selectListByClassifyIdOrderByCollectionNumLimit(Integer classifyId, Integer begin,
+	public List<Singer> selectListByClassifyIdOrderByCollectionNumLimit(Integer classifyId, Integer begin,
 			Integer limit) {
 		return singerDao.selectListByClassifyIdOrderByCollectionNumLimit(classifyId,begin,limit);
 	}
 
 	@Override
-	public SingerVo selectById(String id) {
+	public Singer selectById(String id) {
 		return singerDao.selectById(id);
 	}
 

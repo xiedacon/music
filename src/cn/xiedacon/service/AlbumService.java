@@ -1,19 +1,15 @@
 package cn.xiedacon.service;
 
-import java.util.List;
 
+import cn.xiedacon.model.Album;
 import cn.xiedacon.util.PageBean;
-import cn.xiedacon.vo.AlbumVo;
-import cn.xiedacon.vo.SimpleAlbumVo;
 
 public interface AlbumService {
 
-	AlbumVo selectById(String id);
+	Album selectById(String id);
 
-	PageBean<SimpleAlbumVo> selectPageBeanByTagIdOrderByCreateTimeLimit(String tagId, Integer page);
+	PageBean<Album> selectPageBeanByTagIdOrderByCreateTimeLimit(String tagId, Integer page);
 
-	List<SimpleAlbumVo> selectHotList();
-
-	PageBean<SimpleAlbumVo> selectPageBeanBySingerIdOrderByCreateTime(String singerId, Integer page);
+	PageBean<Album> selectPageBeanBySingerIdOrderByCreateTime(String singerId, Integer page);
 
 }

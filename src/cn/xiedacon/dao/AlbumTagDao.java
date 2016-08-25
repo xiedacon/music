@@ -2,10 +2,10 @@ package cn.xiedacon.dao;
 
 import java.util.List;
 
-import cn.xiedacon.vo.AlbumTagVo;
+import cn.xiedacon.model.AlbumTag;
 
 public interface AlbumTagDao {
 
-	List<AlbumTagVo> selectList();
+	List<AlbumTag> selectList();
 
 }

@@ -1,26 +1,16 @@
 (function() {
-	var realUrl = document.getElementById("realUrl").innerHTML;
-
-	var ajaxConfigs = new router.AjaxConfigs(realUrl);
-	ajaxConfigs.setAjaxConfigs({
-		url : realUrl + "/songMenu",
-		success : loadSongMenus
-	}, {
-		url : realUrl + "/songMenuSecondTag",
-		success : loadSongMenuSecondTags
-	}, {
-		url : realUrl + "/ablum",
-		success : loadAlbums
-	}, {
-		url : realUrl + "/user",
-		success : loadUsers
-	}, {
-		url : realUrl + "/songList",
-		success : loadSongLists
+	AJAX({
+		url : "json/index",
+		success : index
 	});
 
-	ajaxConfigs.startAjaxs();
-
+	function index(data) {
+		loadSongMenus(data.songMenus);
+		loadSongMenuSecondTags(data.songMenuTags);
+		loadAlbums(data.albums);
+		loadUsers(data.users);
+		loadSongLists(data.songLists);
+	}
 	function loadSongMenus(data) {
 		var $songMenuListEle = $("#songMenuList");
 		var $prototype = $songMenuListEle.find(".prototype").clone().removeClass("prototype");
@@ -35,15 +25,15 @@
 				"title" : songMenu.name
 			});
 			$songMenuEle.find("img").parent().attr({
-				"data-href" : "songMenu/{" + songMenu.id + "}"
+				"data-href" : "songMenu?songMenuId=" + songMenu.id
 			});
 			$songMenuEle.find(".num").text(songMenu.playNum);
 			$songMenuEle.find(".playthis").attr({
-				"onclick" : "hiddenDiv.playFromSongMenu('" + songMenu.id + "')"
+				"onclick" : "MMR.get('music').batchAddThenPlay('songMenuId','" + songMenu.id + "')"
 			});
 			$songMenuEle.find(".name").attr({
 				"title" : songMenu.name,
-				"data-href" : "songMenu/{" + songMenu.id + "}"
+				"data-href" : "songMenu?songMenuId=" + songMenu.id
 			}).text(limitStringLength(songMenu.name, 20));
 
 			$songMenuEle.attr("id", songMenu.id);
@@ -60,7 +50,7 @@
 			songMenuSecondTag = data[i];
 			$songMenuSecondTagEle = $prototype.clone().attr({
 				"id" : songMenuSecondTag.id,
-				"data-href" : "songMenus/{" + songMenuSecondTag.id + "}?" + songMenuSecondTag.name,
+				"data-href" : "songMenus?secondTagId=" + songMenuSecondTag.id + "&secondTagName=" + songMenuSecondTag.name,
 				"data-url" : "songMenus",
 			}).text(songMenuSecondTag.name);
 
@@ -82,19 +72,19 @@
 				"alt" : album.name
 			});
 			$albumEle.find("img").parent().attr({
-				"data-href" : "album/{" + album.id + "}"
+				"data-href" : "album?albumId=" + album.id
 			});
 			$albumEle.find(".play").attr({
-				"onclick" : "hiddenDiv.playFromAlbum('" + album.id + "')"
+				"onclick" : "MMR.get('music').batchAddThenPlay('albumId','" + album.id + "')"
 			});
 
 			$albumEle.find(".name").attr({
 				"title" : album.name,
-				"data-href" : "album/{" + album.id + "}"
+				"data-href" : "album?albumId=" + album.id
 			}).text(limitStringLength(album.name, 6));
 			$albumEle.find(".songer").attr({
 				"title" : album.singerName,
-				"data-href" : "singer/{" + album.singerId + "}"
+				"data-href" : "singer?singerId=" + album.singerId
 			}).text(limitStringLength(album.singerName, 6));
 
 			if (i > 4) {
@@ -125,7 +115,7 @@
 			}).text(limitStringLength(user.introduction, 9));
 
 			$userEle.attr({
-				"data-href" : "home/{" + user.id + "}"
+				"data-href" : "home?userId=" + user.id
 			})
 
 			$userListEle.append($userEle);
@@ -135,10 +125,10 @@
 	function loadSongLists(data) {
 		var $songListsEle = $("#songLists");
 		var $prototype = $songListsEle.children(".prototype").clone().removeClass("prototype");
-		var songList, $songListEle, $head, $_prototype, songs, $songEle, song, flag;
+		var songList, $songListEle, $head;
 
 		$songListsEle.parents(".lists").find(".more").attr({
-			"data-href" : "songList/{" + data[0].id + "}"
+			"data-href" : "songList?songListId=" + data[0].id
 		})
 
 		for (var i = 0; i < data.length; i++) {
@@ -149,69 +139,76 @@
 				"src" : songList.icon,
 				"alt" : songList.name,
 				"title" : songList.name,
-				"data-href" : "songList/{" + songList.id + "}"
+				"data-href" : "songList?songListId=" + songList.id
 			});
 			$head.find("h3").attr({
 				"title" : songList.name,
-				"data-href" : "songList/{" + songList.id + "}"
+				"data-href" : "songList?songListId=" + songList.id
 			}).text(songList.name);
 			$head.find(".play").attr({
-				"onclick" : "hiddenDiv.playFromSongList('" + songList.id + "')"
+				"onclick" : "MMR.get('music').batchAddThenPlay('songListId','" + songList.id + "')"
 			});
 			$head.find(".collection").attr({
 			// "onclick" : "hiddenDiv.playFromSongList('" + songList.id + "')"
 			});
 
-			$_prototype = $prototype.find(".prototype").clone().removeClass("prototype");
-			songs = songList.songs;
-			flag = false;
-
-			for (var j = 0; j < songs.length; j++) {
-				song = songs[j];
-				$songEle = $_prototype.clone();
-				$songEle.find(".num").text(song.rank);
-				$songEle.find(".name").attr({
-					"title" : song.name,
-					"data-name" : limitStringLength(song.name, 13),
-					"data-href" : "song/{" + song.id + "}"
-				}).text(limitStringLength(song.name, 13));
-
-				if (flag) {
-					$songEle.addClass("even");
-					flag = false;
-				} else {
-					$songEle.addClass("odd");
-					flag = true;
-				}
-				hiddenDiv.setSong(song.id, song);
-				$songEle.find(".hidden .add").attr({
-					"onclick" : 'hiddenDiv.addToPlayList("' + song.id + '");'
-				})
-				$songEle.find(".hidden .play").attr({
-					"onclick" : 'hiddenDiv.addToPlayListThenPlay("' + song.id + '");'
-				})
-				$songEle.bind("mouseover", function() {
-					var name = $(this).find(".name").text();
-					$(this).find(".hidden").css("display", "block");
-					$(this).find(".name").text(limitStringLength(name, 7));
-				})
-				$songEle.bind("mouseout", function() {
-					var name = $(this).find(".name").attr("data-name");
-					$(this).find(".hidden").css("display", "none");
-					$(this).find(".name").text(name);
-				})
-				$songEle.attr({
-					"id" : song.id
-				})
-				$songListEle.append($songEle);
-			}
-
-			$songListEle.append("<li><span class='all' data-url='songList' data-href='songList/{" + songList.id
-					+ "}' onclick='jump(this);'>查看全部></span></li>");
+			loadSongs(songList, $songListEle.find("ul"), $prototype);
 
 			$songListEle.attr("id", songList.id);
 			$songListsEle.append($songListEle);
 		}
+	}
+	function loadSongs(songList, $songListEle, $prototype) {
+		var $songEle, song, $_prototype, flag;
+		AJAX({
+			url : "song/s/songListId_" + songList.id,
+			success : function(songs) {
+				$_prototype = $prototype.find(".prototype").clone().removeClass("prototype");
+				flag = false;
+
+				for (var j = 0; j < songs.length; j++) {
+					song = songs[j];
+					$songEle = $_prototype.clone();
+					$songEle.find(".num").text(song.rank);
+					$songEle.find(".name").attr({
+						"title" : song.name,
+						"data-name" : limitStringLength(song.name, 13),
+						"data-href" : "song?songId=" + song.id
+					}).text(limitStringLength(song.name, 13));
+
+					if (flag) {
+						$songEle.addClass("even");
+						flag = false;
+					} else {
+						$songEle.addClass("odd");
+						flag = true;
+					}
+					var songSerialized = MMR.get("music").serialize(song);
+					$songEle.find(".hidden .add").attr({
+						"onclick" : "MMR.get('music').add('" + songSerialized + "');"
+					})
+					$songEle.find(".hidden .play").attr({
+						"onclick" : "MMR.get('music').addThenPlay('" + songSerialized + "');"
+					})
+					$songEle.bind("mouseover", function() {
+						var name = $(this).find(".name").text();
+						$(this).find(".hidden").css("display", "block");
+						$(this).find(".name").text(limitStringLength(name, 7));
+					})
+					$songEle.bind("mouseout", function() {
+						var name = $(this).find(".name").attr("data-name");
+						$(this).find(".hidden").css("display", "none");
+						$(this).find(".name").text(name);
+					})
+					$songEle.attr({
+						"id" : song.id
+					})
+					$songListEle.append($songEle);
+				}
+				$songListEle.append("<li><span class='all' data-url='songList' data-href='songList/{" + songList.id
+						+ "}' onclick='jump(this);'>查看全部></span></li>");
+			}
+		})
 	}
 
 	var albumDiv = new function() {

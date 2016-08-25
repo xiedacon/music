@@ -1,23 +1,22 @@
 (function() {
-
-	var realUrl = document.getElementById("realUrl").innerHTML;
-	var pageScope = router.getPageScope(realUrl);
-	var ajaxConfigs = new router.AjaxConfigs(realUrl);
-
-	pageScope.setAttribute("realUrl", realUrl);
-	pageScope.setAttribute("rootUrl", realUrl.split("/")[0]);
-	pageScope.setAttribute("remainUrl", realUrl.substring(realUrl.indexOf("/") + 1).split("?")[0]);
-	pageScope.setAttribute("param", realUrl.split("?")[1]);
-	
-	ajaxConfigs.setAjaxConfigs({
-		url : realUrl,
+	var url = "singer/s";
+	if (PageScope.params.classifyId) {
+		if (PageScope.params.classifyId === "all") {
+			url = "singer/s";
+		} else if (PageScope.params.classifyId === "hot") {
+			url = "singer/s/hot";
+		} else {
+			url += "/classifyId_" + PageScope.params.classifyId;
+		}
+	}
+	AJAX({
+		url : url,
 		success : loadFouction
-	}, {
+	});
+	AJAX({
 		url : "json/userClassify",
 		success : loadClassify
 	});
-
-	ajaxConfigs.startAjaxs();
 
 	function loadClassify(classifyList) {
 		if (!classifyList) {
@@ -28,7 +27,7 @@
 		var $prototype = $classifyListEle.children(".prototype").clone().removeClass("prototype");
 		var $classifyEle, classify;
 
-		var childId = pageScope.getAttribute("remainUrl").split("_")[1];
+		var childId = PageScope.params.classifyId;
 
 		for (var i = 0; i < classifyList.length; i++) {
 			$classifyEle = $prototype.clone();
@@ -44,7 +43,7 @@
 				child = childs[j];
 
 				$child.find(".songerList").attr({
-					"data-href" : pageScope.getAttribute("rootUrl") + "/classify_" + child.id + "?" + child.name,
+					"data-href" : "singers?classifyId=" + child.id + "&classifyName=" + child.name,
 					"title" : child.name
 				}).text(child.name);
 
@@ -62,8 +61,8 @@
 	function loadFouction(data) {
 		$("#singerList").css("display", "none");
 		$("#simpleSingerList").css("display", "none");
-		
-		switch (pageScope.getAttribute("remainUrl")) {
+
+		switch (PageScope.params.classifyId) {
 			case "all" :
 				$("h2").text("入驻歌手");
 				$("#classify_all").addClass("now");
@@ -75,7 +74,7 @@
 				loadHot(data);
 				break;
 			default :
-				$("h2").text(pageScope.getAttribute("param"));
+				$("h2").text(PageScope.params.classifyName);
 				loadByClassify(data);
 				break;
 		}
@@ -126,16 +125,16 @@
 			$singerEle.find("img").attr({
 				"title" : singer.name + "的音乐",
 				"src" : singer.icon,
-				"data-href" : "singer/{" + singer.id + "}"
+				"data-href" : "singer?singerId=" + singer.id
 			});
 			$singerEle.find(".name").attr({
 				"title" : singer.name + "的音乐",
-				"data-href" : "singer/{" + singer.id + "}"
+				"data-href" : "singer?singerId=" + singer.id
 			}).text(singer.name);
 			if (singer.userId) {
 				$singerEle.find(".icon").removeAttr("style").attr({
 					"title" : singer.name + "的个人主页",
-					"data-href" : "homePage/{" + singer.userId + "}"
+					"data-href" : "homePage?userId=" + singer.userId
 				});
 			}
 
@@ -162,12 +161,12 @@
 
 			$simpleSingerEle.find(".name").attr({
 				"title" : singer.name + "的音乐",
-				"data-href" : "singer/{" + singer.id + "}"
+				"data-href" : "singer?singerId=" + singer.id
 			}).text(singer.name);
 			if (singer.userId) {
 				$simpleSingerEle.find(".icon").removeAttr("style").attr({
 					"title" : singer.name + "的个人主页",
-					"data-href" : "homePage/{" + singer.userId + "}"
+					"data-href" : "homePage?userId=" + singer.userId
 				});
 			}
 

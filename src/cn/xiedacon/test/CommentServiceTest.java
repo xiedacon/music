@@ -4,9 +4,10 @@ import java.util.List;
 
 import org.junit.Test;
 
+import cn.xiedacon.model.Comment;
 import cn.xiedacon.service.CommentService;
+import cn.xiedacon.test.base.BaseTest;
 import cn.xiedacon.util.PageBean;
-import cn.xiedacon.vo.CommentVo;
 
 public class CommentServiceTest extends BaseTest{
 
@@ -14,7 +15,7 @@ public class CommentServiceTest extends BaseTest{
 	public void testSelectCommentsBySongMenuId(){
 		CommentService commentService = this.getApplicationContext().getBean(CommentService.class);
 		
-		List<CommentVo> list = commentService.selectForHotBySongMenuId("1");
+		List<Comment> list = commentService.selectForHotBySongMenuId("1");
 		
 		System.out.println(list);
 	}
@@ -23,7 +24,7 @@ public class CommentServiceTest extends BaseTest{
 	public void testSelectPageBeanBySongMenuId(){
 		CommentService commentService = this.getApplicationContext().getBean(CommentService.class);
 		
-		PageBean<CommentVo> list = commentService.selectPageBeanBySongMenuId("1",1);
+		PageBean<Comment> list = commentService.selectPageBeanBySongMenuId("1",1);
 		
 		System.out.println(list);
 	}
@@ -32,7 +33,7 @@ public class CommentServiceTest extends BaseTest{
 	public void testSelectCommentsByAlbumId(){
 		CommentService commentService = this.getApplicationContext().getBean(CommentService.class);
 		
-		List<CommentVo> list = commentService.selectForHotByAlbumId("1");
+		List<Comment> list = commentService.selectForHotByAlbumId("1");
 		
 		System.out.println(list);
 	}
@@ -41,7 +42,7 @@ public class CommentServiceTest extends BaseTest{
 	public void testSelectPageBeanByAlbumId(){
 		CommentService commentService = this.getApplicationContext().getBean(CommentService.class);
 		
-		PageBean<CommentVo> list = commentService.selectPageBeanByAlbumId("1",1);
+		PageBean<Comment> list = commentService.selectPageBeanByAlbumId("1",1);
 		
 		System.out.println(list);
 	}
@@ -50,7 +51,7 @@ public class CommentServiceTest extends BaseTest{
 	public void testSelectHotBySongListId(){
 		CommentService commentService = this.getApplicationContext().getBean(CommentService.class);
 		
-		List<CommentVo> list = commentService.selectHotBySongListId("1");
+		List<Comment> list = commentService.selectHotBySongListId("1");
 		
 		System.out.println(list);
 	}
@@ -59,7 +60,7 @@ public class CommentServiceTest extends BaseTest{
 	public void testSelectPageBeanBySongListIdLimit(){
 		CommentService commentService = this.getApplicationContext().getBean(CommentService.class);
 		
-		PageBean<CommentVo> list = commentService.selectPageBeanBySongListIdLimit("1",1);
+		PageBean<Comment> list = commentService.selectPageBeanBySongListIdLimit("1",1);
 		
 		System.out.println(list);
 	}
@@ -68,7 +69,7 @@ public class CommentServiceTest extends BaseTest{
 	public void testselectForHotBySongId(){
 		CommentService commentService = this.getApplicationContext().getBean(CommentService.class);
 		
-		List<CommentVo> list = commentService.selectForHotBySongId("1");
+		List<Comment> list = commentService.selectForHotBySongId("1");
 		
 		System.out.println(list);
 	}
@@ -77,7 +78,7 @@ public class CommentServiceTest extends BaseTest{
 	public void testSelectPageBeanBySongId(){
 		CommentService commentService = this.getApplicationContext().getBean(CommentService.class);
 		
-		PageBean<CommentVo> list = commentService.selectPageBeanBySongId("1",1);
+		PageBean<Comment> list = commentService.selectPageBeanBySongId("1",1);
 		
 		System.out.println(list);
 	}

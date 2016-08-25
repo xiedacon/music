@@ -1,19 +1,12 @@
 (function() {
-	var realUrl = document.getElementById("realUrl").innerHTML;
-	var pageScope = router.getPageScope(realUrl);
-	var ajaxConfigs = new router.AjaxConfigs(realUrl);
-
-	pageScope.setAttribute("singerId", realUrl.split("/")[1]);
-
-	ajaxConfigs.setAjaxConfigs({
-		url : realUrl,
+	AJAX({
+		url : "singer/" + PageScope.params.singerId,
 		success : loadSinger
-	}, {
-		url : realUrl + "/songs",
+	});
+	AJAX({
+		url : "song/s/singerId_" + PageScope.params.singerId,
 		success : loadSongs
 	});
-
-	ajaxConfigs.startAjaxs();
 
 	function loadSinger(singer) {
 		var $singerEle = $("#singer");
@@ -28,15 +21,15 @@
 		if (singer.userId) {
 			$singerEle.find(".homePage").attr({
 				"title" : singer.name + "的个人主页",
-				"data-href" : "home/{" + singer.userId + "}"
+				"data-href" : "home?userId=" + singer.userId
 			}).removeAttr("style");
 		}
 		var $songList = $(".songList .play_addToPlayList");
 		$songList.find(".play").attr({
-			"onclick" : "hiddenDiv.playFromSinger('" + singer.id + "')"
+			"onclick" : "MMR.get('music').batchAddThenPlay('singerId','" + singer.id + "')"
 		});
 		$songList.find(".addToPlaylist").attr({
-			"onclick" : "hiddenDiv.addFromSinger('" + singer.id + "')"
+			"onclick" : "MMR.get('music').batchAdd('singerId','" + singer.id + "')"
 		});
 	}
 
@@ -61,15 +54,16 @@
 			}
 
 			$songEle.find(".num").text(i + 1);
+			var songSerialized = MMR.get('music').serialize(song);
 			$songEle.find(".play").attr({
-				"onclick" : "hiddenDiv.addToPlayListThenPlay('" + song.id + "')"
+				"onclick" : "MMR.get('music').addThenPlay('" + songSerialized + "')"
 			});
 			$songEle.find(".songName").attr({
 				"title" : song.name,
-				"data-href" : "song/{" + song.id + "}"
+				"data-href" : "song?songId=" + song.id
 			}).text(song.name);
 			$songEle.find(".addToPlaylist").attr({
-				"onclick" : "hiddenDiv.addToPlayList('" + song.id + "')"
+				"onclick" : "MMR.get('music').add('','" + songSerialized + "')"
 			});
 			$songEle.find(".time").text(song.time);
 			if (song.albumName) {
@@ -110,11 +104,11 @@
 			$albumEle.find("img").attr({
 				"src" : album.icon,
 				"title" : album.name,
-				"data-href" : "album/{" + album.id + "}"
+				"data-href" : "album?albumId=" + album.id
 			});
 			$albumEle.find(".name").attr({
 				"title" : album.name,
-				"data-href" : "album/{" + album.id + "}"
+				"data-href" : "album?albumId=" + album.id
 			}).text(limitStringLength(album.name, 9));
 			$albumEle.find(".time").text(new DateFormatter("yyyy.MM.dd").format(album.createTime));
 
@@ -168,16 +162,12 @@
 			$pagesEle.find(".button").not(".unable").not(".now").click(function() {
 				var page = $(this).attr("data-page");
 
-				if (!ajaxConfigs.hasAjaxConfig(realUrl + "/albums/" + page)) {
-					ajaxConfigs.setAjaxConfig({
-						url : realUrl + "/albums/" + page,
-						success : function(pageBean) {
-							loadAlbumList(pageBean);
-						}
-					});
-				}
-
-				ajaxConfigs.startAjax(realUrl + "/albums/" + page);
+				AJAX({
+					url : "album/s/singerId_" + PageScope.params.singerId + "/" + page,
+					success : function(pageBean) {
+						loadAlbumList(pageBean);
+					}
+				});
 			})
 		}
 	}
@@ -198,24 +188,21 @@
 	}
 
 	$("#songListHead").click(function() {
-		ajaxConfigs.setAjaxConfig({
-			url : realUrl + "/songs",
+		AJAX({
+			url : "song/s/singerId_" + PageScope.params.singerId,
 			success : loadSongs
 		});
-		ajaxConfigs.startAjax(realUrl + "/songs");
 	});
 	$("#albumListHead").click(function() {
-		ajaxConfigs.setAjaxConfig({
-			url : realUrl + "/albums/1",
+		AJAX({
+			url : "album/s/singerId_" + PageScope.params.singerId + "/1",
 			success : loadAlbums
 		});
-		ajaxConfigs.startAjax(realUrl + "/albums/1");
 	});
 	$("#introductionHead").click(function() {
-		ajaxConfigs.setAjaxConfig({
-			url : realUrl + "/introduction",
+		AJAX({
+			url : "singer/" + PageScope.params.singerId + "/introduction",
 			success : loadIntroduction
 		});
-		ajaxConfigs.startAjax(realUrl + "/introduction");
 	});
 }())

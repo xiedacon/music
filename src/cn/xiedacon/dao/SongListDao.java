@@ -2,17 +2,12 @@ package cn.xiedacon.dao;
 
 import java.util.List;
 
-import org.apache.ibatis.annotations.Param;
-
-import cn.xiedacon.vo.SimpleSongListVo;
-import cn.xiedacon.vo.SongListVo;
+import cn.xiedacon.model.SongList;
 
 public interface SongListDao {
 
-	List<SimpleSongListVo> selectSongListsByIds(@Param("songListIds") String[] songListIds);
+	SongList selectById(String id);
 
-	SongListVo selectById(String id);
-
-	List<SongListVo> selectList();
+	List<SongList> selectList();
 
 }

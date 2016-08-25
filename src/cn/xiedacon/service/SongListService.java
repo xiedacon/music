@@ -2,15 +2,12 @@ package cn.xiedacon.service;
 
 import java.util.List;
 
-import cn.xiedacon.vo.SimpleSongListVo;
-import cn.xiedacon.vo.SongListVo;
+import cn.xiedacon.model.SongList;
 
 public interface SongListService {
 
-	List<SimpleSongListVo> selectForIndex();
+	SongList selectById(String id);
 
-	SongListVo selectById(String id);
-
-	List<SongListVo> selectList();
+	List<SongList> selectList();
 
 }

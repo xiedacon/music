@@ -7,37 +7,25 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import cn.xiedacon.dao.SongMenuDao;
-import cn.xiedacon.dao.WebDao;
+import cn.xiedacon.model.SongMenu;
 import cn.xiedacon.service.SongMenuService;
 import cn.xiedacon.util.PageBean;
-import cn.xiedacon.vo.SimpleSongMenuVo;
-import cn.xiedacon.vo.SongMenuVo;
 
 @Service
 @Transactional
 public class SongMenuServiceImpl implements SongMenuService {
 
 	@Autowired
-	private WebDao webDao;
-	@Autowired
 	private SongMenuDao songMenuDao;
 
 	@Override
-	public List<SimpleSongMenuVo> selectForIndex() {
-		String songMenuIdsString = webDao.selectSongMenuIds();
-		String[] songMenuIds = songMenuIdsString.split("\\|");
-
-		return songMenuDao.selectSongMenuListByIds(songMenuIds);
+	public SongMenu selectById(String id) {
+		return songMenuDao.selectSongMenuById(id);
 	}
 
 	@Override
-	public SongMenuVo selectSongMenuById(String id) {
-		return songMenuDao.selectSongMenuByid(id);
-	}
-
-	@Override
-	public PageBean<SimpleSongMenuVo> selectPageBean(Integer page) {
-		PageBean<SimpleSongMenuVo> pageBean = new PageBean<>();
+	public PageBean<SongMenu> selectPageBean(Integer page) {
+		PageBean<SongMenu> pageBean = new PageBean<>();
 		int limit = 10;
 		int count = songMenuDao.selectCount();
 		int totalPage = count / limit;
@@ -45,7 +33,7 @@ public class SongMenuServiceImpl implements SongMenuService {
 
 		int begin = limit * (page - 1);
 
-		List<SimpleSongMenuVo> beans = songMenuDao.selectByLimit(begin,limit);
+		List<SongMenu> beans = songMenuDao.selectByLimit(begin, limit);
 
 		pageBean.setPage(page);
 		pageBean.setLimit(limit);
@@ -56,8 +44,8 @@ public class SongMenuServiceImpl implements SongMenuService {
 	}
 
 	@Override
-	public PageBean<SimpleSongMenuVo> selectPageBeanOrderByCollectionNum(Integer page) {
-		PageBean<SimpleSongMenuVo> pageBean = new PageBean<>();
+	public PageBean<SongMenu> selectPageBeanOrderByCollectionNum(Integer page) {
+		PageBean<SongMenu> pageBean = new PageBean<>();
 		int limit = 10;
 		int count = songMenuDao.selectCount();
 		int totalPage = count / limit;
@@ -65,7 +53,7 @@ public class SongMenuServiceImpl implements SongMenuService {
 
 		int begin = limit * (page - 1);
 
-		List<SimpleSongMenuVo> beans = songMenuDao.selectByLimitOrderByCollectionNum(begin,limit);
+		List<SongMenu> beans = songMenuDao.selectByLimitOrderByCollectionNum(begin, limit);
 
 		pageBean.setPage(page);
 		pageBean.setLimit(limit);
@@ -76,8 +64,8 @@ public class SongMenuServiceImpl implements SongMenuService {
 	}
 
 	@Override
-	public PageBean<SimpleSongMenuVo> selectPageBeanBySecondTagId(String secondTagId, Integer page) {
-		PageBean<SimpleSongMenuVo> pageBean = new PageBean<>();
+	public PageBean<SongMenu> selectPageBeanBySecondTagId(String secondTagId, Integer page) {
+		PageBean<SongMenu> pageBean = new PageBean<>();
 		int limit = 10;
 		int count = songMenuDao.selectCountBySecondTagId(secondTagId);
 		int totalPage = count / limit;
@@ -85,7 +73,7 @@ public class SongMenuServiceImpl implements SongMenuService {
 
 		int begin = limit * (page - 1);
 
-		List<SimpleSongMenuVo> beans = songMenuDao.selectBySecondTagIdLimit(secondTagId,begin,limit);
+		List<SongMenu> beans = songMenuDao.selectBySecondTagIdLimit(secondTagId, begin, limit);
 
 		pageBean.setPage(page);
 		pageBean.setLimit(limit);
@@ -96,9 +84,8 @@ public class SongMenuServiceImpl implements SongMenuService {
 	}
 
 	@Override
-	public PageBean<SimpleSongMenuVo> selectPageBeanBySecondTagIdOrderByCollectionNum(String secondTagId,
-			Integer page) {
-		PageBean<SimpleSongMenuVo> pageBean = new PageBean<>();
+	public PageBean<SongMenu> selectPageBeanBySecondTagIdOrderByCollectionNum(String secondTagId, Integer page) {
+		PageBean<SongMenu> pageBean = new PageBean<>();
 		int limit = 10;
 		int count = songMenuDao.selectCountBySecondTagId(secondTagId);
 		int totalPage = count / limit;
@@ -106,7 +93,7 @@ public class SongMenuServiceImpl implements SongMenuService {
 
 		int begin = limit * (page - 1);
 
-		List<SimpleSongMenuVo> beans = songMenuDao.selectBySecondTagIdOrderByCollectionNumLimit(secondTagId,begin,limit);
+		List<SongMenu> beans = songMenuDao.selectBySecondTagIdOrderByCollectionNumLimit(secondTagId, begin, limit);
 
 		pageBean.setPage(page);
 		pageBean.setLimit(limit);
@@ -117,13 +104,19 @@ public class SongMenuServiceImpl implements SongMenuService {
 	}
 
 	@Override
-	public List<SimpleSongMenuVo> selectListByCreatorId(String creatorId) {
+	public List<SongMenu> selectListByCreatorId(String creatorId) {
 		return songMenuDao.selectListByCreatorId(creatorId);
 	}
 
 	@Override
-	public List<SimpleSongMenuVo> selectListByCollectorId(String collectorId) {
+	public List<SongMenu> selectListByCollectorId(String collectorId) {
 		return songMenuDao.selectListByCollectorId(collectorId);
+	}
+
+	@Override
+	public void insertSongMenu(SongMenu songMenu) {
+		songMenuDao.insertSongMenu_base(songMenu);
+		songMenuDao.insertSongMenu_record(songMenu);
 	}
 
 }

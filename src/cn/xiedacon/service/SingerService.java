@@ -2,19 +2,18 @@ package cn.xiedacon.service;
 
 import java.util.List;
 
-import cn.xiedacon.vo.SimpleSingerVo;
-import cn.xiedacon.vo.SingerVo;
+import cn.xiedacon.model.Singer;
 
 public interface SingerService {
 
-	List<SimpleSingerVo> selectListLimit(Integer begin, Integer limit);
+	List<Singer> selectListLimit(Integer begin, Integer limit);
 
-	List<SimpleSingerVo> selectListOrderByCollectionNumLimit(Integer begin, Integer limit);
+	List<Singer> selectListOrderByCollectionNumLimit(Integer begin, Integer limit);
 
-	List<SimpleSingerVo> selectListByClassifyIdOrderByCollectionNumLimit(Integer classifyId, Integer begin,
+	List<Singer> selectListByClassifyIdOrderByCollectionNumLimit(Integer classifyId, Integer begin,
 			Integer limit);
 
-	SingerVo selectById(String id);
+	Singer selectById(String id);
 
 	String selectIntroductionById(String id);
 }

@@ -9,40 +9,41 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import cn.xiedacon.service.CommentService;
+import cn.xiedacon.model.Song;
 import cn.xiedacon.service.SongService;
-import cn.xiedacon.util.PageBean;
-import cn.xiedacon.vo.CommentVo;
-import cn.xiedacon.vo.CommentsVo;
-import cn.xiedacon.vo.SongVo;
+import cn.xiedacon.util.Constant;
 
 @Controller
 @ResponseBody
+@RequestMapping(value = "/song", method = RequestMethod.GET)
 public class SongController {
 
 	@Autowired
 	private SongService songService;
-	@Autowired
-	private CommentService commentService;
 
-	@RequestMapping(value = "/song/{id:\\w+}", method = RequestMethod.GET)
-	public SongVo getSongBy(@PathVariable("id") String id) {
+	@RequestMapping("/{id:\\w+}")
+	public Song getById(@PathVariable("id") String id) {
 		return songService.selectById(id);
 	}
 
-	@RequestMapping(value = "/song/{songId:\\w+}/comments", method = RequestMethod.GET)
-	public CommentsVo getComments(@PathVariable("songId") String songId) {
-		CommentsVo comments = new CommentsVo();
-		List<CommentVo> hotList = commentService.selectForHotBySongId(songId);
-		PageBean<CommentVo> pageBean = commentService.selectPageBeanBySongId(songId, 1);
-		comments.setHotList(hotList);
-		comments.setPageBean(pageBean);
-		return comments;
+	@RequestMapping("/s/albumId_{albumId:\\w+}")
+	public List<Song> getListByAlbumId(@PathVariable("albumId") String albumId) {
+		return songService.selectListByAlbumIdOrderByRank(albumId);
 	}
 
-	@RequestMapping(value = "/song/{songId:\\w+}/comments/{page:[1-9]\\d*}", method = RequestMethod.GET)
-	public PageBean<CommentVo> getCommentList(@PathVariable("songId") String songId,
-			@PathVariable("page") Integer page) {
-		return commentService.selectPageBeanBySongId(songId, page);
+	@RequestMapping("/s/songMenuId_{songMenuId:\\w+}")
+	public List<Song> getListBySongMenuId(@PathVariable("songMenuId") String songMenuId) {
+		return songService.selectListBySongMenuIdOrderByRank(songMenuId);
+	}
+
+	@RequestMapping("/s/songListId_{songListId:\\w+}")
+	public List<Song> getListBySongListId(@PathVariable("songListId") String songListId) {
+		return songService.selectListBySongListIdOrderByRank(songListId);
+	}
+
+	@RequestMapping(value = "/s/singerId_{singerId:\\w+}")
+	public List<Song> getListBySingerId(@PathVariable("singerId") String singerId) {
+		return songService.selectListBySingerIdOrderByCollectionNumLimit(singerId, Constant.BEGIN_DEFAULT,
+				Constant.SINGER_SHOW_SONGNUM);
 	}
 }

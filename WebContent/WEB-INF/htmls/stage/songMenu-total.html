@@ -6,69 +6,10 @@
 <title>歌单总页</title>
 </head>
 <body>
-	<div class="head">
-		<div class="head_top">
-			<h1>
-				<a href="#">我的音乐网</a>
-			</h1>
-			<ul class="nav">
-				<li class="selected">发现音乐<i></i></li>
-				<li>我的音乐</li>
-				<li>朋友</li>
-				<li>下载客户端</li>
-			</ul>
-			<div class="search">
-				<i></i> <input id="search_global" class="search_input" type="input" name="song" placeholder="单曲/歌手/专辑/歌单/MV/用户">
-			</div>
-			<span class="msg"></span>
-			<div id="userDiv" class="user">
-				<span class="username"><img src="image/default.jpg">xiedacon<i></i></span>
-				<ul class="user_nav nav_login" style="display: none;">
-					<i></i>
-					<li>
-						<ul>
-							<li>我的主页</li>
-							<li>我的等级</li>
-							<li>付费音乐包</li>
-							<li>积分商城</li>
-						</ul>
-					</li>
-					<li>
-						<ul>
-							<li>个人设置</li>
-							<li>导入歌单</li>
-						</ul>
-					</li>
-					<li class="exit">退出</li>
-				</ul>
-				<ul class="user_nav nav_logout" style="display: none;">
-					<i></i>
-					<li>
-						<ul>
-							<li id="toLoginByPhoneDiv">手机号登录</li>
-							<li>微信登录</li>
-							<li>QQ登录</li>
-							<li>Github登录</li>
-						</ul>
-					</li>
-				</ul>
-			</div>
-		</div>
-		<div class="head_bottom">
-			<ul class="subnav">
-				<li class="selected">推荐</li>
-				<li>排行榜</li>
-				<li>歌单</li>
-				<li>主播电台</li>
-				<li>歌手</li>
-				<li>新碟上架</li>
-			</ul>
-		</div>
-	</div>
 	<div class="body">
 		<div class="material">
 			<div class="material_top">
-				<h2 id="tagName">全部</h2>
+				<h2 id="tagName"></h2>
 				<div class="nav_button">
 					<span class="button" data-flag="hidden" id="select">选择分类<i></i></span>
 					<ul id="secondTagList" class="nav" style="display: none">
@@ -94,8 +35,7 @@
 					<div class="image">
 						<img alt="" src="" title="" data-href="" onclick="jump(this);">
 						<div class="image_bottom">
-							<i></i> <span class="num"></span> 
-							<i class="playthis" title="播放"></i>
+							<i></i> <span class="num"></span> <i class="playthis" title="播放"></i>
 						</div>
 					</div> <a class="name" href="javascript:void(0);" title="" data-href="" onclick="jump(this);"></a> <span class="by">by</span> <a class="songer"
 					href="javascript:void(0);" title="" data-href="" onclick="jump(this);"></a>

@@ -2,8 +2,15 @@ package cn.xiedacon.util;
 
 public class Constant {
 
-	
-	
+	public static Integer SUCCESS = 200;
+	public static Integer REDIRECT = 302;
+	public static Integer ERROR = 404;
+
+	public static Integer PAGE_DEFAULT = 1;
+	public static Integer BEGIN_DEFAULT = 0;
+	public static Integer SINGER_SHOW_NUM = 100;
+	public static Integer SINGER_SHOW_SONGNUM = 50;
+
 	// 用户默认设置
 	public static String USER_ICON_DEFAULT = "image/default.jpg";
 	public static Integer USER_DYNAMICNUM_DEFAULT = 0;

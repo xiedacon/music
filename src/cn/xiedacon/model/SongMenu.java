@@ -1,24 +1,33 @@
 package cn.xiedacon.model;
 
 import java.util.Date;
+import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+
+@JsonInclude(Include.NON_NULL)
 public class SongMenu {
 
 	private String id;
 	private String name;
 	private String icon;
-	private String creatorName;
-	private Date createTime;
-	private Integer songNum;
-	private String introduction;
-	private Boolean isPublic;
 	private String creatorId;
+	private String creatorName;
+	private String creatorIcon;
 	private String userId;
+	private Date createTime;
+	private String introduction;
+	private Integer songNum;
+	
+	private Boolean isPublic;
 
 	private Integer collectionNum;
 	private Integer shareNum;
 	private Integer commentNum;
 	private Integer playNum;
+	
+	private List<SongMenuSecondTag> songMenuSecondTagList;
 
 	public Boolean getIsPublic() {
 		return isPublic;
@@ -26,6 +35,22 @@ public class SongMenu {
 
 	public void setIsPublic(Boolean isPublic) {
 		this.isPublic = isPublic;
+	}
+
+	public List<SongMenuSecondTag> getSongMenuSecondTagList() {
+		return songMenuSecondTagList;
+	}
+
+	public void setSongMenuSecondTagList(List<SongMenuSecondTag> songMenuSecondTagList) {
+		this.songMenuSecondTagList = songMenuSecondTagList;
+	}
+
+	public String getCreatorIcon() {
+		return creatorIcon;
+	}
+
+	public void setCreatorIcon(String creatorIcon) {
+		this.creatorIcon = creatorIcon;
 	}
 
 	public String getCreatorId() {
@@ -134,10 +159,11 @@ public class SongMenu {
 
 	@Override
 	public String toString() {
-		return "SongMenu [id=" + id + ", name=" + name + ", icon=" + icon + ", creatorName=" + creatorName
-				+ ", createTime=" + createTime + ", songNum=" + songNum + ", introduction=" + introduction
-				+ ", isPublic=" + isPublic + ", creatorId=" + creatorId + ", userId=" + userId + ", collectionNum="
-				+ collectionNum + ", shareNum=" + shareNum + ", commentNum=" + commentNum + ", playNum=" + playNum
-				+ "]";
+		return "SongMenu [id=" + id + ", name=" + name + ", icon=" + icon + ", creatorId=" + creatorId
+				+ ", creatorName=" + creatorName + ", creatorIcon=" + creatorIcon + ", userId=" + userId
+				+ ", createTime=" + createTime + ", introduction=" + introduction + ", songNum=" + songNum
+				+ ", isPublic=" + isPublic + ", collectionNum=" + collectionNum + ", shareNum=" + shareNum
+				+ ", commentNum=" + commentNum + ", playNum=" + playNum + ", songMenuSecondTagList="
+				+ songMenuSecondTagList + "]";
 	}
 }

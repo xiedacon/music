@@ -2,13 +2,13 @@ package cn.xiedacon.controller;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,19 +29,14 @@ public class BaseController {
 		return "stage/router";
 	}
 
-	@RequestMapping(value = "/html/{name}", method = RequestMethod.GET)
+	@RequestMapping(value = "/html/{name:.+}", method = RequestMethod.GET)
 	public String html(@PathVariable("name") String name) {
 		return "stage/" + name;
 	}
 
-	@RequestMapping(value = "/json/{name}", method = RequestMethod.GET)
+	@RequestMapping(value = "/json/{name:.+}", method = RequestMethod.GET)
 	public void json(@PathVariable("name") String name, HttpServletRequest request, HttpServletResponse response) {
-		String json = getResourceAsString(request, "jsons/" + name + ".json");
-		response.setCharacterEncoding("utf-8");
-		try {
-			response.getWriter().write(json.toString());
-		} catch (IOException e) {
-		}
+		writeToResponse("jsons/" + name + ".json", request, response);
 	}
 
 	@ResponseBody
@@ -64,62 +59,27 @@ public class BaseController {
 	@RequestMapping(value = "/file/{songId:\\w+}", method = RequestMethod.GET)
 	public void getFile(@PathVariable("songId") String songId, HttpServletRequest request,
 			HttpServletResponse response) {
-		String fileUri = songService.selectFileUriById(songId);
-		writeToResponse(request, response, fileUri);
+		response.setContentType("audio/mp3;");
+		writeToResponse(songService.selectFileUriById(songId), request, response);
+	}
+
+	private void writeToResponse(String uri, HttpServletRequest request, HttpServletResponse response) {
+		InputStream in = request.getServletContext().getResourceAsStream(uri);
+		try {
+			response.setCharacterEncoding("utf-8");
+			IOUtils.copy(in, response.getOutputStream());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	private String getResourceAsString(HttpServletRequest request, String uri) {
-		StringBuffer json = new StringBuffer();
-
 		InputStream in = request.getServletContext().getResourceAsStream(uri);
-		if (in == null) {
-			return null;
-		}
-
-		InputStreamReader inr = null;
 		try {
-			inr = new InputStreamReader(in, "utf-8"); // 注意编码
-			char[] temp = new char[1024];
-			int num;
-			while ((num = inr.read(temp)) > 0) { // 要有num值
-				json.append(temp, 0, num);
-			}
-
-			return json.toString();
-
+			return IOUtils.toString(in);
 		} catch (IOException e) {
-			e.printStackTrace(); // 暂时先这样
+			e.printStackTrace();
 			return null;
-		} finally {
-			try {
-				if (inr != null)
-					inr.close();
-			} catch (IOException e) {
-			}
-		}
-	}
-
-	private void writeToResponse(HttpServletRequest request, HttpServletResponse response, String uri) {
-		InputStream in = request.getServletContext().getResourceAsStream(uri);
-		if (in == null) {
-			return;
-		}
-
-		try {
-			byte[] temp = new byte[1024 * 1024];
-			int num;
-			while ((num = in.read(temp)) > 0) {
-				response.getOutputStream().write(temp, 0, num);
-			}
-			return;
-		} catch (IOException e) {
-			//e.printStackTrace();
-			return;
-		} finally {
-			try {
-				in.close();
-			} catch (IOException e) {
-			}
 		}
 	}
 }

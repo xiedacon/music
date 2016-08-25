@@ -7,11 +7,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import cn.xiedacon.dao.AlbumDao;
-import cn.xiedacon.dao.WebDao;
+import cn.xiedacon.model.Album;
 import cn.xiedacon.service.AlbumService;
 import cn.xiedacon.util.PageBean;
-import cn.xiedacon.vo.AlbumVo;
-import cn.xiedacon.vo.SimpleAlbumVo;
 
 @Service
 @Transactional
@@ -19,25 +17,15 @@ public class AlbumServiceImpl implements AlbumService {
 
 	@Autowired
 	private AlbumDao albumDao;
-	@Autowired
-	private WebDao webDao;
 
 	@Override
-	public List<SimpleAlbumVo> selectHotList() {
-		String ablumIdsString = webDao.selectAblumIds();
-		String[] ablumIds = ablumIdsString.split("\\|");
-
-		return albumDao.selectAblumListByIds(ablumIds);
-	}
-
-	@Override
-	public AlbumVo selectById(String id) {
+	public Album selectById(String id) {
 		return albumDao.selectById(id);
 	}
 
 	@Override
-	public PageBean<SimpleAlbumVo> selectPageBeanByTagIdOrderByCreateTimeLimit(String tagId, Integer page) {
-		PageBean<SimpleAlbumVo> pageBean = new PageBean<>();
+	public PageBean<Album> selectPageBeanByTagIdOrderByCreateTimeLimit(String tagId, Integer page) {
+		PageBean<Album> pageBean = new PageBean<>();
 
 		int limit = 10;
 		int count = albumDao.selectCountByTagId(tagId);
@@ -46,7 +34,7 @@ public class AlbumServiceImpl implements AlbumService {
 
 		int begin = limit * (page - 1);
 
-		List<SimpleAlbumVo> beans = albumDao.selectListByTagIdOrderByCreateTimeLimit(tagId, begin, limit);
+		List<Album> beans = albumDao.selectListByTagIdOrderByCreateTimeLimit(tagId, begin, limit);
 
 		pageBean.setPage(page);
 		pageBean.setLimit(limit);
@@ -57,8 +45,8 @@ public class AlbumServiceImpl implements AlbumService {
 	}
 
 	@Override
-	public PageBean<SimpleAlbumVo> selectPageBeanBySingerIdOrderByCreateTime(String singerId, Integer page) {
-		PageBean<SimpleAlbumVo> pageBean = new PageBean<>();
+	public PageBean<Album> selectPageBeanBySingerIdOrderByCreateTime(String singerId, Integer page) {
+		PageBean<Album> pageBean = new PageBean<>();
 
 		int limit = 10;
 		int count = albumDao.selectCountBySingerId(singerId);
@@ -67,7 +55,7 @@ public class AlbumServiceImpl implements AlbumService {
 
 		int begin = limit * (page - 1);
 
-		List<SimpleAlbumVo> beans = albumDao.selectListBySingerIdOrderByCreateTimeLimit(singerId, begin, limit);
+		List<Album> beans = albumDao.selectListBySingerIdOrderByCreateTimeLimit(singerId, begin, limit);
 
 		pageBean.setPage(page);
 		pageBean.setLimit(limit);

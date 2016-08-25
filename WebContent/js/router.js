@@ -22,8 +22,12 @@
 		}
 	}
 
-	Router.prototype.getPageScope = function(realUrl) {
+	Router.prototype.getPage = function(realUrl) {
 		return router.pageCache.get(realUrl);
+	}
+
+	Router.prototype.getPageScope = function(realUrl) {
+		return router.pageCache.get(realUrl).pageScope;
 	}
 
 	Router.prototype.startRouter = function(routerUrl) {
@@ -41,92 +45,51 @@
 		router.historyStack.push(routerObj.realUrl);
 	}
 
-	Router.prototype.AjaxConfigs = function AjaxConfigs(realUrl) {
-		var pageScope = router.getPageScope(realUrl);
-		var configs = new Array();
+	window.FUNCTION = {};
+	window.AJAX = function(config) {
+		if (!config) {
+			console.error("ajax配置错误");
+			return;
+		}
+		
+		var url = config.url;
+		var type = config.type;
+		var dataType = config.dataType;
+		var _success = config.success;
+		var error = config.error;
 
-		this.setAjaxConfig = setAjaxConfig;
-		this.setAjaxConfigs = function() {
-			for (var i = 0; i < arguments.length; i++) {
-				setAjaxConfig(arguments[i]);
-			}
+		if (!url) {
+			throw "url不能为空";
 		}
-		this.hasAjaxConfig = function(url) {
-			return getAjax(url) ? true : false;
-		}
-		this.startAjaxs = function(urls) {
-			if (urls && urls instanceof Array) {
-				for (var i = 0; i < urls.length; i++) {
-					startAjax(getAjax(urls[i]));
-				}
-			} else {
-				for ( var i in configs) {
-					startAjax(configs[i]);
-				}
-			}
-		}
-		this.startAjax = function(url) {
-			startAjax(getAjax(url));
+		if (!type)
+			type = "GET";
+		if (!dataType)
+			dataType = "json";
+		if (!error) {
+			error = function(e) {
+				console.error(e);
+			};
 		}
 
-		function setAjaxConfig(config) {
-			configs[config.url] = new AjaxConfig(config);
-			configs.length++;
-		}
-		function getAjax(url) {
-			return configs[url];
-		}
-		function startAjax(ajaxConfig) {
-			var data = pageScope.getAttribute(ajaxConfig.url);
-			if (data) {
-				ajaxConfig.success(data);
-			} else {
-				ajaxConfig.sendAjax();
+		var success = function(data) {
+			if (_success) {
+				_success(data);
 			}
+			window.PageScope[url] = data;
+		};
+		
+		if (window.PageScope[url]) {
+			success(window.PageScope[url]);
 			return;
 		}
 
-		function AjaxConfig(config) {
-			var url = config.url;
-			var type = config.type;
-			var dataType = config.dataType;
-			var success = config.success;
-			var error = config.error;
-
-			if (!url)
-				throw "url不能为空";
-			if (!type)
-				type = "GET";
-			if (!dataType)
-				dataType = "json";
-			if (!success)
-				success = function() {
-				};
-			if (!error)
-				error = function(e) {
-					console.log(e);
-				};
-
-			this.url = url;
-			this.type = type;
-			this.dataType = dataType;
-			this.success = success;
-			this.error = error;
-			this.sendAjax = function() {
-				$.ajax({
-					url : url,
-					type : type,
-					dataType : dataType,
-					success : function(data) {
-						success(data);
-						pageScope.setAttribute(url, data);
-					},
-					error : function(e) {
-						error(e);
-					}
-				})
-			}
-		}
+		$.ajax({
+			url : url,
+			type : type,
+			dataType : dataType,
+			success : success,
+			error : error
+		})
 	}
 
 	function HistoryStack() {
@@ -169,7 +132,8 @@
 			pages[data.realUrl] = new Page({
 				"templateUrl" : data.templateUrl,
 				"controller" : data.controller,
-				"html" : data.html
+				"html" : data.html,
+				"realUrl":data.realUrl
 			});
 		}
 
@@ -195,8 +159,27 @@
 			this.templateUrl = data.templateUrl;
 			this.controller = data.controller;
 			this.html = data.html;
-			var pageScope = new Array();
+			var pageScope = new PageScope(data.realUrl);
+			this.pageScope = pageScope;
+			
+			function PageScope(url) {
+				this.url = url;
+				var params = new Array();
+				this.params = params;
 
+				parseUrl(url);
+				function parseUrl(url) {
+					if (/\?/.test(url)) {
+						url = url.replace(" ", "");
+						var paramString = url.split("?")[1];
+						var _params = paramString.split("&");
+						for (var i = 0; i < _params.length; i++) {
+							var key_value = _params[i].split("=");
+							params[key_value[0]] = key_value[1];
+						}
+					}
+				}
+			}
 			this.setAttribute = function(attributeName, attributeValue) {
 				pageScope[attributeName] = attributeValue;
 				pageScope.length += 1;
@@ -234,17 +217,17 @@
 				var ele = $('<div></div>');
 				ele.html(data);
 
-				loadPage({
-					html : ele.clone(),
-					realUrl : routerObj.realUrl,
-					controller : routerItem.controller
-				});
-
 				router.pageCache.put({
 					"realUrl" : routerObj.realUrl,
 					"templateUrl" : routerItem.templateUrl,
 					"controller" : routerItem.controller,
 					"html" : ele.clone()
+				});
+				
+				loadPage({
+					html : ele.clone(),
+					realUrl : routerObj.realUrl,
+					controller : routerItem.controller
 				});
 			},
 			error : function(e) {
@@ -254,6 +237,8 @@
 	}
 
 	function loadPage(data) {
+		window.PageScope = router.getPageScope(data.realUrl);
+		
 		$("html .body")//
 		.html("")//
 		.css("min-height", window.innerHeight - $("html .head").height() - $("html .foot").height());
@@ -337,13 +322,8 @@
 	}
 
 	function parseUrl(routerUrl) {
-		var url = routerUrl.split("/")[0];
+		var url = routerUrl.split("?")[0];
 		var realUrl = routerUrl;
-		var params = routerUrl.match(/\{\w+\}/g);
-
-		if (params) {
-			realUrl = routerUrl.replace(/\{|\}/g, "");
-		}
 
 		return {
 			"url" : url,

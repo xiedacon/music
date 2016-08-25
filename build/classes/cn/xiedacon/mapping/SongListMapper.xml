@@ -5,87 +5,51 @@
 
 <mapper namespace="cn.xiedacon.dao.SongListDao">
 
-	<resultMap type="cn.xiedacon.vo.SimpleSongVo" id="simpleSongResultMap">
-		<id property="id" column="song_id" />
-		<result property="name" column="song_name" />
-		<result property="icon" column="song_icon" />
-		<result property="time" column="song_time" />
-		<result property="singerId" column="song_singerId" />
-		<result property="singerName" column="song_singerName" />
-		<result property="albumId" column="song_albumId" />
-		<result property="albumName" column="song_albumName" />
-		<result property="rank" column="song_rank" />
-	</resultMap>
-	
-	<resultMap type="cn.xiedacon.vo.SimpleSongListVo" id="simpleSongListResultMap">
-		<id property="id" column="songList_id"/>
-		<result property="name" column="songList_name" />
-		<result property="icon" column="songList_icon" />
-
-		<collection property="songs" javaType="java.util.ArrayList"
-			ofType="cn.xiedacon.vo.SimpleSongVo" resultMap="simpleSongResultMap" />
-	</resultMap>
-
-
-	<select id="selectSongListsByIds" parameterType="java.lang.reflect.Array"
-		resultMap="simpleSongListResultMap">
-		SELECT
-		slb.id songList_id,
-		slb.name songList_name,
-		slb.icon songList_icon,
-		sb.id song_id,
-		sb.name song_name,
-		sb.icon song_icon,
-		sb.time song_time,
-		sb.singerId song_singerId,
-		sb.singerName song_singerName,
-		sb.albumId song_albumId,
-		sb.albumName song_albumName,
-		sgs.rank song_rank
-		FROM
-		songList_base
-		slb
-		LEFT JOIN song_gl_songList sgs ON sgs.songListId = slb.id
-		LEFT JOIN
-		song_base sb ON sb.id = sgs.songId
-		WHERE
-		slb.id in
-		<foreach collection="songListIds" open="(" separator="," close=")"
-			item="item">
-			#{item}
-		</foreach>
-		ORDER BY slb.id ASC, sgs.rank ASC
-	</select>
-	
-	<select id="selectById"
-		resultType="cn.xiedacon.vo.SongListVo">
+	<sql id="required_SELECT">
 		SELECT
 		s.id id,
 		s.name name,
 		s.icon icon,
-		s.refreshRate refreshRate,
+		s.refreshRate
+		refreshRate,
+	</sql>
+	<sql id="simpleSongListVo_SELECT">
+		<include refid="required_SELECT"></include>
+		s.globe globe
+	</sql>
+	<sql id="songListVo_SELECT">
+		<include refid="required_SELECT"></include>
 		s.refreshDate refreshDate,
 		s.songNum songNum,
-		sr.collectionNum collectionNum,
+		sr.collectionNum
+		collectionNum,
 		sr.shareNum shareNum,
 		sr.commentNum commentNum,
 		sr.playNum playNum
-		FROM
-		songList_base s
+	</sql>
+
+	<sql id="songList_base_FROM">
+		FROM songList_base s
+	</sql>
+
+	<sql id="songList_record_JOIN">
 		INNER JOIN songlist_record sr ON s.id = sr.id
-		WHERE s.id = #{id}
+	</sql>
+
+	<sql id="id_WHERE">
+		<where>s.id = #{id}</where>
+	</sql>
+
+	<select id="selectById" resultType="cn.xiedacon.model.SongList">
+		<include refid="songListVo_SELECT"></include>
+		<include refid="songList_base_FROM"></include>
+		<include refid="songList_record_JOIN"></include>
+		<include refid="id_WHERE"></include>
 	</select>
-	
-	<select id="selectList"
-		resultType="cn.xiedacon.vo.SongListVo">
-		SELECT
-		s.id id,
-		s.name name,
-		s.icon icon,
-		s.refreshRate refreshRate,
-		s.globe globe
-		FROM
-		songList_base s
+
+	<select id="selectList" resultType="cn.xiedacon.model.SongList">
+		<include refid="simpleSongListVo_SELECT"></include>
+		<include refid="songList_base_FROM"></include>
 	</select>
 
 </mapper>

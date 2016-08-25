@@ -11,64 +11,46 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import cn.xiedacon.service.AlbumService;
+import cn.xiedacon.model.Singer;
 import cn.xiedacon.service.SingerService;
-import cn.xiedacon.service.SongService;
-import cn.xiedacon.util.PageBean;
-import cn.xiedacon.vo.SimpleAlbumVo;
-import cn.xiedacon.vo.SimpleSingerVo;
-import cn.xiedacon.vo.SingerVo;
-import cn.xiedacon.vo.SongVo;
+import cn.xiedacon.util.Constant;
 
 @Controller
 @ResponseBody
-public class singerController {
+@RequestMapping(value = "/singer", method = RequestMethod.GET)
+public class SingerController {
 
 	@Autowired
 	private SingerService singerService;
-	@Autowired
-	private SongService songService;
-	@Autowired
-	private AlbumService albumService;
 
-	@RequestMapping(value = "/singers/all", method = RequestMethod.GET)
-	public List<SimpleSingerVo> getSingerList() {
-		return singerService.selectListLimit(0, 30);
+	@RequestMapping("/s")
+	public List<Singer> getList() {
+		return singerService.selectListLimit(Constant.BEGIN_DEFAULT, Constant.SINGER_SHOW_NUM);
 	}
 
-	@RequestMapping(value = "/singers/hot", method = RequestMethod.GET)
-	public List<SimpleSingerVo> getHotSingerList() {
-		return singerService.selectListOrderByCollectionNumLimit(0, 100);
+	@RequestMapping("/s/hot")
+	public List<Singer> getHotList() {
+		return singerService.selectListOrderByCollectionNumLimit(Constant.BEGIN_DEFAULT, Constant.SINGER_SHOW_NUM);
 	}
 
-	@RequestMapping(value = "/singers/classify_{classifyId:\\d{4}}", method = RequestMethod.GET)
-	public List<SimpleSingerVo> getSingerListByClassifyId(@PathVariable("classifyId") Integer classifyId) {
-		return singerService.selectListByClassifyIdOrderByCollectionNumLimit(classifyId, 0, 100);
+	@RequestMapping("/s/classifyId_{classifyId:\\d{4}}")
+	public List<Singer> getListByClassifyId(@PathVariable("classifyId") Integer classifyId) {
+		return singerService.selectListByClassifyIdOrderByCollectionNumLimit(classifyId, Constant.BEGIN_DEFAULT,
+				Constant.SINGER_SHOW_NUM);
 	}
 
-	@RequestMapping(value = "/singer/{id:\\w+}", method = RequestMethod.GET)
-	public SingerVo getSingerById(@PathVariable("id") String id) {
+	@RequestMapping("/{id:\\w+}")
+	public Singer getById(@PathVariable("id") String id) {
 		return singerService.selectById(id);
 	}
 
-	@RequestMapping(value = "/singer/{singerId:\\w+}/songs", method = RequestMethod.GET)
-	public List<SongVo> getSongListBySingerId(@PathVariable("singerId") String singerId) {
-		return songService.selectListBySingerIdOrderByCollectionNumLimit(singerId, 0, 50);
-	}
-
-	@RequestMapping(value = "/singer/{sinerId:\\w+}/albums/{page:[1-9]\\d*}", method = RequestMethod.GET)
-	public PageBean<SimpleAlbumVo> getAlbumPageBeanBySingerId(@PathVariable("sinerId") String singerId,
-			@PathVariable("page") Integer page) {
-		return albumService.selectPageBeanBySingerIdOrderByCreateTime(singerId, page);
-	}
-
-	@RequestMapping(value = "/singer/{id:\\w+}/introduction", method = RequestMethod.GET)
+	@RequestMapping("/{id:\\w+}/introduction")
 	public Map<String, Object> getIntroductionById(@PathVariable("id") String id) {
 		Map<String, Object> result = new HashMap<>();
 		String introduction = singerService.selectIntroductionById(id);
 
 		// 可能扩展为富文本
-		result.put("code", 200);
+		result.put("code", Constant.SUCCESS);
 		result.put("introduction", introduction);
 
 		return result;

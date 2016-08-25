@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 
-import cn.xiedacon.vo.CommentVo;
+import cn.xiedacon.model.Comment;
 
 public interface CommentDao {
 
@@ -12,31 +12,31 @@ public interface CommentDao {
 
 	Integer selectCountByAlbumId(String albumId);
 
-	List<CommentVo> selectListByAlbumId(@Param("albumId") String albumId, @Param("begin") int begin,
+	List<Comment> selectListByAlbumIdLimit(@Param("albumId") String albumId, @Param("begin") int begin,
 			@Param("limit") int limit);
 
-	List<CommentVo> selectListByAlbumIdAndMINAgreeNum(@Param("albumId") String albumId,
+	List<Comment> selectListByAlbumIdAndMINAgreeNum(@Param("albumId") String albumId,
 			@Param("agreeNum") int agreeNum);
 
-	List<CommentVo> selectListBySongMenuId(@Param("songMenuId") String songMenuId, @Param("begin") int begin,
+	List<Comment> selectListBySongMenuIdLimit(@Param("songMenuId") String songMenuId, @Param("begin") int begin,
 			@Param("limit") int limit);
 
-	List<CommentVo> selectListBySongMenuIdAndMINAgreeNum(@Param("songMenuId") String songMenuId,
+	List<Comment> selectListBySongMenuIdAndMINAgreeNum(@Param("songMenuId") String songMenuId,
 			@Param("agreeNum") int agreeNum);
 
-	List<CommentVo> selectListBySongListIdAndMINAgreeNum(@Param("songListId") String songListId,
+	List<Comment> selectListBySongListIdAndMINAgreeNum(@Param("songListId") String songListId,
 			@Param("agreeNum") int agreeNum);
 
 	Integer selectCountBySongListId(String songListId);
 
-	List<CommentVo> selectListBySongListId(@Param("songListId") String songListId, @Param("begin") int begin,
+	List<Comment> selectListBySongListIdLimit(@Param("songListId") String songListId, @Param("begin") int begin,
 			@Param("limit") int limit);
 
-	List<CommentVo> selectListBySongIdAndMINAgreeNum(@Param("songId") String songId, @Param("agreeNum") int agreeNum);
+	List<Comment> selectListBySongIdAndMINAgreeNum(@Param("songId") String songId, @Param("agreeNum") int agreeNum);
 
 	int selectCountBySongId(String songId);
 
-	List<CommentVo> selectListBySongId(@Param("songId") String songId, @Param("begin") int begin,
+	List<Comment> selectListBySongIdLimit(@Param("songId") String songId, @Param("begin") int begin,
 			@Param("limit") int limit);
 
 }

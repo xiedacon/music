@@ -62,17 +62,6 @@
 		WHERE ur.githubId = #{githubId}
 	</sql>
 
-	<select id="selectUserListByIds" parameterType="java.lang.reflect.Array"
-		resultType="cn.xiedacon.vo.SimpleUserVo">
-		<include refid="min_simpleUserVo_SELECT"></include>
-		<include refid="user_base_FROM"></include>
-		WHERE u.id in
-		<foreach collection="userIds" open="(" separator="," close=")"
-			item="item">
-			#{item}
-		</foreach>
-	</select>
-
 	<insert id="insertUser_base" parameterType="cn.xiedacon.model.User">
 		INSERT INTO user_base
 		VALUES(
@@ -97,7 +86,7 @@
 	</insert>
 
 
-	<select id="insertUser_record" parameterType="cn.xiedacon.model.User">
+	<insert id="insertUser_record" parameterType="cn.xiedacon.model.User">
 		INSERT INTO
 		user_relation
 		VALUES(
@@ -111,7 +100,7 @@
 		#{password},
 		#{githubId}
 		)
-	</select>
+	</insert>
 
 	<select id="selectByPhone" resultType="cn.xiedacon.model.User">
 		<include refid="userVo_SELECT"></include>

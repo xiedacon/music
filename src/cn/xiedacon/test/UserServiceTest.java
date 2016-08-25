@@ -1,82 +1,72 @@
 package cn.xiedacon.test;
 
-import java.util.List;
+import java.util.Date;
 
 import org.junit.Test;
 
 import cn.xiedacon.model.User;
 import cn.xiedacon.service.UserService;
+import cn.xiedacon.test.base.BaseTest;
+import cn.xiedacon.test.base.Level;
+import cn.xiedacon.test.base.Priority;
 import cn.xiedacon.util.UUIDUtils;
-import cn.xiedacon.vo.SimpleUserVo;
 
-public class UserServiceTest extends BaseTest{
+public class UserServiceTest extends BaseTest {
+
+	private User user;
 
 	@Test
-	public void testSelectForIndex(){
+	@Priority(Level.Level_1)
+	public void testInsertUser() {
 		UserService userService = this.getApplicationContext().getBean(UserService.class);
-		
-		List<SimpleUserVo> list = userService.selectForIndex();
-		
-		System.out.println(list);
-	}
-	
-	@Test
-	public void testInsertUser(){
-		UserService userService = this.getApplicationContext().getBean(UserService.class);
-		User user = this.getFactory().get(User.class);
+		user = this.getFactory().get(User.class);
 		user.setId(UUIDUtils.uuid("test"));
-		
+		user.setPhone("1111" + new Date().getTime());
+		user.setGithubId("test" + new Date().getTime());
 		userService.insertUser(user);
 	}
-	
+
 	@Test
-	public void testSelectByPhone(){
+	public void testSelectById() {
 		UserService userService = this.getApplicationContext().getBean(UserService.class);
-		
-		User bean = userService.selectByPhone("1111");
-		
+
+		User bean = userService.selectById(user.getId());
+
 		System.out.println(bean);
 	}
-	
+
 	@Test
-	public void testSelectById(){
+	public void testSelectByPhone() {
 		UserService userService = this.getApplicationContext().getBean(UserService.class);
-		
-		User bean = userService.selectById("test147072979234011df0190f47d143");
-		
+
+		User bean = userService.selectByPhone(user.getPhone());
+
 		System.out.println(bean);
 	}
-	
+
 	@Test
-	public void testUpdateUsername(){
+	public void testUpdateUsername() {
 		UserService userService = this.getApplicationContext().getBean(UserService.class);
-		User user = new User();
-		user.setId("test14715941147101f342ffb30c3842");
 		user.setName("test");
-		
+
 		userService.updateUsername(user);
 	}
-	
+
 	@Test
-	public void testSelectByGitHubId(){
+	public void testSelectByGitHubId() {
 		UserService userService = this.getApplicationContext().getBean(UserService.class);
-		
-		String githubId = "test";
-		
-		User bean = userService.selectByGitHubId(githubId);
-		
+
+		User bean = userService.selectByGitHubId(user.getGithubId());
+
 		System.out.println(bean);
 	}
-	
+
 	@Test
-	public void testUpdatePassword(){
+	public void testUpdatePassword() {
 		UserService userService = this.getApplicationContext().getBean(UserService.class);
-		
-		User user = new User();
-		user.setId("test147072979234011df0190f47d143");
 		user.setPassword("testtest");
-		
+
 		userService.updatePassword(user);
 	}
-	
+
 }

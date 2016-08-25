@@ -5,76 +5,75 @@
 
 <mapper namespace="cn.xiedacon.dao.SingerDao">
 
-	<sql id="selectSimpleSingerVoSql">
+	<sql id="required_SELECT">
 		SELECT
 		s.id id,
 		s.name name,
 		s.icon icon,
+	</sql>
+	<sql id="simpleSingerVo_SELECT">
+		<include refid="required_SELECT"></include>
 		s.userId userId
 	</sql>
 
-	<sql id="selectSingerVoSql">
-		SELECT
-		s.id id,
-		s.name name,
-		s.icon icon,
+	<sql id="singerVo_SELECT">
+		<include refid="required_SELECT"></include>
 		s.remark remark,
 		s.userId userId
 	</sql>
 
-	<sql id="fromSingerSql">
+	<sql id="singer_FROM">
 		FROM singer s
 	</sql>
 
-	<sql id="byClassifyIdSql">
-		WHERE
-		s.classifyId = #{classifyId}
+	<sql id="classifyId_WHERE">
+		<where>s.classifyId = #{classifyId}</where>
 	</sql>
 
-	<sql id="byIdSql">
-		WHERE s.id = #{id}
+	<sql id="id_WHERE">
+		<where>s.id = #{id}</where>
 	</sql>
 
-	<sql id="orderByCollectionNumSql">
+	<sql id="collectionNum_ORDERBY">
 		ORDER BY s.collectionNum DESC
 	</sql>
 
-	<sql id="limitSql">
+	<sql id="LIMIT">
 		LIMIT #{begin},#{limit}
 	</sql>
 
 	<select id="selectListByClassifyIdOrderByCollectionNumLimit"
-		resultType="cn.xiedacon.vo.SimpleSingerVo">
-		<include refid="selectSimpleSingerVoSql"></include>
-		<include refid="fromSingerSql"></include>
-		<include refid="byClassifyIdSql"></include>
-		<include refid="orderByCollectionNumSql"></include>
-		<include refid="limitSql"></include>
+		resultType="cn.xiedacon.model.Singer">
+		<include refid="simpleSingerVo_SELECT"></include>
+		<include refid="singer_FROM"></include>
+		<include refid="classifyId_WHERE"></include>
+		<include refid="collectionNum_ORDERBY"></include>
+		<include refid="LIMIT"></include>
 	</select>
 
-	<select id="selectListOrderByCollectionNumLimit" resultType="cn.xiedacon.vo.SimpleSingerVo">
-		<include refid="selectSimpleSingerVoSql"></include>
-		<include refid="fromSingerSql"></include>
-		<include refid="orderByCollectionNumSql"></include>
-		<include refid="limitSql"></include>
+	<select id="selectListOrderByCollectionNumLimit" resultType="cn.xiedacon.model.Singer">
+		<include refid="simpleSingerVo_SELECT"></include>
+		<include refid="singer_FROM"></include>
+		<include refid="collectionNum_ORDERBY"></include>
+		<include refid="LIMIT"></include>
 	</select>
 
-	<select id="selectListLimit" resultType="cn.xiedacon.vo.SimpleSingerVo">
-		<include refid="selectSimpleSingerVoSql"></include>
-		<include refid="fromSingerSql"></include>
-		<include refid="limitSql"></include>
+	<select id="selectListLimit" resultType="cn.xiedacon.model.Singer">
+		<include refid="simpleSingerVo_SELECT"></include>
+		<include refid="singer_FROM"></include>
+		<include refid="LIMIT"></include>
 	</select>
 
-	<select id="selectById" resultType="cn.xiedacon.vo.SingerVo">
-		<include refid="selectSingerVoSql"></include>
-		<include refid="fromSingerSql"></include>
-		<include refid="byIdSql"></include>
+	<select id="selectById" resultType="cn.xiedacon.model.Singer">
+		<include refid="singerVo_SELECT"></include>
+		<include refid="singer_FROM"></include>
+		<include refid="id_WHERE"></include>
 	</select>
 
 	<select id="selectIntroductionById" resultType="java.lang.String">
 		SELECT s.introduction
-		<include refid="fromSingerSql"></include>
-		<include refid="byIdSql"></include>
+		<include refid="singer_FROM"></include>
+		<include refid="id_WHERE"></include>
 	</select>
 
 </mapper>

@@ -4,8 +4,9 @@ import java.util.List;
 
 import org.junit.Test;
 
+import cn.xiedacon.model.SongMenuFirstTag;
 import cn.xiedacon.service.SongMenuTagService;
-import cn.xiedacon.vo.SongMenuTagVo;
+import cn.xiedacon.test.base.BaseTest;
 
 public class SongMenuTagServiceTest extends BaseTest {
 
@@ -14,7 +15,7 @@ public class SongMenuTagServiceTest extends BaseTest {
 	public void testSelectAll() {
 		SongMenuTagService songMenuTagService = this.getApplicationContext().getBean(SongMenuTagService.class);
 
-		List<SongMenuTagVo> list = songMenuTagService.selectAll();
+		List<SongMenuFirstTag> list = songMenuTagService.selectList();
 
 		System.out.println(list);
 	}

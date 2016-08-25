@@ -7,9 +7,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import cn.xiedacon.dao.SongDao;
+import cn.xiedacon.model.Song;
 import cn.xiedacon.service.SongService;
-import cn.xiedacon.vo.SimpleSongVo;
-import cn.xiedacon.vo.SongVo;
 
 @Service
 @Transactional
@@ -19,22 +18,22 @@ public class SongServiceImpl implements SongService {
 	private SongDao songDao;
 
 	@Override
-	public List<SimpleSongVo> selectListBySongMenuIdOrderByRank(String songMenuId) {
+	public List<Song> selectListBySongMenuIdOrderByRank(String songMenuId) {
 		return songDao.selectListBySongMenuIdOrderByRank(songMenuId);
 	}
 
 	@Override
-	public List<SimpleSongVo> selectListByAlbumIdOrderByRank(String albumId) {
+	public List<Song> selectListByAlbumIdOrderByRank(String albumId) {
 		return songDao.selectListByAlbumIdOrderByRank(albumId);
 	}
 
 	@Override
-	public List<SimpleSongVo> selectListBySongListIdOrderByRank(String songListId) {
+	public List<Song> selectListBySongListIdOrderByRank(String songListId) {
 		return songDao.selectListBySongListIdOrderByRank(songListId);
 	}
 
 	@Override
-	public SongVo selectById(String id) {
+	public Song selectById(String id) {
 		return songDao.selectById(id);
 	}
 
@@ -44,7 +43,7 @@ public class SongServiceImpl implements SongService {
 	}
 
 	@Override
-	public List<SongVo> selectListBySingerIdOrderByCollectionNumLimit(String singerId, Integer begin, Integer limit) {
+	public List<Song> selectListBySingerIdOrderByCollectionNumLimit(String singerId, Integer begin, Integer limit) {
 		return songDao.selectListBySingerIdOrderByCollectionNumLimit(singerId, begin, limit);
 	}
 
