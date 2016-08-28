@@ -98,7 +98,7 @@
 		bindEvents('nav_login');
 
 		$("#myMusic").attr({
-			"data-href" : "myMusic/{" + user.id + "}"
+			"data-href" : "myMusic?userId=" + user.id
 		})
 
 		if (firstFlag) {
@@ -155,11 +155,7 @@
 		}
 	}
 	window.UserManager = new UserManager();
-
-	// 保持高度相等
-	function chiping() {
-		$(".material_right").css("height", $(".material_left")[0].clientHeight);
-	}
+	
 	// $yyyy-$MM-$dd $HH:$mm:$ss
 	window.DateFormatter = function DateFormatter(regExpString) {
 		var array = new Array();

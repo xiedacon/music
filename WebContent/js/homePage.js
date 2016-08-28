@@ -1,20 +1,16 @@
 (function() {
-	var realUrl = document.getElementById("realUrl").innerHTML;
-	var pageScope = router.getPageScope(realUrl);
-	var ajaxConfigs = new router.AjaxConfigs(realUrl);
-
-	ajaxConfigs.setAjaxConfigs({
-		url : realUrl,
+	AJAX({
+		url : "user/" + PageScope.params.userId,
 		success : loadUser
-	}, {
-		url : realUrl + "/songMenu_create",
+	});
+	AJAX({
+		url : "songMenu/s/creatorId_" + PageScope.params.userId,
 		success : loadSongMenus_create
-	}, {
-		url : realUrl + "/songMenu_collect",
+	});
+	AJAX({
+		url : "songMenu/s/collectorId_" + PageScope.params.userId,
 		success : loadSongMenus_collect
 	});
-
-	ajaxConfigs.startAjaxs();
 
 	function loadUser(user) {
 		$userEle = $("#user");
@@ -25,7 +21,7 @@
 		$userEle.find(".attention");
 		if (user.singerId) {
 			$userEle.find(".toSongerPage").removeAttr("style").attr({
-				"data-href" : "singer/{" + user.singerId + "}"
+				"data-href" : "singer?singerId=" + user.singerId
 			});
 		}
 
@@ -82,12 +78,12 @@
 				"title" : songMenu.name
 			});
 			$songMenuEle.find("img").parent().attr({
-				"data-href" : "songMenu/{" + songMenu.id + "}"
+				"data-href" : "songMenu?songMenuId=" + songMenu.id
 			});
 			$songMenuEle.find(".num").text(songMenu.playNum);
 			$songMenuEle.find(".name").attr({
 				"title" : songMenu.name,
-				"data-href" : "songMenu/{" + songMenu.id + "}"
+				"data-href" : "songMenu?songMenuId=" + songMenu.id
 			}).text(limitStringLength(songMenu.name, 20));
 
 			$songMenuEle.attr("id", songMenu.id);

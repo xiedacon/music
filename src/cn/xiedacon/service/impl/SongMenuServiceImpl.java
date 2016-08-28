@@ -119,4 +119,9 @@ public class SongMenuServiceImpl implements SongMenuService {
 		songMenuDao.insertSongMenu_record(songMenu);
 	}
 
+	@Override
+	public void deleteById(String songMenuId) {
+		songMenuDao.deleteById(songMenuId);
+	}
+
 }

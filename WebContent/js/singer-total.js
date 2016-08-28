@@ -61,7 +61,7 @@
 	function loadFouction(data) {
 		$("#singerList").css("display", "none");
 		$("#simpleSingerList").css("display", "none");
-
+console.log(PageScope.params.classifyId)
 		switch (PageScope.params.classifyId) {
 			case "all" :
 				$("h2").text("入驻歌手");

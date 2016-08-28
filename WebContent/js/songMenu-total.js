@@ -5,7 +5,6 @@
 	} else {
 		PageScope["supplement"] = "";
 	}
-	console.log(PageScope)
 	AJAX({
 		url : "songMenu/s/" + PageScope["orderBy"] + "_1" + PageScope["supplement"],
 		success : loadSongMenuList

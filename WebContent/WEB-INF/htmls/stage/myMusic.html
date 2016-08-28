@@ -148,168 +148,360 @@
 .creator_time .creator .creatorName:hover {
 	text-decoration: underline;
 }
+#editPage{
+    font-size: 14px;
+    font-family: Arial, Helvetica, sans-serif;
+}
+#editPage .editPage_top{
+    line-height: 40px;
+    border-bottom: 1px #bdbdbd solid;
+}
+#editPage .editPage_top .name{
+    color: #495df3;
+}
+#editPage .editPage_top .name:hover{
+    text-decoration: underline;
+}
+#editPage .editPage_bottom{
+    padding: 20px 0;
+}
+#editPage .editPage_bottom .bottom_left{
+    line-height: 30px;
+    float: left;
+    width: 400px;
+}
+#editPage .editPage_bottom .bottom_left p{
+    font-size: 0;
+}
+#editPage .editPage_bottom .bottom_left .key{
+    width: 70px;
+    display: inline-block;
+    font-size: 14px;
+    text-align: right;
+    vertical-align: top;
+}
+#editPage .editPage_bottom .bottom_left .value{
+    width: 330px;
+    font-size: 14px;
+    line-height: 30px;
+    display: inline-block;
+    position: relative;
+}
+.bottom_left .value input{
+    border: 1px #bdbdbd solid;
+    display: inline-block;
+    height: 30px;
+    box-sizing: border-box;
+    border-radius: 3px;
+    width: 100%;
+    padding: 0 0 0 10px;
+}
+.bottom_left .value .errorMessage{
+    color: #e60000;
+}
+.bottom_left .value .errorMessage i{
+    vertical-align: bottom;
+    padding: 0 5px 0 0;
+}
+.bottom_left .value a{
+    display: inline-block;
+    color: #495df3;
+    font-size: 14px;
+}
+.bottom_left .value .tags{
+    font-size: 0;
+    line-height: 0;
+    display: block;
+}
+.bottom_left .value .tag{
+    line-height: 24px;
+    height: 24px;
+    display: inline-block;
+    font-size: 13px;
+    text-align: center;
+    background: #f5f5f5;
+    border: 1px #bdbdbd solid;
+    border-radius: 24px;
+    padding: 0 10px 0 15px;
+    margin: 0 5px;
+    color: #7d7d7d;
+    cursor: pointer;
+}
+.bottom_left .value .tag:hover{
+	background: #fff;
+}
+.bottom_left .value .tag i{
+    font-size: 10px;
+    transform: scale(0.7,0.7);
+    display: inline-block;
+    padding: 0 0 0 5px;
+}
+.bottom_left .value a:hover{
+	text-decoration: underline;
+}
+.bottom_left .value .message{
+    color: #adadad;
+}
+.bottom_left .value textarea{
+    font-family: inherit;
+    font-size: inherit;
+    font-weight: inherit;
+    outline: none;
+    width: 100%;
+    height: 150px;
+    padding: 10px;
+    box-sizing: border-box;
+    resize: none;
+}
+.bottom_left .value .num{
+    position: absolute;
+    top: 100%;
+    left: 100%;
+    transform: translate(-130%,-130%);
+    color: #adadad;
+}
+.bottom_left .value .button{
+    font-size: 14px;
+    display: inline-block;
+    width: 70px;
+    text-align: center;
+    background: #fdf8f8;
+    border-radius: 3px;
+    border: 1px #bdbdbd solid;
+    box-sizing: border-box;
+    height: 30px;
+    cursor: pointer;
+}
+.bottom_left .value .button:hover{
+	opacity: 0.7;
+}
+.bottom_left .value .enable{
+    background: #6b7cff;
+    border: 1px #7282f9 solid;
+    color: #fff;
+}
+#editPage .editPage_bottom .bottom_right{
+    float: left;
+    position: relative;
+    padding: 0 0 0 30px;
+    font-size: 0;
+}
+#editPage .editPage_bottom .bottom_right img{
+    width: 140px;
+    height: 140px;
+}
+#editPage .editPage_bottom .bottom_right span{
+    position: absolute;
+    top: 100%;
+    left: 100%;
+    width: 140px;
+    text-align: center;
+    transform: translate(-100%,-100%);
+    line-height: 30px;
+    font-size: 14px;
+    color: #fff;
+    background: #3c3c3c;
+    opacity: 0.7;
+    cursor: pointer;
+}
+#editPage .editPage_bottom .bottom_right span:hover{
+	text-decoration: underline;
+}
 </style>
 <body>
 	<div class="body">
 		<div class="material">
 			<div class="material_right">
 				<h2 id="createdSongMenusHead">
-					<i></i>
-					<span class="content"></span> 
-					<span class="h2_rightF">
-						<i class="icomoon"></i>新建
+					<i></i> <span class="content"></span> <span class="h2_rightF" onclick="MMR.get('addMenu').show();"> <i class="icomoon"></i>新建
 					</span>
 				</h2>
 				<ul id="createdSongMenus" class="select">
-					<li class="option prototype">
-						<img src="">
+					<li class="option prototype"><img src="">
 						<div class="option_right">
-							<span class="name"></span><br> 
-							<span class="num"></span>
+							<span class="name"></span><br> <span class="num"></span>
 						</div>
 						<div class="option_rightF" style="display: none">
-							<i class="edit icomoon" title="修改" style="display: none"></i> 
-							<i class="delete icomoon" title="删除"></i>
-						</div>
-					</li>
+							<i class="edit icomoon" title="修改" style="display: none"></i> <i class="delete icomoon" title="删除"></i>
+						</div></li>
 				</ul>
 				<h2 id="collectedSongMenusHead">
 					<i></i><span class="content"></span>
 				</h2>
 				<ul id="collectedSongMenus" class="select">
-					<li class="option prototype">
-						<img src="">
+					<li class="option prototype"><img src="">
 						<div class="option_right">
-							<span class="name"></span><br> 
-							<span class="num"></span>
+							<span class="name"></span><br> <span class="num"></span>
 						</div>
 						<div class="option_rightF" style="display: none">
-							<i class="edit icomoon" title="修改" style="display: none"></i> 
-							<i class="delete icomoon" title="删除"></i>
+							<i class="edit icomoon" title="修改" style="display: none"></i> <i class="delete icomoon" title="删除"></i>
 						</div>
 					</li>
 				</ul>
 			</div>
 			<div class="material_left">
-				<div id="songMenu" class="songMenuMessage entityMessage">
-					<div class="songMenuMessage_left entityMessage_left">
-						<img src="">
+				<div id="editPage" style="display: none">
+					<div class="editPage_top">
+						<a href="javascript:void(0);" onclick="jump(this);" class="name"></a> 
+						<span>></span>
+						<strong>编辑歌单</strong>
 					</div>
-					<div class="songMenuMessage_right entityMessage_right">
-						<div class="label">
-							<span class="content">歌单</span> <span class="triangle"><i></i></span>
-						</div>
-						<h2></h2>
-						<div class="creator_time">
-							<div class="creator">
-								<img data-href="" onclick="jump(this);" src="" /> <a class="creatorName" href="javascript:void(0);" data-href="" onclick="jump(this);"
-									title="creatorName"></a>
-							</div>
-							<span class="createTime"></span>
-						</div>
-						<div class="buttons">
-							<div class="play_addToPlayList">
-								<span class="play" title="播放">
-									<i class="icomoon"></i>
-									<span>播放</span>
+					<div class="editPage_bottom">
+						<div class="bottom_left">
+							<p>
+								<span class="key">歌单名：</span>
+								<span class="value">
+									<input name="name" type="text"> 
+									<span class="errorMessage" style="visibility: hidden;">
+										<i class="icomoon"></i>
+									</span>
 								</span> 
-								<span class="addToPlaylist icomoon" title="添加到播放列表"></span>
+							</p>
+							<p>
+								<span class="key">标签：</span>
+								<span class="value">
+									
+									<span class="tags">
+										<span class="tag">华语<i class="icomoon"></i></span>
+										<span class="tag">中文<i class="icomoon"></i></span>
+										<span class="tag">中文<i class="icomoon"></i></span>
+										<a href="javascript:void(0);" onclick="MMR.get('tags').show();">选择标签</a>
+									</span>
+									<span class="message">选择适合的标签，最多选3个</span>
+								</span> 
+							</p>
+							<p>
+								<span class="key">介绍：</span>
+								<span class="value">
+									<textarea class="introduction" rows="" cols=""></textarea>
+									<span class="num">1000</span>
+								</span>
+							</p>
+							<p>
+								<span class="key"></span>
+								<span class="value">
+									<span class="button enable" style="margin: 0 30px 0 0;">保 存</span>
+									<span class="button">取 消</span>
+								</span>
+							</p>
+						</div>
+						<div class="bottom_right">
+							<img alt="" src=""> 
+							<span>编辑封面</span>
+						</div>
+					</div>
+				</div>
+				<div id="showPage">
+					<div id="songMenu" class="songMenuMessage entityMessage">
+						<div class="songMenuMessage_left entityMessage_left">
+							<img src="">
+						</div>
+						<div class="songMenuMessage_right entityMessage_right">
+							<div class="label">
+								<span class="content">歌单</span> <span class="triangle"><i></i></span>
 							</div>
-							<span class="share button "><i class="icomoon"></i></span> 
-							<span class="collection button "><i class="icomoon"></i></span> 
-							<span class="download button "><i class="icomoon"></i>下载</span> 
-							<span class="comment button "><i class="icomoon"></i></span>
+							<h2></h2>
+							<div class="creator_time">
+								<div class="creator">
+									<img data-href="" onclick="jump(this);" src="" /> <a class="creatorName" href="javascript:void(0);" data-href="" onclick="jump(this);"
+										title="creatorName"></a>
+								</div>
+								<span class="createTime"></span>
+							</div>
+							<div class="buttons">
+								<div class="play_addToPlayList">
+									<span class="play" title="播放"> <i class="icomoon"></i> <span>播放</span>
+									</span> <span class="addToPlaylist icomoon" title="添加到播放列表"></span>
+								</div>
+								<span class="share button "><i class="icomoon"></i></span> <span class="collection button "><i class="icomoon"></i></span> <span
+									class="download button "><i class="icomoon"></i>下载</span> <span class="comment button "><i class="icomoon"></i></span>
+							</div>
+							<div class="details">
+								<p class="tags">标签：</p>
+								<p class="introduction">介绍：无</p>
+							</div>
 						</div>
-						<div class="details">
-							<p class="tags">标签：</p>
-							<p class="introduction">介绍：无</p>
+					</div>
+					<div class="songList">
+						<div class="songList_top">
+							<h2>歌曲列表</h2>
+							<span class="songList_detail"></span>
+							<p class="top_right">
+								<span>播放：<i class="num"></i>次
+								</span>
+							</p>
 						</div>
+						<table>
+							<thead>
+								<tr>
+									<td class="first_td"></td>
+									<td class="songName_td">歌曲标题</td>
+									<td class="time_td">时长</td>
+									<td class="songer_td">歌手</td>
+									<td class="special_td">专辑</td>
+								</tr>
+							</thead>
+							<tbody id="songList">
+								<tr class="prototype">
+									<td><span class="num"></span> <i class="play icomoon"></i></td>
+									<td><a class="songName" href="javascript:void(0);" data-href="" onclick="jump(this);"></a></td>
+									<td><span class="time"></span>
+										<p class="hidden">
+											<span class="addToPlaylist icomoon"></span> <span class="collection icomoon"></span> <span class="share icomoon"></span> <span
+												class="download icomoon"></span>
+										</p></td>
+									<td><a class="songer" href="javascript:void(0);" data-href="" onclick="jump(this);"></a></td>
+									<td><a class="special" href="javascript:void(0);" data-href="" onclick="jump(this);"></a></td>
+								</tr>
+							</tbody>
+						</table>
 					</div>
-				</div>
-				<div class="songList">
-					<div class="songList_top">
-						<h2>歌曲列表</h2>
-						<span class="songList_detail"></span>
-						<p class="top_right">
-							<span>播放：<i class="num"></i>次
-							</span>
-						</p>
-					</div>
-					<table>
-						<thead>
-							<tr>
-								<td class="first_td"></td>
-								<td class="songName_td">歌曲标题</td>
-								<td class="time_td">时长</td>
-								<td class="songer_td">歌手</td>
-								<td class="special_td">专辑</td>
-							</tr>
-						</thead>
-						<tbody id="songList">
-							<tr class="prototype">
-								<td>
-									<span class="num"></span> 
-									<i class="play icomoon"></i>
-								</td>
-								<td><a class="songName" href="javascript:void(0);" data-href="" onclick="jump(this);"></a></td>
-								<td><span class="time"></span>
-									<p class="hidden">
-										<span class="addToPlaylist icomoon"></span> 
-										<span class="collection icomoon"></span> 
-										<span class="share icomoon"></span> 
-										<span class="download icomoon"></span>
-									</p></td>
-								<td><a class="songer" href="javascript:void(0);" data-href="" onclick="jump(this);"></a></td>
-								<td><a class="special" href="javascript:void(0);" data-href="" onclick="jump(this);"></a></td>
-							</tr>
-						</tbody>
-					</table>
-				</div>
-				<div class="commentList">
-					<div class="commentList_top">
-						<h2>评论列表</h2>
-						<span class="commentList_detail"></span>
-					</div>
-					<div class="commentList_middle">
-						<div class="newComment">
-							<img class="newComment_left" src="image/default.jpg">
-							<div class="newComment_right">
-								<s></s>
-								<textarea class="content"></textarea>
-								<div class="right_bottom">
-									<div class="left">
-										<i class="icomoon face"></i> <i class="icomoon at"></i>
-									</div>
-									<div class="right">
-										<span class="num">213</span> <span class="button">评论</span>
+					<div class="commentList">
+						<div class="commentList_top">
+							<h2>评论列表</h2>
+							<span class="commentList_detail"></span>
+						</div>
+						<div class="commentList_middle">
+							<div class="newComment">
+								<img class="newComment_left" src="image/default.jpg">
+								<div class="newComment_right">
+									<s></s>
+									<textarea class="content"></textarea>
+									<div class="right_bottom">
+										<div class="left">
+											<i class="icomoon face"></i> <i class="icomoon at"></i>
+										</div>
+										<div class="right">
+											<span class="num">213</span> <span class="button">评论</span>
+										</div>
 									</div>
 								</div>
 							</div>
-						</div>
-						<ul id="commentList" class="comments">
-							<li class="comment prototype"><img src="image/song/1409573912061911.jpg" data-href="" onclick="jump(this);">
-								<div class="comment_left">
-									<p class="comment_material">
-										<a class="name" href="javascript:void(0);" data-href="" onclick="jump(this);"></a> <span class="content"></span>
-									</p>
-									<p class="comment_reply" style="display: none">
-										<i></i> <a class="name" href="javascript:void(0);" data-href="" onclick="jump(this);"></a> <span class="content"></span>
-									</p>
-									<div class="comment_bottom">
-										<span class="createTime"></span>
-										<div class="right">
-											<p>
-												<i class="icomoon"></i> <span class="num"></span>
-											</p>
-											<span class="interval">|</span> <span class="reply">回复</span>
+							<ul id="commentList" class="comments">
+								<li class="comment prototype"><img src="image/song/1409573912061911.jpg" data-href="" onclick="jump(this);">
+									<div class="comment_left">
+										<p class="comment_material">
+											<a class="name" href="javascript:void(0);" data-href="" onclick="jump(this);"></a> <span class="content"></span>
+										</p>
+										<p class="comment_reply" style="display: none">
+											<i></i> <a class="name" href="javascript:void(0);" data-href="" onclick="jump(this);"></a> <span class="content"></span>
+										</p>
+										<div class="comment_bottom">
+											<span class="createTime"></span>
+											<div class="right">
+												<p>
+													<i class="icomoon"></i> <span class="num"></span>
+												</p>
+												<span class="interval">|</span> <span class="reply">回复</span>
+											</div>
 										</div>
-									</div>
-								</div></li>
-						</ul>
-					</div>
-					<div class="commentList_bottom">
-						<ul id="pages">
-						</ul>
+									</div></li>
+							</ul>
+						</div>
+						<div class="commentList_bottom">
+							<ul id="pages">
+							</ul>
+						</div>
 					</div>
 				</div>
 			</div>

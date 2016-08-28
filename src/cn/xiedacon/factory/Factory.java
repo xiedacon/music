@@ -32,9 +32,9 @@ public class Factory {
 		configMap.put("level", Constant.USER_LEVEL_DEFAULT);
 		configMap.put("experience", Constant.USER_EXPERIENCE_DEFAULT);
 		configMaps.put(cn.xiedacon.model.User.class, configMap);
-		
+
 		configMap = new HashMap<>();
-		
+
 		configMap.put("icon", Constant.SONGMENU_IOCN_DEFAULT);
 		configMap.put("songNum", Constant.SONGMENU_SONGNUM_DEFAULT);
 		configMap.put("isPublic", Constant.SONGMENU_ISPUBLIC_DEFAULT);
@@ -42,11 +42,12 @@ public class Factory {
 		configMap.put("shareNum", Constant.SONGMENU_SHARENUM_DEFAULT);
 		configMap.put("commentNum", Constant.SONGMENU_COMMENTNUM_DEFAULT);
 		configMap.put("playNum", Constant.SONGMENU_PLAYNUM_DEFAULT);
+		configMap.put("visible", Constant.VISIBLE_DEFAULT);
 		configMaps.put(cn.xiedacon.model.SongMenu.class, configMap);
 
 		Iterator<Class> iterator = configMaps.keySet().iterator();
-		
-		while(iterator.hasNext()){
+
+		while (iterator.hasNext()) {
 			Class c = iterator.next();
 			Object object = get(c);
 			cacheMap.put(c, object);
@@ -56,7 +57,7 @@ public class Factory {
 	@SuppressWarnings("unchecked")
 	public <T> T get(Class<T> c) {
 		T object = (T) cacheMap.get(c);
-		
+
 		if (object != null) {
 			T instance = getInstance(c);
 			return cloneOject(object, instance);
@@ -75,7 +76,7 @@ public class Factory {
 			Object defaultValue = entry.getValue();
 			setValue(c, instance, fieldName, defaultValue);
 		}
-		
+
 		return instance;
 	}
 

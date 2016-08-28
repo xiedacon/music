@@ -130,6 +130,9 @@
 		$songListsEle.parents(".lists").find(".more").attr({
 			"data-href" : "songList?songListId=" + data[0].id
 		})
+		$(".head_bottom .subnav li:eq(1)").attr({
+			"data-href" : "songList?songListId=" + data[0].id
+		})
 
 		for (var i = 0; i < data.length; i++) {
 			songList = data[i];
@@ -193,7 +196,7 @@
 					$songEle.bind("mouseover", function() {
 						var name = $(this).find(".name").text();
 						$(this).find(".hidden").css("display", "block");
-						$(this).find(".name").text(limitStringLength(name, 7));
+						$(this).find(".name").text(limitStringLength(name, 6));
 					})
 					$songEle.bind("mouseout", function() {
 						var name = $(this).find(".name").attr("data-name");
@@ -394,10 +397,10 @@
 				"src" : user.icon
 			}) //
 			.parent().attr({
-				"data-href" : "home/{" + user.id + "}"
+				"data-href" : "home?userId=" + user.id
 			});
 			$login.find(".name").attr({
-				"data-href" : "home/{" + user.id + "}"
+				"data-href" : "home?userId=" + user.id
 			}).text(user.name);
 			// $login.find(".level").text(user.level);
 			// var $nums = $login.find(".userDiv_bottom .num")

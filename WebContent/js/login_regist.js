@@ -307,6 +307,41 @@
 	var message = new Message();
 	MMR.addModule("message", message);
 
+	var $checkDiv = $("#checkDiv");
+	function Check() {
+		this.$ele = $checkDiv;
+	}
+	Check.prototype = new Prototype();
+	Check.prototype.setData = function(data) {
+		setContent(data.content);
+		// setTitle(data.title);
+		setCallback(data.callback);
+		return MMR.get("check");
+
+		function setCallback(callback) {
+			$checkDiv.find(".login").unbind().click(function(event) {
+				MMR.get('check').hiddenAll();
+				if (callback) {
+					callback.yes();
+				}
+			});
+			$checkDiv.find(".exit, .regist").unbind().click(function(event) {
+				MMR.get('check').hiddenAll();
+				if (callback) {
+					callback.no();
+				}
+			});
+		}
+		function setContent(content) {
+			$checkDiv.find(".login_material p").html(content);
+		}
+		function setTitle(title) {
+			$checkDiv.find(".login_head span").text(title);
+		}
+	}
+	var check = new Check();
+	MMR.addModule("check", check);
+
 	var $usernameDiv = $("#usernameDiv");
 	function Username() {
 		this.$ele = $usernameDiv;
@@ -336,10 +371,9 @@
 		$usernameDiv.find(".login").text("设置中...");
 		// 发送
 		$.ajax({
-			url : "user/" + id + "/username",
-			data : "id=" + id + "&username=" + username,
+			url : "user/" + id + "/username?id=" + id + "&username=" + username,
 			dataType : "json",
-			type : "POST",
+			type : "PATCH",
 			success : function(data) {
 				// 返回结果
 				if (data.code == 200) {
@@ -414,4 +448,100 @@
 	MMR.addModule("simpleMsg", simpleMsg);
 
 	UserManager.init();// 第三方登录的问题
+
+	var $addMenuDiv = $("#addMenuDiv");
+	function AddMenu() {
+		this.$ele = $addMenuDiv;
+	}
+	AddMenu.prototype = new Prototype();
+	AddMenu.prototype.show = function() {
+		show($addMenuDiv, function() {
+			$addMenuDiv.find(".name").val("");
+			$addMenuDiv.find(".errorMessage").css('display', 'none');
+			$addMenuDiv.find(".name").focus();
+		});
+	}
+	AddMenu.prototype.add = function() {
+		var name = $addMenuDiv.find("input[name='name']").val();
+		// 校验
+		if (name && !/\W+/.test(name)) {
+			var userId = UserManager.getUserId();
+			if (!userId) {
+				MMR.get('simpleMsg').setData({
+					status : "error",
+					content : "添加失败"
+				}).show();
+				return;
+			}
+			// 发送
+			$.ajax({
+				url : "songMenu",
+				type : "POST",
+				context : this,
+				data : {
+					creatorId : userId,
+					name : name
+				},
+				dataType : "json",
+				success : function(data) {
+					// 返回
+					if (data.code === 200) {
+						this.hiddenAll();
+						MMR.get('simpleMsg').setData({
+							status : "info",
+							content : "添加成功"
+						}).show();
+						router.startRouter("myMusic?userId=" + UserManager.getUserId(), true);
+					} else {
+						showErrorMsg("addMenuDiv", "name", data.error.value);
+					}
+				}
+			})
+		} else {
+			showErrorMsg("addMenuDiv", "name", "歌单名格式错误");
+		}
+	}
+	var addMenu = new AddMenu();
+	MMR.addModule("addMenu", addMenu);
+
+	MMR.deleteSongMenu = function(that) {
+		var $songMenu = $(that).parents(".option");
+		var id = $songMenu.attr("data-id");
+		var name = $songMenu.find(".name").text();
+		MMR.get('check').setData({
+			content : "删除" + name + "？",
+			callback : {
+				yes : function() {
+					$.ajax({
+						url : "songMenu/" + id,
+						type : "DELETE",
+						dataType : "json",
+						success : function(data) {
+							if(data.code === 200){
+								MMR.get('simpleMsg').setData({
+									status:"success",
+									content:"删除成功"
+								}).show();
+							}else{
+								MMR.get('simpleMsg').setData({
+									status:"error",
+									content : error.songMenu
+								}).show();
+							}
+							router.startRouter("myMusic?userId=" + UserManager.getUserId(), true);
+						},
+						error : function() {
+							MMR.get('simpleMsg').setData({
+								status:"error",
+								content : "删除失败"
+							}).show();
+						}
+					})
+				},
+				no : function() {
+					MMR.get('check').hiddenAll();
+				}
+			}
+		}).show();
+	}
 }())

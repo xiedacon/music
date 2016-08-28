@@ -22,7 +22,7 @@ import cn.xiedacon.vo.SimpleUserVo;
 public class A extends BaseTest {
 
 	@Test
-	public void test(){
+	public void test() {
 		Map<String, Object> result = new HashMap<>();
 
 		SongMenuService songMenuService = this.getApplicationContext().getBean(SongMenuService.class);
@@ -70,15 +70,15 @@ public class A extends BaseTest {
 		songLists.add(BuilderUtils.buildFrom(SimpleSongListVo.class, songListService.selectById("1")));
 		songLists.add(BuilderUtils.buildFrom(SimpleSongListVo.class, songListService.selectById("2")));
 		songLists.add(BuilderUtils.buildFrom(SimpleSongListVo.class, songListService.selectById("3")));
-		
+
 		result.put("songMenus", songMenuList);
 		result.put("songMenuTags", songMenuTagList);
 		result.put("albums", albumList);
 		result.put("users", userList);
 		result.put("songLists", songLists);
-		
+
 		String json = JsonUtils.stringify(result);
 		System.out.println(json);
-		
+
 	}
 }

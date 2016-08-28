@@ -19,15 +19,25 @@ public class SongMenu {
 	private Date createTime;
 	private String introduction;
 	private Integer songNum;
-	
+
 	private Boolean isPublic;
 
 	private Integer collectionNum;
 	private Integer shareNum;
 	private Integer commentNum;
 	private Integer playNum;
-	
+
+	private Boolean visible;
+
 	private List<SongMenuSecondTag> songMenuSecondTagList;
+
+	public Boolean getVisible() {
+		return visible;
+	}
+
+	public void setVisible(Boolean visible) {
+		this.visible = visible;
+	}
 
 	public Boolean getIsPublic() {
 		return isPublic;

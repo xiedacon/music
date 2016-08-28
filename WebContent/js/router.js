@@ -30,7 +30,7 @@
 		return router.pageCache.get(realUrl).pageScope;
 	}
 
-	Router.prototype.startRouter = function(routerUrl) {
+	Router.prototype.startRouter = function(routerUrl, refresh) {
 		if (!routerUrl) {
 			throw "路径不存在";
 		}
@@ -41,6 +41,7 @@
 			};
 		}
 
+		routerObj.refresh = refresh;
 		routerAction(routerObj);
 		router.historyStack.push(routerObj.realUrl);
 	}
@@ -51,7 +52,7 @@
 			console.error("ajax配置错误");
 			return;
 		}
-		
+
 		var url = config.url;
 		var type = config.type;
 		var dataType = config.dataType;
@@ -77,7 +78,7 @@
 			}
 			window.PageScope[url] = data;
 		};
-		
+
 		if (window.PageScope[url]) {
 			success(window.PageScope[url]);
 			return;
@@ -133,7 +134,7 @@
 				"templateUrl" : data.templateUrl,
 				"controller" : data.controller,
 				"html" : data.html,
-				"realUrl":data.realUrl
+				"realUrl" : data.realUrl
 			});
 		}
 
@@ -146,7 +147,7 @@
 		}
 
 		this.reflesh = function(realUrl) {
-
+			pages[realUrl].reflesh();
 		}
 
 		this.removeAll = function() {
@@ -161,7 +162,10 @@
 			this.html = data.html;
 			var pageScope = new PageScope(data.realUrl);
 			this.pageScope = pageScope;
-			
+			this.reflesh = function() {
+				this.pageScope = new PageScope(data.realUrl);
+			}
+
 			function PageScope(url) {
 				this.url = url;
 				var params = new Array();
@@ -194,6 +198,9 @@
 	function routerAction(routerObj) {
 		var temp = router.pageCache.get(routerObj.realUrl);
 		if (temp) {
+			if (routerObj.refresh) {
+				router.pageCache.reflesh(routerObj.realUrl);
+			}
 			loadPage({
 				html : temp.html.clone(),
 				realUrl : routerObj.realUrl,
@@ -223,7 +230,7 @@
 					"controller" : routerItem.controller,
 					"html" : ele.clone()
 				});
-				
+
 				loadPage({
 					html : ele.clone(),
 					realUrl : routerObj.realUrl,
@@ -238,7 +245,7 @@
 
 	function loadPage(data) {
 		window.PageScope = router.getPageScope(data.realUrl);
-		
+
 		$("html .body")//
 		.html("")//
 		.css("min-height", window.innerHeight - $("html .head").height() - $("html .foot").height());

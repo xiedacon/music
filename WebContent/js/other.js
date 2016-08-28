@@ -1,32 +1,5 @@
-function addMenuDiv() {
-	var $addMenuDiv = $("#addMenuDiv");
 
-	this.init = function() {
-		$addMenuDiv.find(".exit").click(function() {
-			hiddenAddMenuDiv();
-		})
-		$addMenuDiv.find(".login").click(function() {
-			hiddenDiv.addSongMenu(this);
-		})
-		$addMenuDiv.find(".regist").click(function() {
-			hiddenAddMenuDiv();
-		})
-	}
-	this.show = function() {
-		$addMenuDiv.removeAttr('style');
-		$addMenuDiv.siblings().not($(".hiddenDiv .music")).css('display', 'none');
-		$addMenuDiv.find(".name").val("");
-		$addMenuDiv.find(".errorMessage").css('display', 'none');
-		$addMenuDiv.find(".name").focus();
-		hiddenDiv.show();
-	}
-	this.hidden = hiddenAddMenuDiv;
 
-	function hiddenAddMenuDiv() {
-		$addMenuDiv.css('display', 'none');
-		hiddenDiv.hidden();
-	}
-}
 
 function collectionDiv() {
 	var $collectionDiv = $("#collectionDiv");
@@ -53,17 +26,6 @@ function collectionDiv() {
 	}
 }
 
-
-
-this.addSongMenu = function addSongMenu(data) {
-	var name = data.name;
-	// 校验
-	if (name && name.length == 0) {
-		data.error("歌单名不能为空");
-	}
-	// 发送
-	// 返回
-}
 
 this.collect = collect;
 this.addToSongMenu = addToSongMenu;

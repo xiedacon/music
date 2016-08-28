@@ -33,4 +33,6 @@ public interface SongMenuDao {
 	void insertSongMenu_record(SongMenu songMenu);
 
 	void updateCreatorNameByCreatorId(@Param("creatorName") String creatorName, @Param("creatorId") String creatorId);
+
+	void deleteById(String songMenuId);
 }

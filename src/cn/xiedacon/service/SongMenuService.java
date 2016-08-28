@@ -24,4 +24,6 @@ public interface SongMenuService {
 
 	void insertSongMenu(SongMenu songMenu);
 
+	void deleteById(String songMenuId);
+
 }

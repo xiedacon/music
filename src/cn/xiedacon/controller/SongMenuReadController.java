@@ -16,7 +16,7 @@ import cn.xiedacon.util.PageBean;
 @Controller
 @ResponseBody
 @RequestMapping(value = "/songMenu", method = RequestMethod.GET)
-public class SongMenuController {
+public class SongMenuReadController {
 
 	@Autowired
 	private SongMenuService songMenuService;
@@ -49,12 +49,12 @@ public class SongMenuController {
 	}
 
 	@RequestMapping("/s/creatorId_{creatorId:\\w+}")
-	public List<SongMenu> getListByCreatorId(@PathVariable("userId") String creatorId) {
+	public List<SongMenu> getListByCreatorId(@PathVariable("creatorId") String creatorId) {
 		return songMenuService.selectListByCreatorId(creatorId);
 	}
 
-	@RequestMapping("/s/collector_{creatorId:\\w+}")
-	public List<SongMenu> getListByCollectorId(@PathVariable("creatorId") String creatorId) {
-		return songMenuService.selectListByCollectorId(creatorId);
+	@RequestMapping("/s/collectorId_{collectorId:\\w+}")
+	public List<SongMenu> getListByCollectorId(@PathVariable("collectorId") String collectorId) {
+		return songMenuService.selectListByCollectorId(collectorId);
 	}
 }

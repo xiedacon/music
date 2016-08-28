@@ -64,7 +64,8 @@
 		collectionNum,
 		tss.id secondTagId,
 		s.userId userId,
-		tss.name secondTagName
+		tss.name
+		secondTagName
 	</sql>
 	<sql id="count_SELECT">
 		SELECT COUNT(s.id) count
@@ -75,22 +76,35 @@
 	</sql>
 
 	<sql id="id_WHERE">
-		<where>s.id = #{id}</where>
+		<where>
+			s.id = #{id}
+			AND s.visible = true
+		</where>
 	</sql>
 	<sql id="secondTagId_WHERE">
 		<where>
 			sgr.tag_songMenu_secondId = #{secondTagId}
 			AND s.userId is null
+			AND s.visible = true
 		</where>
 	</sql>
 	<sql id="creatorId_WHERE">
-		<where>s.creatorId = #{creatorId}</where>
+		<where>
+			s.creatorId = #{creatorId}
+			AND s.visible = true
+		</where>
 	</sql>
 	<sql id="collectorId_WHERE">
-		<where>ugs.collectorId = #{collectorId}</where>
+		<where>
+			ugs.collectorId = #{collectorId}
+			AND s.visible = true
+		</where>
 	</sql>
 	<sql id="exceptLove_WHERE">
-		<where>s.userId is null</where>
+		<where>
+			s.userId is null
+			AND s.visible = true
+		</where>
 	</sql>
 
 	<sql id="songMenu_recored_JOIN">
@@ -202,9 +216,10 @@
 		<include refid="user_gl_songmenu_JOIN"></include>
 		<include refid="collectorId_WHERE"></include>
 	</select>
-	
+
 	<insert id="insertSongMenu_base" parameterType="cn.xiedacon.model.SongMenu">
-		INSERT INTO songMenu_base VALUES(
+		INSERT INTO
+		songMenu_base VALUES(
 		#{id},
 		#{name},
 		#{icon},
@@ -214,12 +229,14 @@
 		#{introduction},
 		#{isPublic},
 		#{creatorId},
-		#{userId}
+		#{userId},
+		#{visible}
 		)
 	</insert>
-	
+
 	<insert id="insertSongMenu_record" parameterType="cn.xiedacon.model.SongMenu">
-		INSERT INTO songMenu_record VALUES(
+		INSERT INTO
+		songMenu_record VALUES(
 		#{id},
 		#{collectionNum},
 		#{shareNum},
@@ -227,9 +244,15 @@
 		#{playNum}
 		)
 	</insert>
-	
+
 	<update id="updateCreatorNameByCreatorId" parameterType="java.lang.String">
 		UPDATE songMenu_base s SET s.creatorName = #{creatorName}
 		<include refid="creatorId_WHERE"></include>
 	</update>
+
+	<delete id="deleteById" parameterType="java.lang.String">
+		UPDATE songMenu_base s SET
+		s.visible = false
+		<include refid="id_WHERE"></include>
+	</delete>
 </mapper>

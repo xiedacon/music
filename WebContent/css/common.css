@@ -1670,3 +1670,115 @@ body .foot {
 .disable:hover{
 	opacity: inherit !important;
 }
+#tagsDiv{
+    width: 530px;
+    height: 400px;
+}
+#tagsDiv .login_material{
+    width: 100%;
+    height: 310px;
+    overflow: auto;
+    padding: 0 0 0 20px;
+    font-size: 14px;
+    position: relative;
+}
+#tagsDiv .login_material p{
+    line-height: 46px;
+    color: #9c9c9c;
+}
+#tagsDiv .login_material .message{
+    position: absolute;
+    background: #ffb1b1;
+    line-height: 30px;
+    color: #333;
+    margin: 0;
+    border: 1px #ff5757 solid;
+    padding: 0 20px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    z-index: 10;
+}
+#tagsDiv .login_material ul{
+	
+}
+#tagsDiv .login_material li{
+	padding: 0 0 20px 0;
+}
+#tagsDiv .login_material li:after{
+	content: "";
+	display: block;
+	height: 0;
+	visibility: hidden;
+	clear: both;
+}
+#tagsDiv .login_material strong{
+    float: left;
+    width: 50px;
+}
+#tagsDiv .login_material .buttons{
+    float: left;
+    width: 460px;
+}
+#tagsDiv .buttons .button{
+    display: inline-block;
+    background: #fbfbfb;
+    line-height: 28px;
+    height: 30px;
+    border: 1px #d8d8d8 solid;
+    box-sizing: border-box;
+    width: 65px;
+    text-align: center;
+    position: relative;
+    border-radius: 5px;
+    margin: 0 20px 15px 0;
+    cursor: pointer;
+}
+#tagsDiv .buttons .button:hover{
+	background: #fff;
+}
+#tagsDiv .button .content{
+	
+}
+#tagsDiv .button .flag{
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background: #568ed8;
+    border-radius: 10px;
+    top: 100%;
+    left: 100%;
+    transform: translate(-50%,-50%);
+}
+#tagsDiv .button i{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%) scale(0.7,0.7);
+    width: 10px;
+    height: 10px;
+    color: #fff;
+    line-height: 10px;
+    text-align: center;
+    text-indent: -2px;
+}
+#tagsDiv .login_foot{
+    text-align: center;
+}
+#tagsDiv .login_foot .save{
+    display: inline-block;
+    height: 30px;
+    padding: 0 20px;
+    background: #0872ff;
+    border-radius: 5px;
+    margin: 10px 0;
+    line-height: 30px;
+    color: #fff;
+    font-size: 14px;
+    box-sizing: border-box;
+    border: 1px #388eff solid;
+    cursor: pointer;
+}
+#tagsDiv .login_foot .save:hover{
+    opacity: 0.7;
+}

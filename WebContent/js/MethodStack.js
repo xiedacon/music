@@ -68,6 +68,8 @@
 				data.click($(this).attr("data-page"));
 			})
 		}
+		
+		FUNCTION.align($(".material_right"),$(".material_left"));
 	}
 	function loadPageBean_comment(pageBean, flag) {
 		var $commentListEle = $("#commentList");
@@ -211,5 +213,14 @@
 			"title" : album.singerName,
 			"data-href" : "singer/{" + album.singerId + "}"
 		}).text(album.singerName);
+	}
+
+	// 保持高度相等
+	FUNCTION.align = function align($ele1, $ele2) {
+		var height1 = $ele1.outerHeight();
+		var height2 = $ele2.outerHeight();
+		var max = height1 > height2 ? height1 : height2;
+		$ele1.css("min-height",max);
+		$ele2.css("min-height",max);
 	}
 }())

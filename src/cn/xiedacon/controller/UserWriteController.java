@@ -2,7 +2,6 @@ package cn.xiedacon.controller;
 
 import java.io.IOException;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.ServletException;
@@ -22,8 +21,8 @@ import cn.xiedacon.model.SongMenu;
 import cn.xiedacon.model.User;
 import cn.xiedacon.service.SongMenuService;
 import cn.xiedacon.service.UserService;
-import cn.xiedacon.util.Constant;
 import cn.xiedacon.util.MD5Util;
+import cn.xiedacon.util.MessageUtils;
 import cn.xiedacon.util.OAuthUtil;
 import cn.xiedacon.util.UUIDUtils;
 
@@ -39,13 +38,13 @@ public class UserWriteController {
 	@Autowired
 	private Factory factory;
 
-	@RequestMapping(value = "/{id:\\w{32}}/username", method = RequestMethod.POST)
+	@RequestMapping(value = "/{id:\\w{32}}/username", method = RequestMethod.PATCH)
 	public Map<String, Object> updateUsername(HttpServletRequest request) {
 		String id = request.getParameter("id");
 		String username = request.getParameter("username");
 
 		if (username == null || username.replaceAll("\\d", "").length() < 4) {
-			return createErrorMessage("username", "昵称格式错误！");
+			return MessageUtils.createError("username", "昵称格式错误！");
 		}
 
 		User dataUser = userService.selectById(id);
@@ -59,7 +58,7 @@ public class UserWriteController {
 		userService.updateUsername(dataUser);
 
 		dataUser.setPassword(null);
-		return createMessage(Constant.SUCCESS, "user", dataUser);
+		return MessageUtils.createSuccess("user", dataUser);
 	}
 
 	@RequestMapping(value = "/oAuth_github", method = RequestMethod.GET)
@@ -91,26 +90,26 @@ public class UserWriteController {
 		String password = request.getParameter("password");
 
 		if (phone == null || !phone.matches("1[3|4|5|8]\\d{9}")) {
-			return createErrorMessage("phone", "手机号格式错误！");
+			return MessageUtils.createError("phone", "手机号格式错误！");
 		}
 		if (password == null || password.length() != 22) {
-			return createErrorMessage("password", "密码格式错误！");
+			return MessageUtils.createError("password", "密码格式错误！");
 		}
 
 		User dataUser = userService.selectByPhone(phone);
 
 		if (dataUser == null) {
-			return createErrorMessage("phone", "手机号未注册！");
+			return MessageUtils.createError("phone", "手机号未注册！");
 		}
 
 		if (password.equals(dataUser.getPassword())) {
 			if (dataUser.getName() == null) {
-				return createErrorMessage("phone", "手机号未注册！");
+				return MessageUtils.createError("phone", "手机号未注册！");
 			}
 			dataUser.setPassword(null);
-			return createMessage(Constant.SUCCESS, "user", dataUser);
+			return MessageUtils.createSuccess("user", dataUser);
 		} else {
-			return createErrorMessage("phone", "手机号或密码错误！");
+			return MessageUtils.createError("phone", "手机号或密码错误！");
 		}
 	}
 
@@ -121,10 +120,10 @@ public class UserWriteController {
 		String password = request.getParameter("password");
 
 		if (phone == null || !phone.matches("1[3|4|5|8]\\d{9}")) {
-			return createErrorMessage("phone", "手机号格式错误！");
+			return MessageUtils.createError("phone", "手机号格式错误！");
 		}
 		if (password == null || !password.matches(".{5,15}")) {
-			return createErrorMessage("password", "密码格式错误！");
+			return MessageUtils.createError("password", "密码格式错误！");
 		}
 
 		User dataUser = userService.selectByPhone(phone);
@@ -155,25 +154,11 @@ public class UserWriteController {
 			userService.updatePassword(dataUser);
 		} else {
 			dataUser.setPassword(null);
-			return createMessage(Constant.REDIRECT, "user", dataUser);
+			return MessageUtils.createInfo("user", dataUser);
 		}
 		// 短信验证（失败，需要网址）
 		dataUser.setPassword(null);
-		return createMessage(Constant.SUCCESS, "user", dataUser);
-	}
-
-	private Map<String, Object> createErrorMessage(String errorName, String errorValue) {
-		Map<String, String> error = new HashMap<>();
-		error.put("name", errorName);
-		error.put("value", errorValue);
-		return createMessage(Constant.ERROR, "error", error);
-	}
-
-	private Map<String, Object> createMessage(int code, String name, Object value) {
-		Map<String, Object> result = new HashMap<>();
-		result.put("code", code);
-		result.put(name, value);
-		return result;
+		return MessageUtils.createSuccess("user", dataUser);
 	}
 
 }

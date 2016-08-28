@@ -25,6 +25,7 @@ i,
 iframe{
     margin:0;
     padding:0;
+    cursor: inherit;
 }
 table {
     border-collapse:collapse;
@@ -35,7 +36,6 @@ iframe {
     border:0;
 }
 em,
-strong,
 th {
     font-style:normal;
     font-weight:normal;
@@ -78,7 +78,6 @@ a:visited,
 span,
 i,
 p{
-    cursor: default;
     color: inherit;
 }
 input,
