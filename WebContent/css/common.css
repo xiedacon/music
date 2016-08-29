@@ -8,7 +8,9 @@
 	font-weight: normal;
 	font-style: normal;
 }
-
+body{
+	font-family: "Arial, Helvetica, sans-serif";
+}
 .icomoon {
 	font-family: "icomoon";
 }
@@ -1715,23 +1717,24 @@ body .foot {
 #tagsDiv .login_material strong{
     float: left;
     width: 50px;
+    line-height: 30px;
 }
 #tagsDiv .login_material .buttons{
     float: left;
-    width: 460px;
+    width: 440px;
 }
 #tagsDiv .buttons .button{
-    display: inline-block;
+display: inline-block;
     background: #fbfbfb;
     line-height: 28px;
     height: 30px;
     border: 1px #d8d8d8 solid;
     box-sizing: border-box;
-    width: 65px;
+    width: 70px;
     text-align: center;
     position: relative;
     border-radius: 5px;
-    margin: 0 20px 15px 0;
+    margin: 0 15px 10px 0;
     cursor: pointer;
 }
 #tagsDiv .buttons .button:hover{

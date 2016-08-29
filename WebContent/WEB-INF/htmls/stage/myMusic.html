@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <link rel="stylesheet" type="text/css" href="css/detail.css">
+<link rel="stylesheet" href="css/jquery.Jcrop.css" type="text/css" />
 <title>我的音乐</title>
 </head>
 <style type="text/css">
@@ -152,14 +153,14 @@
     font-size: 14px;
     font-family: Arial, Helvetica, sans-serif;
 }
-#editPage .editPage_top{
+.editPage_top{
     line-height: 40px;
     border-bottom: 1px #bdbdbd solid;
 }
-#editPage .editPage_top .name{
+.editPage_top .name{
     color: #495df3;
 }
-#editPage .editPage_top .name:hover{
+.editPage_top .name:hover{
     text-decoration: underline;
 }
 #editPage .editPage_bottom{
@@ -207,6 +208,7 @@
     display: inline-block;
     color: #495df3;
     font-size: 14px;
+    line-height: 30px;
 }
 .bottom_left .value .tags{
     font-size: 0;
@@ -307,6 +309,88 @@
 #editPage .editPage_bottom .bottom_right span:hover{
 	text-decoration: underline;
 }
+#imageEditPage .bottom_top{
+    line-height: 70px;
+    font-size: 14px;
+    color: #a9a9a9;
+}
+#imageEditPage .bottom_top .button{
+    background: #fbfbfb;
+    color: #000;
+    display: inline-block;
+    height: 34px;
+    width: 110px;
+    border-radius: 5px;
+    border: 1px #bdbdbd solid;
+    box-sizing: border-box;
+    text-align: center;
+    line-height: 34px;
+}
+#imageEditPage .bottom_top .button:hover{
+	background: #fff;
+}
+#imageEditPage .bottom_middle{
+    display: inline-block;
+}
+#imageEditPage .bottom_middle .main{
+    line-height: 0;
+    padding: 0 45px 0 0;
+    display: inline-block;
+    border-right: 1px #bdbdbd solid;
+}
+#imageEditPage .bottom_middle .main img{
+    width: 320px;
+    height: 320px;
+}
+#imageEditPage .bottom_middle .desc{
+    display: inline-block;
+    padding: 0 0 0 40px;
+    font-size: 14px;
+    color: #a9a9a9;
+}
+#imageEditPage .bottom_middle .desc .desc_head{
+    display: inline-block;
+    color: #333;
+}
+#imageEditPage .bottom_middle .desc .show_max{
+    width: 180px;
+    height: 180px;
+    margin: 15px 0;
+    overflow: hidden;
+}
+#imageEditPage .bottom_middle .desc .show_min{
+    width: 40px;
+    height: 40px;
+    margin: 10px 0;
+    overflow: hidden;
+}
+#imageEditPage .bottom_middle .desc span{
+}
+#imageEditPage .bottom_bottom{
+    padding: 50px 0 0 0;
+}
+#imageEditPage .bottom_bottom .button{
+	font-size: 14px;
+    display: inline-block;
+    width: 70px;
+    text-align: center;
+    background: #fdf8f8;
+    border-radius: 3px;
+    border: 1px #bdbdbd solid;
+    box-sizing: border-box;
+    height: 30px;
+    cursor: pointer;
+    line-height: 30px;
+}
+#imageEditPage .bottom_bottom .button:hover{
+    background: #fff;
+}
+.disable{
+    color: #cacaca !important;
+    border-color: #bdbdbd !important;
+    background: #ececec !important;
+    cursor: default !important;
+}
 </style>
 <body>
 	<div class="body">
@@ -360,11 +444,7 @@
 							<p>
 								<span class="key">标签：</span>
 								<span class="value">
-									
-									<span class="tags">
-										<span class="tag">华语<i class="icomoon"></i></span>
-										<span class="tag">中文<i class="icomoon"></i></span>
-										<span class="tag">中文<i class="icomoon"></i></span>
+									<span id="tags" class="tags">
 										<a href="javascript:void(0);" onclick="MMR.get('tags').show();">选择标签</a>
 									</span>
 									<span class="message">选择适合的标签，最多选3个</span>
@@ -380,14 +460,46 @@
 							<p>
 								<span class="key"></span>
 								<span class="value">
-									<span class="button enable" style="margin: 0 30px 0 0;">保 存</span>
+									<span class="button disable" style="margin: 0 30px 0 0;">保 存</span>
 									<span class="button">取 消</span>
 								</span>
 							</p>
 						</div>
 						<div class="bottom_right">
 							<img alt="" src=""> 
-							<span>编辑封面</span>
+							<span class="toImageEditPage">编辑封面</span>
+						</div>
+					</div>
+				</div>
+				<div id="imageEditPage" style="display: none">
+					<div class="editPage_top">
+						<a href="javascript:void(0);" onclick="jump(this);" class="name"></a> 
+						<span>></span>
+						<a class="turnToEditPage" href="javascript:void(0);" onclick="">编辑歌单</a>
+						<span>></span>
+						<strong>编辑封面</strong>
+					</div>
+					<div class="editPage_bottom">
+						<div class="bottom_top">
+							<a id="imageUpload" class="button" type="button">上传封面</a>
+							<input type="file" style="visibility: hidden;width: 0px;height: 0px">
+							<span>支持jpg、png、bmp格式的图片，且文件小于20M</span>
+						</div>
+						<div class="bottom_middle">
+							<div class="main">
+								<img id="main" alt="" src="image/default_cover.png">
+							</div>
+							<div class="desc">
+								<span class="desc_head">歌单封面预览</span><br>
+								<div id="max" class="show_max"><img  alt="" src="image/default_cover.png"></div>
+								<span>大尺寸封面（180x180像素）</span><br>
+								<div id="min" class="show_min"><img  alt="" src="image/default_cover.png"></div>
+								<span>小尺寸封面（40x40像素）</span>
+							</div>
+						</div>
+						<div class="bottom_bottom">
+							<a class="button disable" type="button">保存</a>
+							<a class="button" type="button">取消</a>
 						</div>
 					</div>
 				</div>
@@ -506,6 +618,68 @@
 				</div>
 			</div>
 		</div>
+		<script src="js/jquery.min.js"></script>
+		<script src="js/jquery.Jcrop.js"></script>
+		<script type="text/javascript">
+		chooseImage();
+		function chooseImage(){
+			var jcrop_api, boundx, boundy;
+
+			var $pcnt1 = $('#max');
+			var $pimg1 = $('#max img');
+			var xsize1 = $pcnt1.width();
+			var ysize1 = $pcnt1.height();
+			var $pcnt2 = $('#min');
+			var $pimg2 = $('#min img');
+			var xsize2 = $pcnt2.width();
+			var ysize2 = $pcnt2.height();
+			initJcrop();
+			function initJcrop(){
+				$('#main').Jcrop({
+					onChange : updatePreview,
+					onSelect : updatePreview,
+					aspectRatio : xsize1 / ysize1
+				}, function() {
+					jcrop_api = this;
+					jcrop_api.animateTo([0, 0, 100, 100]);
+					jcrop_api.setOptions({
+						allowSelect : !!this.checked,
+						aspectRatio : 1,
+						minSize : [80, 80],
+						maxSize : [350, 350]
+					});
+					
+					var bounds = this.getBounds();
+					boundx = bounds[0];
+					boundy = bounds[1];
+				});
+			};
+			
+			function updatePreview(c) {
+				if (parseInt(c.w) > 0) {
+					var rx1 = xsize1 / c.w;
+					var ry1 = ysize1 / c.h;
+
+					$pimg1.css({
+						width : Math.round(rx1 * boundx) + 'px',
+						height : Math.round(ry1 * boundy) + 'px',
+						marginLeft : '-' + Math.round(rx1 * c.x) + 'px',
+						marginTop : '-' + Math.round(ry1 * c.y) + 'px'
+					});
+					
+					var rx2 = xsize2 / c.w;
+					var ry2 = ysize2 / c.h;
+
+					$pimg2.css({
+						width : Math.round(rx2 * boundx) + 'px',
+						height : Math.round(ry2 * boundy) + 'px',
+						marginLeft : '-' + Math.round(rx2 * c.x) + 'px',
+						marginTop : '-' + Math.round(ry2 * c.y) + 'px'
+					});
+				}
+			};
+		}
+		</script>
 	</div>
 	<div class="foot">
 		<p>@2016</p>

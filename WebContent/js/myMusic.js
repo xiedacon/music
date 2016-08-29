@@ -16,6 +16,8 @@
 		PageScope.loadForFirst = "comment/s/songMenuId_" + songMenuId;
 		PageScope.loadPageBean = "comment/s/songMenuId_" + songMenuId + "/";
 
+		$("#showPage").css("display", "block").siblings().css("display", "none");
+
 		AJAX({
 			url : "songMenu/" + songMenuId,
 			success : _loadSongMenu
@@ -121,23 +123,40 @@
 				if (songMenu.introduction) {
 					$editPage.find(".introduction").text(songMenu.introduction);
 				}
+				var $tags = $editPage.find(".tags");
+				$tags.children(".tag").remove();
 				if (songMenu.songMenuSecondTagList) {
-					var $tags = $editPage.find(".tags");
 					var tagList = songMenu.songMenuSecondTagList;
 					var tag;
 					for (var i = 0; i < tagList.length; i++) {
 						tag = tagList[i];
 						$tags.prepend("<span data-id='" + tag.id + "' class='tag'>" + tag.name + "<i class='icomoon'></i></span>");
 					}
-					$tags.find("i").on("onclick", function() {
+					$tags.find("i").on("click", function() {
 						$(this).parent().remove();
 					})
 				}
-				$editPage.find("img").attr("src", songMenu.icon);
-				$editPage.css("display", "block");
-				$("#showPage").css("display", "none");
+				$editPage.find("img").attr("src", songMenu.icon)
+				$editPage.find(".toImageEditPage").on("click", showImageEditPage);
+
+				$editPage.css("display", "block").siblings().css("display", "none");
 			}
 		})
+	}
+
+	function showImageEditPage() {
+		var $imageEditPage = $("#imageEditPage");
+		var imageSrc = $("#editPage img").attr("src");
+		$imageEditPage.find(".name").attr({
+			"data-href" : $("#editPage .name").attr("data-href")
+		}).text($("#editPage .name").text());
+
+		$imageEditPage.find(".turnToEditPage").on("click", function() {
+			$("#editPage").css("display", "block").siblings().css("display", "none");
+		});
+
+		// chooseImage();
+		$imageEditPage.css("display", "block").siblings().css("display", "none");
 	}
 
 	function _loadSongMenu(songMenu) {
@@ -190,7 +209,7 @@
 		for (var i = 0; i < songMenu.songMenuSecondTagList.length; i++) {
 			$tagEle = $(" <a class='tag' href='javascript:void(0);' onclick='jump(this);'></a>");
 			$tagEle.attr({
-				"data-href" : "songMenus/{" + songMenu.songMenuSecondTagList[i].id + "}?" + songMenu.songMenuSecondTagList[i].name
+				"data-href" : "songMenus" + songMenu.songMenuSecondTagList[i].id + "}?" + songMenu.songMenuSecondTagList[i].name
 			}).text(songMenu.songMenuSecondTagList[i].name);
 			$tagsEle.append($tagEle);
 		}
@@ -200,5 +219,78 @@
 		$(".songList .songList_detail").text(songMenu.songNum + " 首歌");
 		$(".songList .songList_top .num").text(songMenu.playNum);
 		$(".commentList .commentList_detail").text("共" + songMenu.commentNum + "条评论");
+	}
+
+	var allowExtention = ".jpg,.bmp,.png";
+	var extention;
+	$("#imageUpload").on("click",function(){
+		var $input = $(this).siblings("input");
+//		$(this).off().on("click",function(){
+//			console.log($input[0].value)
+//			var reader = new FileReader();
+//			reader.onload = function(e) {
+//				$("#main").attr("src", e.target.result);
+//			}			
+//			reader.readAsDataURL($input[0].files[0]);
+//		})
+		$input.click();
+		console.log($input[0].value)
+		//extention = fileObj.value.substring(fileObj.value.lastIndexOf(".") + 1).toLowerCase();
+	})
+	function previewImage(fileObj, imgPreviewId, divPreviewId) {
+		var allowExtention = ".jpg,.bmp,.gif,.png";// 允许上传文件的后缀名document.getElementById("hfAllowPicSuffix").value;
+		var extention = fileObj.value.substring(fileObj.value.lastIndexOf(".") + 1).toLowerCase();
+		var browserVersion = window.navigator.userAgent.toUpperCase();
+		if (allowExtention.indexOf(extention) > -1) {
+			if (fileObj.files) {// HTML5实现预览，兼容chrome、火狐7+等
+				if (window.FileReader) {
+					var reader = new FileReader();
+					reader.onload = function(e) {
+						document.getElementById(imgPreviewId).setAttribute("src", e.target.result);
+					}
+					reader.readAsDataURL(fileObj.files[0]);
+				} else if (browserVersion.indexOf("SAFARI") > -1) {
+					alert("不支持Safari6.0以下浏览器的图片预览!");
+				}
+			} else if (browserVersion.indexOf("MSIE") > -1) {
+				if (browserVersion.indexOf("MSIE 6") > -1) {// ie6
+					document.getElementById(imgPreviewId).setAttribute("src", fileObj.value);
+				} else {// ie[7-9]
+					fileObj.select();
+					if (browserVersion.indexOf("MSIE 9") > -1)
+						fileObj.blur();// 不加上document.selection.createRange().text在ie9会拒绝访问
+					var newPreview = document.getElementById(divPreviewId + "New");
+					if (newPreview == null) {
+						newPreview = document.createElement("div");
+						newPreview.setAttribute("id", divPreviewId + "New");
+						newPreview.style.width = document.getElementById(imgPreviewId).width + "px";
+						newPreview.style.height = document.getElementById(imgPreviewId).height + "px";
+						newPreview.style.border = "solid 1px #d2e2e2";
+					}
+					newPreview.style.filter = "progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod='scale',src='"
+							+ document.selection.createRange().text + "')";
+					var tempDivPreview = document.getElementById(divPreviewId);
+					tempDivPreview.parentNode.insertBefore(newPreview, tempDivPreview);
+					tempDivPreview.style.display = "none";
+				}
+			} else if (browserVersion.indexOf("FIREFOX") > -1) {// firefox
+				var firefoxVersion = parseFloat(browserVersion.toLowerCase().match(/firefox\/([\d.]+)/)[1]);
+				if (firefoxVersion < 7) {// firefox7以下版本
+					document.getElementById(imgPreviewId).setAttribute("src", fileObj.files[0].getAsDataURL());
+				} else {// firefox7.0+
+					document.getElementById(imgPreviewId).setAttribute("src", window.URL.createObjectURL(fileObj.files[0]));
+				}
+			} else {
+				document.getElementById(imgPreviewId).setAttribute("src", fileObj.value);
+			}
+		} else {
+			alert("仅支持" + allowExtention + "为后缀名的文件!");
+			fileObj.value = "";// 清空选中文件
+			if (browserVersion.indexOf("MSIE") > -1) {
+				fileObj.select();
+				document.selection.clear();
+			}
+			fileObj.outerHTML = fileObj.outerHTML;
+		}
 	}
 }())

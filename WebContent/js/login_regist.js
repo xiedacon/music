@@ -517,14 +517,14 @@
 						type : "DELETE",
 						dataType : "json",
 						success : function(data) {
-							if(data.code === 200){
+							if (data.code === 200) {
 								MMR.get('simpleMsg').setData({
-									status:"success",
-									content:"删除成功"
+									status : "success",
+									content : "删除成功"
 								}).show();
-							}else{
+							} else {
 								MMR.get('simpleMsg').setData({
-									status:"error",
+									status : "error",
 									content : error.songMenu
 								}).show();
 							}
@@ -532,7 +532,7 @@
 						},
 						error : function() {
 							MMR.get('simpleMsg').setData({
-								status:"error",
+								status : "error",
 								content : "删除失败"
 							}).show();
 						}
@@ -544,4 +544,84 @@
 			}
 		}).show();
 	}
+
+	var $tagsDiv = $("#tagsDiv");
+	function Tags() {
+		this.$ele = $tagsDiv;
+	}
+	Tags.prototype = new Prototype();
+	Tags.prototype.show = function() {
+		$.ajax({
+			url : "songMenuTag/s",
+			type : "GET",
+			dataType : "json",
+			success : function(tags) {
+				show($tagsDiv, function() {
+					var $existTags = $("#tags").find(".tag");
+					var tagIds = new Array();
+					for (var i = 0; i < $existTags.length; i++) {
+						var id = $existTags.eq(i).attr("data-id");
+						tagIds[id] = id;
+					}
+					var $tags = $tagsDiv.find("ul");
+					$tags.children("li[class!='prototype']").remove();
+					var $prototype = $tags.children(".prototype").clone().removeClass("prototype");
+					var $_prototype = $prototype.find(".prototype").clone().removeClass("prototype");
+					var $tag, tag;
+					for (var i = 0; i < tags.length; i++) {
+						$tag = $prototype.clone();
+						tag = tags[i];
+						$tag.find("strong").text(tag.name + "：");
+						var $childs = $tag.find(".buttons");
+						var $child, child;
+
+						for (var j = 0; j < tag.secondTagList.length; j++) {
+							$child = $_prototype.clone();
+							child = tag.secondTagList[j];
+							$child.attr("data-id", child.id);
+							$child.attr("data-name", child.name);
+							$child.find(".content").text(child.name);
+
+							if (tagIds[child.id]) {
+								$child.find(".flag").css("display", "block");
+								$child.attr("data-flag", "true");
+							}
+							$child.on("click", function(event) {
+								if ($(this).attr("data-flag")) {
+									$(this).removeAttr("data-flag");
+									$(this).find(".flag").css("display", "none");
+								} else {
+									if ($tags.find(".button[data-flag='true']").length < 3) {
+										$(this).attr("data-flag", "true");
+										$(this).find(".flag").css("display", "block");
+									}else{
+										$tagsDiv.find(".message").stop(true).fadeIn(300).delay(500).fadeOut(300);
+									}
+								}
+							});
+
+							$childs.append($child);
+						}
+						$tags.append($tag);
+					}
+				});
+			}
+		})
+	}
+	Tags.prototype.save = function() {
+		var $tags = $("#tags");
+		$tags.children(".tag").remove();
+		var $checkedTags = $tagsDiv.find(".button[data-flag='true']");
+		for(var i=0;i<$checkedTags.length;i++){
+			var id = $checkedTags.eq(i).attr("data-id");
+			var name = $checkedTags.eq(i).attr("data-name");
+			$tags.prepend("<span data-id='" + id + "' class='tag'>" + name + "<i class='icomoon'></i></span>");
+		}
+		$tags.find("i").on("click", function() {
+			$(this).parent().remove();
+		})
+		MMR.get('tags').hiddenAll();
+	}
+	var tags = new Tags();
+	MMR.addModule("tags", tags);
 }())
