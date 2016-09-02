@@ -44,8 +44,8 @@
 	
 	<!-- 上面两个可以被下面这个替换
 		默认加载很多的参数方法，比如json转换解析器就默认加载了
+	<mvc:annotation-driven />
 	 -->
-	<!-- <mvc:annotation-driven /> -->
 	
 	<!-- 视图解析器 -->
 	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">

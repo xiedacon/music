@@ -26,4 +26,6 @@ public interface SongMenuService {
 
 	void deleteById(String songMenuId);
 
+	void updateIconById(String icon, String songMenuId);
+
 }

@@ -124,4 +124,9 @@ public class SongMenuServiceImpl implements SongMenuService {
 		songMenuDao.deleteById(songMenuId);
 	}
 
+	@Override
+	public void updateIconById(String icon, String songMenuId) {
+		songMenuDao.updateIconById(icon, songMenuId);
+	}
+
 }

@@ -255,4 +255,9 @@
 		s.visible = false
 		<include refid="id_WHERE"></include>
 	</delete>
+	
+	<update id="updateIconById" parameterType="java.lang.String">
+		UPDATE songMenu_base s SET s.icon = #{icon}
+		<include refid="id_WHERE"></include>
+	</update>
 </mapper>

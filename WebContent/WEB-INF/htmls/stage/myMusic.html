@@ -435,7 +435,7 @@
 							<p>
 								<span class="key">歌单名：</span>
 								<span class="value">
-									<input name="name" type="text"> 
+									<input id="songMenuName" name="name" type="text"> 
 									<span class="errorMessage" style="visibility: hidden;">
 										<i class="icomoon"></i>
 									</span>
@@ -460,7 +460,7 @@
 							<p>
 								<span class="key"></span>
 								<span class="value">
-									<span class="button disable" style="margin: 0 30px 0 0;">保 存</span>
+									<span id="updateSongMenu" class="button enable" style="margin: 0 30px 0 0;">保 存</span>
 									<span class="button">取 消</span>
 								</span>
 							</p>
@@ -481,8 +481,10 @@
 					</div>
 					<div class="editPage_bottom">
 						<div class="bottom_top">
-							<a id="imageUpload" class="button" type="button">上传封面</a>
-							<input type="file" style="visibility: hidden;width: 0px;height: 0px">
+							<form id="image_form" action="songMenu/zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz/icon" method="PUT">
+								<a id="imageUpload" class="button" type="button">上传封面</a>
+								<input name="file" type="file" style="visibility: hidden;width: 0px;height: 0px">
+							</form>
 							<span>支持jpg、png、bmp格式的图片，且文件小于20M</span>
 						</div>
 						<div class="bottom_middle">
@@ -491,15 +493,15 @@
 							</div>
 							<div class="desc">
 								<span class="desc_head">歌单封面预览</span><br>
-								<div id="max" class="show_max"><img  alt="" src="image/default_cover.png"></div>
+								<div id="max" class="show_max"><img id="image_max" alt="" src="image/default_cover.png"></div>
 								<span>大尺寸封面（180x180像素）</span><br>
-								<div id="min" class="show_min"><img  alt="" src="image/default_cover.png"></div>
+								<div id="min" class="show_min"><img id="image_min" alt="" src="image/default_cover.png"></div>
 								<span>小尺寸封面（40x40像素）</span>
 							</div>
 						</div>
 						<div class="bottom_bottom">
-							<a class="button disable" type="button">保存</a>
-							<a class="button" type="button">取消</a>
+							<a id="image_update" class="button disable" type="button" style="background: #4c61fd;color: #fff;">保存</a>
+							<a id="image_quit" class="button" type="button">取消</a>
 						</div>
 					</div>
 				</div>
@@ -620,66 +622,6 @@
 		</div>
 		<script src="js/jquery.min.js"></script>
 		<script src="js/jquery.Jcrop.js"></script>
-		<script type="text/javascript">
-		chooseImage();
-		function chooseImage(){
-			var jcrop_api, boundx, boundy;
-
-			var $pcnt1 = $('#max');
-			var $pimg1 = $('#max img');
-			var xsize1 = $pcnt1.width();
-			var ysize1 = $pcnt1.height();
-			var $pcnt2 = $('#min');
-			var $pimg2 = $('#min img');
-			var xsize2 = $pcnt2.width();
-			var ysize2 = $pcnt2.height();
-			initJcrop();
-			function initJcrop(){
-				$('#main').Jcrop({
-					onChange : updatePreview,
-					onSelect : updatePreview,
-					aspectRatio : xsize1 / ysize1
-				}, function() {
-					jcrop_api = this;
-					jcrop_api.animateTo([0, 0, 100, 100]);
-					jcrop_api.setOptions({
-						allowSelect : !!this.checked,
-						aspectRatio : 1,
-						minSize : [80, 80],
-						maxSize : [350, 350]
-					});
-					
-					var bounds = this.getBounds();
-					boundx = bounds[0];
-					boundy = bounds[1];
-				});
-			};
-			
-			function updatePreview(c) {
-				if (parseInt(c.w) > 0) {
-					var rx1 = xsize1 / c.w;
-					var ry1 = ysize1 / c.h;
-
-					$pimg1.css({
-						width : Math.round(rx1 * boundx) + 'px',
-						height : Math.round(ry1 * boundy) + 'px',
-						marginLeft : '-' + Math.round(rx1 * c.x) + 'px',
-						marginTop : '-' + Math.round(ry1 * c.y) + 'px'
-					});
-					
-					var rx2 = xsize2 / c.w;
-					var ry2 = ysize2 / c.h;
-
-					$pimg2.css({
-						width : Math.round(rx2 * boundx) + 'px',
-						height : Math.round(ry2 * boundy) + 'px',
-						marginLeft : '-' + Math.round(rx2 * c.x) + 'px',
-						marginTop : '-' + Math.round(ry2 * c.y) + 'px'
-					});
-				}
-			};
-		}
-		</script>
 	</div>
 	<div class="foot">
 		<p>@2016</p>
