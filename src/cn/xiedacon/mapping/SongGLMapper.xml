@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.xiedacon.dao.SongGLDao">
+
+	<sql id="id_SELECT">
+		SELECT s.id
+	</sql>
+
+	<sql id="song_gl_songmenu_FROM">
+		FROM song_gl_songmenu s
+	</sql>
+
+	<select id="selectIdBySongIdAndSongMenuId" resultType="java.lang.String">
+		<include refid="id_SELECT"></include>
+		<include refid="song_gl_songmenu_FROM"></include>
+		WHERE s.songId = #{songId} AND s.songMenuId =
+		#{songMenuId}
+	</select>
+
+	<insert id="insertSongMenuGL">
+		INSERT INTO song_gl_songmenu
+		VALUES(
+		#{id},
+		#{songMenuId},
+		#{songId},
+		#{time})
+	</insert>
+</mapper>

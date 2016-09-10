@@ -7,7 +7,9 @@ import org.junit.Test;
 import cn.xiedacon.model.SongMenu;
 import cn.xiedacon.service.SongMenuService;
 import cn.xiedacon.test.base.BaseTest;
+import cn.xiedacon.test.base.Priority;
 import cn.xiedacon.util.PageBean;
+import cn.xiedacon.util.UUIDUtils;
 
 public class SongMenuServiceTest extends BaseTest {
 
@@ -15,10 +17,9 @@ public class SongMenuServiceTest extends BaseTest {
 	public void testSelectSongMenuById() {
 		SongMenuService songMenuService = this.getApplicationContext().getBean(SongMenuService.class);
 
-		String id = "7";
-		SongMenu songMenu = songMenuService.selectById(id);
+		SongMenu bean = songMenuService.selectById(songMenu.getId());
 
-		System.out.println(songMenu);
+		System.out.println(bean);
 	}
 
 	@Test
@@ -58,8 +59,8 @@ public class SongMenuServiceTest extends BaseTest {
 
 		String secondTagId = "1";
 		Integer page = 1;
-		PageBean<SongMenu> pageBean = songMenuService
-				.selectPageBeanBySecondTagIdOrderByCollectionNum(secondTagId, page);
+		PageBean<SongMenu> pageBean = songMenuService.selectPageBeanBySecondTagIdOrderByCollectionNum(secondTagId,
+				page);
 
 		System.out.println(pageBean);
 	}
@@ -80,5 +81,36 @@ public class SongMenuServiceTest extends BaseTest {
 		List<SongMenu> bean = songMenuService.selectListByCreatorId("1");
 
 		System.out.println(bean);
+	}
+
+	@Test
+	public void testUpdateIconById() {
+		SongMenuService songMenuService = this.getApplicationContext().getBean(SongMenuService.class);
+
+		songMenuService.updateIconById("aaa", songMenu.getId());
+	}
+
+	private SongMenu songMenu;
+
+	@Test
+	@Priority
+	public void testInsert() {
+		SongMenuService songMenuService = this.getApplicationContext().getBean(SongMenuService.class);
+		songMenu = this.getFactory().get(SongMenu.class);
+		songMenu.setId(UUIDUtils.randomUUID());
+		songMenuService.insert(songMenu);
+	}
+
+	@Test
+	public void testUpdate() {
+		SongMenuService songMenuService = this.getApplicationContext().getBean(SongMenuService.class);
+		songMenu.setName("test");
+		songMenuService.update(songMenu);
+	}
+
+	@Test
+	public void testDelete() {
+		SongMenuService songMenuService = this.getApplicationContext().getBean(SongMenuService.class);
+		songMenuService.delete(songMenu);
 	}
 }

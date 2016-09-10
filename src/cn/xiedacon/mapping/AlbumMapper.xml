@@ -13,18 +13,19 @@
 		a.singerId singerId,
 		a.singerName singerName,
 	</sql>
-	
+
 	<sql id="simpleAlbumVo_SELECT">
 		<include refid="required_SELECT"></include>
 		a.createTime createTime
 	</sql>
-	
+
 	<sql id="albumVo_SELECT">
 		<include refid="required_SELECT"></include>
 		a.createTime createTime,
 		a.remark remark,
 		a.createCompany
 		createCompany,
+		ar.playNum playNum,
 		ar.shareNum shareNum,
 		ar.commentNum commentNum,
 		a.introduction
@@ -36,19 +37,19 @@
 		SELECT
 		COUNT(a.id)
 	</sql>
-	
+
 	<sql id="album_base_FROM">
 		FROM album_base a
 	</sql>
-	
+
 	<sql id="album_record_JOIN">
 		INNER JOIN album_record ar ON a.id = ar.id
 	</sql>
-	
+
 	<sql id="id_WHERE">
 		<where>a.id = #{id}</where>
 	</sql>
-	
+
 	<sql id="tagId_WHERE">
 		<where>a.tagId = #{tagId}</where>
 	</sql>
@@ -56,7 +57,7 @@
 	<sql id="singerId_WHERE">
 		<where>a.singerId = #{singerId}</where>
 	</sql>
-	
+
 	<sql id="createTime_ORDERBY">
 		ORDER BY a.createTime DESC
 	</sql>
@@ -104,4 +105,16 @@
 		<include refid="createTime_ORDERBY"></include>
 		<include refid="LIMIT"></include>
 	</select>
+
+	<update id="updatePlayNumById">
+		UPDATE album_record a
+		SET a.playNum = #{playNum}
+		<include refid="id_WHERE"></include>
+	</update>
+	
+	<update id="updateCommentNumById">
+		UPDATE album_record a
+		SET a.commentNum = #{commentNum}
+		<include refid="id_WHERE"></include>
+	</update>
 </mapper>

@@ -65,4 +65,14 @@ public class AlbumServiceImpl implements AlbumService {
 		return pageBean;
 	}
 
+	@Override
+	public void updatePlayNumById(Integer playNum, String id) {
+		albumDao.updatePlayNumById(playNum, id);
+	}
+
+	@Override
+	public void updateCommentNumById(Integer commentNum, String id) {
+		albumDao.updateCommentNumById(commentNum, id);
+	}
+
 }

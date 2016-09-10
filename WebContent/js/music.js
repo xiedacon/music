@@ -1,6 +1,6 @@
 (function() {
+	var $musicDiv = $("#musicDiv");
 	function Music() {
-		var $musicDiv = $("#musicDiv");
 		var $playButton = $musicDiv.find(".music_left .middle");
 		var $play = $musicDiv.find(".music_middle");
 
@@ -10,7 +10,7 @@
 		function changeTime(ratio) {
 			var now = ratio * audio.duration;
 			// 谷歌不兼容
-			//audio.currentTime = now;
+			// audio.currentTime = now;
 		}
 		function changeVolume(ratio) {
 			audio.volume = ratio;
@@ -71,7 +71,7 @@
 			if (songId) { // 有指定的songId
 				newSong_Flag = true;
 				$pointer = playListDivModule.get$(songId);
-			}else if ($pointer) {// 没有songId需从$pointer获取
+			} else if ($pointer) {// 没有songId需从$pointer获取
 				songId = $pointer.attr("data-songId");
 				if (!songList[songId]) {// 存在$pointer，但songList中不一定有对应的song
 					$pointer = playListDivModule.getSongs$(songId).eq(0);
@@ -109,6 +109,7 @@
 				newSong_Flag = false;
 			}
 			audio.play();
+			loadLrc(songId);
 
 			clearInterval(timeChangeId);
 			timeChangeId = setInterval(timeChange, 1000);
@@ -129,6 +130,7 @@
 			var cacheRatio = audio.buffered.end(0) / total;
 			progressModule.changePlayProgress(playRatio);
 			progressModule.changeCacheProgress(cacheRatio);
+			changeLrc(now, total);
 		}
 		function add(songSerialized) {
 			var song = deserialize(songSerialized);
@@ -154,8 +156,8 @@
 		function previous() {
 			var $songs = playListDivModule.getSongs$();
 			var index = $songs.index($pointer) - 1;
-			if(index<0){
-				index = $songs.length-1;
+			if (index < 0) {
+				index = $songs.length - 1;
 			}
 			$pointer = $songs.eq(index);
 			stop();
@@ -164,7 +166,7 @@
 		function next() {
 			var $songs = playListDivModule.getSongs$();
 			var index = $songs.index($pointer) + 1;
-			if(index > $songs.length-1){
+			if (index > $songs.length - 1) {
 				index = 0;
 			}
 			$pointer = $songs.eq(index);
@@ -291,8 +293,8 @@
 		}
 	}
 
+	var $playListDiv = $("#playListDiv");
 	function playListDiv(musicDiv) {
-		var $playListDiv = $("#playListDiv");
 
 		var listScrollDivModule = new listScrollDiv();
 		var songScrollDivModule = new songScrollDiv();
@@ -693,6 +695,7 @@
 					song = songs[i];
 					music.add(JSON.stringify(song));
 				}
+
 				if (callback && callback instanceof Function) {
 					callback(songs);
 				}
@@ -701,6 +704,85 @@
 				console.error(e);
 			}
 		})
+		if (type === "singerId") {
+			return;
+		}
+		$.ajax({
+			url : type.replace("Id", "") + "/" + id + "/playNum",
+			type : "PUT"
+		})
+	}
+
+	var $lrcEle = $playListDiv.find(".song_body .lrc");
+	function loadLrc(songId) {
+		$.ajax({
+			url : "lrc/" + songId,
+			dataType : "json",
+			success : function(data) {
+				if (data.code === 200) {
+					$lrcEle.children("p").remove();
+					var lrc = data.data;
+					var ar = lrc.match(/(?:\[ar:)(.*)(?:\])/);
+					var ti = lrc.match(/(?:\[ti:)(.*)(?:\])/);
+
+					if (ar) {
+						$lrcEle.append("<p>" + ar[1] + "</p>");
+					}
+					if (ti) {
+						$lrcEle.append("<p>" + ti[1] + "</p>");
+						$lrcEle.append("<p>&nbsp;</p>");
+					}
+
+					var ps = lrc.match(/\[\d{2}:\d{2}\.\d{2}\].*[\n\r]/g);
+					var p;
+					for (var i = 0; i < ps.length; i++) {
+						p = ps[i];
+						var strs = p.match(/\[(\d{2}:\d{2})\.(\d{2})\](.*)[\n\r]/);
+						// if (parseInt(strs[2]) / 10 > 4) {
+						// var ms = strs[1].split(":");
+						// var m = parseInt(ms[0]);
+						// var s = parseInt(ms[1]) + 1;
+						// if (s === 60) {
+						// m += 1;
+						// s = 0;
+						// }
+						// if (m < 10) {
+						// m = "0" + m;
+						// }
+						// if (s < 10) {
+						// s = "0" + s;
+						// }
+						// strs[1] = m + ":" + s;
+						// }
+						$lrcEle.append("<p data-time=" + strs[1] + ">" + strs[3] + "</p>");
+					}
+					var ratio = 7 / parseFloat(ps.length);
+					if (ratio > 1) {
+						ratio = 1;
+					}
+					var topRatio = parseFloat($songScrollDiv.find(".vernier").css("top")) / $songScrollDiv.height();
+					if ((ratio + topRatio) > 1) {
+						topRatio = 1 - ratio;
+						$songScrollDiv.find(".vernier").css("top", topRatio * $songScrollDiv.height() + "px");
+					}
+					$songScrollDiv.find(".vernier").css("height", ratio * 100 + "%");
+				}
+			}
+		})
+	}
+	var $songScrollDiv = $("#songScrollDiv");
+	var $childs;
+	var totalHeight;
+	function changeLrc(now, total) {
+		var $now = $lrcEle.find("p[data-time='" + new DateFormatter("mm:ss").format(now * 1000) + "']");//
+		$childs = $lrcEle.children();
+		totalHeight = parseInt($childs.eq(0).css("line-height")) * $childs.length;
+		if ($now.length > 0) {
+			$now.addClass("now") //
+			.prev().removeClass("now");
+			var ratio = now / total;
+			
+		}
 	}
 
 	var music = new Music();

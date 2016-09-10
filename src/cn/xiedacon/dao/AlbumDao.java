@@ -22,4 +22,8 @@ public interface AlbumDao {
 	List<Album> selectListBySingerIdOrderByCreateTimeLimit(@Param("singerId") String singerId,
 			@Param("begin") int begin, @Param("limit") int limit);
 
+	void updatePlayNumById(@Param("playNum") Integer playNum, @Param("id") String id);
+
+	void updateCommentNumById(@Param("commentNum") Integer commentNum, @Param("id") String id);
+
 }

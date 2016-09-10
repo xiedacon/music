@@ -20,4 +20,6 @@ public interface SongService {
 
 	String selectFileUriById(String songId);
 
+	void updateCommentNumById(Integer commentNum, String id);
+
 }

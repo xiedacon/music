@@ -39,4 +39,12 @@ public interface CommentDao {
 	List<Comment> selectListBySongIdLimit(@Param("songId") String songId, @Param("begin") int begin,
 			@Param("limit") int limit);
 
+	void insertComment_songMenu(Comment comment);
+
+	void insertComment_album(Comment comment);
+
+	void insertComment_song(Comment comment);
+
+	void insertComment_songlist(Comment comment);
+
 }

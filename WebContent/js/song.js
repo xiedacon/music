@@ -76,5 +76,10 @@
 		})
 
 		$(".commentList .commentList_detail").text("共" + song.commentNum + "条评论");
+		var user = UserManager.getUser();
+		if (user) {
+			$(".commentList .newComment_left").attr("src", user.icon);
+		}
+		$(".commentList .button").attr("onclick", "MMR.addComment('song','" + song.id + "')");
 	}
 }())

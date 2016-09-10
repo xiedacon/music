@@ -10,7 +10,7 @@
 		modules[key] = value;
 	}
 	var moduleManager = new ModuleManager();
-	
+
 	var $userDiv = $("#userDiv");
 	function UserManager() {
 	}
@@ -98,14 +98,15 @@
 		bindEvents('nav_login');
 
 		$("#myMusic").attr({
-			"data-href" : "myMusic?userId=" + user.id
+			"data-href" : "myMusic?userId=" + user.id,
+			"onclick" : "jump(this);"
 		})
 
 		if (firstFlag) {
 			firstFlag = false;
 			return;
 		}
-		
+
 		router.startRouter("index");
 	}
 	function removeUser() {
@@ -155,8 +156,8 @@
 		}
 	}
 	window.UserManager = new UserManager();
-	
-	// $yyyy-$MM-$dd $HH:$mm:$ss
+
+	// $yyyy-$MM-$dd-$SS $HH:$mm:$ss:$SS
 	window.DateFormatter = function DateFormatter(regExpString) {
 		var array = new Array();
 		var str = regExpString;
@@ -182,8 +183,8 @@
 			str = parse_base("m", "minute", str, possibleValues);
 
 			possibleValues.splice(0, possibleValues.length, 2);
-			str = parse_base("s", "second", str, possibleValues);
-
+			str = parse_base("s", "seconds", str, possibleValues);
+			
 			return str;
 		}
 
@@ -232,8 +233,7 @@
 			array["day"].num = date.getDate();
 			array["hour"].num = date.getHours();
 			array["minute"].num = date.getMinutes();
-			array["second"].num = date.getSeconds();
-
+			array["seconds"].num = date.getSeconds();
 			return replace(array, str);
 		}
 
@@ -263,7 +263,7 @@
 
 	var configs = new Array();
 	configs.push("js/music.js");
-	configs.push("js/login_regist.js");
+	configs.push("js/modules.js");
 	configs.push("js/MethodStack.js");
 
 	for (var i = 0; i < configs.length; i++) {

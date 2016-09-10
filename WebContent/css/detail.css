@@ -363,6 +363,7 @@ body .material .material_left{
 .newComment_right .right_bottom .left{
     float: left;
     font-size: 1.5em;
+    position: relative;
 }
 .newComment_right .right_bottom .left .face{
     cursor: pointer;
@@ -370,6 +371,44 @@ body .material .material_left{
 }
 .newComment_right .right_bottom .left .face:hover{
     opacity: 1;
+}
+.emojis{
+    position: absolute;
+    font-size: 0;
+    width: 340px;
+    background: #fff;
+    border: 1px #d3d3d3 solid;
+    border-radius: 5px;
+    line-height: 0;
+    box-sizing: border-box;
+    padding: 5px 7px;
+    top: 35px;
+    left: -10px;
+}
+.emoji{
+    width: 20px !important;
+    height: 20px;
+    margin: 1px;
+    cursor: default !important;
+    border: 1px rgba(0,0,0,0) solid;
+    box-sizing: border-box;
+    float: inherit !important;
+    vertical-align: middle;
+}
+.emojis .emoji:hover{
+    border-color: #1c9cff;
+}
+.emojis .triangle{
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background: #fff;
+    border: 1px rgba(255,255,255,1) solid;
+    transform: rotate(45deg) translate(0,-80%);
+    top: 0;
+    border-left-color: #d3d3d3;
+    border-top-color: #d3d3d3;
+    box-sizing: border-box;
 }
 .newComment_right .right_bottom .left .at{
     font-size: 1.4em;

@@ -250,14 +250,48 @@
 		<include refid="creatorId_WHERE"></include>
 	</update>
 
-	<delete id="deleteById" parameterType="java.lang.String">
+	<delete id="delete" parameterType="cn.xiedacon.model.SongMenu">
 		UPDATE songMenu_base s SET
 		s.visible = false
 		<include refid="id_WHERE"></include>
 	</delete>
-	
-	<update id="updateIconById" parameterType="java.lang.String">
-		UPDATE songMenu_base s SET s.icon = #{icon}
+
+	<update id="update" parameterType="cn.xiedacon.model.SongMenu">
+		UPDATE songMenu_base s
+		SET s.name = #{name},
+		s.introduction =
+		#{introduction}
 		<include refid="id_WHERE"></include>
+	</update>
+
+	<update id="updateIconById" parameterType="java.lang.String">
+		UPDATE songMenu_base s
+		SET s.icon = #{icon}
+		<include refid="id_WHERE"></include>
+	</update>
+
+	<update id="updateSongNumById">
+		UPDATE songMenu_base s
+		SET s.songNum = #{songNum}
+		<include refid="id_WHERE"></include>
+	</update>
+
+	<update id="updateCollectionNumById">
+		UPDATE songMenu_record sr
+		SET sr.collectionNum =
+		#{collectionNum}
+		WHERE sr.id = #{id}
+	</update>
+	<update id="updatePlayNumById">
+		UPDATE songMenu_record sr
+		SET sr.playNum =
+		#{playNum}
+		WHERE sr.id = #{id}
+	</update>
+	<update id="updateCommentNumById">
+		UPDATE songMenu_record sr
+		SET sr.commentNum =
+		#{commentNum}
+		WHERE sr.id = #{id}
 	</update>
 </mapper>

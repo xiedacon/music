@@ -7,29 +7,29 @@
 
 	<sql id="required_SELECT">
 		SELECT
-		sb.id id,
-		sb.name name,
-		sb.icon icon,
-		sb.time time,
-		sb.singerId singerId,
-		sb.singerName singerName,
-		sb.albumId albumId,
-		sb.albumName albumName,
+		s.id id,
+		s.name name,
+		s.icon icon,
+		s.time time,
+		s.singerId singerId,
+		s.singerName singerName,
+		s.albumId albumId,
+		s.albumName albumName,
 	</sql>
 	
 	<sql id="song_base_FROM">
-		FROM song_base sb
+		FROM song_base s
 	</sql>
 
 	<sql id="aong_record_JOIN">
-		INNER JOIN song_record sr ON sb.id = sr.id
+		INNER JOIN song_record sr ON s.id = sr.id
 	</sql>
 	
 	<sql id="id_WHERE">
-		WHERE sb.id = #{id}
+		WHERE s.id = #{id}
 	</sql>
 	<sql id="singerId_WHERE">
-		WHERE sb.singerId = #{singerId}
+		WHERE s.singerId = #{singerId}
 	</sql>
 
 	<sql id="collectionNum_ORDERBY">
@@ -41,20 +41,27 @@
 	</sql>
 
 	<select id="selectListBySongMenuIdOrderByRank" resultType="cn.xiedacon.model.Song">
-		<include refid="required_SELECT"></include>
-		sgs.rank rank
+		SELECT
+		s.id id,
+		s.name name,
+		s.icon icon,
+		s.time time,
+		s.singerId singerId,
+		s.singerName singerName,
+		s.albumId albumId,
+		s.albumName albumName
 		<include refid="song_base_FROM"></include>
 		INNER JOIN
-		song_gl_songmenu sgs ON sgs.songId = sb.id
+		song_gl_songmenu sgs ON sgs.songId = s.id
 		WHERE sgs.songMenuId = #{songMenuId}
-		ORDER BY sgs.rank ASC
+		ORDER BY sgs.time ASC
 	</select>
 
 	<select id="selectListByAlbumIdOrderByRank" resultType="cn.xiedacon.model.Song">
 		<include refid="required_SELECT"></include>
 		sga.rank rank
 		<include refid="song_base_FROM"></include>
-		INNER JOIN song_gl_album sga ON sga.songId = sb.id
+		INNER JOIN song_gl_album sga ON sga.songId = s.id
 		WHERE sga.albumId = #{albumId}
 		ORDER BY sga.rank ASC
 	</select>
@@ -64,14 +71,14 @@
 		sgs.rank rank,
 		sgs.rankChange rankChange
 		<include refid="song_base_FROM"></include>
-		INNER JOIN song_gl_songlist sgs ON sgs.songId = sb.id
+		INNER JOIN song_gl_songlist sgs ON sgs.songId = s.id
 		WHERE sgs.songListId = #{songListId}
 		ORDER BY sgs.rank ASC
 	</select>
 
 	<select id="selectById" resultType="cn.xiedacon.model.Song">
 		<include refid="required_SELECT"></include>
-		sb.remark remark,
+		s.remark remark,
 		sr.commentNum commentNum
 		<include refid="song_base_FROM"></include>
 		<include refid="aong_record_JOIN"></include>
@@ -79,7 +86,7 @@
 	</select>
 
 	<select id="selectLyricUriById" resultType="java.lang.String">
-		SELECT sb.lyricUri
+		SELECT s.lyricUri
 		<include refid="song_base_FROM"></include>
 		<include refid="id_WHERE"></include>
 	</select>
@@ -95,8 +102,20 @@
 	</select>
 	
 	<select id="selectFileUriById" resultType="java.lang.String">
-		SELECT sb.fileUri
+		SELECT s.fileUri
 		<include refid="song_base_FROM"></include>
 		<include refid="id_WHERE"></include>
 	</select>
+	
+	<update id="updatePlayNumById">
+		UPDATE song_record s
+		SET s.playNum = #{playNum}
+		<include refid="id_WHERE"></include>
+	</update>
+	
+	<update id="updateCommentNumById">
+		UPDATE song_record s
+		SET s.commentNum = #{commentNum}
+		<include refid="id_WHERE"></include>
+	</update>
 </mapper>

@@ -7,7 +7,6 @@ import org.junit.Test;
 import cn.xiedacon.model.User;
 import cn.xiedacon.service.UserService;
 import cn.xiedacon.test.base.BaseTest;
-import cn.xiedacon.test.base.Level;
 import cn.xiedacon.test.base.Priority;
 import cn.xiedacon.util.UUIDUtils;
 
@@ -16,7 +15,7 @@ public class UserServiceTest extends BaseTest {
 	private User user;
 
 	@Test
-	@Priority(Level.Level_1)
+	@Priority(Priority.Level.L1)
 	public void testInsertUser() {
 		UserService userService = this.getApplicationContext().getBean(UserService.class);
 		user = this.getFactory().get(User.class);

@@ -37,8 +37,10 @@
 		$songMenuEle.find(".play_addToPlayList .addToPlaylist").attr({
 			"onclick" : "MMR.get('music').batchAdd('songMenuId','" + songMenu.id + "')"
 		});
-		$songMenuEle.find(".buttons .share").html("<i class='icomoon'></i>" + songMenu.collectionNum);
-		$songMenuEle.find(".buttons .collection").html("<i class='icomoon'></i>" + songMenu.shareNum);
+		$songMenuEle.find(".buttons .collection").on("click", function() {
+			MMR.collectSongMenu(songMenu.id);
+		}).html("<i class='icomoon'></i>" + songMenu.collectionNum);
+		$songMenuEle.find(".buttons .share").html("<i class='icomoon'></i>" + songMenu.shareNum);
 		$songMenuEle.find(".buttons .comment").html("<i class='icomoon'></i>" + songMenu.commentNum);
 		var $tagsEle = $songMenuEle.find(".details .tags");
 		var $tagEle;
@@ -57,5 +59,10 @@
 		$(".songList .songList_detail").text(songMenu.songNum + " 首歌");
 		$(".songList .songList_top .num").text(songMenu.playNum);
 		$(".commentList .commentList_detail").text("共" + songMenu.commentNum + "条评论");
+		var user = UserManager.getUser();
+		if (user) {
+			$(".commentList .newComment_left").attr("src", user.icon);
+		}
+		$(".commentList .button").attr("onclick", "MMR.addComment('songMenu','" + songMenu.id + "')");
 	}
 }())

@@ -4,7 +4,7 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="cn.xiedacon.dao.CommentDao">
-	
+
 	<sql id="commentVo_SELECT">
 		SELECT
 		c.id id,
@@ -13,7 +13,8 @@
 		c.agreeNum agreeNum,
 		u.id creatorId,
 		u.name creatorName,
-		u.icon creatorIcon
+		u.icon
+		creatorIcon
 	</sql>
 	<sql id="count_SELECT">
 		SELECT
@@ -106,7 +107,7 @@
 		WHERE c.songListId = #{songListId} AND c.agreeNum >= #{agreeNum}
 		<include refid="createTime_ORDERBY"></include>
 	</select>
-	
+
 	<select id="selectListBySongIdLimit" resultType="cn.xiedacon.model.Comment">
 		<include refid="commentVo_SELECT"></include>
 		FROM
@@ -131,4 +132,56 @@
 		WHERE c.songId = #{songId} AND c.agreeNum >= #{agreeNum}
 		<include refid="createTime_ORDERBY"></include>
 	</select>
+
+	<insert id="insertComment_songMenu" parameterType="cn.xiedacon.model.Comment">
+		INSERT INTO
+		comment_songmenu
+		VALUES (
+		#{id},
+		#{content},
+		#{createTime},
+		#{isChecked},
+		#{songMenuId},
+		#{creatorId},
+		#{agreeNum})
+	</insert>
+
+	<insert id="insertComment_album" parameterType="cn.xiedacon.model.Comment">
+		INSERT INTO
+		comment_album
+		VALUES (
+		#{id},
+		#{content},
+		#{createTime},
+		#{isChecked},
+		#{albumId},
+		#{creatorId},
+		#{agreeNum})
+	</insert>
+
+	<insert id="insertComment_song" parameterType="cn.xiedacon.model.Comment">
+		INSERT INTO
+		comment_song
+		VALUES (
+		#{id},
+		#{content},
+		#{createTime},
+		#{isChecked},
+		#{songId},
+		#{creatorId},
+		#{agreeNum})
+	</insert>
+
+	<insert id="insertComment_songlist" parameterType="cn.xiedacon.model.Comment">
+		INSERT INTO
+		comment_songList
+		VALUES (
+		#{id},
+		#{content},
+		#{createTime},
+		#{isChecked},
+		#{songListId},
+		#{creatorId},
+		#{agreeNum})
+	</insert>
 </mapper>

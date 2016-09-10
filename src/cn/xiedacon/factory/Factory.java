@@ -24,27 +24,34 @@ public class Factory {
 		Map<String, Object> configMap = new HashMap<>();
 
 		configMap.put("icon", Constant.USER_ICON_DEFAULT);
-		configMap.put("dynamicNum", Constant.USER_DYNAMICNUM_DEFAULT);
-		configMap.put("attentionNum", Constant.USER_ATTENTIONNUM_DEFAULT);
-		configMap.put("fansNum", Constant.USER_FANSNUM_DEFAULT);
-		configMap.put("createSongMenuNum", Constant.USER_CREATESONGMENUNUM_DEFAULT);
-		configMap.put("collectSongMenuNum", Constant.USER_COLLECTSONGMENUNUM_DEFAULT);
-		configMap.put("level", Constant.USER_LEVEL_DEFAULT);
-		configMap.put("experience", Constant.USER_EXPERIENCE_DEFAULT);
+		configMap.put("dynamicNum", Constant.NUM_DEFAULT);
+		configMap.put("attentionNum", Constant.NUM_DEFAULT);
+		configMap.put("fansNum", Constant.NUM_DEFAULT);
+		configMap.put("createSongMenuNum", Constant.NUM_DEFAULT);
+		configMap.put("collectSongMenuNum", Constant.NUM_DEFAULT);
+		configMap.put("level", Constant.NUM_DEFAULT);
+		configMap.put("experience", Constant.NUM_DEFAULT);
 		configMaps.put(cn.xiedacon.model.User.class, configMap);
 
 		configMap = new HashMap<>();
 
 		configMap.put("icon", Constant.SONGMENU_IOCN_DEFAULT);
-		configMap.put("songNum", Constant.SONGMENU_SONGNUM_DEFAULT);
+		configMap.put("songNum", Constant.NUM_DEFAULT);
 		configMap.put("isPublic", Constant.SONGMENU_ISPUBLIC_DEFAULT);
-		configMap.put("collectionNum", Constant.SONGMENU_COLLECTIONNUM_DEFAULT);
-		configMap.put("shareNum", Constant.SONGMENU_SHARENUM_DEFAULT);
-		configMap.put("commentNum", Constant.SONGMENU_COMMENTNUM_DEFAULT);
-		configMap.put("playNum", Constant.SONGMENU_PLAYNUM_DEFAULT);
+		configMap.put("collectionNum", Constant.NUM_DEFAULT);
+		configMap.put("shareNum", Constant.NUM_DEFAULT);
+		configMap.put("commentNum", Constant.NUM_DEFAULT);
+		configMap.put("playNum", Constant.NUM_DEFAULT);
 		configMap.put("visible", Constant.VISIBLE_DEFAULT);
 		configMaps.put(cn.xiedacon.model.SongMenu.class, configMap);
 
+		configMap = new HashMap<>();
+		
+		configMap.put("agreeNum", Constant.NUM_DEFAULT);
+		configMap.put("isChecked", Constant.COMMENT_ISCHECKED_DEFAULT);
+		
+		configMaps.put(cn.xiedacon.model.Comment.class, configMap);
+		
 		Iterator<Class> iterator = configMaps.keySet().iterator();
 
 		while (iterator.hasNext()) {
@@ -70,7 +77,7 @@ public class Factory {
 		}
 
 		T instance = getInstance(c);
-
+		
 		for (Entry<String, Object> entry : configMap.entrySet()) {
 			String fieldName = entry.getKey();
 			Object defaultValue = entry.getValue();

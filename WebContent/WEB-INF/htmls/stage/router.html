@@ -201,14 +201,17 @@
 		</div>
 		<div id="collectionDiv" class="collectionDiv loginDiv" style="display: none">
 			<div class="login_head">
-				<span>添加到歌单</span> <i class="exit"></i>
+				<span>添加到歌单</span> <i class="exit" onclick="MMR.get('collection').hiddenAll();"></i>
 			</div>
 			<div class="login_material">
-				<p class="newMenu menu">
+				<p class="newMenu menu" onclick="MMR.get('addMenu').show();">
 					<i class="icomoon"></i> <span class="new">新歌单</span>
 				</p>
 				<p class="menu prototype">
-					<img src=""> <span class="menu_right"> <span class="name"></span> <span class="num"></span>
+					<img src=""> 
+					<span class="menu_right"> 
+						<span class="name"></span> 
+						<span class="num"></span>
 					</span>
 				</p>
 			</div>
@@ -328,7 +331,7 @@
 			</div>
 			<div class="playList_hidden_bottom">
 				<ul class="list_body">
-					<li class="none" style="display: none">
+					<li class="none">
 						<p>你还没有添加任何歌曲</p>
 						<p>
 							去首页<span>发现音乐</span>，或在<span>我的音乐</span>收听自己收藏的歌单
@@ -336,10 +339,15 @@
 					</li>
 					<li class="song prototype"><a href="javascript:void(0);" class="songName"></a>
 						<p class="song_hidden">
-							<i class="collection icomoon" onclick="hiddenDiv.collection();" title="收藏"></i> <i class="share icomoon" title="分享"></i> <i
-								class="download icomoon" title="下载"></i> <i class="delete icomoon" title="删除"></i>
-						</p> <a href="javascript:void(0);" onclick="jump(this);" class="songer"></a> <span class="time"></span> <i class="icomoon from"
-						onclick="jump(this);" style="display: none;"></i></li>
+							<i class="collection icomoon" onclick="hiddenDiv.collection();" title="收藏"></i> 
+							<i class="share icomoon" title="分享"></i> 
+							<i class="download icomoon" title="下载"></i> 
+							<i class="delete icomoon" title="删除"></i>
+						</p> 
+						<a href="javascript:void(0);" onclick="jump(this);" class="songer"></a> 
+						<span class="time"></span> 
+						<i class="icomoon from" onclick="jump(this);" style="display: none;"></i>
+					</li>
 				</ul>
 				<div id="listScrollDiv" class="barrier scroll">
 					<div class="vernier"></div>
@@ -380,7 +388,7 @@
 			</h1>
 			<ul class="nav">
 				<li id="findMusic" data-href="index" onclick="jump(this);" class="selected">发现音乐<i></i></li>
-				<li id="myMusic" data-href="myMusic" onclick="jump(this);">我的音乐</li>
+				<li id="myMusic" onclick="MMR.get('login').show();">我的音乐</li>
 				<li onclick="alert('暂无')">朋友</li>
 				<li onclick="alert('暂无')">下载客户端</li>
 			</ul>

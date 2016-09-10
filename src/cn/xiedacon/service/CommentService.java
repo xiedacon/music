@@ -23,5 +23,13 @@ public interface CommentService {
 
 	PageBean<Comment> selectPageBeanBySongId(String songId, Integer page);
 
+	void insertSongMenuComment(Comment comment);
+
+	void insertAlbumComment(Comment comment);
+
+	void insertSongComment(Comment comment);
+
+	void insertSongListComment(Comment comment);
+
 
 }

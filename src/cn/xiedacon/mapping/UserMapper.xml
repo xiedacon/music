@@ -135,4 +135,10 @@
 		<include refid="id_WHERE"></include>
 	</update>
 
+	<update id="updateCollectSongMenuNumById">
+		UPDATE user_base u
+		SET u.collectSongMenuNum = #{collectSongMenuNum}
+		<include refid="id_WHERE"></include>
+	</update>
+
 </mapper>

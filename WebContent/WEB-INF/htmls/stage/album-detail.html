@@ -311,13 +311,17 @@
 							<img class="newComment_left" src="image/default.jpg">
 							<div class="newComment_right">
 								<s></s>
-								<textarea placeholder="评论" class="content" style="resize: none"></textarea>
+								<textarea id="newComment" class="content"></textarea>
 								<div class="right_bottom">
 									<div class="left">
-										<i class="icomoon face"></i> <i class="icomoon at"></i>
+										<i class="icomoon face" onclick="FUNCTION.showEmojis();"></i> 
+										<i class="icomoon at"></i>
+										<div id="emojis" class="emojis" style="display: none;">
+											<i class="triangle"></i>
+										</div>
 									</div>
 									<div class="right">
-										<span class="num">140</span> <span class="button">评论</span>
+										<span class="num">200</span> <span class="button">评论</span>
 									</div>
 								</div>
 							</div>

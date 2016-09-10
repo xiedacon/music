@@ -27,4 +27,14 @@ public class SongListServiceImpl implements SongListService {
 		return songListDao.selectList();
 	}
 
+	@Override
+	public void updatePlayNumById(Integer playNum, String id) {
+		songListDao.updatePlayNumById(playNum, id);
+	}
+
+	@Override
+	public void updateCommentNumById(Integer commentNum, String id) {
+		songListDao.updateCommentNumById(commentNum, id);
+	}
+
 }

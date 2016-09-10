@@ -52,4 +52,15 @@
 		<include refid="songList_base_FROM"></include>
 	</select>
 
+	<update id="updatePlayNumById">
+		UPDATE songlist_record s 
+		SET s.playNum = #{playNum}
+		<include refid="id_WHERE"></include>
+	</update>
+	
+	<update id="updateCommentNumById">
+		UPDATE songlist_record s 
+		SET s.commentNum = #{commentNum}
+		<include refid="id_WHERE"></include>
+	</update>
 </mapper>

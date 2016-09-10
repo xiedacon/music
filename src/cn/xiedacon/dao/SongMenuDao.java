@@ -34,7 +34,17 @@ public interface SongMenuDao {
 
 	void updateCreatorNameByCreatorId(@Param("creatorName") String creatorName, @Param("creatorId") String creatorId);
 
-	void deleteById(String songMenuId);
+	void delete(SongMenu songMenu);
 
 	void updateIconById(@Param("icon") String icon, @Param("id") String songMenuId);
+
+	void update(SongMenu songMenu);
+
+	void updateSongNumById(@Param("songNum") Integer songNum, @Param("id") String id);
+
+	void updateCollectionNumById(@Param("collectionNum") Integer collectionNum, @Param("id") String id);
+
+	void updatePlayNumById(@Param("playNum") Integer playNum, @Param("id") String songMenuId);
+
+	void updateCommentNumById(@Param("commentNum") Integer commentNum, @Param("id") String id);
 }

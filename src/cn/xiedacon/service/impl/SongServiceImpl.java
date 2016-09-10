@@ -52,4 +52,9 @@ public class SongServiceImpl implements SongService {
 		return songDao.selectFileUriById(songId);
 	}
 
+	@Override
+	public void updateCommentNumById(Integer commentNum, String id) {
+		songDao.updateCommentNumById(commentNum,id);
+	}
+
 }

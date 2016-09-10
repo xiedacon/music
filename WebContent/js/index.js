@@ -193,6 +193,12 @@
 					$songEle.find(".hidden .play").attr({
 						"onclick" : "MMR.get('music').addThenPlay('" + songSerialized + "');"
 					})
+					$songEle.find(".hidden .play").attr({
+						"onclick" : "MMR.get('music').addThenPlay('" + songSerialized + "');"
+					})
+					$songEle.find(".hidden .collection").attr({
+						"onclick" : "MMR.get('collection').collect('" + song.id + "');"
+					})
 					$songEle.bind("mouseover", function() {
 						var name = $(this).find(".name").text();
 						$(this).find(".hidden").css("display", "block");

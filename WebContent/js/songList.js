@@ -81,6 +81,11 @@
 		$(".songList .songList_detail").text(songList.songNum + " 首歌");
 		$(".songList .top_right .num").text(songList.playNum);
 		$(".commentList .commentList_detail").text("共" + songList.commentNum + "条评论");
+		var user = UserManager.getUser();
+		if (user) {
+			$(".commentList .newComment_left").attr("src", user.icon);
+		}
+		$(".commentList .button").attr("onclick", "MMR.addComment('songList','" + songList.id + "')");
 	}
 
 	function loadSongs(songs) {

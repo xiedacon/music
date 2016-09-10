@@ -121,8 +121,11 @@
 					"data-href" : "songMenu?songMenuId=" + songMenu.id
 				}).text(songMenu.name);
 				$editPage.find("input").val(songMenu.name);
+				$editPage.find(".introduction").text("");
+				$editPage.find(".num").text(1000);
 				if (songMenu.introduction) {
 					$editPage.find(".introduction").text(songMenu.introduction);
+					$editPage.find(".num").text(1000 - songMenu.introduction.length);
 				}
 				var $tags = $editPage.find(".tags");
 				$tags.children(".tag").remove();
@@ -139,24 +142,42 @@
 				}
 				$editPage.find("img").attr("src", songMenu.icon)
 				$editPage.find(".toImageEditPage").on("click", showImageEditPage);
+				$editPage.find(".introduction").on("focusin", function() {
+					$editPage.find(".introduction").on("keydown", function() {
+						$(this).siblings(".num").text(1000 - $(this).val().length)
+					});
+				});
+				$editPage.find(".introduction").on("focusout", function() {
+					$editPage.find(".introduction").off("keydown");
+				});
 
 				$editPage.css("display", "block").siblings().css("display", "none");
 			}
 		})
 
+		$editPage.find("#updateSongMenu").off().on("click", updateSongMenu);
 		function updateSongMenu() {
 			var name = $editPage.find("#songMenuName").val();
-			var introduction = $editPage.find(".introduction").text();
-			var $tags = $editPage.find("#tags");
+			var introduction = $editPage.find(".introduction").val();
+			var $tags = $editPage.find("#tags .tag");
 
 			if (!name || name == "") {
 				return alert("歌单名不能为空");
 			}
 
+			var $tag;
+			var tags = "";
+			for (var i = 0; i < $tags.length; i++) {
+				$tag = $tags.eq(i);
+				tags += $tag.attr("data-id");
+				if (i < $tags.length - 1) {
+					tags += "-";
+				}
+			}
 			var formData = new FormData();
 			formData.append("name", name);
 			formData.append("introduction", introduction);
-			formData.append("name", name);
+			formData.append("tags", tags);
 			$.ajax({
 				url : "songMenu/" + $("#editPage").attr("data-id"),
 				type : "PUT",
@@ -166,7 +187,14 @@
 				data : formData,
 				dataType : "json",
 				success : function(data) {
-
+					if (data.code === 200) {
+						router.startRouter("myMusic?userId=" + PageScope.params.userId, true);
+					} else {
+						MMR.get("simpleMsg").setData({
+							status : "error",
+							content : "编辑失败"
+						}).show();
+					}
 				}
 			})
 		}

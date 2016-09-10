@@ -5,7 +5,6 @@ import java.util.List;
 import cn.xiedacon.model.SongMenu;
 import cn.xiedacon.util.PageBean;
 
-
 public interface SongMenuService {
 
 	SongMenu selectById(String id);
@@ -22,10 +21,16 @@ public interface SongMenuService {
 
 	List<SongMenu> selectListByCollectorId(String collectorId);
 
-	void insertSongMenu(SongMenu songMenu);
+	void insert(SongMenu songMenu);
 
-	void deleteById(String songMenuId);
+	void delete(SongMenu songMenu);
+
+	void update(SongMenu songMenu);
 
 	void updateIconById(String icon, String songMenuId);
+
+	void updatePlayNumById(Integer playNum, String songMenuId);
+
+	void updateCommentNumById(Integer commentNum, String id);
 
 }

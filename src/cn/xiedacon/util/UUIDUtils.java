@@ -24,7 +24,7 @@ public class UUIDUtils {
 		return UUID.randomUUID().toString().replace("-", "");
 	}
 
-	public static String uuid_base(StringBuilder result) {
+	private static String uuid_base(StringBuilder result) {
 		result.append(Thread.currentThread().getId());
 		result.append(UUID.randomUUID());
 		return result.toString().replace("-", "").substring(0, 32);

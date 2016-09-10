@@ -7,9 +7,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import cn.xiedacon.dao.SongMenuDao;
+import cn.xiedacon.dao.SongMenuTagDao;
 import cn.xiedacon.model.SongMenu;
+import cn.xiedacon.model.SongMenuSecondTag;
 import cn.xiedacon.service.SongMenuService;
 import cn.xiedacon.util.PageBean;
+import cn.xiedacon.util.UUIDUtils;
 
 @Service
 @Transactional
@@ -17,6 +20,8 @@ public class SongMenuServiceImpl implements SongMenuService {
 
 	@Autowired
 	private SongMenuDao songMenuDao;
+	@Autowired
+	private SongMenuTagDao tagDao;
 
 	@Override
 	public SongMenu selectById(String id) {
@@ -114,19 +119,38 @@ public class SongMenuServiceImpl implements SongMenuService {
 	}
 
 	@Override
-	public void insertSongMenu(SongMenu songMenu) {
+	public void insert(SongMenu songMenu) {
 		songMenuDao.insertSongMenu_base(songMenu);
 		songMenuDao.insertSongMenu_record(songMenu);
 	}
 
 	@Override
-	public void deleteById(String songMenuId) {
-		songMenuDao.deleteById(songMenuId);
+	public void delete(SongMenu songMenu) {
+		songMenuDao.delete(songMenu);
+	}
+
+	@Override
+	public void update(SongMenu songMenu) {
+		songMenuDao.update(songMenu);
+		tagDao.deleteGLBySongMenuId(songMenu.getId());
+		for (SongMenuSecondTag tag : songMenu.getSongMenuSecondTagList()) {
+			tagDao.insertGL(UUIDUtils.randomUUID(), songMenu.getId(), tag.getId());
+		}
 	}
 
 	@Override
 	public void updateIconById(String icon, String songMenuId) {
 		songMenuDao.updateIconById(icon, songMenuId);
+	}
+
+	@Override
+	public void updatePlayNumById(Integer playNum, String songMenuId) {
+		songMenuDao.updatePlayNumById(playNum, songMenuId);
+	}
+
+	@Override
+	public void updateCommentNumById(Integer commentNum, String id) {
+		songMenuDao.updateCommentNumById(commentNum, id);
 	}
 
 }

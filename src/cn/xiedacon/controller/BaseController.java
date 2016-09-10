@@ -65,6 +65,9 @@ public class BaseController {
 
 	private void writeToResponse(String uri, HttpServletRequest request, HttpServletResponse response) {
 		InputStream in = request.getServletContext().getResourceAsStream(uri);
+		if (in == null) {
+			return;
+		}
 		try {
 			response.setCharacterEncoding("utf-8");
 			IOUtils.copy(in, response.getOutputStream());
@@ -75,6 +78,9 @@ public class BaseController {
 
 	private String getResourceAsString(HttpServletRequest request, String uri) {
 		InputStream in = request.getServletContext().getResourceAsStream(uri);
+		if (in == null) {
+			return null;
+		}
 		try {
 			return IOUtils.toString(in);
 		} catch (IOException e) {

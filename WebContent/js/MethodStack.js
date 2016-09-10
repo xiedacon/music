@@ -13,7 +13,7 @@
 			"data-href" : "home?userId=" + comment.creatorId,
 			"title" : comment.creatorName
 		}).text(comment.creatorName);
-		$commentEle.find(".comment_material .content").text(":" + comment.content);
+		$commentEle.find(".comment_material .content").html(":" + comment.content);
 		$commentEle.find(".comment_bottom .createTime").text(new DateFormatter("MM月dd号 HH:mm").format(comment.createTime));
 		$commentEle.find(".comment_bottom .right .num").text(comment.agreeNum);
 
@@ -68,8 +68,9 @@
 				data.click($(this).attr("data-page"));
 			})
 		}
-		
-		FUNCTION.align($(".material_right"),$(".material_left"));
+
+		FUNCTION.loadEmojis();
+		FUNCTION.align($(".material_right"), $(".material_left"));
 	}
 	function loadPageBean_comment(pageBean, flag) {
 		var $commentListEle = $("#commentList");
@@ -131,6 +132,7 @@
 	}
 	FUNCTION.loadSongs = function loadSongList(songList, special) {
 		var $songListEle = $("#songList");
+		$songListEle.children().not(".prototype").remove();
 		var $prototype = $songListEle.find(".prototype").clone().removeClass("prototype");
 		var $songEle, song;
 
@@ -148,7 +150,7 @@
 				special($songEle, song, i);
 			}
 
-			$songEle.find(".num").text(song.rank);
+			$songEle.find(".num").text(i + 1);
 			var songSerialized = MMR.get('music').serialize(song);
 			$songEle.find(".play").attr({
 				"onclick" : "MMR.get('music').addThenPlay('" + songSerialized + "');"
@@ -156,6 +158,9 @@
 			$songEle.find(".addToPlaylist").attr({
 				"onclick" : "MMR.get('music').add('" + song.id + "');"
 			});
+			$songEle.find(".hidden .collection").attr({
+				"onclick" : "MMR.get('collection').collect('" + song.id + "');"
+			})
 			$songEle.find(".songName").attr({
 				"data-href" : "song?songId=" + song.id,
 				"title" : song.name
@@ -217,10 +222,70 @@
 
 	// 保持高度相等
 	FUNCTION.align = function align($ele1, $ele2) {
+		$ele1.css("min-height", "inherit");
+		$ele2.css("min-height", "inherit");
 		var height1 = $ele1.outerHeight();
 		var height2 = $ele2.outerHeight();
 		var max = height1 > height2 ? height1 : height2;
-		$ele1.css("min-height",max);
-		$ele2.css("min-height",max);
+		$ele1.css("min-height", max);
+		$ele2.css("min-height", max);
+	}
+
+	FUNCTION.loadEmojis = function() {
+		var $emojis = $("#emojis");
+		var $newComment = $("#newComment");
+		AJAX({
+			url : "json/emoji",
+			success : function(emojis) {
+				PageScope.emojis = emojis;
+				var shortnames = new Array();
+				emojis.forEach(function(emoji) {
+					$emojis.append('<img class="emoji" data-name="' + emoji.shortname + '" alt="" src="svg/' + emoji.unicode + '.svg">');
+					shortnames.push(emoji.shortname);
+				});
+				var regShortNames = new RegExp(shortnames.join('|'), "gi");
+				FUNCTION.shortnameToImage = function(str) {
+					var emoji;
+					str = str.replace(regShortNames, function(shortname) {
+						if ((typeof shortname === 'undefined') || (shortname === '')) {
+							return shortname;
+						}
+						emoji = emojis.find(function(emoji) {
+							if (emoji.shortname === shortname) {
+								return true;
+							} else {
+								return false;
+							}
+						})
+						return '<img class="emoji" data-name="' + emoji.shortname + '" alt="" src="svg/' + emoji.unicode + '.svg">';
+					});
+					return str;
+				};
+				$emojis.find("img").on("click", function() {
+					var name = $(this).attr("data-name");
+					var comment = $("#newComment").val();
+					$newComment.val(comment + name);
+					FUNCTION.showEmojis();
+				})
+			}
+		})
+		var emojis_flag;
+		FUNCTION.showEmojis = function() {
+			if (emojis_flag) {
+				$emojis.css("display", "none");
+				emojis_flag = false;
+			} else {
+				$emojis.css("display", "block");
+				emojis_flag = true;
+			}
+		}
+		$newComment.on("focusin", function() {
+			$newComment.on("keydown", function() {
+				$(this).parent().find(".num").text(200 - $(this).val().length);
+			});
+		});
+		$newComment.on("focusout", function() {
+			$newComment.off("keydown");
+		});
 	}
 }())

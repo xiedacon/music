@@ -118,4 +118,24 @@ public class CommentServiceImpl implements CommentService {
 		return pageBean;
 	}
 
+	@Override
+	public void insertSongMenuComment(Comment comment) {
+		commentDao.insertComment_songMenu(comment);
+	}
+
+	@Override
+	public void insertAlbumComment(Comment comment) {
+		commentDao.insertComment_album(comment);
+	}
+
+	@Override
+	public void insertSongComment(Comment comment) {
+		commentDao.insertComment_song(comment);
+	}
+
+	@Override
+	public void insertSongListComment(Comment comment) {
+		commentDao.insertComment_songlist(comment);
+	}
+
 }

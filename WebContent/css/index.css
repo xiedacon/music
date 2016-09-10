@@ -269,10 +269,10 @@ h2 i i {
 
 .albums .bottom .albumDiv {
 	background: #F5F5F5;
-	border: 1px #fff solid;
-	position: relative;
-	padding: 0 2%;
-	height: 178px;
+    border: 1px #fff solid;
+    position: relative;
+    padding: 0 2%;
+    height: 200px;
 }
 
 .albums .bottom .albumDiv:after {
