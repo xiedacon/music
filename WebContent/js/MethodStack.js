@@ -15,7 +15,17 @@
 		}).text(comment.creatorName);
 		$commentEle.find(".comment_material .content").html(":" + comment.content);
 		$commentEle.find(".comment_bottom .createTime").text(new DateFormatter("MM月dd号 HH:mm").format(comment.createTime));
-		$commentEle.find(".comment_bottom .right .num").text(comment.agreeNum);
+		$commentEle.find(".comment_bottom .right .num").text(comment.agreeNum).attr("onclick", "MMR.agreeComment(this,'" + comment.id + "');");
+		$commentEle.find(".comment_bottom .right .num").siblings().on("click", {
+			id : comment.id
+		}, function(e) {
+			MMR.agreeComment($(this).siblings().eq(0)[0], e.data.id);
+		})
+		if (sessionStorage["flag_agreed_" + comment.id]) {
+			$commentEle.find(".comment_bottom .right .num").siblings().css("color", "#ff0000");
+		} else {
+			$commentEle.find(".comment_bottom .right .num").siblings().removeAttr("style");
+		}
 
 		$commentListEle.append($commentEle);
 	}

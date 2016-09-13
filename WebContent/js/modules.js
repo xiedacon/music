@@ -753,4 +753,42 @@
 			})
 		}
 	}
+	MMR.agreeComment = function(that, commentId) {
+		var userId = UserManager.getUserId();
+		if (!userId) {
+			return MMR.get("login").show();
+		}
+		if (!commentId) {
+			return;
+		}
+		var page = PageScope.page;
+		if (page) {
+			$.ajax({
+				url : "comment/" + commentId + "/" + page,
+				type : "PUT",
+				data : {
+					creatorId : userId
+				},
+				dataType : "json",
+				success : function(data) {
+					if (data.code == 200) {
+						that = $(that);
+						if (sessionStorage["flag_agreed_" + commentId] && sessionStorage["flag_agreed_" + commentId] === "true") {
+							sessionStorage["flag_agreed_" + commentId] = false;
+							that.siblings().removeAttr("style");
+							that.text(+(that.text()) - 1);
+							MMR.get("simpleMsg").showInfo("取消成功");
+						} else {
+							sessionStorage["flag_agreed_" + commentId] = true;
+							that.siblings().css("color", "#ff0000");
+							that.text(+(that.text()) + 1);
+							MMR.get("simpleMsg").showSuccess("点赞成功");
+						}
+					} else {
+						MMR.get("simpleMsg").showError(data.error.value);
+					}
+				}
+			})
+		}
+	}
 }())

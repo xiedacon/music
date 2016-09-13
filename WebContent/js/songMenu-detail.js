@@ -1,5 +1,6 @@
 (function() {
 	var songMenuId = PageScope.params.songMenuId;
+	PageScope.page = "songMenu";
 	PageScope.loadForFirst = "comment/s/songMenuId_" + songMenuId;
 	PageScope.loadPageBean = "comment/s/songMenuId_" + songMenuId + "/";
 	AJAX({

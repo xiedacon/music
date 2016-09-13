@@ -31,5 +31,20 @@ public interface CommentService {
 
 	void insertSongListComment(Comment comment);
 
+	Comment selectSongMenuCommentById(String commentId);
+
+	void updateSongMenuCommentAgreeNumById(Integer agreeNum, String id);
+
+	Comment selectAlbumCommentById(String commentId);
+
+	void updateAlbumCommentAgreeNumById(Integer agreeNum, String id);
+
+	Comment selectSongListCommentById(String commentId);
+
+	void updateSongListCommentAgreeNumById(Integer agreeNum, String id);
+
+	Comment selectSongCommentById(String commentId);
+
+	void updateSongCommentAgreeNumById(Integer agreeNum, String id);
 
 }

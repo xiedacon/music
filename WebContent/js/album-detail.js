@@ -2,6 +2,7 @@
 	var albumId = PageScope.params.albumId;
 	PageScope.loadForFirst = "comment/s/albumId_" + albumId;
 	PageScope.loadPageBean = "comment/s/albumId_" + albumId + "/";
+	PageScope.page = "album";
 	AJAX({
 		url : "album/" + albumId,
 		success : loadAlbum

@@ -2,7 +2,8 @@
 	var songId = PageScope.params.songId;
 	PageScope.loadForFirst = "comment/s/songId_" + songId;
 	PageScope.loadPageBean = "comment/s/songId_" + songId + "/";
-
+	PageScope.page = "song";
+	
 	AJAX({
 		url : "song/" + songId,
 		success : loadSong

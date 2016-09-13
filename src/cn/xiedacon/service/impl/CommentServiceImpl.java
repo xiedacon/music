@@ -138,4 +138,44 @@ public class CommentServiceImpl implements CommentService {
 		commentDao.insertComment_songlist(comment);
 	}
 
+	@Override
+	public Comment selectSongMenuCommentById(String commentId) {
+		return commentDao.selectSongMenuCommentById(commentId);
+	}
+
+	@Override
+	public void updateSongMenuCommentAgreeNumById(Integer agreeNum, String id) {
+		commentDao.updateSongMenuCommentAgreeNumById(agreeNum, id);
+	}
+
+	@Override
+	public Comment selectAlbumCommentById(String commentId) {
+		return commentDao.selectAlbumCommentById(commentId);
+	}
+
+	@Override
+	public void updateAlbumCommentAgreeNumById(Integer agreeNum, String id) {
+		commentDao.updateAlbumCommentAgreeNumById(agreeNum, id);
+	}
+
+	@Override
+	public Comment selectSongListCommentById(String commentId) {
+		return commentDao.selectSongListCommentById(commentId);
+	}
+
+	@Override
+	public void updateSongListCommentAgreeNumById(Integer agreeNum, String id) {
+		commentDao.updateSongListCommentAgreeNumById(agreeNum, id);
+	}
+
+	@Override
+	public Comment selectSongCommentById(String commentId) {
+		return commentDao.selectSongCommentById(commentId);
+	}
+
+	@Override
+	public void updateSongCommentAgreeNumById(Integer agreeNum, String id) {
+		commentDao.updateSongCommentAgreeNumById(agreeNum, id);
+	}
+
 }

@@ -184,4 +184,68 @@
 		#{creatorId},
 		#{agreeNum})
 	</insert>
+
+	<select id="selectSongMenuCommentById" resultType="cn.xiedacon.model.Comment">
+		SELECT
+		c.id id,
+		c.content content,
+		c.createTime createTime,
+		c.agreeNum agreeNum
+		FROM comment_songmenu c
+		WHERE c.id = #{id}
+	</select>
+
+	<select id="selectAlbumCommentById" resultType="cn.xiedacon.model.Comment">
+		SELECT
+		c.id id,
+		c.content content,
+		c.createTime createTime,
+		c.agreeNum agreeNum
+		FROM comment_album c
+		WHERE c.id = #{id}
+	</select>
+
+	<select id="selectSongListCommentById" resultType="cn.xiedacon.model.Comment">
+		SELECT
+		c.id id,
+		c.content content,
+		c.createTime createTime,
+		c.agreeNum agreeNum
+		FROM comment_songlist c
+		WHERE c.id = #{id}
+	</select>
+
+	<select id="selectSongCommentById" resultType="cn.xiedacon.model.Comment">
+		SELECT
+		c.id id,
+		c.content content,
+		c.createTime createTime,
+		c.agreeNum agreeNum
+		FROM comment_song c
+		WHERE c.id = #{id}
+	</select>
+
+	<update id="updateSongMenuCommentAgreeNumById">
+		UPDATE comment_songmenu c
+		SET c.agreeNum = #{agreeNum}
+		WHERE c.id = #{id}
+	</update>
+
+	<update id="updateAlbumCommentAgreeNumById">
+		UPDATE comment_album c
+		SET c.agreeNum = #{agreeNum}
+		WHERE c.id = #{id}
+	</update>
+
+	<update id="updateSongListCommentAgreeNumById">
+		UPDATE comment_songlist c
+		SET c.agreeNum = #{agreeNum}
+		WHERE c.id = #{id}
+	</update>
+
+	<update id="updateSongCommentAgreeNumById">
+		UPDATE comment_song c
+		SET c.agreeNum = #{agreeNum}
+		WHERE c.id = #{id}
+	</update>
 </mapper>
