@@ -3,7 +3,12 @@
 
 # Custom for Visual Studio
 *.cs     diff=csharp
+
 *.svg linguist-language=Java
+*.png linguist-language=Java
+*.jpg linguist-language=Java
+*.mp3 linguist-language=Java
+
 # Standard to msysgit
 *.doc	 diff=astextplain
 *.DOC	 diff=astextplain
