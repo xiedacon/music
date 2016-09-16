@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+
+	<head>
+
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="description" content="">
+		<meta name="author" content="">
+
+		<title>后台管理-歌手分类模块</title>
+
+		<!-- Bootstrap Core CSS -->
+		<link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+		<!-- Custom CSS -->
+		<link href="../dist/css/sb-admin-2.css" rel="stylesheet">
+
+		<!-- Custom Fonts -->
+		<link href="../vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+		<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+		<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+		<!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+	</head>
+
+	<body>
+
+		<div id="wrapper">
+
+			<!-- Navigation -->
+			<nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+				<div class="navbar-header" style="width: 100%;">
+					<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+	                    <span class="sr-only">Toggle navigation</span>
+	                    <span class="icon-bar"></span>
+	                    <span class="icon-bar"></span>
+	                    <span class="icon-bar"></span>
+	                </button>
+					<a class="navbar-brand" href="index.html">网站后台</a>
+					<ul class="nav navbar-top-links navbar-right pull-right">
+						<li class="dropdown">
+							<a class="dropdown-toggle" data-toggle="dropdown" href="#">
+								<i class="fa fa-user fa-fw"></i> <i class="fa fa-caret-down"></i>
+							</a>
+							<ul class="dropdown-menu dropdown-user">
+								<li>
+									<a href="login.html"><i class="fa fa-sign-out fa-fw"></i>退出</a>
+								</li>
+							</ul>
+						</li>
+					</ul>
+				</div>
+				<div class="navbar-default sidebar" role="navigation">
+					<div class="sidebar-nav navbar-collapse">
+						<ul class="nav" id="side-menu">
+							<li>
+								<a href="user-tables.html"><i class="fa fa-fw"></i> 用户模块</a>
+							</li>
+							<li>
+								<a href="songMenu-tables.html"><i class="fa fa-fw"></i> 歌单模块</a>
+							</li>
+							<li>
+								<a href="singer-tables.html"><i class="fa fa-fw"></i> 歌手模块</a>
+							</li>
+							<li>
+								<a href="song-tables.html"><i class="fa fa-fw"></i> 歌曲模块</a>
+							</li>
+							<li>
+								<a href="songList-tables.html"><i class="fa fa-fw"></i> 榜单模块</a>
+							</li>
+							<li>
+								<a href="album-tables.html"><i class="fa fa-fw"></i> 专辑模块</a>
+							</li>
+							<li>
+								<a href="singerClassify-tables.html" class="active"><i class="fa fa-fw"></i> 歌手分类模块</a>
+							</li>
+							<li>
+								<a href="albumTag-tables.html"><i class="fa fa-fw"></i> 专辑分类模块</a>
+							</li>
+							<li>
+								<a href="songMenuTag-tables.html"><i class="fa fa-fw"></i> 歌单分类模块</a>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</nav>
+
+			<div id="page-wrapper">
+				<div class="row">
+					<div class="col-lg-12">
+						<h1 class="page-header">全部歌手分类</h1>
+					</div>
+					<!-- /.col-lg-12 -->
+				</div>
+				<!-- /.row -->
+				<div class="row">
+					<div class="col-lg-12">
+						<div class="panel panel-default">
+							<!-- /.panel-heading -->
+							<div class="panel-body">
+								<div class="">
+									<label>一级分类</label>
+									<button class="btn btn-default pull-right" data-toggle="modal" data-target="#first-add" style="margin-bottom: 10px;">
+										添加
+									</button>
+								</div>
+								<div class="">
+									<table width="100%" class="table table-striped table-bordered table-hover" id="dataTables-example">
+										<thead>
+											<tr>
+												<th>歌手分类id</th>
+												<th>歌手分类名</th>
+												<th>操作</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr class="odd gradeX">
+												<td>1</td>
+												<td>2016-9-22</td>
+												<td class="center" style="text-align: center;">
+													<button class="btn btn-info" data-toggle="modal" data-target="#first-edit">
+														<span class="glyphicon glyphicon-edit"></span>
+													</button>
+													<button class="btn btn-danger">
+														<span class="glyphicon glyphicon-trash"></span>
+													</button>
+												</td>
+											</tr>
+											<tr class="even gradeC">
+												<td>1</td>
+												<td>2016-9-22</td>
+												<td class="center" style="text-align: center;">
+													<button class="btn btn-info" data-toggle="modal" data-target="#first-edit">
+														<span class="glyphicon glyphicon-edit"></span>
+													</button>
+													<button class="btn btn-danger">
+														<span class="glyphicon glyphicon-trash"></span>
+													</button>
+												</td>
+											</tr>
+										</tbody>
+									</table>
+									<div class="modal fade" id="first-add" tabindex="-1" role="dialog" aria-hidden="true">
+										<div class="modal-dialog">
+											<div class="modal-content">
+												<div class="modal-header">
+													<button class="close" type="button" data-dismiss="modal">&times;</button>
+													<h4 class="modal-title">添加一级分类</h4>
+												</div>
+												<div class="modal-body">
+													<form>
+														<div class="form-group">
+															<label>分类名</label>
+															<input type="text" class="form-control" />
+															<p class="help-block">必填，不能包含特殊字符</p>
+														</div>
+													</form>
+												</div>
+												<div class="modal-footer">
+													<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+													<button type="button" class="btn btn-primary">提交</button>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="modal fade" id="first-edit" tabindex="-1" role="dialog" aria-hidden="true">
+										<div class="modal-dialog">
+											<div class="modal-content">
+												<div class="modal-header">
+													<button class="close" type="button" data-dismiss="modal">&times;</button>
+													<h4 class="modal-title">修改一级分类</h4>
+												</div>
+												<div class="modal-body">
+													<form>
+														<div class="form-group">
+															<label>分类名</label>
+															<input type="text" class="form-control" />
+															<p class="help-block">必填，不能包含特殊字符</p>
+														</div>
+													</form>
+												</div>
+												<div class="modal-footer">
+													<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+													<button type="button" class="btn btn-primary">修改</button>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="">
+									<label>二级分类</label>
+									<button class="btn btn-default pull-right" data-toggle="modal" data-target="#second-add" style="margin-bottom: 10px;">
+										添加
+									</button>
+								</div>
+								<div class="">
+									<table width="100%" class="table table-striped table-bordered table-hover" id="dataTables-example">
+										<thead>
+											<tr>
+												<th>歌手分类id</th>
+												<th>歌手分类名</th>
+												<th>操作</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr class="odd gradeX">
+												<td>1</td>
+												<td>2016-9-22</td>
+												<td class="center" style="text-align: center;">
+													<button class="btn btn-info" data-toggle="modal" data-target="#second-edit">
+														<span class="glyphicon glyphicon-edit"></span>
+													</button>
+													<button class="btn btn-danger">
+														<span class="glyphicon glyphicon-trash"></span>
+													</button>
+												</td>
+											</tr>
+											<tr class="even gradeC">
+												<td>1</td>
+												<td>2016-9-22</td>
+												<td class="center" style="text-align: center;">
+													<button class="btn btn-info" data-toggle="modal" data-target="#second-edit">
+														<span class="glyphicon glyphicon-edit"></span>
+													</button>
+													<button class="btn btn-danger">
+														<span class="glyphicon glyphicon-trash"></span>
+													</button>
+												</td>
+											</tr>
+										</tbody>
+									</table>
+									<div class="modal fade" id="second-add" tabindex="-1" role="dialog" aria-hidden="true">
+										<div class="modal-dialog">
+											<div class="modal-content">
+												<div class="modal-header">
+													<button class="close" type="button" data-dismiss="modal">&times;</button>
+													<h4 class="modal-title">添加二级分类</h4>
+												</div>
+												<div class="modal-body">
+													<form>
+														<div class="form-group">
+															<label>分类名</label>
+															<input type="text" class="form-control" />
+															<p class="help-block">必填，不能包含特殊字符</p>
+														</div>
+														<div class="form-group">
+															<label>所属一级分类</label>
+															<select class="form-control">
+																<option>1</option>
+																<option>1</option>
+																<option>1</option>
+															</select>
+															<p class="help-block">必填</p>
+														</div>
+													</form>
+												</div>
+												<div class="modal-footer">
+													<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+													<button type="button" class="btn btn-primary">提交</button>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="modal fade" id="second-edit" tabindex="-1" role="dialog" aria-hidden="true">
+										<div class="modal-dialog">
+											<div class="modal-content">
+												<div class="modal-header">
+													<button class="close" type="button" data-dismiss="modal">&times;</button>
+													<h4 class="modal-title">修改二级分类</h4>
+												</div>
+												<div class="modal-body">
+													<form>
+														<div class="form-group">
+															<label>分类名</label>
+															<input type="text" class="form-control" />
+															<p class="help-block">必填，不能包含特殊字符</p>
+														</div>
+														<div class="form-group">
+															<label>所属一级分类</label>
+															<select class="form-control">
+																<option>1</option>
+																<option>1</option>
+																<option>1</option>
+															</select>
+															<p class="help-block">必填</p>
+														</div>
+													</form>
+												</div>
+												<div class="modal-footer">
+													<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+													<button type="button" class="btn btn-primary">修改</button>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<!-- /.panel-body -->
+						</div>
+						<!-- /.panel -->
+					</div>
+					<!-- /.col-lg-12 -->
+				</div>
+			</div>
+			<!-- /#page-wrapper -->
+
+		</div>
+		<!-- /#wrapper -->
+
+		<!-- jQuery -->
+		<script src="../vendor/jquery/jquery.min.js"></script>
+
+		<!-- Bootstrap Core JavaScript -->
+		<script src="../vendor/bootstrap/js/bootstrap.min.js"></script>
+
+	</body>
+
+</html>
