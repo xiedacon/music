@@ -140,5 +140,9 @@
 		SET u.collectSongMenuNum = #{collectSongMenuNum}
 		<include refid="id_WHERE"></include>
 	</update>
+	
+	<select id="selectListLimit">
+		
+	</select>
 
 </mapper>

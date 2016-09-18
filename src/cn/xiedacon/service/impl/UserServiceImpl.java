@@ -8,6 +8,7 @@ import cn.xiedacon.dao.SongMenuDao;
 import cn.xiedacon.dao.UserDao;
 import cn.xiedacon.model.User;
 import cn.xiedacon.service.UserService;
+import cn.xiedacon.util.PageBean;
 
 @Service
 @Transactional
@@ -48,6 +49,21 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public void updatePassword(User dataUser) {
 		userDao.updatePassword(dataUser);
+	}
+
+	@Override
+	public PageBean<User> selectPageBean(Integer page) {
+		PageBean<User> pageBean = new PageBean<User>();
+		int limit = 10;
+		pageBean.setLimit(limit);
+		pageBean.setPage(page);
+		int count = userDao.selectCount();
+		pageBean.setCount(count);
+		int totalPage = count / limit + (count % limit == 0 ? 0 : 1);
+		pageBean.setTotalPage(totalPage);
+		int begin = limit * (page - 1);
+		pageBean.setBeans(userDao.selectListLimit(begin, limit));
+		return pageBean;
 	}
 
 }

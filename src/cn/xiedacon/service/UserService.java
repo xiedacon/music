@@ -2,6 +2,7 @@ package cn.xiedacon.service;
 
 
 import cn.xiedacon.model.User;
+import cn.xiedacon.util.PageBean;
 
 public interface UserService {
 
@@ -16,5 +17,7 @@ public interface UserService {
 	void insertUser(User dataUser);
 
 	void updatePassword(User dataUser);
+
+	PageBean<User> selectPageBean(Integer page);
 
 }

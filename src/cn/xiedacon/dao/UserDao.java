@@ -1,5 +1,7 @@
 package cn.xiedacon.dao;
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.Param;
 
 import cn.xiedacon.model.User;
@@ -21,5 +23,9 @@ public interface UserDao {
 	void updatePassword(User dataUser);
 
 	void updateCollectSongMenuNumById(@Param("collectSongMenuNum") Integer collectSongMenuNum, @Param("id") String id);
+
+	int selectCount();
+
+	List<User> selectListLimit(@Param("begin") int begin, @Param("limit") int limit);
 
 }

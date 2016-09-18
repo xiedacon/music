@@ -29,6 +29,16 @@ public class BaseController {
 		return "stage/router";
 	}
 
+	@RequestMapping(value = "/admin", method = RequestMethod.GET)
+	public String admin() {
+		return "backStage/login";
+	}
+
+	@RequestMapping(value = "/admin/html/{name:.+}", method = RequestMethod.GET)
+	public String adminHtml(@PathVariable("name") String name) {
+		return "backStage/" + name;
+	}
+
 	@RequestMapping(value = "/html/{name:.+}", method = RequestMethod.GET)
 	public String html(@PathVariable("name") String name) {
 		return "stage/" + name;
