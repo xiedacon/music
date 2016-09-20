@@ -24,14 +24,19 @@ public class BaseController {
 	@Autowired
 	private SongService songService;
 
+	@RequestMapping(value = "", method = RequestMethod.GET)
+	public String toIndex() {
+		return index();
+	}
+
 	@RequestMapping(value = "/index", method = RequestMethod.GET)
 	public String index() {
-		return "stage/router";
+		return html("router");
 	}
 
 	@RequestMapping(value = "/admin", method = RequestMethod.GET)
 	public String admin() {
-		return "backStage/login";
+		return adminHtml("login");
 	}
 
 	@RequestMapping(value = "/admin/html/{name:.+}", method = RequestMethod.GET)
