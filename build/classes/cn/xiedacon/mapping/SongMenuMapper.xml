@@ -250,11 +250,11 @@
 		<include refid="creatorId_WHERE"></include>
 	</update>
 
-	<delete id="delete" parameterType="cn.xiedacon.model.SongMenu">
+	<update id="delete" parameterType="cn.xiedacon.model.SongMenu">
 		UPDATE songMenu_base s SET
 		s.visible = false
 		<include refid="id_WHERE"></include>
-	</delete>
+	</update>
 
 	<update id="update" parameterType="cn.xiedacon.model.SongMenu">
 		UPDATE songMenu_base s

@@ -20,4 +20,6 @@ public interface UserService {
 
 	PageBean<User> selectPageBean(Integer page);
 
+	void deleteUser(User user);
+
 }

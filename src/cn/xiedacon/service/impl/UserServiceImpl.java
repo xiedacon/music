@@ -66,4 +66,9 @@ public class UserServiceImpl implements UserService {
 		return pageBean;
 	}
 
+	@Override
+	public void deleteUser(User user) {
+		userDao.deleteUser(user);
+	}
+
 }

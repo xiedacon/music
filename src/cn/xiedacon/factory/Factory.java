@@ -31,6 +31,7 @@ public class Factory {
 		configMap.put("collectSongMenuNum", Constant.NUM_DEFAULT);
 		configMap.put("level", Constant.NUM_DEFAULT);
 		configMap.put("experience", Constant.NUM_DEFAULT);
+		configMap.put("visible", Constant.VISIBLE_DEFAULT);
 		configMaps.put(cn.xiedacon.model.User.class, configMap);
 
 		configMap = new HashMap<>();

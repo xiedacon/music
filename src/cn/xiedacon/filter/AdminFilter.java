@@ -1,4 +1,4 @@
-package cn.xiedacon.util;
+package cn.xiedacon.filter;
 
 import java.io.IOException;
 
@@ -11,7 +11,9 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class PrivilegeFilter implements Filter {
+import cn.xiedacon.util.AdminManager;
+
+public class AdminFilter implements Filter {
 
 	@Override
 	public void destroy() {

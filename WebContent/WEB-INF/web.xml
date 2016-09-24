@@ -10,15 +10,16 @@
 		<param-value>classpath:spring-mybatis.xml</param-value>
 	</context-param>
 
+	<!-- 后台过滤器 -->
 	<filter>
-		<filter-name>PrivilegeFilter</filter-name>
-		<filter-class>cn.xiedacon.util.PrivilegeFilter</filter-class>
+		<filter-name>adminFilter</filter-name>
+		<filter-class>cn.xiedacon.filter.AdminFilter</filter-class>
+
 		<async-supported>true</async-supported>
 	</filter>
-	
 	<filter-mapping>
-		<filter-name>PrivilegeFilter</filter-name>
-		<url-pattern>/*</url-pattern>
+		<filter-name>adminFilter</filter-name>
+		<url-pattern>/admin/*</url-pattern>
 	</filter-mapping>
 
 	<!-- 编码过滤器 -->
@@ -33,7 +34,6 @@
 			<param-value>UTF-8</param-value>
 		</init-param>
 	</filter>
-
 	<filter-mapping>
 		<filter-name>CharacterEncodingFilter</filter-name>
 		<url-pattern>/*</url-pattern>
@@ -61,10 +61,9 @@
 
 		<async-supported>true</async-supported>
 	</servlet>
-
 	<servlet-mapping>
 		<servlet-name>springmvc</servlet-name>
 		<url-pattern>/</url-pattern>
 	</servlet-mapping>
-	
+
 </web-app>

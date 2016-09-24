@@ -25,6 +25,7 @@ public class User {
 	private Integer experience;
 	private String singerId;
 	private Date lastSignDate;
+	private Boolean visible;
 
 	private String qq;
 	private String phone;
@@ -34,6 +35,14 @@ public class User {
 	private String douban;
 	private String password;
 	private String githubId;
+
+	public Boolean getVisible() {
+		return visible;
+	}
+
+	public void setVisible(Boolean visible) {
+		this.visible = visible;
+	}
 
 	public String getSingerId() {
 		return singerId;

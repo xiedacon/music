@@ -18,6 +18,11 @@
         <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
+<style type="text/css">
+.prototype {
+	display: none;
+}
+</style>
 </head>
 <body>
 	<div id="wrapper">
@@ -544,7 +549,7 @@
 			})
 		});
 		var $modules = $("#nav").find("a");
-		var $material = $("#page-wrapper"); 
+		var $material = $("#page-wrapper");
 		$modules.on("click", function() {
 			$modules.removeClass("active");
 			$(this).addClass("active");
@@ -556,6 +561,78 @@
 				}
 			})
 		});
+
+		function loadPages(pageBean, $pages, prefix) {
+			if (pageBean.totalPage < 2) {
+				return;
+			}
+			var config = {
+				addEle : function(index) {
+					var className = "", href = "#";
+					if (index == pageBean.page) {
+						className = "active";
+						href = prefix + index;
+					}
+					$pages.append("<li class='"+className+"'><a href='"+href+"'>" + index + "</a></li>");
+				},
+				addPrevious : function() {
+					var className = "", href = "#";
+					if (pageBean.page == 1) {
+						className = "disabled";
+						href = prefix + (pageBean.page - 1);
+					}
+					$pages.append("<li><a class='" + className + "' href='" + href + "'>上一页 </a></li>");
+				},
+				addNext : function() {
+					var className = "", href = "#";
+					if (pageBean.page == 1) {
+						className = "disabled";
+						href = prefix + (pageBean.page + 1);
+					}
+					$pages.append("<li><a class='" + className + "' href='" + href + "'>下一页 </a></li>");
+				},
+				totalPage : pageBean.totalPage,
+				page : pageBean.page,
+				limit : pageBean.limit
+			};
+			Page(config);
+		}
+
+		//addEle：根据给出的页数，执行添加方法，前一页、后一页不在其中
+		//addPrevious/addNext：执行前一页或后一页的添加方法
+		//totalPage：总页数
+		//page：当前页数
+		//limit：显示的页面个数
+		function Page(config) {//分页的计算模块
+			if (config.totalPage <= 0) {
+				//传的什么玩意儿啊
+				return;
+			} else if (config.totalPage == 1) {
+				//上一页   1  下一页
+				config.addPrevious();
+				config.addEle(1);
+				config.addNext();
+			} else {
+				//一般情况
+				var middle = Math.ceil(config.limit / 2), //中数
+				begin = config.page - (middle - 1), //开始位默认值
+				end = config.page + (middle - 1); //结束位默认值
+
+				if (config.page < middle) { //中数以下
+					begin = 1;
+					end = config.limit;
+				}
+				if (config.totalPage < end) {//结束位修正
+					end = config.totalPage;
+				}
+
+				config.addPrevious();
+				for (var i = begin; i < end + 1; i++) {
+					config.addEle(i);
+				}
+				config.addNext();
+			}
+		}
 	</script>
 </body>
 </html>

@@ -53,13 +53,13 @@
 	</sql>
 
 	<sql id="id_WHERE">
-		WHERE u.id = #{id}
+		WHERE u.id = #{id} AND u.visible = true
 	</sql>
 	<sql id="phone_WHERE">
-		WHERE ur.phone = #{phone}
+		WHERE ur.phone = #{phone} AND u.visible = true
 	</sql>
 	<sql id="githubId_WHERE">
-		WHERE ur.githubId = #{githubId}
+		WHERE ur.githubId = #{githubId} AND u.visible = true
 	</sql>
 
 	<insert id="insertUser_base" parameterType="cn.xiedacon.model.User">
@@ -141,8 +141,30 @@
 		<include refid="id_WHERE"></include>
 	</update>
 	
-	<select id="selectListLimit">
-		
+	<select id="selectCount" resultType="int">
+		SELECT COUNT(u.id)
+		<include refid="user_base_FROM"></include>
+	</select>
+	
+	<select id="selectListLimit" resultType="cn.xiedacon.model.User">
+		SELECT 
+		u.id id,
+		u.name name,
+		u.dynamicNum dynamicNum,
+		u.attentionNum attentionNum,
+		u.fansNum fansNum,
+		u.createSongMenuNum createSongMenuNum,
+		u.collectSongMenuNum collectSongMenuNum,
+		u.level level,
+		u.experience experience,
+		u.singerId singerId
+		<include refid="user_base_FROM"></include>
+		WHERE u.visible = true
 	</select>
 
+	<update id="deleteUser" parameterType="cn.xiedacon.model.User">
+		UPDATE user_base u 
+		SET u.visible = false
+		<include refid="id_WHERE"></include> 
+	</update>
 </mapper>

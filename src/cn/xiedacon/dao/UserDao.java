@@ -28,4 +28,6 @@ public interface UserDao {
 
 	List<User> selectListLimit(@Param("begin") int begin, @Param("limit") int limit);
 
+	void deleteUser(User user);
+
 }
