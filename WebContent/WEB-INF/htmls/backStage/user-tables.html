@@ -100,7 +100,6 @@
 				loadPages(pageBean, $pages, "/music/admin/user/page_");
 
 				$tbody.on("click", function(e) {
-					console.log(e);
 					var type = $(e.target).attr("data-type");
 					if (type) {
 						var $user = $(e.target).parents("tr");

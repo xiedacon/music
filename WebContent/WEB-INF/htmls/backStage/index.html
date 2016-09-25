@@ -562,6 +562,69 @@
 			})
 		});
 
+		function loadTable(url, loadItem, pageUrl,event) {
+			var $tbody = $("tbody"), $prototype = $tbody.find(".prototype").clone().removeClass("prototype");
+			var $pages = $("ul[data-pages]");
+			$.ajax({
+				url : url,
+				dataType : "json",
+				type : "GET"
+			}).done(function(data) {
+				if (data.code == 200) {
+					var pageBean = data.data, beans = pageBean.beans, $bean;
+					songMenus.map(function(bean, index) {
+						$bean = $prototype.clone();
+						loadItem($bean, bean, index);
+						$tbody.append($bean);
+					});
+
+					loadPages(pageBean, $pages, pageUrl);
+
+					$tbody.on("click", function(e) {
+						var type = $(e.target).attr("data-type");
+						if (type) {
+							var $item = $(e.target).parents("tr");
+							switch (type) {
+								case "delete" :
+									deleteItem($item);
+									break;
+								case "edit" :
+									editItem($item);
+									break;
+							}
+						}
+					});
+				} else {
+					alert("加载失败");
+				}
+			});
+		}
+
+		function deleteItem($item) {
+			$.ajax({
+				url : $item.attr("data-url"),
+				type : "DELETE",
+				dataType : "json"
+			}).done(function(data) {
+				if (data.code == 200) {
+					$item.remove();
+				} else {
+					alert("操作失败");
+				}
+			}).fail(function(e) {
+				alert("操作失败");
+			});
+		}
+		
+		function editItem($item) {
+			$.ajax({
+				url : $item.attr("data-url"),
+				type : "GET"
+			}).done(function(data) {
+				$material.html(data);
+			});
+		}
+
 		function loadPages(pageBean, $pages, prefix) {
 			if (pageBean.totalPage < 2) {
 				return;
@@ -604,33 +667,42 @@
 		//page：当前页数
 		//limit：显示的页面个数
 		function Page(config) {//分页的计算模块
-			if (config.totalPage <= 0) {
+			var defaultFunction = function() {
+			}, //
+			addEle = config.addEle || defaultFunction, //
+			addPrevious = config.addPrevious || defaultFunction, //
+			addNext = config.addNext || defaultFunction, //
+			totalPage = config.totalPage || 0, //
+			page = config.page || 1, //
+			limit = config.limit || 10;
+
+			if (totalPage <= 0) {
 				//传的什么玩意儿啊
 				return;
-			} else if (config.totalPage == 1) {
+			} else if (totalPage == 1) {
 				//上一页   1  下一页
-				config.addPrevious();
-				config.addEle(1);
-				config.addNext();
+				addPrevious();
+				addEle(1);
+				addNext();
 			} else {
 				//一般情况
-				var middle = Math.ceil(config.limit / 2), //中数
-				begin = config.page - (middle - 1), //开始位默认值
-				end = config.page + (middle - 1); //结束位默认值
+				var middle = Math.ceil(limit / 2), //中数
+				begin = page - (middle - 1), //开始位默认值
+				end = page + (middle - 1); //结束位默认值
 
-				if (config.page < middle) { //中数以下
+				if (page < middle) { //中数以下
 					begin = 1;
-					end = config.limit;
+					end = limit;
 				}
-				if (config.totalPage < end) {//结束位修正
-					end = config.totalPage;
+				if (totalPage < end) {//结束位修正
+					end = totalPage;
 				}
 
-				config.addPrevious();
+				addPrevious();
 				for (var i = begin; i < end + 1; i++) {
-					config.addEle(i);
+					addEle(i);
 				}
-				config.addNext();
+				addNext();
 			}
 		}
 	</script>
