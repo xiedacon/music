@@ -12,13 +12,16 @@ public class Constant {
 	public static Integer SINGER_SHOW_SONGNUM = 50;
 	public static Boolean VISIBLE_DEFAULT = Boolean.TRUE;
 	public static Integer NUM_DEFAULT = 0;
-	
+	public static Integer LIMIT_DEFAULT = 10;
+
 	// 用户默认设置
 	public static String USER_ICON_DEFAULT = "image/default.jpg";
 
 	// 歌单默认设置
 	public static String SONGMENU_IOCN_DEFAULT = "image/default_songMenu.jpg";
 	public static Boolean SONGMENU_ISPUBLIC_DEFAULT = Boolean.TRUE;
-	
+
+	// 评论默认配置
+	public static Integer COMMENT_HOT_AGREENUM = 10;
 	public static Boolean COMMENT_ISCHECKED_DEFAULT = Boolean.FALSE;
 }

@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import cn.xiedacon.dao.AlbumDao;
 import cn.xiedacon.model.Album;
 import cn.xiedacon.service.AlbumService;
+import cn.xiedacon.util.Constant;
 import cn.xiedacon.util.PageBean;
 
 @Service
@@ -25,44 +26,18 @@ public class AlbumServiceImpl implements AlbumService {
 
 	@Override
 	public PageBean<Album> selectPageBeanByTagIdOrderByCreateTimeLimit(String tagId, Integer page) {
-		PageBean<Album> pageBean = new PageBean<>();
-
-		int limit = 10;
+		int limit = Constant.LIMIT_DEFAULT;
 		int count = albumDao.selectCountByTagId(tagId);
-		int totalPage = count / limit;
-		totalPage = count % limit == 0 ? 0 : ++totalPage;
-
-		int begin = limit * (page - 1);
-
-		List<Album> beans = albumDao.selectListByTagIdOrderByCreateTimeLimit(tagId, begin, limit);
-
-		pageBean.setPage(page);
-		pageBean.setLimit(limit);
-		pageBean.setCount(count);
-		pageBean.setTotalPage(totalPage);
-		pageBean.setBeans(beans);
-		return pageBean;
+		List<Album> beans = albumDao.selectListByTagIdOrderByCreateTimeLimit(tagId, limit * (page - 1), limit);
+		return new PageBean<>(page, limit, count, beans);
 	}
 
 	@Override
 	public PageBean<Album> selectPageBeanBySingerIdOrderByCreateTime(String singerId, Integer page) {
-		PageBean<Album> pageBean = new PageBean<>();
-
-		int limit = 10;
+		int limit = Constant.LIMIT_DEFAULT;
 		int count = albumDao.selectCountBySingerId(singerId);
-		int totalPage = count / limit;
-		totalPage = count % limit == 0 ? 0 : ++totalPage;
-
-		int begin = limit * (page - 1);
-
-		List<Album> beans = albumDao.selectListBySingerIdOrderByCreateTimeLimit(singerId, begin, limit);
-
-		pageBean.setPage(page);
-		pageBean.setLimit(limit);
-		pageBean.setCount(count);
-		pageBean.setTotalPage(totalPage);
-		pageBean.setBeans(beans);
-		return pageBean;
+		List<Album> beans = albumDao.selectListBySingerIdOrderByCreateTimeLimit(singerId, limit * (page - 1), limit);
+		return new PageBean<>(page, limit, count, beans);
 	}
 
 	@Override

@@ -55,4 +55,5 @@
 	<context:component-scan base-package="cn.xiedacon.controller"></context:component-scan>
 
 	<mvc:default-servlet-handler />
+	
 </beans>

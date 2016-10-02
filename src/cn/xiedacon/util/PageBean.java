@@ -10,6 +10,14 @@ public class PageBean<T> {
 	private Integer count;
 	private List<T> beans;
 
+	public PageBean(Integer page, Integer limit, Integer count, List<T> beans) {
+		this.page = page;
+		this.limit = limit;
+		this.count = count;
+		this.totalPage = count / limit + count % limit == 0 ? 0 : 1;
+		this.beans = beans;
+	}
+
 	public Integer getPage() {
 		return page;
 	}

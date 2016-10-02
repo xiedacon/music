@@ -21,8 +21,8 @@
 	<context:component-scan base-package="cn.xiedacon.*"></context:component-scan>
 
 	<!-- 导入外部文件 -->
-	<context:property-placeholder location="classpath:jdbc.properties"/>
-	
+	<context:property-placeholder location="classpath:jdbc.properties" />
+
 	<!-- 配置数据源 -->
 	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
 		<property name="driverClass" value="${jdbc.driverClass}"></property>
@@ -34,12 +34,20 @@
 	<!-- 配置sqlSessionFactory -->
 	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
 		<property name="dataSource" ref="dataSource"></property>
-		<property name="mapperLocations" value="classpath:cn/xiedacon/mapping/*.xml"></property>
+		<property name="mapperLocations" value="classpath:cn/xiedacon/mapper/*.xml"></property>
 	</bean>
 
 	<!-- 配置dao接口包名 -->
-	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-		<property name="basePackage" value="cn.xiedacon.dao"></property>
+	<bean id="writeMapperScannerConfig" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="cn.xiedacon.write.dao"></property>
+		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"></property>
+	</bean>
+	<bean id="readMapperScannerConfig" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="cn.xiedacon.read.dao"></property>
+		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"></property>
+	</bean>
+	<bean id="adminMapperScannerConfig" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="cn.xiedacon.admin.dao"></property>
 		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"></property>
 	</bean>
 
@@ -49,6 +57,22 @@
 		<property name="dataSource" ref="dataSource"></property>
 	</bean>
 
-	<tx:annotation-driven transaction-manager="transactionManager" />
+	<!-- <tx:annotation-driven transaction-manager="transactionManager" /> -->
+
+	<!-- 配置事务的传播特性 -->
+	<tx:advice id="commonAdvice" transaction-manager="transactionManager">
+		<tx:attributes>
+			<tx:method name="select*" propagation="SUPPORTS" read-only="true" />
+			<tx:method name="insert*" propagation="REQUIRED" />
+			<tx:method name="update*" propagation="REQUIRED" />
+			<tx:method name="delete*" propagation="REQUIRED" />
+		</tx:attributes>
+	</tx:advice>
+
+	<!-- 配置参与事务的类 -->
+	<aop:config>
+		<aop:pointcut expression="expression(public * cn.xiedacon.*.service.*.*(..))" />
+		<aop:advisor advice-ref="commonAdvice" />
+	</aop:config>
 
 </beans>

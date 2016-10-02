@@ -12,7 +12,7 @@ import cn.xiedacon.model.User;
 
 @Service
 @Transactional
-public class SongMenuGLService implements cn.xiedacon.service.SongMenuGLService {
+public class SongMenuGLService implements cn.xiedacon.write.service.SongMenuGLService {
 
 	@Autowired
 	private SongMenuGLDao songMenuGLDao;

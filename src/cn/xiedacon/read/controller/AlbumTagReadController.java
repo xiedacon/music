@@ -1,0 +1,26 @@
+package cn.xiedacon.read.controller;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import cn.xiedacon.model.AlbumTag;
+import cn.xiedacon.read.service.AlbumTagReadService;
+
+@Controller
+@ResponseBody
+@RequestMapping(value = "/albumTag", method = RequestMethod.GET)
+public class AlbumTagReadController {
+
+	@Autowired
+	private AlbumTagReadService tagService;
+
+	@RequestMapping(value = "/s")
+	public List<AlbumTag> getList() {
+		return tagService.selectList();
+	}
+}

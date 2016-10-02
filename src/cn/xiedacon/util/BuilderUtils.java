@@ -32,18 +32,6 @@ public class BuilderUtils {
 		}
 		return result;
 	}
-	
-	public static <T> PageBean<T> buildPageBeanFrom(Class<T> c, Object obj) {
-		PageBean<T> result = null;
-		try {
-			result = new PageBean<T>();
-			// way1(c, result, obj);
-			way2(result, obj);
-		} catch (IllegalAccessException | InvocationTargetException e) {
-			throw new RuntimeException(e);
-		}
-		return result;
-	}
 
 	private static <T> void way1(Class<T> c, T result, Object obj)
 			throws IllegalArgumentException, IllegalAccessException {

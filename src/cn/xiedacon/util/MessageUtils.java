@@ -5,47 +5,125 @@ import java.util.Map;
 
 public class MessageUtils {
 
-	public static Map<String, Object> createError(String errorName, String errorValue) {
-		Map<String, Object> error = new HashMap<>();
-		error.put("name", errorName);
-		error.put("value", errorValue);
-		return createError(error);
-	}
-
-	public static Map<String, Object> createError(Map<String, Object> errorMap) {
-		return createMessage(Constant.ERROR, "error", errorMap);
-	}
-
+	/**
+	 * 创建默认的成功返回
+	 * 
+	 * @return
+	 */
 	public static Map<String, Object> createSuccess() {
-		return createMessage(Constant.SUCCESS);
+		return createSuccess(null, null, null);
 	}
 
+	/**
+	 * 创建携带message信息的成功返回
+	 * 
+	 * @return
+	 */
+	public static Map<String, Object> createSuccess(String message) {
+		return createSuccess(message, null, null);
+	}
+
+	/**
+	 * 创建携带数据的成功返回
+	 * 
+	 * @return
+	 */
 	public static Map<String, Object> createSuccess(String name, Object value) {
-		return createMessage(Constant.SUCCESS, name, value);
+		return createSuccess(null, name, value);
 	}
 
-	public static Map<String, Object> createSuccess(Map<String, Object> map) {
-		return createMessage(Constant.SUCCESS, "success", map);
+	/**
+	 * 创建成功返回
+	 * 
+	 * @return
+	 */
+	public static Map<String, Object> createSuccess(String message, String name, Object value) {
+		return createMessage(Constant.SUCCESS, message, name, value);
 	}
 
+	/**
+	 * 创建默认的警告返回
+	 * 
+	 * @return
+	 */
+	public static Map<String, Object> createInfo() {
+		return createInfo(null, null, null);
+	}
+
+	/**
+	 * 创建携带message信息的警告返回
+	 * 
+	 * @return
+	 */
+	public static Map<String, Object> createInfo(String message) {
+		return createInfo(message, null, null);
+	}
+
+	/**
+	 * 创建携带数据的警告返回
+	 * 
+	 * @return
+	 */
 	public static Map<String, Object> createInfo(String name, Object value) {
-		return createMessage(Constant.INFO, name, value);
+		return createInfo(null, name, value);
 	}
 
-	public static Map<String, Object> createInfo(Map<String, Object> map) {
-		return createMessage(Constant.SUCCESS, "info", map);
+	/**
+	 * 创建警告返回
+	 * 
+	 * @return
+	 */
+	public static Map<String, Object> createInfo(String message, String name, Object value) {
+		return createMessage(Constant.INFO, message, name, value);
 	}
 
-	private static Map<String, Object> createMessage(int code, String name, Object value) {
+	/**
+	 * 创建默认的失败返回
+	 * 
+	 * @return
+	 */
+	public static Map<String, Object> createError() {
+		return createError(null, null, null);
+	}
+
+	/**
+	 * 创建携带message信息的失败返回
+	 * 
+	 * @return
+	 */
+	public static Map<String, Object> createError(String message) {
+		return createError(message, null, null);
+	}
+
+	/**
+	 * 创建携带数据的失败返回
+	 * 
+	 * @return
+	 */
+	public static Map<String, Object> createError(String name, Object value) {
+		return createError(null, name, value);
+	}
+
+	/**
+	 * 创建失败返回
+	 * 
+	 * @return
+	 */
+	public static Map<String, Object> createError(String message, String name, Object value) {
+		Map<String, Object> error = new HashMap<>();
+		error.put(name, value);
+		return createMessage(Constant.ERROR, message, "error", error);
+	}
+
+	private static Map<String, Object> createMessage(int code, String message, String name, Object value) {
 		Map<String, Object> result = new HashMap<>();
 		result.put("code", code);
-		result.put(name, value);
-		return result;
-	}
-
-	private static Map<String, Object> createMessage(int code) {
-		Map<String, Object> result = new HashMap<>();
-		result.put("code", code);
+		if (message != null) {
+			result.put("message", message);
+		}
+		if (name != null && value != null) {
+			result.put(name, value);
+		}
 		return result;
 	}
 }
