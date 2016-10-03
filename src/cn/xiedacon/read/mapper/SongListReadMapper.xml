@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.xiedacon.read.dao.SongListReadDao">
+
+	<sql id="required_SELECT">
+		SELECT
+		s.id id,
+		s.name name,
+		s.icon icon,
+		s.refreshRate
+		refreshRate,
+	</sql>
+	<sql id="simpleSongListVo_SELECT">
+		<include refid="required_SELECT"></include>
+		s.globe globe
+	</sql>
+	<sql id="songListVo_SELECT">
+		<include refid="required_SELECT"></include>
+		s.refreshDate refreshDate,
+		s.songNum songNum,
+		sr.collectionNum
+		collectionNum,
+		sr.shareNum shareNum,
+		sr.commentNum commentNum,
+		sr.playNum playNum
+	</sql>
+
+	<sql id="songList_base_FROM">
+		FROM songList_base s
+	</sql>
+
+	<sql id="songList_record_JOIN">
+		INNER JOIN songlist_record sr ON s.id = sr.id
+	</sql>
+
+	<sql id="id_WHERE">
+		<where>s.id = #{id}</where>
+	</sql>
+
+	<select id="selectById" resultType="cn.xiedacon.model.SongList">
+		<include refid="songListVo_SELECT"></include>
+		<include refid="songList_base_FROM"></include>
+		<include refid="songList_record_JOIN"></include>
+		<include refid="id_WHERE"></include>
+	</select>
+
+	<select id="selectList" resultType="cn.xiedacon.model.SongList">
+		<include refid="simpleSongListVo_SELECT"></include>
+		<include refid="songList_base_FROM"></include>
+	</select>
+
+</mapper>

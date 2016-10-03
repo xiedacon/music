@@ -2,7 +2,7 @@
 package cn.xiedacon.write.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.stereotype.Service;
 
 import cn.xiedacon.model.SongMenu;
 import cn.xiedacon.model.User;
@@ -13,7 +13,7 @@ import cn.xiedacon.write.dao.SongMenuWriteDao;
 import cn.xiedacon.write.dao.UserWriteDao;
 import cn.xiedacon.write.service.User_SongMenuGLService;
 
-@Transactional
+@Service
 public class User_SongMenuGLServiceImpl implements User_SongMenuGLService {
 
 	@Autowired

@@ -7,6 +7,6 @@ public interface SongMenu_SongGLService {
 
 	String selectIdBySongIdAndSongMenuId(String songId, String songMenuId);
 
-	void insertSongMenuGL(SongMenu songMenu, Song song);
+	void insert(SongMenu songMenu, Song song);
 
 }

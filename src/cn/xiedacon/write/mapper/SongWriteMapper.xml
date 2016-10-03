@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.xiedacon.write.dao.SongWriteDao">
+
+	<sql id="id_WHERE">
+		WHERE s.id = #{id}
+	</sql>
+
+	<update id="updatePlayNumById">
+		UPDATE song_record s
+		SET s.playNum = #{playNum}
+		<include refid="id_WHERE"></include>
+	</update>
+
+	<update id="updateCommentNumById">
+		UPDATE song_record s
+		SET s.commentNum = #{commentNum}
+		<include refid="id_WHERE"></include>
+	</update>
+</mapper>

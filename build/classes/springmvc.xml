@@ -52,7 +52,10 @@
 		<property name="suffix" value=".html"></property>
 	</bean>
 
-	<context:component-scan base-package="cn.xiedacon.controller"></context:component-scan>
+	<context:component-scan base-package="cn.xiedacon.admin.controller"></context:component-scan>
+	<context:component-scan base-package="cn.xiedacon.read.controller"></context:component-scan>
+	<context:component-scan base-package="cn.xiedacon.write.controller"></context:component-scan>
+	<context:component-scan base-package="cn.xiedacon.base.controller"></context:component-scan>
 
 	<mvc:default-servlet-handler />
 	

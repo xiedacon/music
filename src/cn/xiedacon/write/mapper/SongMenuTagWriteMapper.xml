@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.xiedacon.write.dao.SongMenu_SongMenuTagGLDao">
+
+	<delete id="deleteBySongMenuId">
+		DELETE FROM
+		smi_gl_rsms WHERE songMenuId =
+		#{songMenuId}
+	</delete>
+
+	<insert id="insert" parameterType="cn.xiedacon.model.SongMenu_SongMenuTagGL">
+		INSERT INTO smi_gl_rsms
+		VALUES
+		(#{id},#{songMenuId},#{songMenuTagId})
+	</insert>
+</mapper>

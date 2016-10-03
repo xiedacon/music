@@ -1,5 +1,7 @@
 package cn.xiedacon.write.dao;
 
+import org.apache.ibatis.annotations.Param;
+
 import cn.xiedacon.model.SongMenu;
 
 public interface SongMenuWriteDao {
@@ -12,16 +14,16 @@ public interface SongMenuWriteDao {
 
 	void update(SongMenu songMenu);
 
-	void updateIconById(String icon, String songMenuId);
+	void updateIconById(@Param("icon") String icon, @Param("id") String id);
 
-	void updatePlayNumById(Integer playNum, String songMenuId);
+	void updatePlayNumById(@Param("playNum") Integer playNum, @Param("id") String id);
 
-	void updateCommentNumById(Integer commentNum, String id);
+	void updateCommentNumById(@Param("commentNum") Integer commentNum, @Param("id") String id);
 
-	void updateCreatorNameByCreatorId(String name, String icon);
+	void updateCreatorNameByCreatorId(@Param("creatorName") String creatorName, @Param("creatorId") String creatorId);
 
-	void updateSongNumById(Integer songNum, String id);
+	void updateSongNumById(@Param("songNum") Integer songNum, @Param("id") String id);
 
-	void updateCollectionNumById(Integer collectionNum, String id);
+	void updateCollectionNumById(@Param("collectionNum") Integer collectionNum, @Param("id") String id);
 
 }

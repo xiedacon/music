@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.xiedacon.read.dao.CommentReadDao">
+
+	<sql id="commentVo_SELECT">
+		SELECT
+		c.id id,
+		c.content content,
+		c.createTime createTime,
+		c.agreeNum agreeNum,
+		u.id creatorId,
+		u.name creatorName,
+		u.icon
+		creatorIcon
+	</sql>
+	<sql id="count_SELECT">
+		SELECT
+		COUNT(c.id) count
+	</sql>
+
+	<sql id="user_base_JOIN">
+		INNER JOIN user_base u ON c.creatorId = u.id
+	</sql>
+
+	<sql id="createTime_ORDERBY">
+		ORDER BY c.createTime DESC
+	</sql>
+
+	<sql id="LIMIT">
+		LIMIT #{begin},#{limit};
+	</sql>
+
+	<select id="selectListBySongMenuIdAndMINAgreeNum" resultType="cn.xiedacon.model.Comment">
+		<include refid="commentVo_SELECT"></include>
+		FROM comment_songMenu c
+		<include refid="user_base_JOIN"></include>
+		WHERE c.songMenuId = #{songMenuId} AND c.agreeNum >= #{agreeNum}
+		<include refid="createTime_ORDERBY"></include>
+	</select>
+
+	<select id="selectListBySongMenuIdLimit" resultType="cn.xiedacon.model.Comment">
+		<include refid="commentVo_SELECT"></include>
+		FROM comment_songMenu c
+		<include refid="user_base_JOIN"></include>
+		WHERE c.songMenuId = #{songMenuId}
+		<include refid="createTime_ORDERBY"></include>
+		<include refid="LIMIT"></include>
+	</select>
+
+	<select id="selectCountBySongMenuId" resultType="java.lang.Integer">
+		<include refid="count_SELECT"></include>
+		FROM comment_songMenu c
+		WHERE c.songMenuId = #{songMenuId}
+	</select>
+
+	<select id="selectListByAlbumIdAndMINAgreeNum" resultType="cn.xiedacon.model.Comment">
+		<include refid="commentVo_SELECT"></include>
+		FROM comment_album c
+		<include refid="user_base_JOIN"></include>
+		WHERE c.albumId = #{albumId} AND c.agreeNum >= #{agreeNum}
+		<include refid="createTime_ORDERBY"></include>
+	</select>
+
+	<select id="selectListByAlbumIdLimit" resultType="cn.xiedacon.model.Comment">
+		<include refid="commentVo_SELECT"></include>
+		FROM
+		comment_album c
+		<include refid="user_base_JOIN"></include>
+		WHERE
+		c.albumId = #{albumId}
+		<include refid="createTime_ORDERBY"></include>
+		<include refid="LIMIT"></include>
+	</select>
+
+	<select id="selectCountByAlbumId" resultType="java.lang.Integer">
+		<include refid="count_SELECT"></include>
+		FROM
+		comment_Album c
+		WHERE
+		c.albumId = #{albumId}
+	</select>
+
+	<select id="selectListBySongListIdLimit" resultType="cn.xiedacon.model.Comment">
+		<include refid="commentVo_SELECT"></include>
+		FROM
+		comment_songlist c
+		<include refid="user_base_JOIN"></include>
+		WHERE c.songListId = #{songListId}
+		<include refid="createTime_ORDERBY"></include>
+		<include refid="LIMIT"></include>
+	</select>
+
+	<select id="selectCountBySongListId" resultType="java.lang.Integer">
+		<include refid="count_SELECT"></include>
+		FROM comment_songlist c
+		WHERE c.songListId = #{songListId}
+	</select>
+
+	<select id="selectListBySongListIdAndMINAgreeNum" resultType="cn.xiedacon.model.Comment">
+		<include refid="commentVo_SELECT"></include>
+		FROM
+		comment_songlist c
+		<include refid="user_base_JOIN"></include>
+		WHERE c.songListId = #{songListId} AND c.agreeNum >= #{agreeNum}
+		<include refid="createTime_ORDERBY"></include>
+	</select>
+
+	<select id="selectListBySongIdLimit" resultType="cn.xiedacon.model.Comment">
+		<include refid="commentVo_SELECT"></include>
+		FROM
+		comment_song c
+		<include refid="user_base_JOIN"></include>
+		WHERE c.songId = #{songId}
+		<include refid="createTime_ORDERBY"></include>
+		<include refid="LIMIT"></include>
+	</select>
+
+	<select id="selectCountBySongId" resultType="java.lang.Integer">
+		<include refid="count_SELECT"></include>
+		FROM comment_song c
+		WHERE c.songId = #{songId}
+	</select>
+
+	<select id="selectListBySongIdAndMINAgreeNum" resultType="cn.xiedacon.model.Comment">
+		<include refid="commentVo_SELECT"></include>
+		FROM
+		comment_song c
+		<include refid="user_base_JOIN"></include>
+		WHERE c.songId = #{songId} AND c.agreeNum >= #{agreeNum}
+		<include refid="createTime_ORDERBY"></include>
+	</select>
+
+	<select id="selectSongMenuCommentById" resultType="cn.xiedacon.model.Comment">
+		SELECT
+		c.id id,
+		c.content content,
+		c.createTime createTime,
+		c.agreeNum agreeNum
+		FROM comment_songmenu c
+		WHERE c.id = #{id}
+	</select>
+
+	<select id="selectAlbumCommentById" resultType="cn.xiedacon.model.Comment">
+		SELECT
+		c.id id,
+		c.content content,
+		c.createTime createTime,
+		c.agreeNum agreeNum
+		FROM comment_album c
+		WHERE c.id = #{id}
+	</select>
+
+	<select id="selectSongListCommentById" resultType="cn.xiedacon.model.Comment">
+		SELECT
+		c.id id,
+		c.content content,
+		c.createTime createTime,
+		c.agreeNum agreeNum
+		FROM comment_songlist c
+		WHERE c.id = #{id}
+	</select>
+
+	<select id="selectSongCommentById" resultType="cn.xiedacon.model.Comment">
+		SELECT
+		c.id id,
+		c.content content,
+		c.createTime createTime,
+		c.agreeNum agreeNum
+		FROM comment_song c
+		WHERE c.id = #{id}
+	</select>
+</mapper>

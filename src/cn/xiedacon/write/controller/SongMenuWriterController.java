@@ -155,7 +155,7 @@ public class SongMenuWriterController {
 		String id = songMenu_SongGLService.selectIdBySongIdAndSongMenuId(songId, songMenuId);
 		if (id == null) {
 			songMenu.setSongNum(songMenu.getSongNum() + 1);
-			songMenu_SongGLService.insertSongMenuGL(songMenu, song);
+			songMenu_SongGLService.insert(songMenu, song);
 			return MessageUtils.createSuccess();
 		} else {
 			return MessageUtils.createError("songId", "歌曲已存在");

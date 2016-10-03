@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.xiedacon.read.dao.UserReadDao">
+
+	<sql id="required_SELECT">
+		SELECT
+		u.id id,
+		u.name name,
+		u.icon icon,
+	</sql>
+	<sql id="min_simpleUserVo_SELECT">
+		<include refid="required_SELECT"></include>
+		u.introduction introduction
+	</sql>
+	<sql id="simpleUserVo_SELECT">
+		<include refid="required_SELECT"></include>
+		u.introduction introduction,
+		u.sex sex,
+		u.dynamicNum dynamicNum,
+		u.attentionNum attentionNum,
+		u.fansNum fansNum
+	</sql>
+	<sql id="userVo_SELECT">
+		<include refid="required_SELECT"></include>
+		ur.password password,
+		u.introduction introduction,
+		u.sex sex,
+		u.dynamicNum dynamicNum,
+		u.attentionNum attentionNum,
+		u.fansNum fansNum,
+		u.level level,
+		u.birthday birthday,
+		u.age age,
+		u.area area,
+		u.createSongMenuNum createSongMenuNum,
+		u.collectSongMenuNum
+		collectSongMenuNum,
+		u.singerId singerId,
+		u.lastSignDate lastSignDate
+	</sql>
+
+	<sql id="user_base_FROM">
+		FROM
+		user_base u
+	</sql>
+
+	<sql id="user_relation_JOIN">
+		INNER JOIN
+		user_relation ur ON u.id = ur.id
+	</sql>
+
+	<sql id="id_WHERE">
+		WHERE u.id = #{id} AND u.visible = true
+	</sql>
+	<sql id="phone_WHERE">
+		WHERE ur.phone = #{phone} AND u.visible = true
+	</sql>
+	<sql id="githubId_WHERE">
+		WHERE ur.githubId = #{githubId} AND u.visible = true
+	</sql>
+
+	<select id="selectByPhone" resultType="cn.xiedacon.model.User">
+		<include refid="userVo_SELECT"></include>
+		<include refid="user_base_FROM"></include>
+		<include refid="user_relation_JOIN"></include>
+		<include refid="phone_WHERE"></include>
+	</select>
+
+	<select id="selectById" resultType="cn.xiedacon.model.User">
+		<include refid="userVo_SELECT"></include>
+		<include refid="user_base_FROM"></include>
+		<include refid="user_relation_JOIN"></include>
+		<include refid="id_WHERE"></include>
+	</select>
+
+	<select id="selectByGitHubId" resultType="cn.xiedacon.model.User">
+		<include refid="userVo_SELECT"></include>
+		<include refid="user_base_FROM"></include>
+		<include refid="user_relation_JOIN"></include>
+		<include refid="githubId_WHERE"></include>
+	</select>
+
+</mapper>

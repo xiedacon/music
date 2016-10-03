@@ -1,4 +1,4 @@
-package cn.xiedacon.util;
+package cn.xiedacon.base.controller;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import cn.xiedacon.read.service.SongReadService;
+import cn.xiedacon.util.ResourceUtils;
 
 @Controller
 public class BaseController {

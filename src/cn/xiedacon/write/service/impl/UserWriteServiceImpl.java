@@ -19,7 +19,7 @@ public class UserWriteServiceImpl implements UserWriteService {
 	@Override
 	public void updateUsername(User dataUser) {
 		userDao.updateUsername(dataUser);
-		songMenuDao.updateCreatorNameByCreatorId(dataUser.getName(), dataUser.getIcon());
+		songMenuDao.updateCreatorNameByCreatorId(dataUser.getName(), dataUser.getId());
 	}
 
 	@Override

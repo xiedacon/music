@@ -1,7 +1,6 @@
 package cn.xiedacon.read.service;
 
 import cn.xiedacon.model.User;
-import cn.xiedacon.util.PageBean;
 
 public interface UserReadService {
 
@@ -11,5 +10,4 @@ public interface UserReadService {
 
 	User selectByGitHubId(String githubId);
 
-	PageBean<User> selectPageBean(Integer page);
 }

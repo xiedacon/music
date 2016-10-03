@@ -8,6 +8,6 @@ public interface SongMenu_SongGLDao {
 
 	String selectIdBySongIdAndSongMenuId(@Param("songId") String songId, @Param("songMenuId") String songMenuId);
 
-	void insertSongMenuGL(SongMenu_SongGL songMenu_SongGL);
+	void insert(SongMenu_SongGL songMenu_SongGL);
 
 }

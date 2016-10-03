@@ -62,6 +62,10 @@
 		ORDER BY a.createTime DESC
 	</sql>
 
+	<sql id="LIMIT">
+		LIMIT #{begin},#{limit}
+	</sql>
+
 	<select id="selectById" resultType="cn.xiedacon.model.Album">
 		<include refid="albumVo_SELECT"></include>
 		<include refid="album_base_FROM"></include>
@@ -84,7 +88,7 @@
 			<include refid="tagId_WHERE"></include>
 		</if>
 		<include refid="createTime_ORDERBY"></include>
-		<include refid="cn.xiedacon.base.LIMIT"></include>
+		<include refid="LIMIT"></include>
 	</select>
 
 	<select id="selectCountBySingerId" resultType="int">
@@ -99,6 +103,6 @@
 		<include refid="album_base_FROM"></include>
 		<include refid="singerId_WHERE"></include>
 		<include refid="createTime_ORDERBY"></include>
-		<include refid="cn.xiedacon.base.LIMIT"></include>
+		<include refid="LIMIT"></include>
 	</select>
 </mapper>

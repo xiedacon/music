@@ -1,5 +1,7 @@
 package cn.xiedacon.write.dao;
 
+import org.apache.ibatis.annotations.Param;
+
 import cn.xiedacon.model.User;
 
 public interface UserWriteDao {
@@ -14,6 +16,6 @@ public interface UserWriteDao {
 
 	void deleteUser(User user);
 
-	void updateCollectSongMenuNumById(Integer collectSongMenuNum, String id);
+	void updateCollectSongMenuNumById(@Param("collectSongMenuNum") Integer collectSongMenuNum, @Param("id") String id);
 
 }

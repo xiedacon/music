@@ -2,6 +2,8 @@ package cn.xiedacon.read.dao;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
 import cn.xiedacon.model.Song;
 
 public interface SongReadDao {
@@ -16,7 +18,8 @@ public interface SongReadDao {
 
 	String selectLyricUriById(String id);
 
-	List<Song> selectListBySingerIdOrderByCollectionNumLimit(String singerId, Integer begin, Integer limit);
+	List<Song> selectListBySingerIdOrderByCollectionNumLimit(@Param("singerId") String singerId,
+			@Param("begin") Integer begin, @Param("limit") Integer limit);
 
 	String selectFileUriById(String songId);
 

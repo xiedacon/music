@@ -7,7 +7,7 @@ import cn.xiedacon.model.SongMenuSecondTag;
 
 public interface SongMenuReadTagDao {
 
-	List<SongMenuFirstTag> selectList();
+	List<SongMenuFirstTag> selectFirstTagList();
 
 	SongMenuSecondTag selectSecondTagById(String id);
 

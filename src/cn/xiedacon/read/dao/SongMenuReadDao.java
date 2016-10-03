@@ -2,6 +2,8 @@ package cn.xiedacon.read.dao;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
 import cn.xiedacon.model.SongMenu;
 
 public interface SongMenuReadDao {
@@ -10,15 +12,17 @@ public interface SongMenuReadDao {
 
 	int selectCount();
 
-	List<SongMenu> selectLimit(int begin, int limit);
+	List<SongMenu> selectLimit(@Param("begin") int begin, @Param("limit") int limit);
 
-	List<SongMenu> selectOrderByCollectionNumLimit(int begin, int limit);
+	List<SongMenu> selectOrderByCollectionNumLimit(@Param("begin") int begin, @Param("limit") int limit);
 
 	int selectCountBySecondTagId(String secondTagId);
 
-	List<SongMenu> selectBySecondTagIdLimit(String secondTagId, int begin, int limit);
+	List<SongMenu> selectBySecondTagIdLimit(@Param("secondTagId") String secondTagId, @Param("begin") int begin,
+			@Param("limit") int limit);
 
-	List<SongMenu> selectBySecondTagIdOrderByCollectionNumLimit(String secondTagId, int i, int limit);
+	List<SongMenu> selectBySecondTagIdOrderByCollectionNumLimit(@Param("secondTagId") String secondTagId,
+			@Param("begin") int begin, @Param("limit") int limit);
 
 	List<SongMenu> selectListByCreatorId(String creatorId);
 

@@ -2,6 +2,7 @@ package cn.xiedacon.read.service.impl;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import cn.xiedacon.model.Album;
@@ -13,8 +14,9 @@ import cn.xiedacon.util.PageBean;
 @Service
 public class AlbumReadServiceImpl implements AlbumReadService {
 
+	@Autowired
 	private AlbumReadDao albumDao;
-	
+
 	@Override
 	public Album selectById(String id) {
 		return albumDao.selectById(id);

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.xiedacon.read.dao.SingerReadDao">
+
+	<sql id="required_SELECT">
+		SELECT
+		s.id id,
+		s.name name,
+		s.icon icon,
+	</sql>
+	<sql id="simpleSingerVo_SELECT">
+		<include refid="required_SELECT"></include>
+		s.userId userId
+	</sql>
+
+	<sql id="singerVo_SELECT">
+		<include refid="required_SELECT"></include>
+		s.remark remark,
+		s.userId userId
+	</sql>
+
+	<sql id="singer_FROM">
+		FROM singer s
+	</sql>
+
+	<sql id="classifyId_WHERE">
+		<where>s.classifyId = #{classifyId}</where>
+	</sql>
+
+	<sql id="id_WHERE">
+		<where>s.id = #{id}</where>
+	</sql>
+
+	<sql id="collectionNum_ORDERBY">
+		ORDER BY s.collectionNum DESC
+	</sql>
+
+	<sql id="LIMIT">
+		LIMIT #{begin},#{limit}
+	</sql>
+
+	<select id="selectListByClassifyIdOrderByCollectionNumLimit"
+		resultType="cn.xiedacon.model.Singer">
+		<include refid="simpleSingerVo_SELECT"></include>
+		<include refid="singer_FROM"></include>
+		<include refid="classifyId_WHERE"></include>
+		<include refid="collectionNum_ORDERBY"></include>
+		<include refid="LIMIT"></include>
+	</select>
+
+	<select id="selectListOrderByCollectionNumLimit" resultType="cn.xiedacon.model.Singer">
+		<include refid="simpleSingerVo_SELECT"></include>
+		<include refid="singer_FROM"></include>
+		<include refid="collectionNum_ORDERBY"></include>
+		<include refid="LIMIT"></include>
+	</select>
+
+	<select id="selectListLimit" resultType="cn.xiedacon.model.Singer">
+		<include refid="simpleSingerVo_SELECT"></include>
+		<include refid="singer_FROM"></include>
+		<include refid="LIMIT"></include>
+	</select>
+
+	<select id="selectById" resultType="cn.xiedacon.model.Singer">
+		<include refid="singerVo_SELECT"></include>
+		<include refid="singer_FROM"></include>
+		<include refid="id_WHERE"></include>
+	</select>
+
+	<select id="selectIntroductionById" resultType="java.lang.String">
+		SELECT s.introduction
+		<include refid="singer_FROM"></include>
+		<include refid="id_WHERE"></include>
+	</select>
+</mapper>

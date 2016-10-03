@@ -4,7 +4,6 @@ import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import cn.xiedacon.model.Song;
 import cn.xiedacon.model.SongMenu;
@@ -15,7 +14,6 @@ import cn.xiedacon.write.dao.SongMenuWriteDao;
 import cn.xiedacon.write.service.SongMenu_SongGLService;
 
 @Service
-@Transactional
 public class SongMenu_SongGLServiceImpl implements SongMenu_SongGLService {
 
 	@Autowired
@@ -24,8 +22,8 @@ public class SongMenu_SongGLServiceImpl implements SongMenu_SongGLService {
 	private SongMenuWriteDao songMenuDao;
 
 	@Override
-	public void insertSongMenuGL(SongMenu songMenu, Song song) {
-		songGLDao.insertSongMenuGL(
+	public void insert(SongMenu songMenu, Song song) {
+		songGLDao.insert(
 				new SongMenu_SongGL(UUIDUtils.randomUUID(), songMenu.getId(), song.getId(), new Date()));
 		songMenuDao.updateSongNumById(songMenu.getSongNum(), songMenu.getId());
 	}

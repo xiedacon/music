@@ -32,23 +32,31 @@
 	</bean>
 
 	<!-- 配置sqlSessionFactory -->
-	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+	<bean id="readSqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
 		<property name="dataSource" ref="dataSource"></property>
-		<property name="mapperLocations" value="classpath:cn/xiedacon/mapper/*.xml"></property>
+		<property name="mapperLocations" value="classpath:cn/xiedacon/read/mapper/*.xml"></property>
+	</bean>
+	<bean id="writeSqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource"></property>
+		<property name="mapperLocations" value="classpath:cn/xiedacon/write/mapper/*.xml"></property>
+	</bean>
+	<bean id="adminSqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource"></property>
+		<property name="mapperLocations" value="classpath:cn/xiedacon/admin/mapper/*.xml"></property>
 	</bean>
 
 	<!-- 配置dao接口包名 -->
 	<bean id="writeMapperScannerConfig" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
 		<property name="basePackage" value="cn.xiedacon.write.dao"></property>
-		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"></property>
+		<property name="sqlSessionFactoryBeanName" value="writeSqlSessionFactory"></property>
 	</bean>
 	<bean id="readMapperScannerConfig" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
 		<property name="basePackage" value="cn.xiedacon.read.dao"></property>
-		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"></property>
+		<property name="sqlSessionFactoryBeanName" value="readSqlSessionFactory"></property>
 	</bean>
 	<bean id="adminMapperScannerConfig" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
 		<property name="basePackage" value="cn.xiedacon.admin.dao"></property>
-		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"></property>
+		<property name="sqlSessionFactoryBeanName" value="adminSqlSessionFactory"></property>
 	</bean>
 
 	<!-- 配置数据源事务 -->

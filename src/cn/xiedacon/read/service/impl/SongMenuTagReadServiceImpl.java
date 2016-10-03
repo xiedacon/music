@@ -18,7 +18,7 @@ public class SongMenuTagReadServiceImpl implements SongMenuTagReadService {
 
 	@Override
 	public List<SongMenuFirstTag> selectList() {
-		return tagDao.selectList();
+		return tagDao.selectFirstTagList();
 	}
 
 	@Override
