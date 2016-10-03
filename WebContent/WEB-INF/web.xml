@@ -40,8 +40,12 @@
 	</filter-mapping>
 
 	<!-- spring监听器 -->
+	<!-- 
+		继承自ContextLoaderListener
+		为ResourceUtils注入ServletContext
+	 -->
 	<listener>
-		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+		<listener-class>cn.xiedacon.util.MyContextLoaderListener</listener-class>
 	</listener>
 
 	<!-- 防止spring内存溢出监听器 -->

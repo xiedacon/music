@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.xiedacon.read.dao.AlbumReadDao">
+
+	<sql id="required_SELECT">
+		SELECT
+		a.id id,
+		a.name name,
+		a.icon icon,
+		a.singerId singerId,
+		a.singerName singerName,
+	</sql>
+
+	<sql id="simpleAlbumVo_SELECT">
+		<include refid="required_SELECT"></include>
+		a.createTime createTime
+	</sql>
+
+	<sql id="albumVo_SELECT">
+		<include refid="required_SELECT"></include>
+		a.createTime createTime,
+		a.remark remark,
+		a.createCompany
+		createCompany,
+		ar.playNum playNum,
+		ar.shareNum shareNum,
+		ar.commentNum commentNum,
+		a.introduction
+		introduction,
+		a.songNum songNum
+	</sql>
+
+	<sql id="count_SELECT">
+		SELECT
+		COUNT(a.id)
+	</sql>
+
+	<sql id="album_base_FROM">
+		FROM album_base a
+	</sql>
+
+	<sql id="album_record_JOIN">
+		INNER JOIN album_record ar ON a.id = ar.id
+	</sql>
+
+	<sql id="id_WHERE">
+		<where>a.id = #{id}</where>
+	</sql>
+
+	<sql id="tagId_WHERE">
+		<where>a.tagId = #{tagId}</where>
+	</sql>
+
+	<sql id="singerId_WHERE">
+		<where>a.singerId = #{singerId}</where>
+	</sql>
+
+	<sql id="createTime_ORDERBY">
+		ORDER BY a.createTime DESC
+	</sql>
+
+	<select id="selectById" resultType="cn.xiedacon.model.Album">
+		<include refid="albumVo_SELECT"></include>
+		<include refid="album_base_FROM"></include>
+		<include refid="album_record_JOIN"></include>
+		<include refid="id_WHERE"></include>
+	</select>
+
+	<select id="selectCountByTagId" resultType="int">
+		<include refid="count_SELECT"></include>
+		<include refid="album_base_FROM"></include>
+		<if test="tagId != null">
+			<include refid="tagId_WHERE"></include>
+		</if>
+	</select>
+
+	<select id="selectListByTagIdOrderByCreateTimeLimit" resultType="cn.xiedacon.model.Album">
+		<include refid="simpleAlbumVo_SELECT"></include>
+		<include refid="album_base_FROM"></include>
+		<if test="tagId != null">
+			<include refid="tagId_WHERE"></include>
+		</if>
+		<include refid="createTime_ORDERBY"></include>
+		<include refid="cn.xiedacon.base.LIMIT"></include>
+	</select>
+
+	<select id="selectCountBySingerId" resultType="int">
+		<include refid="count_SELECT"></include>
+		<include refid="album_base_FROM"></include>
+		<include refid="singerId_WHERE"></include>
+	</select>
+
+	<select id="selectListBySingerIdOrderByCreateTimeLimit"
+		resultType="cn.xiedacon.model.Album">
+		<include refid="simpleAlbumVo_SELECT"></include>
+		<include refid="album_base_FROM"></include>
+		<include refid="singerId_WHERE"></include>
+		<include refid="createTime_ORDERBY"></include>
+		<include refid="cn.xiedacon.base.LIMIT"></include>
+	</select>
+</mapper>

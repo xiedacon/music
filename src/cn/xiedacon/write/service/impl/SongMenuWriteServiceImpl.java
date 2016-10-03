@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import cn.xiedacon.model.SongMenu;
 import cn.xiedacon.model.SongMenuSecondTag;
 import cn.xiedacon.util.UUIDUtils;
+import cn.xiedacon.write.dao.SongMenuTagWriteDao;
 import cn.xiedacon.write.dao.SongMenuWriteDao;
 import cn.xiedacon.write.service.SongMenuWriteService;
 
@@ -14,6 +15,8 @@ public class SongMenuWriteServiceImpl implements SongMenuWriteService {
 
 	@Autowired
 	private SongMenuWriteDao songMenuDao;
+	@Autowired
+	private SongMenuTagWriteDao tagDao;
 
 	@Override
 	public void insert(SongMenu songMenu) {

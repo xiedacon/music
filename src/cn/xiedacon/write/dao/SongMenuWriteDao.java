@@ -18,4 +18,10 @@ public interface SongMenuWriteDao {
 
 	void updateCommentNumById(Integer commentNum, String id);
 
+	void updateCreatorNameByCreatorId(String name, String icon);
+
+	void updateSongNumById(Integer songNum, String id);
+
+	void updateCollectionNumById(Integer collectionNum, String id);
+
 }

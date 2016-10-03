@@ -10,7 +10,6 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -18,15 +17,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import cn.xiedacon.factory.Factory;
+import cn.xiedacon.model.Song;
 import cn.xiedacon.model.SongMenu;
 import cn.xiedacon.model.SongMenuSecondTag;
 import cn.xiedacon.model.User;
 import cn.xiedacon.read.service.SongMenuReadService;
-import cn.xiedacon.service.SongGLService;
-import cn.xiedacon.service.SongMenuService;
-import cn.xiedacon.service.UserService;
+import cn.xiedacon.read.service.SongReadService;
+import cn.xiedacon.read.service.UserReadService;
 import cn.xiedacon.util.MessageUtils;
 import cn.xiedacon.util.UUIDUtils;
+import cn.xiedacon.write.service.SongMenu_SongGLService;
 import cn.xiedacon.write.service.SongMenuWriteService;
 import cn.xiedacon.util.Base64UploadUtils;
 import cn.xiedacon.util.ImageUtils;
@@ -41,30 +41,29 @@ public class SongMenuWriterController {
 	@Autowired
 	private SongMenuReadService songMenuReadService;
 	@Autowired
-	private SongMenuReadService tagService;
+	private SongReadService songReadService;
 	@Autowired
 	private Factory factory;
 	@Autowired
-	private UserService userService;
+	private UserReadService userService;
 	@Autowired
-	private SongGLService songGLService;
+	private SongMenu_SongGLService songMenu_SongGLService;
 
 	@RequestMapping(value = "/{songMenuId:\\w{32}}", method = RequestMethod.DELETE)
 	public Map<String, Object> deleteSongMenu(@PathVariable("songMenuId") String songMenuId) {
-		SongMenu songMenu = songMenuService.selectById(songMenuId);
+		SongMenu songMenu = songMenuReadService.selectById(songMenuId);
 		if (songMenu == null) {
 			return MessageUtils.createError("songMenu", "歌单不存在");
 		} else {
-			songMenuService.delete(songMenu);
+			songMenuWriteService.delete(songMenu);
 			return MessageUtils.createSuccess();
 		}
 	}
 
-	@Transactional
 	@RequestMapping(value = "/{songMenuId:\\w{32}}", method = RequestMethod.PUT)
 	public Map<String, Object> updateSongMenu(HttpServletRequest request,
 			@PathVariable("songMenuId") String songMenuId) {
-		SongMenu songMenu = songMenuService.selectById(songMenuId);
+		SongMenu songMenu = songMenuReadService.selectById(songMenuId);
 		if (songMenu == null) {
 			return MessageUtils.createError("songMenuId", "歌单不存在");
 		}
@@ -79,7 +78,7 @@ public class SongMenuWriterController {
 		songMenu.setName(Base64UploadUtils.getString("name"));
 		songMenu.setIntroduction(Base64UploadUtils.getString("introduction"));
 		songMenu.setSongMenuSecondTagList(songMenuSecondTagList);
-		songMenuService.update(songMenu);
+		songMenuWriteService.update(songMenu);
 		return MessageUtils.createSuccess("songMenu", songMenu);
 	}
 
@@ -106,13 +105,13 @@ public class SongMenuWriterController {
 		songMenu.setCreateTime(createTime);
 		songMenu.setName(name);
 
-		songMenuService.insert(songMenu);
+		songMenuWriteService.insert(songMenu);
 		return MessageUtils.createSuccess("songMenu", songMenu);
 	}
 
 	@RequestMapping(value = "/{songMenuId:\\w{32}}/icon", method = RequestMethod.PUT)
 	public Map<String, Object> updateIcon(HttpServletRequest request, @PathVariable String songMenuId) {
-		SongMenu songMenu = songMenuService.selectById(songMenuId);
+		SongMenu songMenu = songMenuReadService.selectById(songMenuId);
 		if (songMenu == null) {
 			return MessageUtils.createError("songMenuId", "歌单不存在");
 		}
@@ -138,21 +137,25 @@ public class SongMenuWriterController {
 		ImageUtils.resize(imageFile, xRatio, yRatio, widthRatio, heightRatio);
 
 		songMenu.setIcon(icon);
-		songMenuService.updateIconById(icon, songMenuId);
+		songMenuWriteService.updateIconById(icon, songMenuId);
 		return MessageUtils.createSuccess("songMenu", songMenu);
 	}
 
 	@RequestMapping(value = "/{songMenuId:\\w{32}}/song", method = RequestMethod.POST)
 	public Map<String, Object> addSong(@RequestParam("songId") String songId,
 			@PathVariable("songMenuId") String songMenuId) {
-		SongMenu songMenu = songMenuService.selectById(songMenuId);
+		SongMenu songMenu = songMenuReadService.selectById(songMenuId);
 		if (songMenu == null) {
 			return MessageUtils.createError("songMenuId", "歌单不存在");
 		}
-		String id = songGLService.selectIdBySongIdAndSongMenuId(songId, songMenuId);
+		Song song = songReadService.selectById(songId);
+		if (song == null) {
+			return MessageUtils.createError("songMenuId", "歌曲不存在");
+		}
+		String id = songMenu_SongGLService.selectIdBySongIdAndSongMenuId(songId, songMenuId);
 		if (id == null) {
 			songMenu.setSongNum(songMenu.getSongNum() + 1);
-			songGLService.insertSongMenuGL(UUIDUtils.randomUUID(), songId, songMenu, new Date());
+			songMenu_SongGLService.insertSongMenuGL(songMenu, song);
 			return MessageUtils.createSuccess();
 		} else {
 			return MessageUtils.createError("songId", "歌曲已存在");
@@ -161,11 +164,11 @@ public class SongMenuWriterController {
 
 	@RequestMapping(value = "/{songMenuId:\\w+}/playNum", method = RequestMethod.PUT)
 	public Map<String, Object> updatePlayNumById(@PathVariable("songMenuId") String songMenuId) {
-		SongMenu songMenu = songMenuService.selectById(songMenuId);
+		SongMenu songMenu = songMenuReadService.selectById(songMenuId);
 		if (songMenu == null) {
 			return MessageUtils.createError("songMenuId", "歌单不存在");
 		}
-		songMenuService.updatePlayNumById(songMenu.getPlayNum() + 1, songMenu.getId());
+		songMenuWriteService.updatePlayNumById(songMenu.getPlayNum() + 1, songMenu.getId());
 		return MessageUtils.createSuccess();
 	}
 }

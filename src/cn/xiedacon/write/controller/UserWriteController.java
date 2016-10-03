@@ -20,13 +20,15 @@ import cn.xiedacon.factory.Factory;
 import cn.xiedacon.factory.SongMenuEnum;
 import cn.xiedacon.model.SongMenu;
 import cn.xiedacon.model.User;
-import cn.xiedacon.service.SongMenuService;
-import cn.xiedacon.service.UserService;
+import cn.xiedacon.read.service.SongMenuReadService;
+import cn.xiedacon.read.service.UserReadService;
 import cn.xiedacon.util.MD5Util;
 import cn.xiedacon.util.MessageUtils;
 import cn.xiedacon.util.OAuthUtil;
 import cn.xiedacon.util.UUIDUtils;
-import cn.xiedacon.write.service.SongMenuGLService;
+import cn.xiedacon.write.service.User_SongMenuGLService;
+import cn.xiedacon.write.service.SongMenuWriteService;
+import cn.xiedacon.write.service.UserWriteService;
 
 @ResponseBody
 @Controller
@@ -34,11 +36,15 @@ import cn.xiedacon.write.service.SongMenuGLService;
 public class UserWriteController {
 
 	@Autowired
-	private UserService userService;
+	private UserWriteService userWriteService;
 	@Autowired
-	private SongMenuService songMenuService;
+	private UserReadService userReadService;
 	@Autowired
-	private SongMenuGLService songMenuGLService;
+	private SongMenuWriteService songMenuWriteService;
+	@Autowired
+	private SongMenuReadService songMenuReadService;
+	@Autowired
+	private User_SongMenuGLService user_SongMenuGLService;
 	@Autowired
 	private Factory factory;
 
@@ -51,7 +57,7 @@ public class UserWriteController {
 			return MessageUtils.createError("username", "昵称格式错误！");
 		}
 
-		User dataUser = userService.selectById(id);
+		User dataUser = userReadService.selectById(id);
 
 		if (dataUser == null) { // 正常情况下不可能发生
 			System.out.println("用户不存在：id=" + id);
@@ -59,7 +65,7 @@ public class UserWriteController {
 		}
 
 		dataUser.setName(username);
-		userService.updateUsername(dataUser);
+		userWriteService.updateUsername(dataUser);
 
 		dataUser.setPassword(null);
 		return MessageUtils.createSuccess("user", dataUser);
@@ -68,18 +74,18 @@ public class UserWriteController {
 	@RequestMapping(value = "/{id:\\w{32}}/collectSongMenu", method = RequestMethod.POST)
 	public Map<String, Object> collectSongMenu(@PathVariable("id") String id,
 			@RequestParam("songMenuId") String songMenuId) {
-		User dataUser = userService.selectById(id);
+		User dataUser = userReadService.selectById(id);
 		if (dataUser == null) {
 			return MessageUtils.createError("userId", "用户不存在");
 		}
-		SongMenu songMenu = songMenuService.selectById(songMenuId);
+		SongMenu songMenu = songMenuReadService.selectById(songMenuId);
 		if (songMenu == null) {
 			return MessageUtils.createError("songMenuId", "歌单不存在");
 		}
 
-		String GLId = songMenuGLService.selectIdBySongMenuIdAndCollectorId(songMenu.getId(), dataUser.getId());
+		String GLId = user_SongMenuGLService.selectIdBySongMenuIdAndCollectorId(songMenu.getId(), dataUser.getId());
 		if (GLId == null) {
-			songMenuGLService.insert(UUIDUtils.randomUUID(), dataUser, songMenu);
+			user_SongMenuGLService.insert(dataUser, songMenu);
 			return MessageUtils.createSuccess();
 		} else {
 			return MessageUtils.createInfo("songMenuId", "已收藏");
@@ -92,14 +98,14 @@ public class UserWriteController {
 		Map<String, Object> params = OAuthUtil.oAuthGithub(request);
 		String githubId = ((String) params.get("id")).split(",")[0];
 
-		User dataUser = userService.selectByGitHubId(githubId);
+		User dataUser = userReadService.selectByGitHubId(githubId);
 
 		if (dataUser == null) {
 			dataUser = factory.get(User.class);
 			String id = UUIDUtils.uuid(githubId);
 			dataUser.setId(id);
 			dataUser.setGithubId(githubId);
-			userService.insertUser(dataUser);
+			userWriteService.insertUser(dataUser);
 		} else {
 			dataUser.setPassword(null);
 			request.setAttribute("user", dataUser);
@@ -121,7 +127,7 @@ public class UserWriteController {
 			return MessageUtils.createError("password", "密码格式错误！");
 		}
 
-		User dataUser = userService.selectByPhone(phone);
+		User dataUser = userReadService.selectByPhone(phone);
 
 		if (dataUser == null) {
 			return MessageUtils.createError("phone", "手机号未注册！");
@@ -150,7 +156,7 @@ public class UserWriteController {
 			return MessageUtils.createError("password", "密码格式错误！");
 		}
 
-		User dataUser = userService.selectByPhone(phone);
+		User dataUser = userReadService.selectByPhone(phone);
 
 		if (dataUser == null) {
 			dataUser = factory.get(User.class);
@@ -160,7 +166,7 @@ public class UserWriteController {
 			dataUser.setPassword(MD5Util.encode(password));
 			dataUser.setCreateSongMenuNum(1);
 
-			userService.insertUser(dataUser);
+			userWriteService.insertUser(dataUser);
 
 			SongMenu songMenu = factory.get(SongMenu.class);
 			String songMenuId = UUIDUtils.randomUUID();
@@ -172,10 +178,10 @@ public class UserWriteController {
 			songMenu.setCreateTime(new Date());
 			songMenu.setUserId(dataUser.getId());
 
-			songMenuService.insert(songMenu);
+			songMenuWriteService.insert(songMenu);
 		} else if (dataUser.getName() == null) {
 			dataUser.setPassword(MD5Util.encode(password));
-			userService.updatePassword(dataUser);
+			userWriteService.updatePassword(dataUser);
 		} else {
 			dataUser.setPassword(null);
 			return MessageUtils.createInfo("user", dataUser);

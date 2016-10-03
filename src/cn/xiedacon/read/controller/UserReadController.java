@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import cn.xiedacon.model.User;
-import cn.xiedacon.service.UserService;
+import cn.xiedacon.read.service.UserReadService;
 
 @ResponseBody
 @Controller
@@ -16,7 +16,7 @@ import cn.xiedacon.service.UserService;
 public class UserReadController {
 
 	@Autowired
-	private UserService userService;
+	private UserReadService userService;
 
 	@RequestMapping(value = "/{id:\\w+}")
 	public User getById(@PathVariable("id") String id) {

@@ -62,17 +62,19 @@
 	<!-- 配置事务的传播特性 -->
 	<tx:advice id="commonAdvice" transaction-manager="transactionManager">
 		<tx:attributes>
-			<tx:method name="select*" propagation="SUPPORTS" read-only="true" />
 			<tx:method name="insert*" propagation="REQUIRED" />
 			<tx:method name="update*" propagation="REQUIRED" />
 			<tx:method name="delete*" propagation="REQUIRED" />
+			<tx:method name="select*" propagation="SUPPORTS" read-only="true" />
+			<tx:method name="*" propagation="SUPPORTS" read-only="true" />
 		</tx:attributes>
 	</tx:advice>
 
 	<!-- 配置参与事务的类 -->
 	<aop:config>
-		<aop:pointcut expression="expression(public * cn.xiedacon.*.service.*.*(..))" />
-		<aop:advisor advice-ref="commonAdvice" />
+		<aop:pointcut id="commonPointcut"
+			expression="execution(* cn.xiedacon.*.service.*.*(..))" />
+		<aop:advisor advice-ref="commonAdvice" pointcut-ref="commonPointcut" />
 	</aop:config>
 
 </beans>

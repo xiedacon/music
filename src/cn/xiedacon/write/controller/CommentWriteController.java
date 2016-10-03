@@ -24,12 +24,12 @@ import cn.xiedacon.model.Song;
 import cn.xiedacon.model.SongList;
 import cn.xiedacon.model.SongMenu;
 import cn.xiedacon.model.User;
+import cn.xiedacon.read.service.AlbumReadService;
 import cn.xiedacon.read.service.CommentReadService;
-import cn.xiedacon.service.AlbumService;
-import cn.xiedacon.service.SongListService;
-import cn.xiedacon.service.SongMenuService;
-import cn.xiedacon.service.SongService;
-import cn.xiedacon.service.UserService;
+import cn.xiedacon.read.service.SongListReadService;
+import cn.xiedacon.read.service.SongMenuReadService;
+import cn.xiedacon.read.service.SongReadService;
+import cn.xiedacon.read.service.UserReadService;
 import cn.xiedacon.util.MessageUtils;
 import cn.xiedacon.util.UUIDUtils;
 import cn.xiedacon.write.service.CommentWriteService;
@@ -46,15 +46,15 @@ public class CommentWriteController {
 	@Autowired
 	private Factory factory;
 	@Autowired
-	private UserService userService;
+	private UserReadService userService;
 	@Autowired
-	private SongMenuService songMenuService;
+	private SongMenuReadService songMenuReadService;
 	@Autowired
-	private AlbumService albumService;
+	private AlbumReadService albumReadService;
 	@Autowired
-	private SongListService songListService;
+	private SongListReadService songListReadService;
 	@Autowired
-	private SongService songService;
+	private SongReadService songReadService;
 
 	@Transactional
 	@RequestMapping(value = "/{type:\\w+}", method = RequestMethod.POST)
@@ -68,50 +68,48 @@ public class CommentWriteController {
 		Comment comment;
 		switch (type) {
 		case "songMenu":
-			SongMenu songMenu = songMenuService.selectById(typeId);
+			SongMenu songMenu = songMenuReadService.selectById(typeId);
 			if (songMenu == null) {
 				return MessageUtils.createError("歌单不存在");
 			}
 			comment = getComment(creator, content);
-			comment.setSongMenuId(songMenu.getId());
+			comment.setSongMenu(songMenu);
 
-			songMenuService.updateCommentNumById(songMenu.getCommentNum() + 1, songMenu.getId());
+			commentWriteService.insertSongMenuComment(comment);
 			break;
 		case "album":
-			Album album = albumService.selectById(typeId);
+			Album album = albumReadService.selectById(typeId);
 			if (album == null) {
 				return MessageUtils.createError("专辑不存在");
 			}
 			comment = getComment(creator, content);
-			comment.setAlbumId(album.getId());
+			comment.setAlbum(album);
 
-			albumService.updateCommentNumById(album.getCommentNum() + 1, album.getId());
+			commentWriteService.insertAlbumComment(comment);
 			break;
 		case "songList":
-			SongList songList = songListService.selectById(typeId);
+			SongList songList = songListReadService.selectById(typeId);
 			if (songList == null) {
 				return MessageUtils.createError("榜单不存在");
 			}
 			comment = getComment(creator, content);
-			comment.setSongListId(songList.getId());
+			comment.setSongList(songList);
 
-			songListService.updateCommentNumById(songList.getCommentNum() + 1, songList.getId());
+			commentWriteService.insertAlbumComment(comment);
 			break;
 		case "song":
-			Song song = songService.selectById(typeId);
+			Song song = songReadService.selectById(typeId);
 			if (song == null) {
 				return MessageUtils.createError("歌曲不存在");
 			}
 			comment = getComment(creator, content);
-			comment.setSongId(song.getId());
+			comment.setSong(song);
 
-			songService.updateCommentNumById(song.getCommentNum() + 1, song.getId());
+			commentWriteService.insertSongComment(comment);
 			break;
 		default:
 			return MessageUtils.createError("类型不存在");
 		}
-
-		commentWriteService.insertSongMenuComment(comment);
 		return MessageUtils.createSuccess();
 	}
 

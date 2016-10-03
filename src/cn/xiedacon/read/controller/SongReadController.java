@@ -1,6 +1,7 @@
 package cn.xiedacon.read.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -10,8 +11,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import cn.xiedacon.model.Song;
-import cn.xiedacon.service.SongService;
+import cn.xiedacon.read.service.SongReadService;
 import cn.xiedacon.util.Constant;
+import cn.xiedacon.util.MessageUtils;
+import cn.xiedacon.util.ResourceUtils;
 
 @Controller
 @ResponseBody
@@ -19,7 +22,7 @@ import cn.xiedacon.util.Constant;
 public class SongReadController {
 
 	@Autowired
-	private SongService songService;
+	private SongReadService songService;
 
 	@RequestMapping("/{id:\\w+}")
 	public Song getById(@PathVariable("id") String id) {
@@ -45,5 +48,10 @@ public class SongReadController {
 	public List<Song> getListBySingerId(@PathVariable("singerId") String singerId) {
 		return songService.selectListBySingerIdOrderByCollectionNumLimit(singerId, Constant.BEGIN_DEFAULT,
 				Constant.SINGER_SHOW_SONGNUM);
+	}
+
+	@RequestMapping("/{id:\\w+}/lrc")
+	public Map<String, Object> getLrcById(@PathVariable("id") String id) {
+		return MessageUtils.createSuccess("lrc", ResourceUtils.getResourceAsString(songService.selectLyricUriById(id)));
 	}
 }
