@@ -37,6 +37,16 @@ public class BaseController {
 	public String adminHtml(@PathVariable("name") String name) {
 		return "backStage/" + name;
 	}
+	
+	@RequestMapping(value = "/admin/html/edit/{name:.+}", method = RequestMethod.GET)
+	public String adminEditHtml(@PathVariable("name") String name) {
+		return "backStage/edit/" + name;
+	}
+	
+	@RequestMapping(value = "/admin/html/add/{name:.+}", method = RequestMethod.GET)
+	public String adminAddHtml(@PathVariable("name") String name) {
+		return "backStage/add/" + name;
+	}
 
 	@RequestMapping(value = "/html/{name:.+}", method = RequestMethod.GET)
 	public String html(@PathVariable("name") String name) {

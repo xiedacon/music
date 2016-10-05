@@ -13,7 +13,7 @@
 				<div class="">
 					<div class="input-group col-lg-4 col-md-4" style="padding: 10px 0;">
 						<input class="form-control" placeholder="用户名" type="text" name="name" id="name" value="" /> <span class="input-group-btn">
-							<button class="btn btn-default">
+							<button class="btn btn-default" id="search">
 								<span class="glyphicon glyphicon-search"></span>
 							</button>
 						</span>
@@ -71,20 +71,23 @@
 		var $tbody = $("tbody"), $prototype = $tbody.find(".prototype").clone().removeClass("prototype");
 		var $pages = $("ul[data-pages]");
 		$.ajax({
-			url : "/music/admin/user/page_1",
+			url : "/music/admin/user/page/1",
 			dataType : "json",
 			type : "GET"
 		}).done(function(data) {
+			load(data, "/music/admin/user/")
+		});
+		function load(data, prefix) {
 			if (data.code == 200) {
 				var pageBean = data.data, users = pageBean.beans, $user;
+				$tbody.empty();
 				users.map(function(user, index) {
 					$user = $prototype.clone();
 
-					$user.attr("id", user.id).addClass(index % 2 == 0 ? "odd" : "even");
+					$user.attr("data-url", prefix + user.id) //
+					.addClass(index % 2 == 0 ? "odd" : "even");
 
-					$user.find(".name").attr({
-						href : "/music/user/" + user.id
-					}).text(user.name);
+					$user.find(".name").text(user.name);
 					$user.find(".dynamicNum").text(user.dynamicNum);
 					$user.find(".attentionNum").text(user.attentionNum);
 					$user.find(".fansNum").text(user.fansNum);
@@ -97,7 +100,7 @@
 					$tbody.append($user);
 				});
 
-				loadPages(pageBean, $pages, "/music/admin/user/page_");
+				loadPages(pageBean, $pages, prefix, load);
 
 				$tbody.on("click", function(e) {
 					var type = $(e.target).attr("data-type");
@@ -105,7 +108,7 @@
 						var $user = $(e.target).parents("tr");
 						switch (type) {
 							case "delete" :
-								deleteUser($user);
+								deleteItem($user);
 								break;
 						}
 					}
@@ -113,22 +116,20 @@
 			} else {
 				alert("加载失败");
 			}
-		});
-
-		function deleteUser($user) {
-			$.ajax({
-				url : "/music/admin/user/" + $user.attr("id"),
-				type : "DELETE",
-				dataType : "json"
-			}).done(function(data) {
-				if (data.code == 200) {
-					$user.remove();
-				} else {
-					alert("操作失败");
-				}
-			}).fail(function(e) {
-				alert("操作失败");
-			});
 		}
+		var $name = $("#name");
+		$("#search").on("click", function() {
+			var name = $name.val();
+			if (!name || name == "") {
+				return;
+			}
+			$.ajax({
+				url : "/music/admin/user/name/" + name + "/page/1",
+				dataType : "json",
+				type : "GET"
+			}).done(function(data) {
+				load(data, "/music/admin/user/name/" + name + "/");
+			})
+		})
 	}())
 </script>

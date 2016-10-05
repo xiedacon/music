@@ -562,7 +562,7 @@
 			})
 		});
 
-		function loadTable(url, loadItem, pageUrl,event) {
+		function loadTable(url, loadItem, pageUrl, event) {
 			var $tbody = $("tbody"), $prototype = $tbody.find(".prototype").clone().removeClass("prototype");
 			var $pages = $("ul[data-pages]");
 			$.ajax({
@@ -615,7 +615,7 @@
 				alert("操作失败");
 			});
 		}
-		
+
 		function editItem($item) {
 			$.ajax({
 				url : $item.attr("data-url"),
@@ -625,40 +625,50 @@
 			});
 		}
 
-		function loadPages(pageBean, $pages, prefix) {
+		function loadPages(pageBean, $pages, prefix, load) {
+			$pages.empty();
 			if (pageBean.totalPage < 2) {
 				return;
 			}
 			var config = {
 				addEle : function(index) {
-					var className = "", href = "#";
+					var className = "", href = prefix + "page/" + index;
 					if (index == pageBean.page) {
 						className = "active";
-						href = prefix + index;
+						href = "#";
 					}
-					$pages.append("<li class='"+className+"'><a href='"+href+"'>" + index + "</a></li>");
+					$pages.append("<li class='"+className+"'><a href='#' data-href='"+href+"'>" + index + "</a></li>");
 				},
 				addPrevious : function() {
-					var className = "", href = "#";
+					var className = "", href = prefix + "page/" + (pageBean.page - 1);
 					if (pageBean.page == 1) {
 						className = "disabled";
-						href = prefix + (pageBean.page - 1);
+						href = "#";
 					}
-					$pages.append("<li><a class='" + className + "' href='" + href + "'>上一页 </a></li>");
+					$pages.append("<li><a href='#' class='" + className + "' data-href='" + href + "'>上一页 </a></li>");
 				},
 				addNext : function() {
-					var className = "", href = "#";
-					if (pageBean.page == 1) {
+					var className = "", href = prefix + "page/" + (pageBean.page + 1);
+					if (pageBean.page == pageBean.totalPage) {
 						className = "disabled";
-						href = prefix + (pageBean.page + 1);
+						href = "#";
 					}
-					$pages.append("<li><a class='" + className + "' href='" + href + "'>下一页 </a></li>");
+					$pages.append("<li><a href='#' class='" + className + "' data-href='" + href + "'>下一页 </a></li>");
 				},
 				totalPage : pageBean.totalPage,
 				page : pageBean.page,
 				limit : pageBean.limit
 			};
 			Page(config);
+			$pages.off("click").on("click", function(e) {
+				$.ajax({
+					url : $(e.target).attr("data-href"),
+					dataType : "json",
+					type : "GET"
+				}).done(function(data) {
+					load(data, prefix)
+				});
+			})
 		}
 
 		//addEle：根据给出的页数，执行添加方法，前一页、后一页不在其中
@@ -703,6 +713,151 @@
 					addEle(i);
 				}
 				addNext();
+			}
+		}
+
+		// $yyyy-$MM-$dd-$SS $HH:$mm:$ss:$SS
+		window.DateFormatter = function DateFormatter(regExpString) {
+			var array = new Array();
+			var str = regExpString;
+			str = parse(str);
+
+			function parse(regExpString) {
+				var possibleValues = new Array();
+				var str = regExpString;
+
+				possibleValues.splice(0, possibleValues.length, 2, 4);
+				str = parse_base("y", "year", str, possibleValues);
+
+				possibleValues.splice(0, possibleValues.length, 2);
+				str = parse_base("M", "month", str, possibleValues);
+
+				possibleValues.splice(0, possibleValues.length, 2);
+				str = parse_base("d", "day", str, possibleValues);
+
+				possibleValues.splice(0, possibleValues.length, 2);
+				str = parse_base("H", "hour", str, possibleValues);
+
+				possibleValues.splice(0, possibleValues.length, 2);
+				str = parse_base("m", "minute", str, possibleValues);
+
+				possibleValues.splice(0, possibleValues.length, 2);
+				str = parse_base("s", "seconds", str, possibleValues);
+
+				return str;
+			}
+
+			function parse_base(part, total, regExpString, possibleValues) {
+				var num = regExpString.split(part).length - 1;
+				var str = regExpString;
+				array[total] = new DateItem();
+
+				for (var i = 0; i < possibleValues.length; i++) {
+					if (num === possibleValues[i] && str.split(increaseStr(part, num)).length === 2) {
+						var _str = increaseStr(part, num);
+						str = str.replace(_str, "$" + _str);
+						array[total].regExp = "$" + _str;
+						array.length += 1;
+						return str;
+					}
+					if (num === 0) {
+						return str;
+					}
+				}
+				alert("格式错误：" + regExpString);
+				throw "格式错误：" + regExpString;
+			}
+
+			function increaseStr(str, num) {
+				var result = "";
+				if (num === 0) {
+					return result;
+				}
+				for (var i = 0; i < num; i++) {
+					result += str;
+				}
+				return result;
+			}
+
+			function DateItem(regExp, num) {
+				this.regExp = regExp;
+				this.num = num;
+			}
+
+			this.format = function(time) {
+				var date = new Date();
+				date.setTime(time);
+				array["year"].num = date.getFullYear();
+				array["month"].num = date.getMonth() + 1;
+				array["day"].num = date.getDate();
+				array["hour"].num = date.getHours();
+				array["minute"].num = date.getMinutes();
+				array["seconds"].num = date.getSeconds();
+				return replace(array, str);
+			}
+
+			function replace(array, str) {
+				var _str = str;
+				for ( var i = 0 in array) {
+					var num = "";
+					var regExp = array[i].regExp;
+					if (regExp) {
+						if (array[i].num || array[i].num === 0) {
+							num = array[i].num.toString();
+							if (num.length < regExp.length - 1) {// 时分秒为0
+								num = increaseStr("0", regExp.length - 1 - num.length) + num;
+							} else {// 年只有两位
+								num = num.substring(num.length - regExp.length + 1);
+							}
+						}
+						_str = _str.replace(regExp, num);
+					}
+				}
+				return _str;
+			}
+		}
+
+		//works：[Function,Function]
+		//WorkGroup(works).done(function(){});
+		function WorkGroup(works) {
+			if (!Array.isArray(works)) {
+				throw TypeError("works必须是数组");
+			}
+
+			var num = works.length | 0 //
+			, callback = function(){} //
+			//定义暴露出去的接口
+			,group = {
+				done : function(_callback) {	//模拟延迟接口
+					callback = _callback;
+					return this;
+				},
+				pop : function(work){		//被work调用接口
+					num--;
+					if(num<=0){
+						callback();
+					}
+				},
+				push : function(work){		//动态添加work接口
+					num++;
+				}
+			};
+			
+			//work与workGroup绑定
+			works.forEach((work)=>{
+				work.workGroup = group;
+			});
+
+			return group;
+		}
+		function Work(doSomething) {
+			return {
+				done : function() {
+					doSomething();
+					if(this.workGroup){
+						this.workGroup.pop(this);
+					}
+				}
 			}
 		}
 	</script>

@@ -337,9 +337,6 @@
 	})
 	$("#image_update").on("click", function() {
 		if (position) {
-			var imageInfo = $("#main").attr("src").split(";base64,");
-			var image = imageInfo[1];
-			var type = imageInfo[0].split("/")[1];
 			var formData = new FormData();
 			formData.append("x1", position.x);
 			formData.append("y1", position.y);
@@ -347,8 +344,7 @@
 			formData.append("y2", position.y2);
 			formData.append("width", 320);
 			formData.append("height", 320);
-			formData.append("image", image);
-			formData.append("type", type);
+			formData.append("image", $("#main").attr("src"));
 
 			$(this).text("保存中..");
 

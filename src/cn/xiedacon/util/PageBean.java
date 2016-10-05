@@ -14,7 +14,7 @@ public class PageBean<T> {
 		this.page = page;
 		this.limit = limit;
 		this.count = count;
-		this.totalPage = count / limit + count % limit == 0 ? 0 : 1;
+		this.totalPage = count / limit + (count % limit == 0 ? 0 : 1);
 		this.beans = beans;
 	}
 

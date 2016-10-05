@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.xiedacon.admin.dao.AdminUserDao">
+
+	<select id="selectLimit" resultType="cn.xiedacon.model.User">
+		SELECT
+		u.id id,
+		u.name name,
+		u.dynamicNum dynamicNum,
+		u.attentionNum attentionNum,
+		u.fansNum
+		fansNum,
+		u.createSongMenuNum createSongMenuNum,
+		u.collectSongMenuNum
+		collectSongMenuNum,
+		u.level level,
+		u.experience experience,
+		u.singerId
+		singerId
+		FROM user_base u
+		WHERE u.visible = true
+		LIMIT #{begin},#{limit}
+	</select>
+
+	<select id="selectCount" resultType="int">
+		SELECT COUNT(u.id)
+		FROM
+		user_base u
+		WHERE u.visible = true
+	</select>
+
+	<select id="selectById" resultType="cn.xiedacon.model.User">
+		SELECT u.id id
+		FROM user_base
+		u
+		WHERE u.id = #{id} AND u.visible = true
+	</select>
+
+	<delete id="deleteUser" parameterType="cn.xiedacon.model.User">
+		UPDATE user_base u
+		SET
+		u.visible = false
+		WHERE u.id = #{id};
+	</delete>
+	
+	<select id="selectCountByNameLike" resultType="int">
+		SELECT COUNT(u.id)
+		FROM
+		user_base u
+		WHERE u.visible = true AND u.name LIKE #{name}
+	</select>
+
+	<select id="selectByNameLikeLimit" resultType="cn.xiedacon.model.User">
+		SELECT
+		u.id id,
+		u.name name,
+		u.dynamicNum dynamicNum,
+		u.attentionNum attentionNum,
+		u.fansNum
+		fansNum,
+		u.createSongMenuNum createSongMenuNum,
+		u.collectSongMenuNum
+		collectSongMenuNum,
+		u.level level,
+		u.experience experience,
+		u.singerId
+		singerId
+		FROM user_base u
+		WHERE u.visible = true AND u.name LIKE #{name}
+		LIMIT #{begin},#{limit}
+	</select>
+</mapper>

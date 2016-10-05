@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import cn.xiedacon.admin.service.UserAdminService;
 import cn.xiedacon.model.User;
+import cn.xiedacon.util.CharsetUtils;
 import cn.xiedacon.util.MessageUtils;
 
 @Controller
@@ -21,7 +22,7 @@ public class UserAdminController {
 	@Autowired
 	private UserAdminService userService;
 
-	@RequestMapping(value = "/page_{page:[1-9]\\d*}", method = RequestMethod.GET)
+	@RequestMapping(value = "/page/{page:[1-9]\\d*}", method = RequestMethod.GET)
 	public Map<String, Object> selectPageBean(@PathVariable("page") Integer page) {
 		return MessageUtils.createSuccess("data", userService.selectPageBean(page));
 	}
@@ -33,5 +34,11 @@ public class UserAdminController {
 			userService.deleteUser(user);
 		}
 		return MessageUtils.createSuccess();
+	}
+
+	@RequestMapping(value = "/name/{name:.+}/page/{page:[1-9]\\d*}", method = RequestMethod.GET)
+	public Map<String, Object> selectPageBeanByNameLike(@PathVariable("name") String name,@PathVariable("page") Integer page) {
+		return MessageUtils.createSuccess("data", userService.selectPageBeanByNameLike(page,
+				"%" + CharsetUtils.decode(name, "ISO-8859-1", "UTF-8") + "%"));
 	}
 }

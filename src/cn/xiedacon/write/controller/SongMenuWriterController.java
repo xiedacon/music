@@ -28,6 +28,7 @@ import cn.xiedacon.util.MessageUtils;
 import cn.xiedacon.util.UUIDUtils;
 import cn.xiedacon.write.service.SongMenu_SongGLService;
 import cn.xiedacon.write.service.SongMenuWriteService;
+import cn.xiedacon.util.Base64FileItem;
 import cn.xiedacon.util.Base64UploadUtils;
 import cn.xiedacon.util.ImageUtils;
 
@@ -68,15 +69,15 @@ public class SongMenuWriterController {
 			return MessageUtils.createError("songMenuId", "歌单不存在");
 		}
 
-		Base64UploadUtils.parseRequest(request);
+		Map<String, Base64FileItem> fileItems = Base64UploadUtils.parseRequest(request);
 
-		String tags = Base64UploadUtils.getString("tags");
+		String tags = fileItems.get("tags").getString();
 		List<SongMenuSecondTag> songMenuSecondTagList = new ArrayList<>();
 		for (String tagId : tags.split("-")) {
 			songMenuSecondTagList.add(new SongMenuSecondTag(tagId));
 		}
-		songMenu.setName(Base64UploadUtils.getString("name"));
-		songMenu.setIntroduction(Base64UploadUtils.getString("introduction"));
+		songMenu.setName(fileItems.get("name").getString());
+		songMenu.setIntroduction(fileItems.get("introduction").getString());
 		songMenu.setSongMenuSecondTagList(songMenuSecondTagList);
 		songMenuWriteService.update(songMenu);
 		return MessageUtils.createSuccess("songMenu", songMenu);
@@ -116,19 +117,19 @@ public class SongMenuWriterController {
 			return MessageUtils.createError("songMenuId", "歌单不存在");
 		}
 
-		Base64UploadUtils.parseRequest(request);
-		Integer x1 = Base64UploadUtils.getInteger("x1");
-		Integer y1 = Base64UploadUtils.getInteger("y1");
-		Integer x2 = Base64UploadUtils.getInteger("x2");
-		Integer y2 = Base64UploadUtils.getInteger("y2");
-		Double width = Base64UploadUtils.getDouble("width");
-		Double height = Base64UploadUtils.getDouble("height");
-		String type = Base64UploadUtils.getString("type");
+		Map<String, Base64FileItem> fileItems = Base64UploadUtils.parseRequest(request);
+		Integer x1 = fileItems.get("x1").getInteger();
+		Integer y1 = fileItems.get("y1").getInteger();
+		Integer x2 = fileItems.get("x2").getInteger();
+		Integer y2 = fileItems.get("y2").getInteger();
+		Double width = fileItems.get("width").getDouble();
+		Double height = fileItems.get("height").getDouble();
 
-		String imageName = UUIDUtils.uuid(new Date().getTime()) + "." + type;
+		Base64FileItem imageFileItem = fileItems.get("image");
+		String imageName = UUIDUtils.uuid(new Date().getTime()) + "." + imageFileItem.getType();
 		String icon = "image/songMenu/" + imageName;
-		File imageFile = Base64UploadUtils.getFile("image",
-				request.getServletContext().getRealPath("image/songMenu") + "/" + imageName);
+		File imageFile = imageFileItem
+				.getFile(request.getServletContext().getRealPath("image/songMenu") + "/" + imageName);
 
 		Double widthRatio = Math.abs(x2 - x1) / width;
 		Double heightRatio = Math.abs(y2 - y1) / height;

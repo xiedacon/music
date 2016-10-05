@@ -11,8 +11,37 @@ public class Singer {
 	private String icon;
 	private String remark;
 	private String introduction;
+	private String classifyId;
 
 	private String userId;
+
+	private Boolean visible;
+
+	private Integer collectionNum;
+
+	public Integer getCollectionNum() {
+		return collectionNum;
+	}
+
+	public void setCollectionNum(Integer collectionNum) {
+		this.collectionNum = collectionNum;
+	}
+
+	public String getClassifyId() {
+		return classifyId;
+	}
+
+	public void setClassifyId(String classifyId) {
+		this.classifyId = classifyId;
+	}
+
+	public Boolean getVisible() {
+		return visible;
+	}
+
+	public void setVisible(Boolean visible) {
+		this.visible = visible;
+	}
 
 	public String getUserId() {
 		return userId;

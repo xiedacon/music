@@ -16,4 +16,8 @@ public interface AdminUserDao {
 
 	void deleteUser(User user);
 
+	int selectCountByNameLike(String name);
+
+	List<User> selectByNameLikeLimit(@Param("name") String name, @Param("begin") int begin, @Param("limit") int limit);
+
 }

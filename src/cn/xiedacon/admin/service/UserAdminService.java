@@ -11,4 +11,6 @@ public interface UserAdminService {
 
 	void deleteUser(User user);
 
+	Object selectPageBeanByNameLike(Integer page, String name);
+
 }

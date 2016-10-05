@@ -35,4 +35,12 @@ public class UserAdminServiceImpl implements UserAdminService {
 		userDao.deleteUser(user);
 	}
 
+	@Override
+	public Object selectPageBeanByNameLike(Integer page, String name) {
+		int limit = Constant.LIMIT_DEFAULT;
+		int count = userDao.selectCountByNameLike(name);
+		List<User> beans = userDao.selectByNameLikeLimit(name, (page - 1) * limit, limit);
+		return new PageBean<>(page, limit, count, beans);
+	}
+
 }
