@@ -14,6 +14,7 @@ public class Constant {
 	public static Integer NUM_DEFAULT = 0;
 	public static Integer LIMIT_DEFAULT = 10;
 	public static String SUCCESS_RETURNNAME = "data";
+	public static Integer EXCEL_BEGINNUM = 4;
 
 	// 用户默认设置
 	public static String USER_ICON_DEFAULT = "image/default.jpg";

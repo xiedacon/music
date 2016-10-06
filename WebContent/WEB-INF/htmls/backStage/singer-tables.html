@@ -42,7 +42,7 @@
 										</form>
 									</div>
 									<div class="modal-footer">
-										<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+										<button id="closeAddByExcel" type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
 										<button id="addByExcel" type="button" class="btn btn-primary">提交更改</button>
 									</div>
 								</div>
@@ -123,57 +123,6 @@
 				});
 
 				loadPages(pageBean, $pages, prefix, load);
-
-				$addByExcel.on("click",function(){
-					var workGroup = WorkGroup([function(){
-						console.log($excel)
-						var file = $excel[0].files[0];
-						if(file && file.name.substring(file.name.lastIndexOf(".")+1).toLowerCase() == "xlsx"){
-							var reader = new FileReader();
-							reader.readAsDataURL(file);
-							reader.onload = function(e){
-								excel = e.target.result;
-								workGroup.pop();
-							}
-						}else{
-							alert("未选择excel文件或格式错误");
-						}
-						return {};
-					}(),function(){
-						var file = $zip[0].files[0];
-						if(file && file.name.substring(file.name.lastIndexOf(".")+1).toLowerCase() == "zip"){
-							var reader = new FileReader();
-							reader.readAsDataURL(file);
-							reader.onload = function(e){
-								zip = e.target.result;
-								zip = zip.replace(":;",":application/zip;");
-								workGroup.pop();
-							}
-						}else{
-							alert("未选择zip文件或格式错误");
-						}
-						return {};
-					}()]).done(function(){
-						var formData = new FormData();
-						formData.append("excel",excel);
-						formData.append("zip",zip);
-						$.ajax({
-							url:"/music/singer/excel",
-							type:"POST",
-							data:formData,
-							processData:false,
-							contentType:false,
-							dataType:"json",
-							success:function(data){
-								if(data.code==200){
-									alert("上传成功");
-								}else{
-									alert("上传失败");
-								}
-							}
-						})
-					}),excel,zip;
-				})
 				
 				$add.on("click",function(){
 					var workGroup = WorkGroup([$.ajax({
@@ -410,5 +359,64 @@
 				load(data, "/music/admin/singer/name/" + name + "/");
 			})
 		})
+		$addByExcel.on("click",addByExcel)
+		function addByExcel(){
+			var workGroup = WorkGroup([function(){
+				var file = $excel[0].files[0];
+				if(file && file.name.substring(file.name.lastIndexOf(".")+1).toLowerCase() == "xlsx"){
+					var reader = new FileReader();
+					reader.readAsDataURL(file);
+					reader.onload = function(e){
+						excel = e.target.result;
+						workGroup.pop();
+					}
+				}else{
+					alert("未选择excel文件或格式错误");
+				}
+				return {};
+			}(),function(){
+				var file = $zip[0].files[0];
+				if(file && file.name.substring(file.name.lastIndexOf(".")+1).toLowerCase() == "zip"){
+					var reader = new FileReader();
+					reader.readAsDataURL(file);
+					reader.onload = function(e){
+						zip = e.target.result;
+						zip = zip.replace(":;",":application/zip;");
+						workGroup.pop();
+					}
+				}else{
+					alert("未选择zip文件或格式错误");
+				}
+				return {};
+			}()]).done(function(){
+				$addByExcel.off();
+				var formData = new FormData();
+				formData.append("excel",excel);
+				formData.append("zip",zip);
+				$.ajax({
+					url:"/music/admin/singer/excel",
+					type:"POST",
+					data:formData,
+					processData:false,
+					contentType:false,
+					dataType:"json",
+					success:function(data){
+						if(data.code==200){
+							alert("上传成功");
+							$.ajax({
+								url : "/music/admin/singer/page/1",
+								dataType : "json",
+								type : "GET"
+							}).done(function(data) {
+								load(data, "/music/admin/singer/");
+							});
+						}else{
+							alert("上传失败");
+						}
+						$addByExcel.on("click",addByExcel)
+					}
+				}) 
+			}),excel,zip;
+		}
 	}())
 </script>

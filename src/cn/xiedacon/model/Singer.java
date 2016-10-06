@@ -94,7 +94,8 @@ public class Singer {
 	@Override
 	public String toString() {
 		return "Singer [id=" + id + ", name=" + name + ", icon=" + icon + ", remark=" + remark + ", introduction="
-				+ introduction + ", userId=" + userId + "]";
+				+ introduction + ", classifyId=" + classifyId + ", userId=" + userId + ", visible=" + visible
+				+ ", collectionNum=" + collectionNum + "]";
 	}
 
 }

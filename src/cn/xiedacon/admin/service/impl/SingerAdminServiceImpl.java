@@ -3,8 +3,10 @@ package cn.xiedacon.admin.service.impl;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import cn.xiedacon.admin.dao.BatchSqlDao;
 import cn.xiedacon.admin.dao.SingerAdminDao;
 import cn.xiedacon.admin.service.SingerAdminService;
 import cn.xiedacon.model.Singer;
@@ -16,6 +18,9 @@ public class SingerAdminServiceImpl implements SingerAdminService {
 
 	@Autowired
 	private SingerAdminDao singerDao;
+	@Qualifier("batchSqlDaoImpl")
+	@Autowired
+	private BatchSqlDao batchDao;
 
 	@Override
 	public PageBean<Singer> selectPageBean(Integer page) {
@@ -56,6 +61,11 @@ public class SingerAdminServiceImpl implements SingerAdminService {
 	@Override
 	public void insert(Singer singer) {
 		singerDao.insert(singer);
+	}
+
+	@Override
+	public void batchInsert(List<Singer> singerList) {
+		batchDao.insertSinger(singerList);
 	}
 
 }

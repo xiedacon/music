@@ -1,5 +1,7 @@
 package cn.xiedacon.admin.service;
 
+import java.util.List;
+
 import cn.xiedacon.model.Singer;
 import cn.xiedacon.util.PageBean;
 
@@ -18,5 +20,7 @@ public interface SingerAdminService {
 	void update(Singer singer);
 
 	void insert(Singer singer);
+
+	void batchInsert(List<Singer> singerList);
 
 }

@@ -1,7 +1,9 @@
 package cn.xiedacon.admin.controller;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -21,6 +23,8 @@ import cn.xiedacon.util.Base64UploadUtils;
 import cn.xiedacon.util.CharsetUtils;
 import cn.xiedacon.util.Constant;
 import cn.xiedacon.util.MessageUtils;
+import cn.xiedacon.util.XSSFUtils;
+import cn.xiedacon.util.ZipUtils;
 import cn.xiedacon.util.UUIDUtils;
 
 @Controller
@@ -108,6 +112,38 @@ public class SingerAdminController {
 		singer.setIntroduction(fileItems.get("introduction").getString());
 
 		singerService.insert(singer);
+		return MessageUtils.createSuccess();
+	}
+
+	@RequestMapping(value = "/excel", method = RequestMethod.POST)
+	public Map<String, Object> batchInsert(HttpServletRequest request) {
+		Map<String, Base64FileItem> fileItems = Base64UploadUtils.parseRequest(request);
+		
+		Base64FileItem excelItem = fileItems.get("excel");
+		File excelFile = excelItem
+				.getFile(request.getServletContext().getRealPath("excelTemp") + "/a" + excelItem.getType());
+		List<List<String>> lists = XSSFUtils.parse(excelFile, Constant.EXCEL_BEGINNUM);
+		excelFile.delete();
+
+		Base64FileItem zipitem = fileItems.get("zip");
+		File zipFile = zipitem.getFile(request.getServletContext().getRealPath("excelTemp") + "/a" + zipitem.getType());
+		ZipUtils.upZip(zipFile, request.getServletContext().getRealPath("image/singer"));
+		zipFile.delete();
+
+		List<Singer> singerList = new ArrayList<>();
+		for (List<String> list : lists) {
+			Singer singer = factory.get(Singer.class);
+			singer.setId(UUIDUtils.randomUUID());
+			singer.setName(list.get(1));
+			singer.setIcon("image/singer/" + list.get(2));
+			singer.setRemark(list.get(3));
+			singer.setIntroduction(list.get(4));
+			singer.setClassifyId(Integer.valueOf(Double.valueOf(list.get(5)).intValue()).toString()); // 真累。。
+			singerList.add(singer);
+		}
+
+		System.out.println(singerList);
+		singerService.batchInsert(singerList);
 		return MessageUtils.createSuccess();
 	}
 }

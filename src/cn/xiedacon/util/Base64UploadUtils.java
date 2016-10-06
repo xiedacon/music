@@ -15,6 +15,8 @@ import org.apache.commons.fileupload.FileItemFactory;
 import org.apache.commons.fileupload.FileUpload;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
+import org.apache.commons.fileupload.servlet.FileCleanerCleanup;
+import org.apache.commons.io.FileCleaningTracker;
 
 public class Base64UploadUtils {
 
@@ -56,6 +58,9 @@ public class Base64UploadUtils {
 					DiskFileItemFactory factory = new DiskFileItemFactory();
 					factory.setSizeThreshold(Integer.valueOf(properties.getProperty("sizeThreshold")));
 					factory.setRepository(new File(getRealPath(req, properties.getProperty("repository"))));
+					//临时文件清除器
+					FileCleaningTracker fileCleaningTracker = FileCleanerCleanup.getFileCleaningTracker(req.getServletContext());
+					factory.setFileCleaningTracker(fileCleaningTracker);
 					Base64UploadUtils.factory = factory;
 				}
 			}
