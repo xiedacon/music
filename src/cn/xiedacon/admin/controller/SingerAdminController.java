@@ -118,15 +118,16 @@ public class SingerAdminController {
 	@RequestMapping(value = "/excel", method = RequestMethod.POST)
 	public Map<String, Object> batchInsert(HttpServletRequest request) {
 		Map<String, Base64FileItem> fileItems = Base64UploadUtils.parseRequest(request);
-		
+
 		Base64FileItem excelItem = fileItems.get("excel");
-		File excelFile = excelItem
-				.getFile(request.getServletContext().getRealPath("excelTemp") + "/a" + excelItem.getType());
+		File excelFile = excelItem.getFile(request.getServletContext().getRealPath("temp") + "/"
+				+ UUIDUtils.randomUUID() + excelItem.getType());
 		List<List<String>> lists = XSSFUtils.parse(excelFile, Constant.EXCEL_BEGINNUM);
 		excelFile.delete();
 
 		Base64FileItem zipitem = fileItems.get("zip");
-		File zipFile = zipitem.getFile(request.getServletContext().getRealPath("excelTemp") + "/a" + zipitem.getType());
+		File zipFile = zipitem.getFile(request.getServletContext().getRealPath("temp") + "/"
+				+ UUIDUtils.randomUUID() + zipitem.getType());
 		ZipUtils.upZip(zipFile, request.getServletContext().getRealPath("image/singer"));
 		zipFile.delete();
 
@@ -138,11 +139,10 @@ public class SingerAdminController {
 			singer.setIcon("image/singer/" + list.get(2));
 			singer.setRemark(list.get(3));
 			singer.setIntroduction(list.get(4));
-			singer.setClassifyId(Integer.valueOf(Double.valueOf(list.get(5)).intValue()).toString()); // 真累。。
+			singer.setClassifyId(list.get(5));
 			singerList.add(singer);
 		}
 
-		System.out.println(singerList);
 		singerService.batchInsert(singerList);
 		return MessageUtils.createSuccess();
 	}

@@ -29,6 +29,18 @@ public class XSSFUtils {
 	}
 
 	/**
+	 * 头部和行限制
+	 * 
+	 * @param file
+	 * @param beginRowNum
+	 * @param cellLimit
+	 * @return
+	 */
+	public static List<List<String>> parse(File file, Integer beginRowNum, Integer cellLimit) {
+		return parse(file, 0, null, beginRowNum, null, 0, cellLimit);
+	}
+
+	/**
 	 * 基础方法
 	 * 
 	 * @param file
@@ -52,7 +64,7 @@ public class XSSFUtils {
 			}
 			int firstSheetNum = 0 + beginSheetNum;
 			int lastSheetNum = workbook.getNumberOfSheets() - 1;
-			if (sheetLimit != null && sheetLimit > 0 && firstSheetNum + sheetLimit < lastSheetNum) {
+			if (sheetLimit != null && sheetLimit > 0) {
 				lastSheetNum = firstSheetNum + sheetLimit;
 			}
 
@@ -88,12 +100,17 @@ public class XSSFUtils {
 		}
 		int firstRowNum = sheet.getFirstRowNum() + beginRowNum;
 		int lastRowNum = sheet.getLastRowNum();
-		if (rowLmit != null && rowLmit > 0 && firstRowNum + rowLmit < lastRowNum) {
+		if (rowLmit != null && rowLmit > 0) {
 			lastRowNum = firstRowNum + rowLmit;
 		}
 
 		for (int i = firstRowNum; i < lastRowNum + 1; i++) {
-			rowList.add(parseRow(sheet.getRow(i), beginCellNum, cellLimit));
+			List<String> row = parseRow(sheet.getRow(i), beginCellNum, cellLimit);
+			if(row.isEmpty()){
+				break;
+			}else{
+				rowList.add(row);
+			}
 		}
 
 		return rowList;
@@ -118,7 +135,7 @@ public class XSSFUtils {
 		}
 		int firstCellNum = row.getFirstCellNum() + beginCellNum;
 		int lastCellNum = row.getLastCellNum();
-		if (cellLimit != null && cellLimit > 0 && firstCellNum + cellLimit < lastCellNum) {
+		if (cellLimit != null && cellLimit > 0) {
 			lastCellNum = firstCellNum + cellLimit;
 		}
 

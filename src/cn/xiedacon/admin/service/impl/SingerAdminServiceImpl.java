@@ -1,6 +1,7 @@
 package cn.xiedacon.admin.service.impl;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -66,6 +67,16 @@ public class SingerAdminServiceImpl implements SingerAdminService {
 	@Override
 	public void batchInsert(List<Singer> singerList) {
 		batchDao.insertSinger(singerList);
+	}
+
+	@Override
+	public Singer selectByName(String name) {
+		return singerDao.selectByName(name);
+	}
+
+	@Override
+	public Map<String, Singer> batchSelectByName(List<String> singerNameList) {
+		return batchDao.selectSingerByName(singerNameList);
 	}
 
 }

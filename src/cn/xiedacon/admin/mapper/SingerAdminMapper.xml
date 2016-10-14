@@ -70,12 +70,10 @@
 	<update id="update" parameterType="cn.xiedacon.model.Singer">
 		UPDATE singer s
 		SET
-		s.name =
-		#{name},
+		s.name = #{name},
 		s.icon = #{icon},
 		s.remark = #{remark},
-		s.classifyId =
-		#{classifyId},
+		s.classifyId = #{classifyId},
 		s.introduction = #{introduction}
 		WHERE s.id = #{id}
 	</update>
@@ -94,4 +92,12 @@
 			#{visible}
 		)
 	</insert>
+	
+	<select id="selectByName" resultType="cn.xiedacon.model.Singer">
+		SELECT 
+		s.id id,
+		s.name name
+		FROM singer s
+		WHERE s.name = #{name}
+	</select>
 </mapper>

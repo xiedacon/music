@@ -12,7 +12,8 @@
 			<div class="panel-body">
 				<div class="">
 					<div class="input-group col-lg-4 col-md-4 pull-left" style="padding-bottom: 10px;">
-						<input class="form-control" placeholder="歌手名" type="text" name="name" id="name" value="" /> <span class="input-group-btn">
+						<input class="form-control" placeholder="歌手名" type="text" name="name" id="name" value="" /> 
+						<span class="input-group-btn">
 							<button class="btn btn-default" id="search">
 								<span class="glyphicon glyphicon-search"></span>
 							</button>
@@ -125,97 +126,7 @@
 				loadPages(pageBean, $pages, prefix, load);
 				
 				$add.on("click",function(){
-					var workGroup = WorkGroup([$.ajax({
-						url:"/music/admin/html/add/singer-add",
-						type:"GET",
-						success:function(data){
-							$singer = $(data);
-							workGroup.pop();
-						}
-					}),$.ajax({
-						url : "/music/json/userClassify",
-						type : "GET",
-						dataType : "json",
-						success : function(data) {
-							classifys = data;
-							workGroup.pop();
-						}
-					})]).done(function(){
-						var $name = $singer.find("#name") //
-						,$icon = $singer.find("#icon") //
-						,$remark = $singer.find("#remark") //
-						,$classifyId = $singer.find("#classifyId") //
-						,$introduction = $singer.find("#introduction");
-						
-						$classifyId.append("<option>===请选择===</option>")
-						classifys.forEach((classify)=>{
-							classify.childs.forEach((child)=>{
-								$classifyId.append("<option value='"+child.id+"'>"+child.name+"</option>");
-							})
-						})
-						$singer.find("#submit").on("click",function(){
-							var formData = new FormData() //
-							,name = $name.val() //
-							,icon = $icon[0].files[0] //
-							,remark = $remark.val() //
-							,classifyId = $classifyId.val() //
-							,introduction = $introduction.val();
-							
-							if(!name || name.trim()==""){
-								return alert("歌手名错误");
-							}
-							if(!icon || icon.name.substring(icon.name.lastIndexOf(".")+1).toLowerCase() != "jpg"){
-								return alert("头像或格式错误");
-							}
-							if(!classifyId){
-								return alert("未选择分类");
-							}
-							
-							var reader = new FileReader();
-							reader.readAsDataURL(icon);
-							reader.onload = function(e){
-								icon = e.target.result;
-								formData.append("name",name);
-								formData.append("icon",icon);
-								formData.append("remark",remark);
-								formData.append("classifyId",classifyId);
-								formData.append("introduction",introduction);
-								console.log(formData)
-								$.ajax({
-									url:"/music/admin/singer",
-									type:"POST",
-									dataType:"json",
-									data:formData,
-									processData:false,
-									contentType:false,
-									success:function(data){
-										if(data.code==200){
-											$.ajax({
-												url : "/music/admin/html/singer-tables",
-												type : "GET",
-												success : function(data) {
-													$material.html(data);
-												}
-											})
-										}else{
-											alert("操作失败");
-										}
-									}
-								})
-							}
-						});
-						$singer.find("#cancel").on("click",function(){
-							$.ajax({
-								url : "/music/admin/html/singer-tables",
-								type : "GET",
-								success : function(data) {
-									$material.html(data);
-								}
-							})
-						});
-						
-						$material.empty().append($singer);
-					}),$singer,classifys;
+					addSinger();
 				});
 				
 				$tbody.off("click").on("click", function(e) {
@@ -227,116 +138,7 @@
 								deleteItem($singer);
 								break;
 							case "edit" :
-								var workGroup = WorkGroup([$.ajax({
-									url : "/music/admin/html/edit/singer-edit",
-									type : "GET",
-									success : function(data) {
-										$singer = $(data);
-										workGroup.pop();
-									}
-								}), $.ajax({
-									url : $singer.attr("data-url"),
-									type : "GET",
-									dataType : "json",
-									success : function(data) {
-										if (data.code == 200) {
-											singer = data.data;
-											workGroup.pop();
-										} else {
-											alert("操作失败");
-										}
-									}
-								}), $.ajax({
-									url : "/music/json/userClassify",
-									type : "GET",
-									dataType : "json",
-									success : function(data) {
-										classifys = data;
-										workGroup.pop();
-									}
-								})]).done(function() {
-									var $name = $singer.find("#name").val(singer.name) //
-									,$icon = $singer.find("#icon") //
-									,$remark = $singer.find("#remark").val(singer.remark) //
-									,$classifyId = $singer.find("#classifyId") //
-									,$introduction = $singer.find("#introduction").text(singer.introduction);
-									
-									classifys.forEach((classify)=>{
-										classify.childs.forEach((child)=>{
-											$classifyId.append("<option value='"+child.id+"' "+(singer.classifyId==child.id?"selected='selected'":"")+">"+child.name+"</option>");
-										})
-									})
-									$singer.find("#submit").on("click",function(){
-										var formData = new FormData() //
-										,name = $name.val() //
-										,icon = $icon[0].files[0] //
-										,remark = $remark.val() //
-										,classifyId = $classifyId.val() //
-										,introduction = $introduction.text();
-										
-										if(!name || name.trim()==""){
-											return alert("歌手名错误");
-										}
-										if(!classifyId){
-											return alert("未选择分类");
-										}
-										
-										if(icon){
-											var reader = new FileReader();
-											reader.readAsDataURL(icon);
-											reader.onload = function(e){
-												icon = e.target.result;
-												update();
-											}
-										}else{
-											update();
-										}
-										
-										function update(){
-											formData.append("id",singer.id);
-											formData.append("name",name);
-											if(icon){
-												formData.append("icon",icon);
-											}
-											formData.append("remark",remark);
-											formData.append("classifyId",classifyId);
-											formData.append("introduction",introduction);
-											
-											$.ajax({
-												url:"/music/admin/singer/"+singer.id,
-												type:"PUT",
-												dataType:"json",
-												data:formData,
-												processData:false,
-												contentType:false,
-												success:function(data){
-													if(data.code==200){
-														$.ajax({
-															url : "/music/admin/html/singer-tables",
-															type : "GET",
-															success : function(data) {
-																$material.html(data);
-															}
-														})
-													}else{
-														alert("操作失败");
-													}
-												}
-											})
-										}
-									});
-									$singer.find("#cancel").on("click",function(){
-										$.ajax({
-											url : "/music/admin/html/singer-tables",
-											type : "GET",
-											success : function(data) {
-												$material.html(data);
-											}
-										})
-									});
-									
-									$material.empty().append($singer);
-								}), singer, $singer,classifys;
+								editSinger($singer);
 								break;
 						}
 					}
@@ -345,6 +147,230 @@
 				alert("加载失败");
 			}
 		}
+		
+		function addSinger(){
+			var $singer //
+			,classifys //
+			,workGroup = WorkGroup([function(){
+				$.ajax({
+					url:"/music/admin/html/add/singer-add",
+					type:"GET",
+					success:function(data){
+						$singer = $(data);
+						workGroup.pop();
+					}
+				})
+			},function(){
+				$.ajax({
+					url : "/music/json/userClassify",
+					type : "GET",
+					dataType : "json",
+					success : function(data) {
+						classifys = data;
+						workGroup.pop();
+					}
+				})
+			}]).done(function(){
+				var $name = $singer.find("#name") //
+				,$icon = $singer.find("#icon") //
+				,$remark = $singer.find("#remark") //
+				,$classifyId = $singer.find("#classifyId") //
+				,$introduction = $singer.find("#introduction");
+				
+				$classifyId.append("<option>===请选择===</option>")
+				classifys.forEach((classify)=>{
+					classify.childs.forEach((child)=>{
+						$classifyId.append("<option value='"+child.id+"'>"+child.name+"</option>");
+					})
+				})
+				
+				$singer.find("#submit").on("click",function(){
+					var formData = new FormData() //
+					,name = $name.val() //
+					,icon = $icon[0].files[0] //
+					,remark = $remark.val() //
+					,classifyId = $classifyId.val() //
+					,introduction = $introduction.val();
+					
+					if(!name || name.trim()==""){
+						return alert("歌手名错误");
+					}
+					if(!icon || icon.name.substring(icon.name.lastIndexOf(".")+1).toLowerCase() != "jpg"){
+						return alert("头像或格式错误");
+					}
+					if(!classifyId){
+						return alert("未选择分类");
+					}
+					
+					var reader = new FileReader();
+					reader.readAsDataURL(icon);
+					reader.onload = function(e){
+						icon = e.target.result;
+						formData.append("name",name);
+						formData.append("icon",icon);
+						formData.append("remark",remark);
+						formData.append("classifyId",classifyId);
+						formData.append("introduction",introduction);
+						$.ajax({
+							url:"/music/admin/singer",
+							type:"POST",
+							dataType:"json",
+							data:formData,
+							processData:false,
+							contentType:false,
+							success:function(data){
+								if(data.code==200){
+									$.ajax({
+										url : "/music/admin/html/singer-tables",
+										type : "GET",
+										success : function(data) {
+											$material.html(data);
+										}
+									})
+								}else{
+									alert("操作失败");
+								}
+							}
+						})
+					}
+				});
+				$singer.find("#cancel").on("click",function(){
+					$.ajax({
+						url : "/music/admin/html/singer-tables",
+						type : "GET",
+						success : function(data) {
+							$material.html(data);
+						}
+					})
+				});
+				
+				$material.empty().append($singer);
+			});
+		}
+		
+		function editSinger(url){
+			var singer //
+			, $singer //
+			,classifys //
+			,workGroup = WorkGroup([function(){
+				$.ajax({
+					url : "/music/admin/html/edit/singer-edit",
+					type : "GET",
+					success : function(data) {
+						$singer = $(data);
+						workGroup.pop();
+					}
+				})
+			}, function(){
+				$.ajax({
+					url : url,
+					type : "GET",
+					dataType : "json",
+					success : function(data) {
+						if (data.code == 200) {
+							singer = data.data;
+							workGroup.pop();
+						} else {
+							alert("操作失败");
+							workGroup.fail();
+						}
+					}
+				})
+			}, function(){
+				$.ajax({
+					url : "/music/json/userClassify",
+					type : "GET",
+					dataType : "json",
+					success : function(data) {
+						classifys = data;
+						workGroup.pop();
+					}
+				})
+			}]).done(function() {
+				var $name = $singer.find("#name").val(singer.name) //
+				,$icon = $singer.find("#icon") //
+				,$remark = $singer.find("#remark").val(singer.remark) //
+				,$classifyId = $singer.find("#classifyId") //
+				,$introduction = $singer.find("#introduction").text(singer.introduction);
+				
+				classifys.forEach((classify)=>{
+					classify.childs.forEach((child)=>{
+						$classifyId.append("<option value='"+child.id+"' "+(singer.classifyId==child.id?"selected='selected'":"")+">"+child.name+"</option>");
+					})
+				})
+				$singer.find("#submit").on("click",function(){
+					var formData = new FormData() //
+					,name = $name.val() //
+					,icon = $icon[0].files[0] //
+					,remark = $remark.val() //
+					,classifyId = $classifyId.val() //
+					,introduction = $introduction.text();
+					
+					if(!name || name.trim()==""){
+						return alert("歌手名错误");
+					}
+					if(!classifyId){
+						return alert("未选择分类");
+					}
+					
+					if(icon){
+						var reader = new FileReader();
+						reader.readAsDataURL(icon);
+						reader.onload = function(e){
+							icon = e.target.result;
+							update();
+						}
+					}else{
+						update();
+					}
+					
+					function update(){
+						formData.append("id",singer.id);
+						formData.append("name",name);
+						if(icon){
+							formData.append("icon",icon);
+						}
+						formData.append("remark",remark);
+						formData.append("classifyId",classifyId);
+						formData.append("introduction",introduction);
+						
+						$.ajax({
+							url:"/music/admin/singer/"+singer.id,
+							type:"PUT",
+							dataType:"json",
+							data:formData,
+							processData:false,
+							contentType:false,
+							success:function(data){
+								if(data.code==200){
+									$.ajax({
+										url : "/music/admin/html/singer-tables",
+										type : "GET",
+										success : function(data) {
+											$material.html(data);
+										}
+									})
+								}else{
+									alert("操作失败");
+								}
+							}
+						})
+					}
+				});
+				$singer.find("#cancel").on("click",function(){
+					$.ajax({
+						url : "/music/admin/html/singer-tables",
+						type : "GET",
+						success : function(data) {
+							$material.html(data);
+						}
+					})
+				});
+				
+				$material.empty().append($singer);
+			});
+		}
+		
 		var $name = $("#name");
 		$("#search").on("click", function() {
 			var name = $name.val();
@@ -358,10 +384,13 @@
 			}).done(function(data) {
 				load(data, "/music/admin/singer/name/" + name + "/");
 			})
-		})
-		$addByExcel.on("click",addByExcel)
+		});
+		
+		$addByExcel.on("click",addByExcel);
 		function addByExcel(){
-			var workGroup = WorkGroup([function(){
+			var excel //
+			,zip //
+			,workGroup = WorkGroup([function(){
 				var file = $excel[0].files[0];
 				if(file && file.name.substring(file.name.lastIndexOf(".")+1).toLowerCase() == "xlsx"){
 					var reader = new FileReader();
@@ -373,8 +402,7 @@
 				}else{
 					alert("未选择excel文件或格式错误");
 				}
-				return {};
-			}(),function(){
+			},function(){
 				var file = $zip[0].files[0];
 				if(file && file.name.substring(file.name.lastIndexOf(".")+1).toLowerCase() == "zip"){
 					var reader = new FileReader();
@@ -386,9 +414,9 @@
 					}
 				}else{
 					alert("未选择zip文件或格式错误");
+					workGroup.fail();
 				}
-				return {};
-			}()]).done(function(){
+			}]).done(function(){
 				$addByExcel.off();
 				var formData = new FormData();
 				formData.append("excel",excel);
@@ -403,6 +431,7 @@
 					success:function(data){
 						if(data.code==200){
 							alert("上传成功");
+							$("#closeAddByExcel").click();
 							$.ajax({
 								url : "/music/admin/singer/page/1",
 								dataType : "json",
@@ -416,7 +445,7 @@
 						$addByExcel.on("click",addByExcel)
 					}
 				}) 
-			}),excel,zip;
+			});
 		}
 	}())
 </script>

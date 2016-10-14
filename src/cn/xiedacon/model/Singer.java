@@ -19,6 +19,16 @@ public class Singer {
 
 	private Integer collectionNum;
 
+	public Singer() {
+		super();
+	}
+
+	public Singer(String id, String name) {
+		super();
+		this.id = id;
+		this.name = name;
+	}
+
 	public Integer getCollectionNum() {
 		return collectionNum;
 	}

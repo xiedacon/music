@@ -60,6 +60,15 @@ public class Factory {
 		
 		configMaps.put(cn.xiedacon.model.Singer.class, configMap);
 		
+		configMap = new HashMap<>();
+		
+		configMap.put("collectionNum", Constant.NUM_DEFAULT);
+		configMap.put("playNum", Constant.NUM_DEFAULT);
+		configMap.put("commentNum", Constant.NUM_DEFAULT);
+		configMap.put("visible", Constant.VISIBLE_DEFAULT);
+		
+		configMaps.put(cn.xiedacon.model.Song.class, configMap);
+		
 		Iterator<Class> iterator = configMaps.keySet().iterator();
 
 		while (iterator.hasNext()) {
@@ -81,7 +90,7 @@ public class Factory {
 		Map<String, Object> configMap = configMaps.get(c);
 
 		if (configMap == null) {
-			throw new RuntimeException("类不存在：" + c.getName());
+			return getInstance(c);
 		}
 
 		T instance = getInstance(c);

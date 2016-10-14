@@ -27,4 +27,6 @@ public interface SingerAdminDao {
 
 	void insert(Singer singer);
 
+	Singer selectByName(String name);
+
 }

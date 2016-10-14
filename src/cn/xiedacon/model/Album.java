@@ -24,6 +24,16 @@ public class Album {
 	private String singerId;
 	private String singerName;
 
+	public Album(String id, String name) {
+		super();
+		this.id = id;
+		this.name = name;
+	}
+
+	public Album() {
+		super();
+	}
+
 	public Integer getPlayNum() {
 		return playNum;
 	}

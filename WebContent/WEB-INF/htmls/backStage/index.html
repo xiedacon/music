@@ -616,15 +616,6 @@
 			});
 		}
 
-		function editItem($item) {
-			$.ajax({
-				url : $item.attr("data-url"),
-				type : "GET"
-			}).done(function(data) {
-				$material.html(data);
-			});
-		}
-
 		function loadPages(pageBean, $pages, prefix, load) {
 			$pages.empty();
 			if (pageBean.totalPage < 2) {
@@ -821,15 +812,19 @@
 		//WorkGroup(works).done(function(){});
 		function WorkGroup(works) {
 			if (!Array.isArray(works)) {
-				throw TypeError("works必须是数组");
+				throw TypeError("works必须为Array");
 			}
 
 			var num = works.length | 0 //
 			, callback = function(){} //
+			, excuteFlag = true //
 			//定义暴露出去的接口
 			,group = {
 				done : function(_callback) {	//模拟延迟接口
 					callback = _callback;
+					if(num === 0){
+						callback();
+					}
 					return this;
 				},
 				pop : function(work){		//被work调用接口
@@ -839,13 +834,24 @@
 					}
 				},
 				push : function(work){		//动态添加work接口
-					num++;
+					//num++;
+				},
+				fail : function(){			//有工作失败时
+					callback = function(){};
+					excuteFlag = false;
 				}
 			};
 			
 			//work与workGroup绑定
 			works.forEach((work)=>{
-				//work.workGroup = group;
+				if(work instanceof Function){
+					if(excuteFlag){
+						work.workGroup = group;
+						work();
+					}
+				}else{
+					throw TypeError("work必须为Function");
+				}
 			});
 
 			return group;

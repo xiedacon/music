@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.xiedacon.admin.dao.AlbumAdminDao">
+
+	<select id="selectByName" resultType="cn.xiedacon.model.Album">
+		SELECT
+		ab.id id,
+		ab.name name
+		FROM album_base ab
+		WHERE ab.name = #{name}
+	</select>
+
+	<update id="updateSongNumByIdAndAddNum">
+		UPDATE album_base ab
+		SET ab.songNum = #{addNum} + ab.songNum
+		WHERE ab.id = #{id}
+	</update>
+</mapper>

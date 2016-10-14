@@ -1,6 +1,7 @@
 package cn.xiedacon.admin.service;
 
 import java.util.List;
+import java.util.Map;
 
 import cn.xiedacon.model.Singer;
 import cn.xiedacon.util.PageBean;
@@ -22,5 +23,9 @@ public interface SingerAdminService {
 	void insert(Singer singer);
 
 	void batchInsert(List<Singer> singerList);
+
+	Singer selectByName(String name);
+
+	Map<String, Singer> batchSelectByName(List<String> singerNameList);
 
 }

@@ -22,6 +22,44 @@ public class Song {
 
 	private Integer commentNum;
 	private Integer collectionNum;
+	private Integer playNum;
+
+	private String fileUri;
+	private String lrcUri;
+
+	private Boolean visible;
+
+	public Integer getPlayNum() {
+		return playNum;
+	}
+
+	public void setPlayNum(Integer playNum) {
+		this.playNum = playNum;
+	}
+
+	public Boolean getVisible() {
+		return visible;
+	}
+
+	public void setVisible(Boolean visible) {
+		this.visible = visible;
+	}
+
+	public String getFileUri() {
+		return fileUri;
+	}
+
+	public void setFileUri(String fileUri) {
+		this.fileUri = fileUri;
+	}
+
+	public String getLrcUri() {
+		return lrcUri;
+	}
+
+	public void setLrcUri(String lrcUri) {
+		this.lrcUri = lrcUri;
+	}
 
 	public Integer getRank() {
 		return rank;
@@ -84,7 +122,7 @@ public class Song {
 		return "Song [id=" + id + ", name=" + name + ", icon=" + icon + ", time=" + time + ", remark=" + remark
 				+ ", singerId=" + singerId + ", singerName=" + singerName + ", albumId=" + albumId + ", albumName="
 				+ albumName + ", rank=" + rank + ", rankChange=" + rankChange + ", commentNum=" + commentNum
-				+ ", collectionNum=" + collectionNum + "]";
+				+ ", collectionNum=" + collectionNum + ", fileUri=" + fileUri + ", lrcUri=" + lrcUri + "]";
 	}
 
 	public String getId() {

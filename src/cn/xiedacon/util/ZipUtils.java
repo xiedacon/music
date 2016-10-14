@@ -16,13 +16,14 @@ public class ZipUtils {
 			ZipEntry entry = in.getNextEntry();
 			while (entry != null) {
 				String name = entry.getName();
-				try(FileOutputStream out = new FileOutputStream(new File(path + "/" + name));){
+				try (FileOutputStream out = new FileOutputStream(new File(path + "/" + name));) {
 					IOUtils.copy(in, out);
 				}
 				entry = in.getNextEntry();
 			}
 
 		} catch (IOException e) {
+			throw new RuntimeException(e);
 		}
 	}
 }
