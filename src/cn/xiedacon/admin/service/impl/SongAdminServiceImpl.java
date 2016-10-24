@@ -108,4 +108,9 @@ public class SongAdminServiceImpl implements SongAdminService {
 		batchDao.insertAlbum_SongGL(album_SongGlList);
 	}
 
+	@Override
+	public Map<String,Song> batchSelectByName(List<String> songNames) {
+		return batchDao.selectSongByName(songNames);
+	}
+
 }

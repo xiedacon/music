@@ -108,6 +108,7 @@
 	<!-- /.panel -->
 </div>
 <!-- /.col-lg-12 -->
+</div>
 <script type="text/javascript">
 	(function() {
 		var $tbody = $("tbody") //
@@ -269,7 +270,7 @@
 							contentType:false,
 							success:function(data){
 								if(data.code==200){
-									alert("aaa");
+									alert("操作成功");
 									$.ajax({
 										url : "/music/admin/html/song-tables",
 										type : "GET",

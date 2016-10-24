@@ -69,6 +69,27 @@ public class Factory {
 		
 		configMaps.put(cn.xiedacon.model.Song.class, configMap);
 		
+		configMap = new HashMap<>();
+		
+		configMap.put("songNum", Constant.NUM_DEFAULT);
+		configMap.put("collectionNum", Constant.NUM_DEFAULT);
+		configMap.put("playNum", Constant.NUM_DEFAULT);
+		configMap.put("commentNum", Constant.NUM_DEFAULT);
+		configMap.put("shareNum", Constant.NUM_DEFAULT);
+		configMap.put("visible", Constant.VISIBLE_DEFAULT);
+		
+		configMaps.put(cn.xiedacon.model.SongList.class, configMap);
+		
+		configMap = new HashMap<>();
+		
+		configMap.put("songNum", Constant.NUM_DEFAULT);
+		configMap.put("playNum", Constant.NUM_DEFAULT);
+		configMap.put("commentNum", Constant.NUM_DEFAULT);
+		configMap.put("shareNum", Constant.NUM_DEFAULT);
+		configMap.put("visible", Constant.VISIBLE_DEFAULT);
+		
+		configMaps.put(cn.xiedacon.model.Album.class, configMap);
+		
 		Iterator<Class> iterator = configMaps.keySet().iterator();
 
 		while (iterator.hasNext()) {

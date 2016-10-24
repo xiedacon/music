@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.xiedacon.admin.dao.SongList_SongGLDao">
+
+	<select id="selectListBySongListIdOrderByRank" resultType="cn.xiedacon.model.SongList_SongGL">
+		SELECT 
+		sgs.id id,
+		sgs.songId songId,
+		sgs.rank rank,
+		sgs.songListId songListId,
+		sgs.rankChange rankChange,
+		slb.name songListName,
+		sb.name songName
+		FROM song_gl_songlist sgs
+		INNER JOIN songlist_base slb ON sgs.songListId = slb.id
+		INNER JOIN song_base sb ON sgs.songId = sb.id
+		WHERE sgs.songListId = #{songListId}
+		ORDER BY sgs.rank
+	</select>
+</mapper>

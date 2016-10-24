@@ -18,13 +18,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import cn.xiedacon.admin.service.SingerAdminService;
 import cn.xiedacon.factory.Factory;
 import cn.xiedacon.model.Singer;
-import cn.xiedacon.util.Base64FileItem;
-import cn.xiedacon.util.Base64UploadUtils;
 import cn.xiedacon.util.CharsetUtils;
 import cn.xiedacon.util.Constant;
 import cn.xiedacon.util.MessageUtils;
-import cn.xiedacon.util.XSSFUtils;
 import cn.xiedacon.util.ZipUtils;
+import cn.xiedacon.util.excel.Cell;
+import cn.xiedacon.util.excel.XSSFUtils;
+import cn.xiedacon.util.upload.Base64FileItem;
+import cn.xiedacon.util.upload.Base64UploadUtils;
 import cn.xiedacon.util.UUIDUtils;
 
 @Controller
@@ -55,7 +56,7 @@ public class SingerAdminController {
 	public Map<String, Object> selectPageBeanByNameLike(@PathVariable("name") String name,
 			@PathVariable("page") Integer page) {
 		return MessageUtils.createSuccess(Constant.SUCCESS_RETURNNAME, singerService.selectPageBeanByNameLike(page,
-				"%" + CharsetUtils.decode(name, "ISO-8859-1", "UTF-8") + "%"));
+				"%" + CharsetUtils.change(name, "ISO-8859-1", "UTF-8") + "%"));
 	}
 
 	@RequestMapping(value = "/{id:\\w+}", method = RequestMethod.GET)
@@ -120,26 +121,26 @@ public class SingerAdminController {
 		Map<String, Base64FileItem> fileItems = Base64UploadUtils.parseRequest(request);
 
 		Base64FileItem excelItem = fileItems.get("excel");
-		File excelFile = excelItem.getFile(request.getServletContext().getRealPath("temp") + "/"
-				+ UUIDUtils.randomUUID() + excelItem.getType());
-		List<List<String>> lists = XSSFUtils.parse(excelFile, Constant.EXCEL_BEGINNUM);
+		File excelFile = excelItem.getFile(
+				request.getServletContext().getRealPath("temp") + "/" + UUIDUtils.randomUUID() + excelItem.getType());
+		List<List<Cell>> cellData = XSSFUtils.parse(excelFile, Constant.EXCEL_BEGINNUM);
 		excelFile.delete();
 
 		Base64FileItem zipitem = fileItems.get("zip");
-		File zipFile = zipitem.getFile(request.getServletContext().getRealPath("temp") + "/"
-				+ UUIDUtils.randomUUID() + zipitem.getType());
+		File zipFile = zipitem.getFile(
+				request.getServletContext().getRealPath("temp") + "/" + UUIDUtils.randomUUID() + zipitem.getType());
 		ZipUtils.upZip(zipFile, request.getServletContext().getRealPath("image/singer"));
 		zipFile.delete();
 
 		List<Singer> singerList = new ArrayList<>();
-		for (List<String> list : lists) {
+		for (List<Cell> singerCells : cellData) {
 			Singer singer = factory.get(Singer.class);
 			singer.setId(UUIDUtils.randomUUID());
-			singer.setName(list.get(1));
-			singer.setIcon("image/singer/" + list.get(2));
-			singer.setRemark(list.get(3));
-			singer.setIntroduction(list.get(4));
-			singer.setClassifyId(list.get(5));
+			singer.setName(singerCells.get(1).getString());
+			singer.setIcon("image/singer/" + singerCells.get(2).getString());
+			singer.setRemark(singerCells.get(3).getString());
+			singer.setIntroduction(singerCells.get(4).getString());
+			singer.setClassifyId(singerCells.get(5).getString());
 			singerList.add(singer);
 		}
 

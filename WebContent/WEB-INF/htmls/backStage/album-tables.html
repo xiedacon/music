@@ -1,239 +1,503 @@
-<!DOCTYPE html>
-<html lang="en">
 
-	<head>
-
-		<meta charset="utf-8">
-		<meta http-equiv="X-UA-Compatible" content="IE=edge">
-		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<meta name="description" content="">
-		<meta name="author" content="">
-
-		<title>后台管理-专辑模块</title>
-
-		<!-- Bootstrap Core CSS -->
-		<link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-
-		<!-- Custom CSS -->
-		<link href="../dist/css/sb-admin-2.css" rel="stylesheet">
-
-		<!-- Custom Fonts -->
-		<link href="../vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-
-		<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-		<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-		<!--[if lt IE 9]>
-        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
-
-	</head>
-
-	<body>
-
-		<div id="wrapper">
-
-			<!-- Navigation -->
-			<nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
-				<div class="navbar-header" style="width: 100%;">
-					<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-	                    <span class="sr-only">Toggle navigation</span>
-	                    <span class="icon-bar"></span>
-	                    <span class="icon-bar"></span>
-	                    <span class="icon-bar"></span>
-	                </button>
-					<a class="navbar-brand" href="index.html">网站后台</a>
-					<ul class="nav navbar-top-links navbar-right pull-right">
-						<li class="dropdown">
-							<a class="dropdown-toggle" data-toggle="dropdown" href="#">
-								<i class="fa fa-user fa-fw"></i> <i class="fa fa-caret-down"></i>
-							</a>
-							<ul class="dropdown-menu dropdown-user">
-								<li>
-									<a href="login.html"><i class="fa fa-sign-out fa-fw"></i>退出</a>
-								</li>
-							</ul>
-						</li>
+<div class="row">
+	<div class="col-lg-12">
+		<h1 class="page-header">全部专辑</h1>
+	</div>
+	<!-- /.col-lg-12 -->
+</div>
+<!-- /.row -->
+<div class="row">
+	<div class="col-lg-12">
+		<div class="panel panel-default">
+			<!-- /.panel-heading -->
+			<div class="panel-body">
+				<div class="">
+					<div class="input-group col-lg-4 col-md-4 pull-left" style="padding-bottom: 10px;">
+						<input class="form-control" placeholder="榜单名" type="text" name="name" id="name" value="" /> <span class="input-group-btn">
+							<button class="btn btn-default" id="search">
+								<span class="glyphicon glyphicon-search"></span>
+							</button>
+						</span>
+					</div>
+					<div class="btn-group pull-right">
+						<button type="button" class="btn btn-default" id="add">添加</button>
+						<button type="button" class="btn btn-default" id="showAddByExcel" data-toggle="modal" data-target="#excelPanel">excel批量添加</button>
+						<!-- 模态框（Modal） -->
+						<div class="modal fade" id="excelPanel" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+							<div class="modal-dialog">
+								<div class="modal-content">
+									<div class="modal-header">
+										<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+										<h4 class="modal-title" id="myModalLabel">excel批量添加</h4>
+									</div>
+									<div class="modal-body">
+										<form class="col-lg-6" action="" method="post" role="form" style="float: none">
+											<div class="form-group">
+												<label>excel文件：</label> <input id="excel" type="file" name="icon" class="form-control" value="" />
+												<p class="help-block">必填，格式为xlsx</p>
+											</div>
+											<div class="form-group">
+												<label>图片压缩包：</label> <input id="iconZip" type="file" name="icon" class="form-control" value="" />
+												<p class="help-block">必填，格式为zip，图片格式为jpg</p>
+											</div>
+										</form>
+									</div>
+									<div class="modal-footer">
+										<button id="closeAddByExcel" type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+										<button id="addByExcel" type="button" class="btn btn-primary">提交更改</button>
+									</div>
+								</div>
+								<!-- /.modal-content -->
+							</div>
+							<!-- /.modal -->
+						</div>
+					</div>
+				</div>
+				<div class="">
+					<table width="100%" class="table table-striped table-bordered table-hover" id="dataTables-example">
+						<thead>
+							<tr>
+								<th>专辑名</th>
+								<th>所属歌手</th>
+								<th>创建时间</th>
+								<th>发行公司</th>
+								<th>歌曲数</th>
+								<th>分享数</th>
+								<th>评论数</th>
+								<th>播放数</th>
+								<th>操作</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr class="prototype">
+								<td><a href="#" class="name"></a></td>
+								<td class="singerName"></td>
+								<td class="createTime"></td>
+								<td class="createCompany"></td>
+								<td class="songNum"></td>
+								<td class="shareNum"></td>
+								<td class="commentNum"></td>
+								<td class="playNum"></td>
+								<td class="operation" style="text-align: center;">
+									<button class="btn btn-info" data-type="edit">
+										<span class="glyphicon glyphicon-edit" data-type="edit"></span>
+									</button>
+									<button class="btn btn-danger" data-type="delete">
+										<span class="glyphicon glyphicon-trash" data-type="delete"></span>
+									</button>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<div class="col-lg-12" style="text-align: center;">
+					<ul class="pagination" data-pages>
 					</ul>
 				</div>
-				<div class="navbar-default sidebar" role="navigation">
-					<div class="sidebar-nav navbar-collapse">
-						<ul class="nav" id="side-menu">
-							<li>
-								<a href="user-tables.html"><i class="fa fa-fw"></i> 用户模块</a>
-							</li>
-							<li>
-								<a href="songMenu-tables.html"><i class="fa fa-fw"></i> 歌单模块</a>
-							</li>
-							<li>
-								<a href="singer-tables.html"><i class="fa fa-fw"></i> 歌手模块</a>
-							</li>
-							<li>
-								<a href="song-tables.html"><i class="fa fa-fw"></i> 歌曲模块</a>
-							</li>
-							<li>
-								<a href="songList-tables.html"><i class="fa fa-fw"></i> 榜单模块</a>
-							</li>
-							<li>
-								<a href="album-tables.html" class="active"><i class="fa fa-fw"></i> 专辑模块</a>
-							</li>
-							<li>
-								<a href="singerClassify-tables.html"><i class="fa fa-fw"></i> 歌手分类模块</a>
-							</li>
-							<li>
-								<a href="albumTag-tables.html"><i class="fa fa-fw"></i> 专辑分类模块</a>
-							</li>
-							<li>
-								<a href="songMenuTag-tables.html"><i class="fa fa-fw"></i> 歌单分类模块</a>
-							</li>
-						</ul>
-					</div>
-				</div>
-			</nav>
-
-			<div id="page-wrapper">
-				<div class="row">
-					<div class="col-lg-12">
-						<h1 class="page-header">全部专辑</h1>
-					</div>
-					<!-- /.col-lg-12 -->
-				</div>
-				<!-- /.row -->
-				<div class="row">
-					<div class="col-lg-12">
-						<div class="panel panel-default">
-							<!-- /.panel-heading -->
-							<div class="panel-body">
-								<div class="">
-									<div class="input-group col-lg-4 col-md-4 pull-left" style="padding-bottom: 10px;">
-										<input class="form-control" placeholder="专辑名" type="text" name="name" id="name" value="" />
-										<span class="input-group-btn">
-											<button class="btn btn-default">
-												<span class="glyphicon glyphicon-search"></span>
-										</button>
-										</span>
-									</div>
-									<div class="btn-group pull-right">
-										<a href="album-add.html" class="btn btn-default">
-											添加
-										</a>
-										<button class="btn btn-default">
-											excel批量添加
-										</button>
-									</div>
-								</div>
-								<div class="">
-									<table width="100%" class="table table-striped table-bordered table-hover" id="dataTables-example">
-										<thead>
-											<tr>
-												<th>专辑名</th>
-												<th>所属歌手</th>
-												<th>创建时间</th>
-												<th>发行公司</th>
-												<th>歌曲数</th>
-												<th>分享数</th>
-												<th>评论数</th>
-												<th>播放数</th>
-												<th>描述</th>
-												<th>介绍</th>
-												<th>操作</th>
-											</tr>
-										</thead>
-										<tbody>
-											<tr class="odd gradeX">
-												<td>
-													<a href="#">github</a>
-												</td>
-												<td>1</td>
-												<td>2016-9-22</td>
-												<td class="center">4</td>
-												<td class="center">0</td>
-												<td class="center">4</td>
-												<td class="center">0</td>
-												<td class="center">4</td>
-												<td class="center">0</td>
-												<td class="center">4</td>
-												<td class="center" style="text-align: center;">
-													<a href="album-edit.html" class="btn btn-info">
-														<span class="glyphicon glyphicon-edit"></span>
-													</a>
-													<button class="btn btn-danger">
-														<span class="glyphicon glyphicon-trash"></span>
-													</button>
-												</td>
-											</tr>
-											<tr class="even gradeC">
-												<td>
-													<a href="#">github</a>
-												</td>
-												<td>1</td>
-												<td>2016-9-22</td>
-												<td class="center">4</td>
-												<td class="center">0</td>
-												<td class="center">4</td>
-												<td class="center">0</td>
-												<td class="center">4</td>
-												<td class="center">0</td>
-												<td class="center">4</td>
-												<td class="center" style="text-align: center;">
-													<a href="album-edit.html" class="btn btn-info">
-														<span class="glyphicon glyphicon-edit"></span>
-													</a>
-													<button class="btn btn-danger">
-														<span class="glyphicon glyphicon-trash"></span>
-													</button>
-												</td>
-											</tr>
-										</tbody>
-									</table>
-								</div>
-								<div class="col-lg-12" style="text-align: center;">
-									<ul class="pagination">
-										<li class="disabled">
-											<a href="#">Previous</a>
-										</li>
-										<li class="active">
-											<a href="#">1</a>
-										</li>
-										<li>
-											<a href="#">2</a>
-										</li>
-										<li>
-											<a href="#">3</a>
-										</li>
-										<li>
-											<a href="#">4</a>
-										</li>
-										<li>
-											<a href="#">5</a>
-										</li>
-										<li>
-											<a href="#">6</a>
-										</li>
-										<li>
-											<a href="#">Next</a>
-										</li>
-									</ul>
-								</div>
-							</div>
-							<!-- /.panel-body -->
-						</div>
-						<!-- /.panel -->
-					</div>
-					<!-- /.col-lg-12 -->
-				</div>
 			</div>
-			<!-- /#page-wrapper -->
-
+			<!-- /.panel-body -->
 		</div>
-		<!-- /#wrapper -->
+		<!-- /.panel -->
+	</div>
+</div>
+<script type="text/javascript">
+	(function() {
+		var $tbody = $("tbody") //
+		, $prototype = $tbody.find(".prototype").clone().removeClass("prototype") //
+		, $pages = $("ul[data-pages]") //
+		, $add = $("#add") //
+		, $addByExcel = $("#addByExcel") //
+		, $excel = $("#excel") //
+		, $iconZip = $("#iconZip") //
+		;
+		
+		$.ajax({
+			url : "/music/admin/album/page/1",
+			dataType : "json",
+			type : "GET"
+		}).done(function(data) {
+			load(data, "/music/admin/album/");
+		});
+		function load(data, prefix) {
+			if (data.code == 200) {
+				var pageBean = data.data //
+				, albums = pageBean.beans //
+				, $album;
+				$tbody.empty();
+				//$pages.empty();
+				albums.map(function(album, index) {
+					$album = $prototype.clone();
 
-		<!-- jQuery -->
-		<script src="../vendor/jquery/jquery.min.js"></script>
+					$album.attr("data-url", "/music/admin/album/" + album.id) //
+					.addClass(index % 2 == 0 ? "odd" : "even");
 
-		<!-- Bootstrap Core JavaScript -->
-		<script src="../vendor/bootstrap/js/bootstrap.min.js"></script>
+					$album.find(".name").text(album.name);
+					$album.find(".singerName").text(album.singerName);
+					$album.find(".createTime").text(new DateFormatter("yyyy-MM-dd").format(album.createTime));
+					$album.find(".createCompany").text(album.createCompany);
+					$album.find(".songNum").text(album.songNum);
+					$album.find(".shareNum").text(album.shareNum);
+					$album.find(".commentNum").text(album.commentNum);
+					$album.find(".playNum").text(album.playNum);
 
-	</body>
+					$tbody.append($album);
+				});
 
-</html>
+				loadPages(pageBean, $pages, prefix, load);
+				
+				$add.on("click",function(){
+					addAlbum();
+				});
+				
+				$tbody.off("click").on("click", function(e) {
+					var type = $(e.target).attr("data-type");
+					if (type) {
+						var $album = $(e.target).parents("tr");
+						switch (type) {
+							case "delete" :
+								deleteItem($album);
+								break;
+							case "edit" :
+								editAlbum($album.attr("data-url"));
+								break;
+						}
+					}
+				});
+			} else {
+				alert("加载失败");
+			}
+		}
+		
+		function addAlbum(){
+			var $album //
+			, albumTags //
+			;
+			
+			WorkGroup([function(){
+				$.ajax({
+					url:"/music/admin/html/add/album-add",
+					type:"GET",
+					context:this,
+					success:function(data){
+						$album = $(data);
+						this.workGroup.pop();
+					}
+				});
+			}, function(){
+				$.ajax({
+					url : "/music/albumTag/s",
+					type : "GET",
+					context:this,
+					dataType : "json",
+					success : function(data) {
+						albumTags = data;
+						this.workGroup.pop();
+					}
+				});
+			}]).done(function(){
+				var $name = $album.find("#name") //
+				, $icon = $album.find("#icon") //
+				, $singerName = $album.find("#singerName") //
+				, $createTime = $album.find("#createTime") //
+				, $createCompany = $album.find("#createCompany") //
+				, $tagId = $album.find("#tagId") //
+				, $remark = $album.find("#remark") //
+				, $introduction = $album.find("#introduction") //
+				;
+				
+				albumTags.forEach(function(albumTag){
+					$tagId.append("<option value="+albumTag.id+">"+albumTag.name+"</option>");
+				})
+				
+				$album.find("#submit").on("click",function(){
+					var formData = new FormData() //
+					,name = $name.val() //
+					,icon = $icon[0].files[0] //
+					,singerName = $singerName.val() //
+					,createTime = $createTime.val() //
+					,createCompany = $createCompany.val() //
+					,tagId = $tagId.val() //
+					,remark = $remark.val() //
+					,introduction = $introduction.val() //
+					;
+					
+					if(!name || name.trim()==""){
+						return alert("专辑名错误");
+					}
+					if(!icon){
+						return alert("图标不能为空");
+					}
+					if(!createTime || createTime.trim()==""){
+						return alert("创建时间错误");
+					}
+					if(!tagId){
+						return alert("未选择分类");
+					}
+					
+					var reader = new FileReader();
+					reader.readAsDataURL(icon);
+					reader.onload = function(e){
+						icon = e.target.result;
+						
+						formData.append("name",name);
+						formData.append("icon",icon);
+						formData.append("singerName",singerName);
+						formData.append("createTime",createTime);
+						formData.append("createCompany",createCompany);
+						formData.append("tagId",tagId);
+						formData.append("remark",remark);
+						formData.append("introduction",introduction);
+						
+						$.ajax({
+							url:"/music/admin/album",
+							type:"POST",
+							dataType:"json",
+							data:formData,
+							processData:false,
+							contentType:false,
+							success:function(data){
+								if(data.code==200){
+									alert("操作成功");
+									$.ajax({
+										url : "/music/admin/html/album-tables",
+										type : "GET",
+										success : function(data) {
+											$material.html(data);
+										}
+									});
+								}else{
+									alert("操作失败");
+								}
+							}
+						});
+					}
+				});
+				
+				$album.find("#cancel").on("click",function(){
+					$.ajax({
+						url : "/music/admin/html/album-tables",
+						type : "GET",
+						success : function(data) {
+							$material.html(data);
+						}
+					})
+				});
+				
+				$material.empty().append($album);
+			});
+		}
+		
+		function editAlbum(url){
+			var album //
+			, $album //
+			, albumTags //
+			,workGroup = WorkGroup([function(){
+				$.ajax({
+					url : "/music/admin/html/edit/album-edit",
+					type : "GET",
+					success : function(data) {
+						$album = $(data);
+						workGroup.pop();
+					}
+				})
+			}, function(){
+				$.ajax({
+					url : url,
+					type : "GET",
+					dataType : "json",
+					success : function(data) {
+						if (data.code == 200) {
+							album = data.data;
+							workGroup.pop();
+						} else {
+							alert("操作失败");
+							workGroup.fail();
+						}
+					}
+				})
+			}, function(){
+				$.ajax({
+					url : "/music/albumTag/s",
+					type : "GET",
+					dataType : "json",
+					success : function(data) {
+						albumTags = data;
+						workGroup.pop();
+					}
+				})
+			}]).done(function() {
+				var $name = $album.find("#name").val(album.name) //
+				, $icon = $album.find("#icon") //
+				, $createTime = $album.find("#createTime").val(new DateFormatter("yyyy-MM-dd").format(album.createTime)) //
+				, $createCompany = $album.find("#createCompany").val(album.createCompany) //
+				, $tagId = $album.find("#tagId") //
+				, $remark = $album.find("#remark").val(album.remark) //
+				, $introduction = $album.find("#introduction").text(album.introduction) //
+				;
+				
+				albumTags.forEach(function(albumTag){
+					$tagId.append("<option value="+albumTag.id+" "+(albumTag.id == album.tagId?"selected='selected'":"")+">"+albumTag.name+"</option>");
+				})
+				
+				$album.find("#submit").on("click",function(){
+					var formData = new FormData() //
+					,name = $name.val() //
+					,icon = $icon[0].files[0] //
+					,createTime = $createTime.val() //
+					,createCompany = $createCompany.val() //
+					,tagId = $tagId.val() //
+					,remark = $remark.val() //
+					,introduction = $introduction.val() //
+					;
+					
+					if(!name || name.trim()==""){
+						return alert("专辑名错误");
+					}
+					if(!createTime || createTime.trim()==""){
+						return alert("创建时间错误");
+					}
+					if(!tagId){
+						return alert("未选择分类");
+					}
+					
+					if(icon){
+						var reader = new FileReader();
+						reader.readAsDataURL(icon);
+						reader.onload = function(e){
+							icon = e.target.result;
+							update();
+						}
+					}else{
+						update();
+					}
+					
+					function update(){
+						formData.append("id",album.id);
+						formData.append("name",name);
+						if(icon){
+							formData.append("icon",icon);
+						}
+						formData.append("createTime",createTime);
+						formData.append("createCompany",createCompany);
+						formData.append("tagId",tagId);
+						formData.append("remark",remark);
+						formData.append("introduction",introduction);
+						
+						$.ajax({
+							url:"/music/admin/album/"+album.id,
+							type:"PUT",
+							dataType:"json",
+							data:formData,
+							processData:false,
+							contentType:false,
+							success:function(data){
+								if(data.code==200){
+									alert("操作成功");
+									$.ajax({
+										url : "/music/admin/html/album-tables",
+										type : "GET",
+										success : function(data) {
+											$material.html(data);
+										}
+									});
+								}else{
+									alert("操作失败");
+								}
+							}
+						});
+					}
+				});
+				
+				$album.find("#cancel").on("click",function(){
+					$.ajax({
+						url : "/music/admin/html/album-tables",
+						type : "GET",
+						success : function(data) {
+							$material.html(data);
+						}
+					})
+				});
+				
+				$material.empty().append($album);
+			});
+		}
+		
+		var $name = $("#name");
+		$("#search").on("click", function() {
+			var name = $name.val();
+			if (!name || name == "") {
+				return;
+			}
+			$.ajax({
+				url : "/music/admin/album/name/" + name + "/page/1",
+				dataType : "json",
+				type : "GET"
+			}).done(function(data) {
+				load(data, "/music/admin/album/name/" + name + "/");
+			})
+		});
+		
+		$addByExcel.on("click",addByExcel);
+		function addByExcel(){
+			var excel = $excel[0].files[0] //
+			, iconZip = $iconZip[0].files[0] //
+			;
+			
+			WorkGroup([function(){
+				if(excel && excel.name.substring(excel.name.lastIndexOf(".")+1).toLowerCase() == "xlsx"){
+					var reader = new FileReader();
+					reader.readAsDataURL(excel);
+					reader.onload = function(e){
+						excel = e.target.result;
+						this.workGroup.pop();
+					}.bind(this);
+				}else{
+					alert("未选择excel文件或格式错误");
+					this.workGroup.fail();
+				}
+			},function(){
+				if(iconZip && iconZip.name.substring(iconZip.name.lastIndexOf(".")+1).toLowerCase() == "zip"){
+					var reader = new FileReader();
+					reader.readAsDataURL(iconZip);
+					reader.onload = function(e){
+						iconZip = e.target.result;
+						iconZip = iconZip.replace(":;",":application/zip;");
+						this.workGroup.pop();
+					}.bind(this);
+				}else{
+					alert("未选择zip文件或格式错误");
+					this.workGroup.fail();
+				}
+			}]).done(function(){
+				$addByExcel.off();
+				var formData = new FormData();
+				formData.append("excel",excel);
+				formData.append("iconZip",iconZip);
+				$.ajax({
+					url:"/music/admin/album/excel",
+					type:"POST",
+					data:formData,
+					processData:false,
+					contentType:false,
+					dataType:"json",
+					success:function(data){
+						if(data.code==200){
+							alert("上传成功");
+							$("#closeAddByExcel").click();
+							$.ajax({
+								url : "/music/admin/album/page/1",
+								dataType : "json",
+								type : "GET"
+							}).done(function(data) {
+								load(data, "/music/admin/album/");
+							});
+						}else{
+							alert("上传失败");
+							$addByExcel.on("click",addByExcel)
+						}
+					}
+				}) 
+			});
+		}
+	}())
+</script>

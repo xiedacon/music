@@ -1,19 +1,19 @@
-package cn.xiedacon.util;
+package cn.xiedacon.util.excel;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
-import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 public class XSSFUtils {
 
-	public static List<List<String>> parse(File file) {
+	public static List<List<cn.xiedacon.util.excel.Cell>> parse(File file) {
 		return parse(file, 0, null, 0, null, 0, null);
 	}
 
@@ -24,7 +24,7 @@ public class XSSFUtils {
 	 * @param beginRowNum
 	 * @return
 	 */
-	public static List<List<String>> parse(File file, Integer beginRowNum) {
+	public static List<List<cn.xiedacon.util.excel.Cell>> parse(File file, Integer beginRowNum) {
 		return parse(file, 0, null, beginRowNum, null, 0, null);
 	}
 
@@ -36,7 +36,7 @@ public class XSSFUtils {
 	 * @param cellLimit
 	 * @return
 	 */
-	public static List<List<String>> parse(File file, Integer beginRowNum, Integer cellLimit) {
+	public static List<List<cn.xiedacon.util.excel.Cell>> parse(File file, Integer beginRowNum, Integer cellLimit) {
 		return parse(file, 0, null, beginRowNum, null, 0, cellLimit);
 	}
 
@@ -52,9 +52,9 @@ public class XSSFUtils {
 	 * @param cellLimit
 	 * @return
 	 */
-	public static List<List<String>> parse(File file, Integer beginSheetNum, Integer sheetLimit, Integer beginRowNum,
-			Integer rowLmit, Integer beginCellNum, Integer cellLimit) {
-		List<List<String>> result = new ArrayList<>();
+	public static List<List<cn.xiedacon.util.excel.Cell>> parse(File file, Integer beginSheetNum, Integer sheetLimit,
+			Integer beginRowNum, Integer rowLmit, Integer beginCellNum, Integer cellLimit) {
+		List<List<cn.xiedacon.util.excel.Cell>> result = new ArrayList<>();
 		if (file == null) {
 			return result;
 		}
@@ -88,9 +88,9 @@ public class XSSFUtils {
 	 * @param cellLimit
 	 * @return
 	 */
-	private static List<List<String>> parseSheet(Sheet sheet, Integer beginRowNum, Integer rowLmit,
+	private static List<List<cn.xiedacon.util.excel.Cell>> parseSheet(Sheet sheet, Integer beginRowNum, Integer rowLmit,
 			Integer beginCellNum, Integer cellLimit) {
-		List<List<String>> rowList = new ArrayList<>();
+		List<List<cn.xiedacon.util.excel.Cell>> rowList = new ArrayList<>();
 		if (sheet == null) {
 			return rowList;
 		}
@@ -105,10 +105,10 @@ public class XSSFUtils {
 		}
 
 		for (int i = firstRowNum; i < lastRowNum + 1; i++) {
-			List<String> row = parseRow(sheet.getRow(i), beginCellNum, cellLimit);
-			if(row.isEmpty()){
+			List<cn.xiedacon.util.excel.Cell> row = parseRow(sheet.getRow(i), beginCellNum, cellLimit);
+			if (row.isEmpty()) {
 				break;
-			}else{
+			} else {
 				rowList.add(row);
 			}
 		}
@@ -124,8 +124,8 @@ public class XSSFUtils {
 	 * @param cellLimit
 	 * @return
 	 */
-	private static List<String> parseRow(Row row, Integer beginCellNum, Integer cellLimit) {
-		List<String> cellList = new ArrayList<>();
+	private static List<cn.xiedacon.util.excel.Cell> parseRow(Row row, Integer beginCellNum, Integer cellLimit) {
+		List<cn.xiedacon.util.excel.Cell> cellList = new ArrayList<>();
 		if (row == null) {
 			return cellList;
 		}
@@ -140,32 +140,44 @@ public class XSSFUtils {
 		}
 
 		for (int i = firstCellNum; i < lastCellNum + 1; i++) {
-			cellList.add(getCellValue(row.getCell(i)));
+			cellList.add(new cn.xiedacon.util.excel.Cell(row.getCell(i)));
 		}
 
 		return cellList;
 	}
 
-	/**
-	 * 获取单元格中的值
-	 * 
-	 * @param cell
-	 * @return
-	 */
-	@SuppressWarnings("deprecation")
-	private static String getCellValue(Cell cell) {
-		if (cell == null) {
-			return null;
+	public static void write(File xssfFile, File templateFile, List<List<Cell>> dataCellsList, Integer beginRowNum) {
+		XSSFUtils.write(xssfFile, templateFile, dataCellsList, beginRowNum, 0);
+	}
+
+	public static void write(File xssfFile, File templateFile, List<List<Cell>> dataCellsList, Integer beginRowNum,
+			Integer beginCellNum) {
+		try (XSSFWorkbook workbook = new XSSFWorkbook(templateFile);
+				FileOutputStream out = new FileOutputStream(xssfFile)) {
+			Sheet sheet = workbook.getSheetAt(0);
+			createSheet(dataCellsList, sheet, beginRowNum, beginCellNum);
+			workbook.write(out);
+		} catch (InvalidFormatException | IOException e) {
+			throw new RuntimeException(e);
 		}
-		switch (cell.getCellType()) {
-		case Cell.CELL_TYPE_STRING:
-			return cell.getStringCellValue().toString();
-		case Cell.CELL_TYPE_NUMERIC:
-			return Double.toString(cell.getNumericCellValue());
-		case Cell.CELL_TYPE_BOOLEAN:
-			return Boolean.toString(cell.getBooleanCellValue());
-		default:
-			return null;
+	}
+
+	private static void createSheet(List<List<Cell>> dataCellsList, Sheet sheet, Integer beginRowNum,
+			Integer beginCellNum) {
+		int endRowNum = beginRowNum + dataCellsList.size();
+		for (int i = beginRowNum; i < endRowNum; i++) {
+			Row row = sheet.createRow(i);
+			List<Cell> dataCells = dataCellsList.get(i - beginRowNum);
+			createRow(dataCells, row, beginCellNum);
+		}
+	}
+
+	private static void createRow(List<Cell> dataCells, Row row, Integer beginCellNum) {
+		int endCellNum = beginCellNum + dataCells.size();
+		for (int j = beginCellNum; j < endCellNum; j++) {
+			org.apache.poi.ss.usermodel.Cell cell = row.createCell(j);
+			Cell dataCell = dataCells.get(j);
+			dataCell.copyTo(cell);
 		}
 	}
 }

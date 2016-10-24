@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import cn.xiedacon.admin.dao.AdminUserDao;
+import cn.xiedacon.admin.dao.UserAdminDao;
 import cn.xiedacon.admin.service.UserAdminService;
 import cn.xiedacon.model.User;
 import cn.xiedacon.util.Constant;
@@ -15,7 +15,7 @@ import cn.xiedacon.util.PageBean;
 public class UserAdminServiceImpl implements UserAdminService {
 
 	@Autowired
-	private AdminUserDao userDao;
+	private UserAdminDao userDao;
 
 	@Override
 	public PageBean<User> selectPageBean(Integer page) {

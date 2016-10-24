@@ -6,7 +6,7 @@ import org.apache.ibatis.annotations.Param;
 
 import cn.xiedacon.model.User;
 
-public interface AdminUserDao {
+public interface UserAdminDao {
 
 	List<User> selectLimit(@Param("begin") int begin, @Param("limit") int limit);
 

@@ -8,6 +8,6 @@ public class MyContextLoaderListener extends ContextLoaderListener {
 
 	public void contextInitialized(ServletContextEvent event) {
 		super.contextInitialized(event);
-		ResourceUtils.setServletContext(event.getServletContext());
+		ResourceLoader.setServletContext(event.getServletContext());
 	}
 }

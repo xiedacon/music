@@ -1,6 +1,7 @@
-package cn.xiedacon.admin.dao;
+package cn.xiedacon.admin.dao.impl;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -14,10 +15,12 @@ import org.springframework.stereotype.Repository;
 
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 
+import cn.xiedacon.admin.dao.BatchSqlDao;
 import cn.xiedacon.model.Album;
 import cn.xiedacon.model.Album_SongGL;
 import cn.xiedacon.model.Singer;
 import cn.xiedacon.model.Song;
+import cn.xiedacon.model.SongList_SongGL;
 
 @Repository
 public class BatchSqlDaoImpl implements BatchSqlDao {
@@ -173,7 +176,6 @@ public class BatchSqlDaoImpl implements BatchSqlDao {
 	public void insertSong(List<Song> songList) {
 		String song_baseSql = "INSERT INTO song_base VALUES(?,?,?,?,?,?,?,?,?,?,?,?)";
 		String song_recordSql = "INSERT INTO song_record VALUES(?,?,?,?)";
-		int batchSize = 100;
 
 		try (Connection conn = dataSource.getConnection();) {
 			conn.setAutoCommit(false);
@@ -218,7 +220,6 @@ public class BatchSqlDaoImpl implements BatchSqlDao {
 	@Override
 	public void insertAlbum_SongGL(List<Album_SongGL> album_SongGLList) {
 		String song_gl_albumSql = "INSERT INTO song_gl_album VALUES(?,?,(SELECT COUNT(s.id) FROM song_gl_album s WHERE s.albumId = ?),?)";
-		int batchSize = 100;
 
 		try (Connection conn = dataSource.getConnection();) {
 			conn.setAutoCommit(false);
@@ -237,6 +238,129 @@ public class BatchSqlDaoImpl implements BatchSqlDao {
 				}
 			}
 			song_gl_albumStatement.executeBatch();
+			conn.commit();
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	@Override
+	public Map<String, Song> selectSongByName(List<String> songNames) {
+		String For1 = "SELECT sb.id, sb.name FROM song_base sb WHERE sb.name = ?";
+		String For3 = "SELECT sb.id, sb.name FROM song_base sb WHERE sb.name IN(?,?,?)";
+		String For10 = "SELECT sb.id, sb.name FROM song_base sb WHERE sb.name IN(?,?,?,?,?,?,?,?,?,?)";
+		int num = songNames.size();
+		int begin = 0;
+		List<ResultSet> resultSetlist = new ArrayList<>();
+		try (Connection conn = dataSource.getConnection();) {
+			while (num > 0) {
+				if (num % 10 == 0) {
+					resultSetlist.add(queryForNameList(conn, begin, 10, For10, songNames));
+					begin += 10;
+					num -= 10;
+				} else if (num % 3 == 0) {
+					resultSetlist.add(queryForNameList(conn, begin, 3, For3, songNames));
+					begin += 3;
+					num -= 3;
+				} else {
+					resultSetlist.add(queryForNameList(conn, begin, 1, For1, songNames));
+					begin += 1;
+					num -= 1;
+				}
+			}
+
+			Map<String, Song> result = new HashMap<>();
+			for (ResultSet resultSet : resultSetlist) {
+				while (resultSet.next()) {
+					result.put(resultSet.getString(2), new Song(resultSet.getString(1), resultSet.getString(2)));
+				}
+			}
+			return result;
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	@Override
+	public void insertSongList_SongGL(List<SongList_SongGL> songList_SongGLList) {
+		String song_gl_songlistSql = "INSERT INTO song_gl_songlist VALUES(?,?,?,?,?)";
+		int batchSize = 100;
+
+		try (Connection conn = dataSource.getConnection();) {
+			conn.setAutoCommit(false);
+
+			PreparedStatement song_gl_songlistStatement = conn.prepareStatement(song_gl_songlistSql);
+			for (int i = 0; i < songList_SongGLList.size(); i++) {
+				SongList_SongGL songList_SongGL = songList_SongGLList.get(i);
+				song_gl_songlistStatement.setString(1, songList_SongGL.getId());
+				song_gl_songlistStatement.setString(2, songList_SongGL.getSongId());
+				song_gl_songlistStatement.setInt(3, songList_SongGL.getRank());
+				song_gl_songlistStatement.setString(4, songList_SongGL.getSongListId());
+				song_gl_songlistStatement.setInt(5, songList_SongGL.getRankChange());
+				song_gl_songlistStatement.addBatch();
+
+				if ((i + 1) % batchSize == 0) {
+					song_gl_songlistStatement.executeBatch();
+				}
+			}
+			song_gl_songlistStatement.executeBatch();
+			conn.commit();
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	@Override
+	public void deleteSongList_SongGLBySongListId(String id) {
+		String sql = "DELETE FROM song_gl_songlist WHERE songListId = ?";
+		try (Connection conn = dataSource.getConnection();) {
+			PreparedStatement statement = conn.prepareStatement(sql);
+			statement.setString(1, id);
+			statement.execute();
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	@Override
+	public void insertAlbum(List<Album> albumList) {
+		String album_baseSql = "INSERT INTO album_base VALUES(?,?,?,?,?,?,?,?,?,?,?,?)";
+		String album_recordSql = "INSERT INTO album_record VALUES(?,?,?,?)";
+
+		try (Connection conn = dataSource.getConnection();) {
+			conn.setAutoCommit(false);
+
+			PreparedStatement album_baseStatement = conn.prepareStatement(album_baseSql);
+			PreparedStatement album_recordStatement = conn.prepareStatement(album_recordSql);
+			for (int i = 0; i < albumList.size(); i++) {
+				Album album = albumList.get(i);
+				album_baseStatement.setString(1, album.getId());
+				album_baseStatement.setString(2, album.getName());
+				album_baseStatement.setString(3, album.getIcon());
+				album_baseStatement.setString(4, album.getRemark());
+				album_baseStatement.setString(5, album.getSingerName());
+				album_baseStatement.setDate(6, new Date(album.getCreateTime().getTime()));
+				album_baseStatement.setString(7, album.getCreateCompany());
+				album_baseStatement.setString(8, album.getIntroduction());
+				album_baseStatement.setInt(9, album.getSongNum());
+				album_baseStatement.setString(10, album.getSingerId());
+				album_baseStatement.setString(11, album.getTagId());
+				album_baseStatement.setBoolean(12, album.getVisible());
+				album_baseStatement.addBatch();
+
+				album_recordStatement.setString(1, album.getId());
+				album_recordStatement.setInt(2, album.getShareNum());
+				album_recordStatement.setInt(3, album.getCommentNum());
+				album_recordStatement.setInt(4, album.getPlayNum());
+				album_recordStatement.addBatch();
+
+				if ((i + 1) % batchSize == 0) {
+					album_baseStatement.executeBatch();
+					album_recordStatement.executeBatch();
+				}
+			}
+			album_baseStatement.executeBatch();
+			album_recordStatement.executeBatch();
 			conn.commit();
 		} catch (Exception e) {
 			throw new RuntimeException(e);

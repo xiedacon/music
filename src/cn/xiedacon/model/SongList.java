@@ -13,14 +13,24 @@ public class SongList {
 	private String icon;
 	private String refreshRate;
 	private Date refreshDate;
-	private Integer songNum;
+	
+	private Boolean globe;
 
+	private Integer songNum;
 	private Integer collectionNum;
 	private Integer shareNum;
 	private Integer commentNum;
 	private Integer playNum;
 
-	private Boolean globe;
+	private Boolean visible;
+
+	public Boolean getVisible() {
+		return visible;
+	}
+
+	public void setVisible(Boolean visible) {
+		this.visible = visible;
+	}
 
 	public Date getRefreshDate() {
 		return refreshDate;
@@ -113,9 +123,9 @@ public class SongList {
 	@Override
 	public String toString() {
 		return "SongList [id=" + id + ", name=" + name + ", icon=" + icon + ", refreshRate=" + refreshRate
-				+ ", refreshDate=" + refreshDate + ", songNum=" + songNum + ", collectionNum=" + collectionNum
-				+ ", shareNum=" + shareNum + ", commentNum=" + commentNum + ", playNum=" + playNum + ", globe=" + globe
-				+ "]";
+				+ ", refreshDate=" + refreshDate + ", globe=" + globe + ", songNum=" + songNum + ", collectionNum="
+				+ collectionNum + ", shareNum=" + shareNum + ", commentNum=" + commentNum + ", playNum=" + playNum
+				+ ", visible=" + visible + "]";
 	}
 
 }

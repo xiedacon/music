@@ -10,7 +10,7 @@
 		ab.id id,
 		ab.name name
 		FROM album_base ab
-		WHERE ab.name = #{name}
+		WHERE ab.name = #{name} AND ab.visible = true
 	</select>
 
 	<update id="updateSongNumByIdAndAddNum">
@@ -18,4 +18,120 @@
 		SET ab.songNum = #{addNum} + ab.songNum
 		WHERE ab.id = #{id}
 	</update>
+
+	<select id="selectCount" resultType="int">
+		SELECT COUNT(ab.id)
+		FROM album_base ab
+		WHERE ab.visible = true
+	</select>
+
+	<select id="selectListLimit" resultType="cn.xiedacon.model.Album">
+		SELECT
+		ab.id id,
+		ab.name name,
+		ab.singerName singerName,
+		ab.createTime createTime,
+		ab.createCompany createCompany,
+		ab.songNum songNum,
+		ar.shareNum shareNum,
+		ar.commentNum commentNum,
+		ar.playNum playNum
+		FROM album_base ab
+		INNER JOIN album_record ar ON ab.id = ar.id
+		WHERE ab.visible = true
+		LIMIT #{begin},#{limit}
+	</select>
+	
+	<select id="selectExist" resultType="cn.xiedacon.model.Album">
+		SELECT
+		ab.id id
+		FROM album_base ab
+		WHERE ab.visible = true AND ab.id = #{id}
+	</select>
+	
+	<update id="delete" parameterType="cn.xiedacon.model.Album">
+		UPDATE album_base ab 
+		SET ab.visible = false
+		WHERE ab.id = #{id}
+	</update>
+	
+	<select id="selectCountByNameLike" resultType="int">
+		SELECT COUNT(ab.id)
+		FROM album_base ab
+		WHERE ab.visible = true AND ab.name LIKE #{nameLike}
+	</select>
+	
+	<select id="selectListByNameLikeLimit" resultType="cn.xiedacon.model.Album">
+		SELECT
+		ab.id id,
+		ab.name name,
+		ab.singerName singerName,
+		ab.createTime createTime,
+		ab.createCompany createCompany,
+		ab.songNum songNum,
+		ar.shareNum shareNum,
+		ar.commentNum commentNum,
+		ar.playNum playNum
+		FROM album_base ab
+		INNER JOIN album_record ar ON ab.id = ar.id
+		WHERE ab.visible = true AND ab.name LIKE #{nameLike}
+		LIMIT #{begin},#{limit}
+	</select>
+	
+	<select id="selectById" resultType="cn.xiedacon.model.Album">
+		SELECT
+		ab.id id,
+		ab.name name,
+		ab.icon icon,
+		ab.singerName singerName,
+		ab.createTime createTime,
+		ab.createCompany createCompany,
+		ab.tagId tagId,
+		ab.remark remark,
+		ab.introduction introduction
+		FROM album_base ab
+		INNER JOIN album_record ar ON ab.id = ar.id
+		WHERE ab.visible = true AND ab.id = #{id}
+	</select>
+	
+	<update id="update" parameterType="cn.xiedacon.model.Album">
+		UPDATE album_base ab
+		SET 
+		ab.name = #{name},
+		ab.icon = #{icon},
+		ab.createTime = #{createTime},
+		ab.createCompany = #{createCompany},
+		ab.tagId = #{tagId},
+		ab.remark = #{remark},
+		ab.introduction = #{introduction}
+		WHERE ab.id = #{id}
+	</update>
+	
+	<insert id="insertAlbum_base" parameterType="cn.xiedacon.model.Album">
+		INSERT INTO album_base
+		VALUES(
+		#{id},
+		#{name},
+		#{icon},
+		#{remark},
+		#{singerName},
+		#{createTime},
+		#{createCompany},
+		#{introduction},
+		#{songNum},
+		#{singerId},
+		#{tagId},
+		#{visible}
+		)
+	</insert>
+	
+	<insert id="insertAlbum_record" parameterType="cn.xiedacon.model.Album">
+		INSERT INTO album_record
+		VALUES(
+		#{id},
+		#{shareNum},
+		#{commentNum},
+		#{playNum}
+		)
+	</insert>
 </mapper>

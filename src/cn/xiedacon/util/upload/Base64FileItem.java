@@ -1,4 +1,4 @@
-package cn.xiedacon.util;
+package cn.xiedacon.util.upload;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -6,6 +6,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileItemHeaders;
@@ -67,9 +70,9 @@ public class Base64FileItem implements FileItem {
 	}
 
 	@Override
-	public String getString(String arg0) {
+	public String getString(String charset) {
 		try {
-			return fileItem.getString(arg0);
+			return fileItem.getString(charset);
 		} catch (UnsupportedEncodingException e) {
 			throw new RuntimeException(e);
 		}
@@ -96,14 +99,26 @@ public class Base64FileItem implements FileItem {
 		}
 	}
 
-	public Integer getInteger(){
+	public Integer getInteger() {
 		return Integer.valueOf(fileItem.getString());
 	}
-	
-	public Double getDouble(){
+
+	public Double getDouble() {
 		return Double.valueOf(fileItem.getString());
 	}
-	
+
+	public Boolean getBoolean() {
+		return Boolean.valueOf(fileItem.getString());
+	}
+
+	public Date getDate(String date) {
+		try {
+			return new SimpleDateFormat(date).parse(fileItem.getString());
+		} catch (ParseException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
 	public File getFile(String path) {
 		File file = new File(path);
 		try (FileOutputStream out = new FileOutputStream(file)) {
@@ -133,10 +148,10 @@ public class Base64FileItem implements FileItem {
 			String base64 = IOUtils.toString(in);
 			String[] strs = base64.split(";base64,");
 			type = strs[0].substring(5);
-			
+
 			//
 			type = type.split("/")[1];
-			
+
 			data = decoder.decodeBuffer(strs[1]);
 		} catch (IOException e) {
 			throw new RuntimeException(e);

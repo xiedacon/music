@@ -1,4 +1,4 @@
-package cn.xiedacon.util;
+package cn.xiedacon.util.upload;
 
 import java.io.File;
 import java.io.FileInputStream;

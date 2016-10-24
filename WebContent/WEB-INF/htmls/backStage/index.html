@@ -847,7 +847,7 @@
 				if(work instanceof Function){
 					if(excuteFlag){
 						work.workGroup = group;
-						work();
+						work.call(work);
 					}
 				}else{
 					throw TypeError("work必须为Function");

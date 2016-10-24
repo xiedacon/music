@@ -111,7 +111,9 @@ public class MessageUtils {
 	 */
 	public static Map<String, Object> createError(String message, String name, Object value) {
 		Map<String, Object> error = new HashMap<>();
-		error.put(name, value);
+		if (name != null && value != null) {
+			error.put(name, value);
+		}
 		return createMessage(Constant.ERROR, message, "error", error);
 	}
 

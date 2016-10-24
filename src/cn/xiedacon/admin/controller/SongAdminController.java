@@ -22,14 +22,15 @@ import cn.xiedacon.factory.Factory;
 import cn.xiedacon.model.Album;
 import cn.xiedacon.model.Singer;
 import cn.xiedacon.model.Song;
-import cn.xiedacon.util.Base64FileItem;
-import cn.xiedacon.util.Base64UploadUtils;
 import cn.xiedacon.util.CharsetUtils;
 import cn.xiedacon.util.Constant;
 import cn.xiedacon.util.MessageUtils;
 import cn.xiedacon.util.UUIDUtils;
-import cn.xiedacon.util.XSSFUtils;
 import cn.xiedacon.util.ZipUtils;
+import cn.xiedacon.util.excel.Cell;
+import cn.xiedacon.util.excel.XSSFUtils;
+import cn.xiedacon.util.upload.Base64FileItem;
+import cn.xiedacon.util.upload.Base64UploadUtils;
 
 @Controller
 @ResponseBody
@@ -63,7 +64,7 @@ public class SongAdminController {
 	public Map<String, Object> selectPageBeanByNameLike(@PathVariable("name") String name,
 			@PathVariable("page") Integer page) {
 		return MessageUtils.createSuccess(Constant.SUCCESS_RETURNNAME, songService.selectPageBeanByNameLike(page,
-				"%" + CharsetUtils.decode(name, "ISO-8859-1", "UTF-8") + "%"));
+				"%" + CharsetUtils.change(name, "ISO-8859-1", "UTF-8") + "%"));
 	}
 
 	@RequestMapping(value = "/{id:\\w+}", method = RequestMethod.GET)
@@ -155,7 +156,7 @@ public class SongAdminController {
 		String songName = UUIDUtils.uuid(new Date().getTime()) + "." + songItem.getType();
 		songItem.getFile(request.getServletContext().getRealPath("music") + "/" + songName);
 
-		if(lrcItem != null){
+		if (lrcItem != null) {
 			String lrcName = UUIDUtils.uuid(new Date().getTime()) + "." + lrcItem.getType();
 			lrcItem.getFile(request.getServletContext().getRealPath("lyrics") + "/" + lrcName);
 			song.setLrcUri("lyrics/" + lrcName);
@@ -191,7 +192,7 @@ public class SongAdminController {
 		Base64FileItem excelItem = fileItems.get("excel");
 		File excelFile = excelItem.getFile(request.getServletContext().getRealPath("temp") + "/"
 				+ UUIDUtils.randomUUID() + "." + excelItem.getType());
-		List<List<String>> excelSongList = XSSFUtils.parse(excelFile, Constant.EXCEL_BEGINNUM, 8);
+		List<List<Cell>> cellData = XSSFUtils.parse(excelFile, Constant.EXCEL_BEGINNUM, 8);
 		excelFile.delete();
 
 		Base64FileItem iconZipItem = fileItems.get("iconZip");
@@ -216,27 +217,27 @@ public class SongAdminController {
 		List<String> singerNameList = new ArrayList<>();
 		List<String> albumNameList = new ArrayList<>();
 
-		for (List<String> excelSong : excelSongList) {
-			singerNameList.add(excelSong.get(6));
-			albumNameList.add(excelSong.get(7));
+		for (List<Cell> songCells : cellData) {
+			singerNameList.add(songCells.get(6).getString());
+			albumNameList.add(songCells.get(7).getString());
 		}
 
 		Map<String, Singer> singerMap = singerService.batchSelectByName(singerNameList);
 		Map<String, Album> albumMap = albumService.batchSelectByName(albumNameList);
 
-		for (int i = 0; i < excelSongList.size(); i++) {
-			List<String> excelSong = excelSongList.get(i);
+		for (int i = 0; i < cellData.size(); i++) {
+			List<Cell> songCells = cellData.get(i);
 
 			Song song = factory.get(Song.class);
 			song.setId(UUIDUtils.randomUUID());
-			song.setName(excelSong.get(1));
-			song.setIcon("image/song/" + excelSong.get(2));
-			song.setTime(excelSong.get(3));
-			String lrcUri = excelSong.get(4);
+			song.setName(songCells.get(1).getString());
+			song.setIcon("image/song/" + songCells.get(2).getString());
+			song.setTime(songCells.get(3).getString());
+			String lrcUri = songCells.get(4).getString();
 			if (lrcUri != null) {
 				song.setLrcUri("lyric/" + lrcUri);
 			}
-			song.setFileUri("music/" + excelSong.get(5));
+			song.setFileUri("music/" + songCells.get(5));
 			Singer singer = singerMap.get(singerNameList.get(i));
 			if (singer != null) {
 				song.setSingerId(singer.getId());
@@ -247,7 +248,7 @@ public class SongAdminController {
 				song.setAlbumId(album.getId());
 				song.setAlbumName(album.getName());
 			}
-			song.setRemark(excelSong.get(8));
+			song.setRemark(songCells.get(8).getString());
 			songList.add(song);
 		}
 

@@ -39,6 +39,6 @@ public class UserAdminController {
 	@RequestMapping(value = "/name/{name:.+}/page/{page:[1-9]\\d*}", method = RequestMethod.GET)
 	public Map<String, Object> selectPageBeanByNameLike(@PathVariable("name") String name,@PathVariable("page") Integer page) {
 		return MessageUtils.createSuccess("data", userService.selectPageBeanByNameLike(page,
-				"%" + CharsetUtils.decode(name, "ISO-8859-1", "UTF-8") + "%"));
+				"%" + CharsetUtils.change(name, "ISO-8859-1", "UTF-8") + "%"));
 	}
 }

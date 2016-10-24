@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import cn.xiedacon.read.service.SongReadService;
-import cn.xiedacon.util.ResourceUtils;
+import cn.xiedacon.util.ResourceLoader;
 
 @Controller
 public class BaseController {
@@ -55,13 +55,13 @@ public class BaseController {
 
 	@RequestMapping(value = "/json/{name:.+}", method = RequestMethod.GET)
 	public void json(@PathVariable("name") String name, HttpServletRequest request, HttpServletResponse response) {
-		ResourceUtils.writeToResponse("jsons/" + name + ".json", response);
+		ResourceLoader.writeToResponse("jsons/" + name + ".json", response);
 	}
 
 	@RequestMapping(value = "/file/{songId:\\w+}", method = RequestMethod.GET)
 	public void getFile(@PathVariable("songId") String songId, HttpServletRequest request,
 			HttpServletResponse response) {
 		response.setContentType("audio/mp3;");
-		ResourceUtils.writeToResponse(songService.selectFileUriById(songId), response);
+		ResourceLoader.writeToResponse(songService.selectFileUriById(songId), response);
 	}
 }

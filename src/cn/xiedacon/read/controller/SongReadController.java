@@ -14,7 +14,7 @@ import cn.xiedacon.model.Song;
 import cn.xiedacon.read.service.SongReadService;
 import cn.xiedacon.util.Constant;
 import cn.xiedacon.util.MessageUtils;
-import cn.xiedacon.util.ResourceUtils;
+import cn.xiedacon.util.ResourceLoader;
 
 @Controller
 @ResponseBody
@@ -52,6 +52,6 @@ public class SongReadController {
 
 	@RequestMapping("/{id:\\w+}/lrc")
 	public Map<String, Object> getLrcById(@PathVariable("id") String id) {
-		return MessageUtils.createSuccess("lrc", ResourceUtils.getResourceAsString(songService.selectLyricUriById(id)));
+		return MessageUtils.createSuccess("lrc", ResourceLoader.getResourceAsString(songService.selectLyricUriById(id)));
 	}
 }

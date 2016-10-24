@@ -1,5 +1,8 @@
 package cn.xiedacon.util;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -8,12 +11,12 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.IOUtils;
 
-public class ResourceUtils {
+public class ResourceLoader {
 
 	private static ServletContext servletContext;
 
 	public static void setServletContext(ServletContext servletContext) {
-		ResourceUtils.servletContext = servletContext;
+		ResourceLoader.servletContext = servletContext;
 	}
 
 	public static String getResourceAsString(String uri) {
@@ -27,6 +30,23 @@ public class ResourceUtils {
 			e.printStackTrace();
 			return null;
 		}
+	}
+
+	public static InputStream loadAsStream(String uri) {
+		try {
+			return new FileInputStream(servletContext.getRealPath(uri));
+		} catch (FileNotFoundException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	public static File loadAsFile(String realUri, String virtualUri) {
+		virtualUri = virtualUri == null ? "" : virtualUri;
+		return new File(servletContext.getRealPath(realUri) + virtualUri);
+	}
+	
+	public static String getRealPath(String realUri) {
+		return servletContext.getRealPath(realUri);
 	}
 
 	public static void writeToResponse(String uri, HttpServletResponse response) {

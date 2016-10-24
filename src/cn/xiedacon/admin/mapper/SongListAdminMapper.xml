@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.xiedacon.admin.dao.SongListAdminDao">
+
+	<select id="selectCount" resultType="int">
+		SELECT COUNT(s.id)
+		FROM
+		songlist_base s
+		WHERE s.visible = true
+	</select>
+
+	<select id="selectListLimit" resultType="cn.xiedacon.model.SongList">
+		SELECT
+		s.id id,
+		s.name name,
+		s.refreshRate refreshRate,
+		s.songNum songNum,
+		s.globe globe,
+		sr.collectionNum collectionNum,
+		sr.shareNum shareNum,
+		sr.commentNum commentNum,
+		sr.playNum playNum
+		FROM songlist_base s
+		INNER JOIN songlist_record sr ON s.id = sr.id
+		WHERE s.visible = true
+		LIMIT #{begin},#{limit}
+	</select>
+
+	<delete id="delete" parameterType="cn.xiedacon.model.SongList">
+		UPDATE songlist_base s 
+		SET s.visible = false
+		WHERE s.id = #{id}
+	</delete>
+
+	<select id="selectExist" resultType="cn.xiedacon.model.SongList">
+		SELECT s.id
+		FROM songlist_base s
+		WHERE s.id = #{id} AND s.visible = true
+	</select>
+
+	<select id="selectCountByNameLike" resultType="int">
+		SELECT COUNT(s.id)
+		FROM
+		songmenu_base s
+		WHERE s.visible = true AND s.name LIKE #{nameLike}
+	</select>
+
+	<select id="selectListByNameLikeLimit" resultType="cn.xiedacon.model.SongList">
+		SELECT
+		s.id id,
+		s.name name,
+		s.refreshRate refreshRate,
+		s.songNum songNum,
+		s.globe globe,
+		sr.collectionNum collectionNum,
+		sr.shareNum shareNum,
+		sr.commentNum commentNum,
+		sr.playNum playNum
+		FROM songlist_base s
+		INNER JOIN songlist_record sr ON s.id = sr.id
+		WHERE s.visible = true AND s.name LIKE #{nameLike}
+		LIMIT #{begin},#{limit}
+	</select>
+
+	<select id="selectById" resultType="cn.xiedacon.model.SongList">
+		SELECT
+		s.id id,
+		s.name name,
+		s.icon icon,
+		s.refreshRate refreshRate,
+		s.songNum songNum,
+		s.globe globe,
+		sr.collectionNum collectionNum,
+		sr.shareNum shareNum,
+		sr.commentNum commentNum,
+		sr.playNum playNum
+		FROM songlist_base s
+		INNER JOIN songlist_record sr ON s.id = sr.id
+		WHERE s.visible = true AND s.id = #{id}
+	</select>
+	
+	<update id="update" parameterType="cn.xiedacon.model.SongList">
+		UPDATE songlist_base s
+		SET 
+		s.name = #{name},
+		s.icon = #{icon},
+		s.refreshRate = #{refreshRate},
+		s.refreshDate = #{refreshDate},
+		s.globe = #{globe}
+		WHERE s.id = #{id}
+	</update>
+	
+	<insert id="insertSonglist_base" parameterType="cn.xiedacon.model.SongList">
+		INSERT INTO songlist_base
+		VALUES(
+		#{id},
+		#{name},
+		#{icon},
+		#{refreshRate},
+		#{songNum},
+		#{refreshDate},
+		#{globe},
+		#{visible}
+		)
+	</insert>
+	
+	<insert id="insertSonglist_record" parameterType="cn.xiedacon.model.SongList">
+		INSERT INTO songlist_record
+		VALUES(
+		#{id},
+		#{collectionNum},
+		#{shareNum},
+		#{commentNum},
+		#{playNum}
+		)
+	</insert>
+	
+</mapper>

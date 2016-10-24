@@ -24,6 +24,18 @@ public class Album {
 	private String singerId;
 	private String singerName;
 
+	private String tagId;
+
+	private Boolean visible;
+
+	public Boolean getVisible() {
+		return visible;
+	}
+
+	public void setVisible(Boolean visible) {
+		this.visible = visible;
+	}
+
 	public Album(String id, String name) {
 		super();
 		this.id = id;
@@ -32,6 +44,14 @@ public class Album {
 
 	public Album() {
 		super();
+	}
+
+	public String getTagId() {
+		return tagId;
+	}
+
+	public void setTagId(String tagId) {
+		this.tagId = tagId;
 	}
 
 	public Integer getPlayNum() {
