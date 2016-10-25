@@ -866,6 +866,17 @@
 				}
 			}
 		}
+		function refresh(url){
+			$.ajax({
+				url : url,
+				type : "GET",
+				success : function(data) {
+					$("body").removeAttr("class").removeAttr("style") //
+					.find(".modal-backdrop").remove();
+					$material.html(data);
+				}
+			});
+		}
 	</script>
 </body>
 </html>

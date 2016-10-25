@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.xiedacon.admin.dao.FirstClassifyAdminDao">
+	
+	<select id="selectList" resultType="cn.xiedacon.model.FirstClassify">
+		SELECT 
+		cf.id id,
+		cf.name name
+		FROM classify_first cf
+		WHERE cf.visible = true
+	</select>
+	
+	<select id="selectById" resultType="cn.xiedacon.model.FirstClassify">
+		SELECT 
+		cf.id id,
+		cf.name name
+		FROM classify_first cf
+		WHERE cf.visible = true AND cf.id = #{id}
+	</select>
+	
+	<update id="delete" parameterType="cn.xiedacon.model.FirstClassify">
+		UPDATE classify_first cf
+		SET 
+		cf.visible = false
+		WHERE cf.id = #{id}
+	</update>
+	
+	<update id="update" parameterType="cn.xiedacon.model.FirstClassify">
+		UPDATE classify_first cf
+		SET 
+		cf.name = #{name}
+		WHERE cf.id = #{id}
+	</update>
+	
+	<insert id="insert" parameterType="cn.xiedacon.model.FirstClassify">
+		INSERT INTO classify_first 
+		VALUES(
+		#{id},
+		#{name},
+		#{visible}
+		)
+	</insert>
+</mapper>

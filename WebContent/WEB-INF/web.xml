@@ -22,6 +22,18 @@
 		<url-pattern>/admin/*</url-pattern>
 	</filter-mapping> -->
 
+	<!-- PUT/PATCH/DELETE请求支持过滤器 -->
+	<filter>
+		<filter-name>RequestTyptSupportFilter</filter-name>
+		<filter-class>cn.xiedacon.util.RequestTypeSupportFilter</filter-class>
+		
+		<async-supported>true</async-supported>
+	</filter>
+	<filter-mapping>
+		<filter-name>RequestTyptSupportFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+
 	<!-- 编码过滤器 -->
 	<filter>
 		<filter-name>CharacterEncodingFilter</filter-name>

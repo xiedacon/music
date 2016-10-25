@@ -133,10 +133,7 @@
 										</div>
 										<div class="form-group">
 											<label>所属一级分类</label> 
-											<select name="firstClassifyId" class="form-control">
-												<option>1</option>
-												<option>1</option>
-												<option>1</option>
+											<select name="firstClassifyId" class="form-control selectFirstClassify">
 											</select>
 											<p class="help-block">必填</p>
 										</div>
@@ -160,15 +157,13 @@
 									<form id="secondEditForm">
 										<div class="form-group">
 											<label>分类名</label> 
+											<input name="id" type="hidden"> 
 											<input name="name" type="text" class="form-control" />
 											<p class="help-block">必填，不能包含特殊字符</p>
 										</div>
 										<div class="form-group">
 											<label>所属一级分类</label> 
-											<select name="firstClassifyId" class="form-control">
-												<option>1</option>
-												<option>1</option>
-												<option>1</option>
+											<select name="firstClassifyId" class="form-control selectFirstClassify">
 											</select>
 											<p class="help-block">必填</p>
 										</div>
@@ -199,11 +194,12 @@
 		, $firstAddForm = $("#firstAddForm") //
 		, $addFirstClassify = $("#addFirstClassify") //
 		, $firstEditForm = $("#firstEditForm") //
-		, $addFirstClassify = $("#addFirstClassify") //
+		, $editFirstClassify = $("#editFirstClassify") //
 		, $secondAddForm = $("#secondAddForm") //
 		, $addSecondClassify = $("#addSecondClassify") //
 		, $secondEditForm = $("#secondEditForm") //
-		, $addSecondClassify = $("#addSecondClassify") //
+		, $editSecondClassify = $("#editSecondClassify") //
+		, $selects = $(".selectFirstClassify")
 		;
 		
 		$.ajax({
@@ -220,7 +216,7 @@
 			, $firstClassify //
 			;
 			
-			firstClassifys.foreach(function(firstClassify,index){
+			firstClassifys.forEach(function(firstClassify,index){
 				$firstClassify = $firstPrototype.clone();
 				
 				$firstClassify.attr("data-url","/music/admin/firstClassify/"+firstClassify.id) //
@@ -230,19 +226,178 @@
 				$firstClassify.find(".firstClassifyName").text(firstClassify.name);
 				
 				$firstTbody.append($firstClassify);
+				
+				$selects.append("<option value='"+firstClassify.id+"'>"+firstClassify.name+"</option>")
 			});
 			
-			
+			$firstTbody.on("click",function(e){
+				var type = $(e.target).attr("data-type") //
+				, $firstClassify = $(e.target).parents("tr");
+				switch(type){
+					case "delete" :
+						deleteItem($firstClassify);
+						break;
+					case "edit" :
+						var id = $firstClassify.find(".firstClassifyId").text() //
+						, name = $firstClassify.find(".firstClassifyName").text();
+						$firstEditForm.find("input[name='id']").val(id);
+						$firstEditForm.find("input[name='name']").val(name);
+						break;
+					default : 
+						return;
+				}
+			});
 		});
 		
 		$.ajax({
 			url:"/music/admin/secondClassify",
 			type:"GET",
 			dataType:"json"
-		}).done(function(){
+		}).done(function(data){
+			if(data.code != 200){
+				alert("加载失败");
+				return;
+			}
 			
+			var secondClassifys = data.data //
+			, $secondClassify //
+			;
+			
+			secondClassifys.forEach(function(secondClassify,index){
+				$secondClassify = $secondPrototype.clone();
+				
+				$secondClassify.attr("data-url","/music/admin/secondClassify/"+secondClassify.id) //
+				.addClass(index % 2 == 0 ? "odd" : "even");
+
+				$secondClassify.find(".secondClassifyId").text(secondClassify.id);
+				$secondClassify.find(".secondClassifyName").text(secondClassify.name);
+				$secondClassify.find(".firstClassifyId").text(secondClassify.firstClassifyId);
+				
+				$secondTbody.append($secondClassify);
+			});
+			
+			$secondTbody.on("click",function(e){
+				var type = $(e.target).attr("data-type") //
+				, $secondClassify = $(e.target).parents("tr");
+				switch(type){
+					case "delete" :
+						deleteItem($secondClassify);
+						break;
+					case "edit" :
+						var id = $secondClassify.find(".secondClassifyId").text() //
+						, name = $secondClassify.find(".secondClassifyName").text() //
+						, firstClassifyId = $secondClassify.find(".firstClassifyId").text();
+						$secondEditForm.find("input[name='id']").val(id);
+						$secondEditForm.find("input[name='name']").val(name);
+						$secondEditForm.find("select[name='firstClassifyId']").val(firstClassifyId);
+						break;
+					default : 
+						return;
+				}
+			});
 		});
 
+		$addFirstClassify.on("click",function(){
+			var name = $firstAddForm.find("input[name='name']").val();
+			
+			if(!name || name.trim() == ""){
+				return alert("分类名不能为空");
+			}
+			
+			$.ajax({
+				url:"/music/admin/firstClassify",
+				type:"POST",
+				dataType:"JSON",
+				data:{name:name}
+			}).done(function(data){
+				if(data.code == 200){
+					alert("操作成功");
+					refresh("/music/admin/html/singerClassify-tables");
+				}else{
+					alert("操作失败");
+				}
+			});
+		});
+		$editFirstClassify.on("click",function(){
+			var id = $firstEditForm.find("input[name='id']").val() //
+			, name = $firstEditForm.find("input[name='name']").val();
+			
+			if(!id){
+				return alert("未知错误");
+			}
+			if(!name || name.trim() == ""){
+				return alert("分类名不能为空");
+			}
+			
+			$.ajax({
+				url:"/music/admin/firstClassify/"+id,
+				type:"PUT",
+				dataType:"JSON",
+				data:{name:name}
+			}).done(function(data){
+				if(data.code == 200){
+					alert("操作成功");
+					refresh("/music/admin/html/singerClassify-tables");
+				}else{
+					alert("操作失败");
+				}
+			});
+		});
+		
+		$addSecondClassify.on("click",function(){
+			var name = $secondAddForm.find("input[name='name']").val() //
+			, firstClassifyId = $secondAddForm.find("select[name='firstClassifyId']").val();
+			
+			if(!name || name.trim() == ""){
+				return alert("分类名不能为空");
+			}
+			if(!firstClassifyId || firstClassifyId.trim() == ""){
+				return alert("一级分类不能为空");
+			}
+			
+			$.ajax({
+				url:"/music/admin/secondClassify",
+				type:"POST",
+				dataType:"JSON",
+				data:{name:name,firstClassifyId:firstClassifyId}
+			}).done(function(data){
+				if(data.code == 200){
+					alert("操作成功");
+					refresh("/music/admin/html/singerClassify-tables");
+				}else{
+					alert("操作失败");
+				}
+			});
+		});
+		$editSecondClassify.on("click",function(){
+			var id = $secondEditForm.find("input[name='id']").val() //
+			, name = $secondEditForm.find("input[name='name']").val() //
+			, firstClassifyId = $secondEditForm.find("select[name='firstClassifyId']").val();
+			
+			if(!id){
+				return alert("未知错误");
+			}
+			if(!name || name.trim() == ""){
+				return alert("分类名不能为空");
+			}
+			if(!firstClassifyId || firstClassifyId.trim() == ""){
+				return alert("一级分类不能为空");
+			}
+			
+			$.ajax({
+				url:"/music/admin/secondClassify/"+id,
+				type:"PUT",
+				dataType:"JSON",
+				data:{name:name,firstClassifyId:firstClassifyId}
+			}).done(function(data){
+				if(data.code == 200){
+					alert("操作成功");
+					refresh("/music/admin/html/singerClassify-tables");
+				}else{
+					alert("操作失败");
+				}
+			});
+		});
 	}())
 
 </script>

@@ -90,6 +90,18 @@ public class Factory {
 		
 		configMaps.put(cn.xiedacon.model.Album.class, configMap);
 		
+		configMap = new HashMap<>();
+		
+		configMap.put("visible", Constant.VISIBLE_DEFAULT);
+		
+		configMaps.put(cn.xiedacon.model.FirstClassify.class, configMap);
+		
+		configMap = new HashMap<>();
+		
+		configMap.put("visible", Constant.VISIBLE_DEFAULT);
+		
+		configMaps.put(cn.xiedacon.model.SecondClassify.class, configMap);
+		
 		Iterator<Class> iterator = configMaps.keySet().iterator();
 
 		while (iterator.hasNext()) {
