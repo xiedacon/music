@@ -47,61 +47,67 @@ public class Factory {
 		configMaps.put(cn.xiedacon.model.SongMenu.class, configMap);
 
 		configMap = new HashMap<>();
-		
+
 		configMap.put("agreeNum", Constant.NUM_DEFAULT);
 		configMap.put("isChecked", Constant.COMMENT_ISCHECKED_DEFAULT);
-		
+
 		configMaps.put(cn.xiedacon.model.Comment.class, configMap);
-		
+
 		configMap = new HashMap<>();
-		
+
 		configMap.put("collectionNum", Constant.NUM_DEFAULT);
 		configMap.put("visible", Constant.VISIBLE_DEFAULT);
-		
+
 		configMaps.put(cn.xiedacon.model.Singer.class, configMap);
-		
+
 		configMap = new HashMap<>();
-		
+
 		configMap.put("collectionNum", Constant.NUM_DEFAULT);
 		configMap.put("playNum", Constant.NUM_DEFAULT);
 		configMap.put("commentNum", Constant.NUM_DEFAULT);
 		configMap.put("visible", Constant.VISIBLE_DEFAULT);
-		
+
 		configMaps.put(cn.xiedacon.model.Song.class, configMap);
-		
+
 		configMap = new HashMap<>();
-		
+
 		configMap.put("songNum", Constant.NUM_DEFAULT);
 		configMap.put("collectionNum", Constant.NUM_DEFAULT);
 		configMap.put("playNum", Constant.NUM_DEFAULT);
 		configMap.put("commentNum", Constant.NUM_DEFAULT);
 		configMap.put("shareNum", Constant.NUM_DEFAULT);
 		configMap.put("visible", Constant.VISIBLE_DEFAULT);
-		
+
 		configMaps.put(cn.xiedacon.model.SongList.class, configMap);
-		
+
 		configMap = new HashMap<>();
-		
+
 		configMap.put("songNum", Constant.NUM_DEFAULT);
 		configMap.put("playNum", Constant.NUM_DEFAULT);
 		configMap.put("commentNum", Constant.NUM_DEFAULT);
 		configMap.put("shareNum", Constant.NUM_DEFAULT);
 		configMap.put("visible", Constant.VISIBLE_DEFAULT);
-		
+
 		configMaps.put(cn.xiedacon.model.Album.class, configMap);
-		
+
 		configMap = new HashMap<>();
-		
+
 		configMap.put("visible", Constant.VISIBLE_DEFAULT);
-		
+
 		configMaps.put(cn.xiedacon.model.FirstClassify.class, configMap);
-		
+
 		configMap = new HashMap<>();
-		
+
 		configMap.put("visible", Constant.VISIBLE_DEFAULT);
-		
+
 		configMaps.put(cn.xiedacon.model.SecondClassify.class, configMap);
-		
+
+		configMap = new HashMap<>();
+
+		configMap.put("visible", Constant.VISIBLE_DEFAULT);
+
+		configMaps.put(cn.xiedacon.model.AlbumTag.class, configMap);
+
 		Iterator<Class> iterator = configMaps.keySet().iterator();
 
 		while (iterator.hasNext()) {
@@ -127,7 +133,7 @@ public class Factory {
 		}
 
 		T instance = getInstance(c);
-		
+
 		for (Entry<String, Object> entry : configMap.entrySet()) {
 			String fieldName = entry.getKey();
 			Object defaultValue = entry.getValue();

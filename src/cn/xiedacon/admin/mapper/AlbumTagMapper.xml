@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.xiedacon.admin.dao.AlbumTagAdminDao">
+	
+	<select id="selectList" resultType="cn.xiedacon.model.AlbumTag">
+		SELECT 
+		ta.id id,
+		ta.name name
+		FROM tag_album ta
+		WHERE ta.visible = true
+	</select>
+	
+	<select id="selectById" resultType="cn.xiedacon.model.AlbumTag">
+		SELECT 
+		ta.id id,
+		ta.name name
+		FROM tag_album ta
+		WHERE ta.visible = true AND ta.id = #{id}
+	</select>
+	
+	<update id="delete" parameterType="cn.xiedacon.model.AlbumTag">
+		UPDATE tag_album ta
+		SET 
+		ta.visible = false
+		WHERE ta.id = #{id}
+	</update>
+	
+	<update id="update" parameterType="cn.xiedacon.model.AlbumTag">
+		UPDATE tag_album ta
+		SET 
+		ta.name = #{name}
+		WHERE ta.id = #{id}
+	</update>
+	
+	<insert id="insert" parameterType="cn.xiedacon.model.AlbumTag">
+		INSERT INTO tag_album 
+		VALUES(
+		#{id},
+		#{name},
+		#{visible}
+		)
+	</insert>
+</mapper>
