@@ -12,6 +12,16 @@ public class SongMenuFirstTag {
 	private String name;
 	private List<SongMenuSecondTag> secondTagList;
 
+	private Boolean visible;
+
+	public Boolean getVisible() {
+		return visible;
+	}
+
+	public void setVisible(Boolean visible) {
+		this.visible = visible;
+	}
+
 	public List<SongMenuSecondTag> getSecondTagList() {
 		return secondTagList;
 	}

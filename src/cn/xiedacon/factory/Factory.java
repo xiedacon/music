@@ -107,7 +107,19 @@ public class Factory {
 		configMap.put("visible", Constant.VISIBLE_DEFAULT);
 
 		configMaps.put(cn.xiedacon.model.AlbumTag.class, configMap);
+		
+		configMap = new HashMap<>();
 
+		configMap.put("visible", Constant.VISIBLE_DEFAULT);
+
+		configMaps.put(cn.xiedacon.model.SongMenuFirstTag.class, configMap);
+
+		configMap = new HashMap<>();
+
+		configMap.put("visible", Constant.VISIBLE_DEFAULT);
+
+		configMaps.put(cn.xiedacon.model.SongMenuSecondTag.class, configMap);
+		
 		Iterator<Class> iterator = configMaps.keySet().iterator();
 
 		while (iterator.hasNext()) {

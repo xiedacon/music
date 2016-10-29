@@ -11,7 +11,8 @@
 	</context-param>
 
 	<!-- 后台过滤器 -->
-	<!-- <filter>
+	<!--  -->
+	<filter>
 		<filter-name>adminFilter</filter-name>
 		<filter-class>cn.xiedacon.filter.AdminFilter</filter-class>
 
@@ -20,7 +21,7 @@
 	<filter-mapping>
 		<filter-name>adminFilter</filter-name>
 		<url-pattern>/admin/*</url-pattern>
-	</filter-mapping> -->
+	</filter-mapping>
 
 	<!-- PUT/PATCH/DELETE请求支持过滤器 -->
 	<filter>

@@ -3,12 +3,33 @@ package cn.xiedacon.model;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
+/**
+ * @author xieda
+ *
+ */
 @JsonInclude(Include.NON_NULL)
 public class SongMenuSecondTag {
 
 	private String id;
 	private String name;
-	private SongMenuFirstTag songMenuFirstTag;
+	private String firstTagId;
+	private Boolean visible;
+
+	public String getFirstTagId() {
+		return firstTagId;
+	}
+
+	public void setFirstTagId(String firstTagId) {
+		this.firstTagId = firstTagId;
+	}
+
+	public Boolean getVisible() {
+		return visible;
+	}
+
+	public void setVisible(Boolean visible) {
+		this.visible = visible;
+	}
 
 	public SongMenuSecondTag() {
 
@@ -17,11 +38,6 @@ public class SongMenuSecondTag {
 	public SongMenuSecondTag(String id) {
 		super();
 		this.id = id;
-	}
-
-	@Override
-	public String toString() {
-		return "SongMenuSecondTag [id=" + id + ", name=" + name + ", songMenuFirstTag=" + songMenuFirstTag + "]";
 	}
 
 	public String getId() {
@@ -38,13 +54,5 @@ public class SongMenuSecondTag {
 
 	public void setName(String name) {
 		this.name = name;
-	}
-
-	public SongMenuFirstTag getSongMenuFirstTag() {
-		return songMenuFirstTag;
-	}
-
-	public void setSongMenuFirstTag(SongMenuFirstTag songMenuFirstTag) {
-		this.songMenuFirstTag = songMenuFirstTag;
 	}
 }

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.xiedacon.admin.dao.FirstSongMenuTagAdminDao">
+	
+	<select id="selectList" resultType="cn.xiedacon.model.SongMenuFirstTag">
+		SELECT 
+		tsf.id id,
+		tsf.name name
+		FROM tag_songmenu_first tsf
+		WHERE tsf.visible = true
+	</select>
+	
+	<select id="selectById" resultType="cn.xiedacon.model.SongMenuFirstTag">
+		SELECT 
+		tsf.id id,
+		tsf.name name
+		FROM tag_songmenu_first tsf
+		WHERE tsf.visible = true AND tsf.id = #{id}
+	</select>
+	
+	<update id="delete" parameterType="cn.xiedacon.model.SongMenuFirstTag">
+		UPDATE tag_songmenu_first tsf
+		SET 
+		tsf.visible = false
+		WHERE tsf.id = #{id}
+	</update>
+	
+	<update id="update" parameterType="cn.xiedacon.model.SongMenuFirstTag">
+		UPDATE tag_songmenu_first tsf
+		SET 
+		tsf.name = #{name}
+		WHERE tsf.id = #{id}
+	</update>
+	
+	<insert id="insert" parameterType="cn.xiedacon.model.SongMenuFirstTag">
+		INSERT INTO tag_songmenu_first 
+		VALUES(
+		#{id},
+		#{name},
+		#{visible}
+		)
+	</insert>
+</mapper>
