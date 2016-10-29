@@ -2,6 +2,7 @@ package cn.xiedacon.admin.controller;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -15,9 +16,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import cn.xiedacon.admin.service.AlbumAdminService;
+import cn.xiedacon.admin.service.AlbumTagAdminService;
 import cn.xiedacon.admin.service.SingerAdminService;
 import cn.xiedacon.factory.Factory;
 import cn.xiedacon.model.Album;
+import cn.xiedacon.model.AlbumTag;
 import cn.xiedacon.model.Singer;
 import cn.xiedacon.util.CharsetUtils;
 import cn.xiedacon.util.Constant;
@@ -40,11 +43,13 @@ public class AlbumAdminController {
 	@Autowired
 	private SingerAdminService singerService;
 	@Autowired
+	private AlbumTagAdminService tagService;
+	@Autowired
 	private Factory factory;
 
 	@RequestMapping(value = "/page/{page:[1-9]\\d*}", method = RequestMethod.GET)
 	public Map<String, Object> selectPageBean(@PathVariable("page") Integer page) {
-		return MessageUtils.createSuccess(Constant.SUCCESS_RETURNNAME, albumService.selectPageBean(page));
+		return MessageUtils.createSuccess(albumService.selectPageBean(page));
 	}
 
 	@RequestMapping(value = "/{id:\\w+}", method = RequestMethod.DELETE)
@@ -60,38 +65,55 @@ public class AlbumAdminController {
 	public Map<String, Object> selectPageBeanByNameLike(@PathVariable("name") String name,
 			@PathVariable("page") Integer page) {
 		String nameLike = "%" + CharsetUtils.change(name, "ISO-8859-1", "UTF-8") + "%";
-		return MessageUtils.createSuccess(Constant.SUCCESS_RETURNNAME,
-				albumService.selectPageBeanByNameLike(page, nameLike));
+		return MessageUtils.createSuccess(albumService.selectPageBeanByNameLike(page, nameLike));
 	}
 
 	@RequestMapping(value = "/{id:\\w+}", method = RequestMethod.GET)
 	public Map<String, Object> selectById(@PathVariable("id") String id) {
-		return MessageUtils.createSuccess(Constant.SUCCESS_RETURNNAME, albumService.selectById(id));
+		return MessageUtils.createSuccess(albumService.selectById(id));
 	}
 
 	@RequestMapping(value = "/{id:\\w+}", method = RequestMethod.PUT)
 	public Map<String, Object> update(@PathVariable("id") String id, HttpServletRequest request) {
 		Album album = albumService.selectById(id);
 		if (album == null) {
-			return MessageUtils.createError("未知错误");
+			return MessageUtils.createError(id, "未知错误");
 		}
 
 		Map<String, Base64FileItem> fileItems = Base64UploadUtils.parseRequest(request);
 
-		album.setName(fileItems.get("name").getString());
+		String name = fileItems.get("name").getString();
+		String icon = album.getIcon();
+		Date createTime = fileItems.get("createTime").getDate("yyyy-MM-dd");
+		String createCompany = fileItems.get("createCompany").getString();
+		String tagId = fileItems.get("tagId").getString();
+		String remark = fileItems.get("remark").getString();
+		String introduction = fileItems.get("introduction").getString();
 
+		if (name == null || name.isEmpty()) {
+			return MessageUtils.createError("name", "专辑名错误");
+		}
 		Base64FileItem iconItem = fileItems.get("icon");
 		if (iconItem != null) {
-			String icon = UUIDUtils.randomUUID() + "." + iconItem.getType();
+			icon = UUIDUtils.randomUUID() + "." + iconItem.getType();
 			iconItem.getFile(ResourceLoader.getRealPath("image/album") + "/" + icon);
-			album.setIcon("image/album/" + icon);
+			icon = "image/album/" + icon;
+		}
+		if (createTime == null) {
+			return MessageUtils.createError("createTime", "日期错误");
+		}
+		AlbumTag tag = tagService.selectById(tagId);
+		if (tag == null) {
+			return MessageUtils.createError("tagId", "分类错误");
 		}
 
-		album.setCreateTime(fileItems.get("createTime").getDate("yyyy-MM-dd"));
-		album.setCreateCompany(fileItems.get("createCompany").getString());
-		album.setTagId(fileItems.get("tagId").getString());
-		album.setRemark(fileItems.get("remark").getString());
-		album.setIntroduction(fileItems.get("introduction").getString());
+		album.setName(name);
+		album.setIcon(icon);
+		album.setCreateTime(createTime);
+		album.setCreateCompany(createCompany);
+		album.setTagId(tag.getId());
+		album.setRemark(remark);
+		album.setIntroduction(introduction);
 
 		albumService.update(album);
 		return MessageUtils.createSuccess();
@@ -101,33 +123,47 @@ public class AlbumAdminController {
 	public Map<String, Object> insert(HttpServletRequest request) {
 		Map<String, Base64FileItem> fileItems = Base64UploadUtils.parseRequest(request);
 
-		Base64FileItem singerNameItem = fileItems.get("singerName");
-		if (singerNameItem == null) {
-			return MessageUtils.createError("未知错误");
-		}
-		Singer singer = singerService.selectByName(singerNameItem.getString());
-		if (singer == null) {
-			return MessageUtils.createError("未知错误");
-		}
+		String name = fileItems.get("name").getString();
+		String icon = null;
+		String singerName = fileItems.get("singerName").getString();
+		Date createTime = fileItems.get("createTime").getDate("yyyy-MM-dd");
+		String createCompany = fileItems.get("createCompany").getString();
+		String tagId = fileItems.get("tagId").getString();
+		String remark = fileItems.get("remark").getString();
+		String introduction = fileItems.get("introduction").getString();
 
+		if (name == null || name.trim().isEmpty()) {
+			return MessageUtils.createError("name", "专辑名错误");
+		}
 		Base64FileItem iconItem = fileItems.get("icon");
 		if (iconItem == null) {
-			return MessageUtils.createError("未知错误");
+			return MessageUtils.createError("icon", "图片错误");
 		}
-		String icon = UUIDUtils.randomUUID() + "." + iconItem.getType();
+		icon = UUIDUtils.randomUUID() + "." + iconItem.getType();
 		iconItem.getFile(ResourceLoader.getRealPath("image/album") + "/" + icon);
+		icon = "image/album/" + icon;
+		Singer singer = singerService.selectByName(singerName);
+		if (createTime == null) {
+			return MessageUtils.createError("createTime", "日期错误");
+		}
+		AlbumTag tag = tagService.selectById(tagId);
+		if (tag == null) {
+			return MessageUtils.createError("tagId", "分类错误");
+		}
 
 		Album album = factory.get(Album.class);
 		album.setId(UUIDUtils.randomUUID());
-		album.setName(fileItems.get("name").getString());
-		album.setIcon("image/album/" + icon);
-		album.setCreateTime(fileItems.get("createTime").getDate("yyyy-MM-dd"));
-		album.setCreateCompany(fileItems.get("createCompany").getString());
-		album.setTagId(fileItems.get("tagId").getString());
-		album.setRemark(fileItems.get("remark").getString());
-		album.setIntroduction(fileItems.get("introduction").getString());
-		album.setSingerId(singer.getId());
-		album.setSingerName(singer.getName());
+		album.setName(name);
+		album.setIcon(icon);
+		album.setCreateTime(createTime);
+		album.setCreateCompany(createCompany);
+		album.setTagId(tag.getId());
+		album.setRemark(remark);
+		album.setIntroduction(introduction);
+		if (singer != null) {
+			album.setSingerId(singer.getId());
+			album.setSingerName(singer.getName());
+		}
 
 		albumService.insert(album);
 		return MessageUtils.createSuccess();
@@ -139,42 +175,59 @@ public class AlbumAdminController {
 
 		File excelFile = fileItems.get("excel")
 				.getFile(ResourceLoader.getRealPath("temp") + "/" + UUIDUtils.randomUUID());
-		List<List<Cell>> cellsList = XSSFUtils.parse(excelFile, Constant.EXCEL_BEGINNUM, 8);
-		excelFile.delete();
+		List<List<Cell>> cellData = XSSFUtils.parse(excelFile, Constant.EXCEL_BEGINNUM, 8);
 
 		File zipFile = fileItems.get("iconZip").getFile(ResourceLoader.getRealPath("temp") + UUIDUtils.randomUUID());
 		ZipUtils.upZip(zipFile, ResourceLoader.getRealPath("image/album"));
-		zipFile.delete();
 
 		List<String> singerNameList = new ArrayList<>();
-		
-		for(List<Cell> cells:cellsList){
+		for (List<Cell> cells : cellData) {
 			singerNameList.add(cells.get(3).getString());
 		}
-		
+
 		Map<String, Singer> singerMap = singerService.batchSelectByName(singerNameList);
 		List<Album> albumList = new ArrayList<>();
-		
-		for(List<Cell> cells:cellsList){
+		for (List<Cell> cells : cellData) {
+			String name = cells.get(1).getString();
+			String icon = "image/album/" + cells.get(2).getString();
 			Singer singer = singerMap.get(cells.get(3).getString());
-			
+			Date createTime = cells.get(4).getDate();
+			String createCompany = cells.get(5).getString();
+			String tagId = cells.get(6).getInteger().toString();
+			String remark = cells.get(7).getString();
+			String introduction = cells.get(8).getString();
+
+			if (name == null || name.trim().isEmpty()) {
+				return MessageUtils.createError("name", "专辑名错误");
+			}
+			if (icon == null || icon.trim().isEmpty()) {
+				return MessageUtils.createError("icon", "图片错误");
+			}
+			if (createTime == null) {
+				return MessageUtils.createError("createTime", "日期错误");
+			}
+			AlbumTag tag = tagService.selectById(tagId);
+			if (tag == null) {
+				return MessageUtils.createError("tagId", "分类错误");
+			}
+
 			Album album = factory.get(Album.class);
 			album.setId(UUIDUtils.randomUUID());
-			album.setName(cells.get(1).getString());
-			album.setIcon("image/album/"+cells.get(2).getString());
-			if(singer!=null){
+			album.setName(name);
+			album.setIcon(icon);
+			if (singer != null) {
 				album.setSingerId(singer.getId());
 				album.setSingerName(singer.getName());
 			}
-			album.setCreateTime(cells.get(4).getDate());
-			album.setCreateCompany(cells.get(5).getString());
-			album.setTagId(cells.get(6).getInteger().toString());
-			album.setRemark(cells.get(7).getString());
-			album.setIntroduction(cells.get(8).getString());
-			
+			album.setCreateTime(createTime);
+			album.setCreateCompany(createCompany);
+			album.setTagId(tag.getId());
+			album.setRemark(remark);
+			album.setIntroduction(introduction);
+
 			albumList.add(album);
 		}
-		
+
 		albumService.batchInsert(albumList);
 		return MessageUtils.createSuccess();
 	}

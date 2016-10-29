@@ -18,6 +18,7 @@ import com.mchange.v2.c3p0.ComboPooledDataSource;
 import cn.xiedacon.admin.dao.BatchSqlDao;
 import cn.xiedacon.model.Album;
 import cn.xiedacon.model.Album_SongGL;
+import cn.xiedacon.model.SecondClassify;
 import cn.xiedacon.model.Singer;
 import cn.xiedacon.model.Song;
 import cn.xiedacon.model.SongList_SongGL;
@@ -74,15 +75,15 @@ public class BatchSqlDaoImpl implements BatchSqlDao {
 		try (Connection conn = dataSource.getConnection();) {
 			while (num > 0) {
 				if (num % 10 == 0) {
-					resultSetlist.add(queryForNameList(conn, begin, 10, For10, singerNameList));
+					resultSetlist.add(queryForList(conn, begin, 10, For10, singerNameList));
 					begin += 10;
 					num -= 10;
 				} else if (num % 3 == 0) {
-					resultSetlist.add(queryForNameList(conn, begin, 3, For3, singerNameList));
+					resultSetlist.add(queryForList(conn, begin, 3, For3, singerNameList));
 					begin += 3;
 					num -= 3;
 				} else {
-					resultSetlist.add(queryForNameList(conn, begin, 1, For1, singerNameList));
+					resultSetlist.add(queryForList(conn, begin, 1, For1, singerNameList));
 					begin += 1;
 					num -= 1;
 				}
@@ -100,11 +101,11 @@ public class BatchSqlDaoImpl implements BatchSqlDao {
 		}
 	}
 
-	private ResultSet queryForNameList(Connection conn, Integer begin, Integer num, String sql, List<String> nameList)
+	private ResultSet queryForList(Connection conn, Integer begin, Integer num, String sql, List<String> list)
 			throws SQLException {
 		PreparedStatement statement = conn.prepareStatement(sql);
 		for (int i = begin; i < begin + num; i++) {
-			statement.setString(i - begin + 1, nameList.get(i));
+			statement.setString(i - begin + 1, list.get(i));
 		}
 		return statement.executeQuery();
 	}
@@ -120,15 +121,15 @@ public class BatchSqlDaoImpl implements BatchSqlDao {
 		try (Connection conn = dataSource.getConnection();) {
 			while (num > 0) {
 				if (num % 10 == 0) {
-					resultSetlist.add(queryForNameList(conn, begin, 10, For10, albumNameList));
+					resultSetlist.add(queryForList(conn, begin, 10, For10, albumNameList));
 					begin += 10;
 					num -= 10;
 				} else if (num % 3 == 0) {
-					resultSetlist.add(queryForNameList(conn, begin, 3, For3, albumNameList));
+					resultSetlist.add(queryForList(conn, begin, 3, For3, albumNameList));
 					begin += 3;
 					num -= 3;
 				} else {
-					resultSetlist.add(queryForNameList(conn, begin, 1, For1, albumNameList));
+					resultSetlist.add(queryForList(conn, begin, 1, For1, albumNameList));
 					begin += 1;
 					num -= 1;
 				}
@@ -255,15 +256,15 @@ public class BatchSqlDaoImpl implements BatchSqlDao {
 		try (Connection conn = dataSource.getConnection();) {
 			while (num > 0) {
 				if (num % 10 == 0) {
-					resultSetlist.add(queryForNameList(conn, begin, 10, For10, songNames));
+					resultSetlist.add(queryForList(conn, begin, 10, For10, songNames));
 					begin += 10;
 					num -= 10;
 				} else if (num % 3 == 0) {
-					resultSetlist.add(queryForNameList(conn, begin, 3, For3, songNames));
+					resultSetlist.add(queryForList(conn, begin, 3, For3, songNames));
 					begin += 3;
 					num -= 3;
 				} else {
-					resultSetlist.add(queryForNameList(conn, begin, 1, For1, songNames));
+					resultSetlist.add(queryForList(conn, begin, 1, For1, songNames));
 					begin += 1;
 					num -= 1;
 				}
@@ -362,6 +363,44 @@ public class BatchSqlDaoImpl implements BatchSqlDao {
 			album_baseStatement.executeBatch();
 			album_recordStatement.executeBatch();
 			conn.commit();
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	@Override
+	public Map<String, SecondClassify> selectSecondClassifyById(List<String> classifyIdList) {
+		String For1 = "SELECT sc.id, sc.name FROM classify_second sc WHERE sc.id = ?";
+		String For3 = "SELECT sc.id, sc.name FROM classify_second sc WHERE sc.id IN(?,?,?)";
+		String For10 = "SELECT sc.id, sc.name FROM classify_second sc WHERE sc.id IN(?,?,?,?,?,?,?,?,?,?)";
+		int num = classifyIdList.size();
+		int begin = 0;
+		List<ResultSet> resultSetlist = new ArrayList<>();
+		try (Connection conn = dataSource.getConnection();) {
+			while (num > 0) {
+				if (num % 10 == 0) {
+					resultSetlist.add(queryForList(conn, begin, 10, For10, classifyIdList));
+					begin += 10;
+					num -= 10;
+				} else if (num % 3 == 0) {
+					resultSetlist.add(queryForList(conn, begin, 3, For3, classifyIdList));
+					begin += 3;
+					num -= 3;
+				} else {
+					resultSetlist.add(queryForList(conn, begin, 1, For1, classifyIdList));
+					begin += 1;
+					num -= 1;
+				}
+			}
+
+			Map<String, SecondClassify> result = new HashMap<>();
+			for (ResultSet resultSet : resultSetlist) {
+				while (resultSet.next()) {
+					result.put(resultSet.getString(1),
+							new SecondClassify(resultSet.getString(1), resultSet.getString(2)));
+				}
+			}
+			return result;
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}

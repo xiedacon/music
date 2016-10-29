@@ -5,6 +5,7 @@ import java.util.Map;
 
 import cn.xiedacon.model.Album;
 import cn.xiedacon.model.Album_SongGL;
+import cn.xiedacon.model.SecondClassify;
 import cn.xiedacon.model.Singer;
 import cn.xiedacon.model.Song;
 import cn.xiedacon.model.SongList_SongGL;
@@ -30,5 +31,7 @@ public interface BatchSqlDao {
 	void deleteSongList_SongGLBySongListId(String id);
 
 	void insertAlbum(List<Album> albumList);
+
+	Map<String, SecondClassify> selectSecondClassifyById(List<String> classifyIdList);
 
 }

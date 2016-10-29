@@ -51,7 +51,7 @@ public class SongListAdminController {
 
 	@RequestMapping(value = "/page/{page:[1-9]\\d*}", method = RequestMethod.GET)
 	public Map<String, Object> selectPageBean(@PathVariable("page") Integer page) {
-		return MessageUtils.createSuccess(Constant.SUCCESS_RETURNNAME, songListService.selectPageBean(page));
+		return MessageUtils.createSuccess(songListService.selectPageBean(page));
 	}
 
 	@RequestMapping(value = "/{id:\\w+}", method = RequestMethod.DELETE)
@@ -67,33 +67,47 @@ public class SongListAdminController {
 	public Map<String, Object> selectPageBeanByNameLike(@PathVariable("name") String name,
 			@PathVariable("page") Integer page) {
 		String nameLike = "%" + CharsetUtils.change(name, "ISO-8859-1", "UTF-8") + "%";
-		return MessageUtils.createSuccess(Constant.SUCCESS_RETURNNAME,
-				songListService.selectPageBeanByNameLike(page, nameLike));
+		return MessageUtils.createSuccess(songListService.selectPageBeanByNameLike(page, nameLike));
 	}
 
 	@RequestMapping(value = "/{id:\\w+}", method = RequestMethod.GET)
 	public Map<String, Object> selectById(@PathVariable("id") String id) {
-		return MessageUtils.createSuccess(Constant.SUCCESS_RETURNNAME, songListService.selectById(id));
+		return MessageUtils.createSuccess(songListService.selectById(id));
 	}
 
 	@RequestMapping(value = "/{id:\\w+}", method = RequestMethod.PUT)
 	public Map<String, Object> update(@PathVariable("id") String id, HttpServletRequest request) {
 		SongList songList = songListService.selectById(id);
 		if (songList == null) {
-			return MessageUtils.createError("未知错误");
+			return MessageUtils.createError("id", "榜单错误");
 		}
 
 		Map<String, Base64FileItem> fileItems = Base64UploadUtils.parseRequest(request);
-		songList.setName(fileItems.get("name").getString());
+
+		String name = fileItems.get("name").getString();
+		String icon = songList.getIcon();
+		String refreshRate = fileItems.get("refreshRate").getString();
+		Date refreshDate = new Date();
+		Boolean globe = fileItems.get("globe").getBoolean();
+
+		if (name == null || name.trim().isEmpty()) {
+			return MessageUtils.createError("name", "榜单名错误");
+		}
 		Base64FileItem iconItem = fileItems.get("icon");
 		if (iconItem != null) {
-			String iconName = UUIDUtils.randomUUID() + "." + iconItem.getType();
-			iconItem.getFile(request.getServletContext().getRealPath("image/songList") + "/" + iconName);
-			songList.setIcon("image/songList/" + iconName);
+			icon = UUIDUtils.randomUUID() + "." + iconItem.getType();
+			iconItem.getFile(ResourceLoader.getRealPath("image/songList") + "/" + icon);
+			icon = "image/songList/" + icon;
 		}
-		songList.setRefreshRate(fileItems.get("refreshRate").getString());
-		songList.setRefreshDate(new Date());
-		songList.setGlobe(fileItems.get("globe").getBoolean());
+		if (globe == null) {
+			return MessageUtils.createError("globe", "未知错误");
+		}
+
+		songList.setName(name);
+		songList.setIcon(icon);
+		songList.setRefreshRate(refreshRate);
+		songList.setRefreshDate(refreshDate);
+		songList.setGlobe(globe);
 
 		songListService.update(songList);
 		return MessageUtils.createSuccess();
@@ -103,7 +117,7 @@ public class SongListAdminController {
 	public Map<String, Object> updateSongs(@PathVariable("id") String id, HttpServletRequest request) {
 		SongList songList = songListService.selectById(id);
 		if (songList == null) {
-			return MessageUtils.createError("未知错误");
+			return MessageUtils.createError("id", "榜单错误");
 		}
 
 		Map<String, Base64FileItem> fileItems = Base64UploadUtils.parseRequest(request);
@@ -111,6 +125,7 @@ public class SongListAdminController {
 		File songExcel = excelItem
 				.getFile(ResourceLoader.getRealPath("temp") + "/" + UUIDUtils.randomUUID() + excelItem.getType());
 		List<List<Cell>> cellData = XSSFUtils.parse(songExcel, Constant.EXCEL_BEGINNUM, 3);
+		// !!!!!!!
 		songExcel.delete();
 
 		List<String> songNames = new ArrayList<>();
@@ -119,15 +134,27 @@ public class SongListAdminController {
 		}
 		Map<String, Song> songMap = songService.batchSelectByName(songNames);
 		if (songNames.size() != songMap.size()) {
-			return MessageUtils.createError("存在未知歌曲");
+			return MessageUtils.createError("songName", "存在未知歌曲");
 		}
 
 		List<SongList_SongGL> songList_SongGLList = new ArrayList<>();
-		for (List<Cell> songCells : cellData) {
-			Song song = songMap.get(songCells.get(1).getString());
-			Integer rank = songCells.get(0).getInteger();
-			Integer rankChange = songCells.get(2).getInteger();
-			songList_SongGLList.add(new SongList_SongGL(UUIDUtils.randomUUID(), song.getId(), rank, id, rankChange));
+		for (List<Cell> cell : cellData) {
+			Song song = songMap.get(cell.get(1).getString());
+			Integer rank = cell.get(0).getInteger();
+			Integer rankChange = cell.get(2).getInteger();
+
+			if (song == null) {
+				return MessageUtils.createError("songName", "存在未知歌曲");
+			}
+			if (rank == null || rank < 0) {
+				return MessageUtils.createError("rank", "排名错误");
+			}
+			if (rankChange == null) {
+				rankChange = 0;
+			}
+
+			songList_SongGLList
+					.add(new SongList_SongGL(UUIDUtils.randomUUID(), song.getId(), rank, songList.getId(), rankChange));
 		}
 
 		songList_SongGLService.batchDeleteThenInsert(id, songList_SongGLList);
@@ -165,6 +192,7 @@ public class SongListAdminController {
 		String contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
 		DownLoadUtlils.write(response, result, fileName, contentType);
 
+		// !!!!!!!
 		result.delete();
 		template.delete();
 	}
@@ -172,21 +200,35 @@ public class SongListAdminController {
 	@RequestMapping(value = "", method = RequestMethod.POST)
 	public Map<String, Object> insert(HttpServletRequest request) {
 		Map<String, Base64FileItem> fileItems = Base64UploadUtils.parseRequest(request);
+
 		String name = fileItems.get("name").getString();
-		Base64FileItem iconItem = fileItems.get("icon");
-		String icon = UUIDUtils.randomUUID() + "." + iconItem.getType();
-		iconItem.getFile(ResourceLoader.getRealPath("image/songList") + "/" + icon);
+		String icon = null;
+		Date refreshDate = new Date();
 		String refreshRate = fileItems.get("refreshRate").getString();
 		Boolean globe = fileItems.get("globe").getBoolean();
+
+		if (name == null || name.trim().isEmpty()) {
+			return MessageUtils.createError("name", "榜单名错误");
+		}
+		Base64FileItem iconItem = fileItems.get("icon");
+		if (iconItem == null) {
+			return MessageUtils.createError("icon", "图片不能为空");
+		}
+		icon = UUIDUtils.randomUUID() + "." + iconItem.getType();
+		iconItem.getFile(ResourceLoader.getRealPath("image/songList") + "/" + icon);
+		icon = "image/songList/" + icon;
+		if (globe == null) {
+			return MessageUtils.createError("globe", "未知错误");
+		}
 
 		SongList songList = factory.get(SongList.class);
 		songList.setId(UUIDUtils.randomUUID());
 		songList.setName(name);
-		songList.setIcon("image/songList/"+icon);
-		songList.setRefreshDate(new Date());
+		songList.setIcon(icon);
+		songList.setRefreshDate(refreshDate);
 		songList.setRefreshRate(refreshRate);
 		songList.setGlobe(globe);
-		
+
 		songListService.insert(songList);
 		return MessageUtils.createSuccess();
 	}

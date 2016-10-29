@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import cn.xiedacon.admin.service.AlbumTagAdminService;
 import cn.xiedacon.factory.Factory;
 import cn.xiedacon.model.AlbumTag;
-import cn.xiedacon.util.Constant;
 import cn.xiedacon.util.MessageUtils;
 import cn.xiedacon.util.UUIDUtils;
 
@@ -29,7 +28,7 @@ public class AlbumTagAdminController {
 
 	@RequestMapping(value = "", method = RequestMethod.GET)
 	public Map<String, Object> selectList() {
-		return MessageUtils.createSuccess(Constant.SUCCESS_RETURNNAME, albumTagService.selectList());
+		return MessageUtils.createSuccess(albumTagService.selectList());
 	}
 
 	@RequestMapping(value = "/{id:\\w+}", method = RequestMethod.DELETE)

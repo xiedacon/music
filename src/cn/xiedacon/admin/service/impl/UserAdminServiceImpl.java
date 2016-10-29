@@ -31,16 +31,21 @@ public class UserAdminServiceImpl implements UserAdminService {
 	}
 
 	@Override
-	public void deleteUser(User user) {
-		userDao.deleteUser(user);
-	}
-
-	@Override
 	public Object selectPageBeanByNameLike(Integer page, String name) {
 		int limit = Constant.LIMIT_DEFAULT;
 		int count = userDao.selectCountByNameLike(name);
 		List<User> beans = userDao.selectByNameLikeLimit(name, (page - 1) * limit, limit);
 		return new PageBean<>(page, limit, count, beans);
+	}
+
+	@Override
+	public void delete(User user) {
+		userDao.delete(user);
+	}
+
+	@Override
+	public User selectExist(String id) {
+		return userDao.selectExist(id);
 	}
 
 }

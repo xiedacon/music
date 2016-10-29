@@ -12,6 +12,15 @@ public class SecondClassify {
 
 	private Boolean visible;
 
+	public SecondClassify() {
+		super();
+	}
+
+	public SecondClassify(String id, String name) {
+		this.id = id;
+		this.name = name;
+	}
+
 	public Boolean getVisible() {
 		return visible;
 	}

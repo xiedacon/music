@@ -9,8 +9,10 @@ public interface UserAdminService {
 
 	User selectById(String id);
 
-	void deleteUser(User user);
+	void delete(User user);
 
 	Object selectPageBeanByNameLike(Integer page, String name);
+
+	User selectExist(String id);
 
 }

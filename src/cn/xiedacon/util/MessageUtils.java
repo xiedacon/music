@@ -11,16 +11,7 @@ public class MessageUtils {
 	 * @return
 	 */
 	public static Map<String, Object> createSuccess() {
-		return createSuccess(null, null, null);
-	}
-
-	/**
-	 * 创建携带message信息的成功返回
-	 * 
-	 * @return
-	 */
-	public static Map<String, Object> createSuccess(String message) {
-		return createSuccess(message, null, null);
+		return createSuccess(null, null);
 	}
 
 	/**
@@ -28,8 +19,8 @@ public class MessageUtils {
 	 * 
 	 * @return
 	 */
-	public static Map<String, Object> createSuccess(String name, Object value) {
-		return createSuccess(null, name, value);
+	public static Map<String, Object> createSuccess(Object data) {
+		return createSuccess(Constant.SUCCESS_RETURNNAME, data);
 	}
 
 	/**
@@ -37,8 +28,8 @@ public class MessageUtils {
 	 * 
 	 * @return
 	 */
-	public static Map<String, Object> createSuccess(String message, String name, Object value) {
-		return createMessage(Constant.SUCCESS, message, name, value);
+	public static Map<String, Object> createSuccess(String name, Object value) {
+		return createMessage(Constant.SUCCESS, null, name, value);
 	}
 
 	/**
@@ -112,7 +103,8 @@ public class MessageUtils {
 	public static Map<String, Object> createError(String message, String name, Object value) {
 		Map<String, Object> error = new HashMap<>();
 		if (name != null && value != null) {
-			error.put(name, value);
+			error.put("name", name);
+			error.put("value", value);
 		}
 		return createMessage(Constant.ERROR, message, "error", error);
 	}

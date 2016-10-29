@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import cn.xiedacon.admin.service.FirstSongMenuTagAdminService;
 import cn.xiedacon.factory.Factory;
 import cn.xiedacon.model.SongMenuFirstTag;
-import cn.xiedacon.util.Constant;
 import cn.xiedacon.util.MessageUtils;
 import cn.xiedacon.util.UUIDUtils;
 
@@ -29,7 +28,7 @@ public class FirstSongMenuTagAdminController {
 
 	@RequestMapping(value = "", method = RequestMethod.GET)
 	public Map<String, Object> selectList() {
-		return MessageUtils.createSuccess(Constant.SUCCESS_RETURNNAME, tagService.selectList());
+		return MessageUtils.createSuccess(tagService.selectList());
 	}
 
 	@RequestMapping(value = "/{id:\\w+}", method = RequestMethod.DELETE)

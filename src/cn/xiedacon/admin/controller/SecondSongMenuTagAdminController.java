@@ -15,7 +15,6 @@ import cn.xiedacon.admin.service.SecondSongMenuTagAdminService;
 import cn.xiedacon.factory.Factory;
 import cn.xiedacon.model.SongMenuFirstTag;
 import cn.xiedacon.model.SongMenuSecondTag;
-import cn.xiedacon.util.Constant;
 import cn.xiedacon.util.MessageUtils;
 import cn.xiedacon.util.UUIDUtils;
 
@@ -33,7 +32,7 @@ public class SecondSongMenuTagAdminController {
 
 	@RequestMapping(value = "", method = RequestMethod.GET)
 	public Map<String, Object> selectList() {
-		return MessageUtils.createSuccess(Constant.SUCCESS_RETURNNAME, secondTagService.selectList());
+		return MessageUtils.createSuccess(secondTagService.selectList());
 	}
 
 	@RequestMapping(value = "", method = RequestMethod.POST)

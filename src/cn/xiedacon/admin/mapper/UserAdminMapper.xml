@@ -72,4 +72,11 @@
 		WHERE u.visible = true AND u.name LIKE #{name}
 		LIMIT #{begin},#{limit}
 	</select>
+	
+	<select id="selectExist" resultType="cn.xiedacon.model.User">
+		SELECT
+		u.id id
+		FROM user_base u
+		WHERE u.visible = true AND u.id = #{id}
+	</select>
 </mapper>

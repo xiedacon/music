@@ -15,7 +15,6 @@ import cn.xiedacon.admin.service.SecondClassifyAdminService;
 import cn.xiedacon.factory.Factory;
 import cn.xiedacon.model.FirstClassify;
 import cn.xiedacon.model.SecondClassify;
-import cn.xiedacon.util.Constant;
 import cn.xiedacon.util.MessageUtils;
 import cn.xiedacon.util.UUIDUtils;
 
@@ -33,7 +32,7 @@ public class SecondClassifyAdminController {
 
 	@RequestMapping(value = "", method = RequestMethod.GET)
 	public Map<String, Object> selectList() {
-		return MessageUtils.createSuccess(Constant.SUCCESS_RETURNNAME, secondlassifyService.selectList());
+		return MessageUtils.createSuccess(secondlassifyService.selectList());
 	}
 
 	@RequestMapping(value = "", method = RequestMethod.POST)

@@ -14,10 +14,12 @@ public interface UserAdminDao {
 
 	User selectById(String id);
 
-	void deleteUser(User user);
+	void delete(User user);
 
 	int selectCountByNameLike(String name);
 
 	List<User> selectByNameLikeLimit(@Param("name") String name, @Param("begin") int begin, @Param("limit") int limit);
+
+	User selectExist(String id);
 
 }

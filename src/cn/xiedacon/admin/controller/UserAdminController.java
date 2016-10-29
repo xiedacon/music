@@ -24,21 +24,22 @@ public class UserAdminController {
 
 	@RequestMapping(value = "/page/{page:[1-9]\\d*}", method = RequestMethod.GET)
 	public Map<String, Object> selectPageBean(@PathVariable("page") Integer page) {
-		return MessageUtils.createSuccess("data", userService.selectPageBean(page));
+		return MessageUtils.createSuccess(userService.selectPageBean(page));
 	}
 
 	@RequestMapping(value = "/{id:\\w+}", method = RequestMethod.DELETE)
-	public Map<String, Object> deleteUser(@PathVariable("id") String id) {
-		User user = userService.selectById(id);
+	public Map<String, Object> delete(@PathVariable("id") String id) {
+		User user = userService.selectExist(id);
 		if (user != null) {
-			userService.deleteUser(user);
+			userService.delete(user);
 		}
 		return MessageUtils.createSuccess();
 	}
 
 	@RequestMapping(value = "/name/{name:.+}/page/{page:[1-9]\\d*}", method = RequestMethod.GET)
-	public Map<String, Object> selectPageBeanByNameLike(@PathVariable("name") String name,@PathVariable("page") Integer page) {
-		return MessageUtils.createSuccess("data", userService.selectPageBeanByNameLike(page,
-				"%" + CharsetUtils.change(name, "ISO-8859-1", "UTF-8") + "%"));
+	public Map<String, Object> selectPageBeanByNameLike(@PathVariable("name") String name,
+			@PathVariable("page") Integer page) {
+		String nameLike = "%" + CharsetUtils.change(name, "ISO-8859-1", "UTF-8") + "%";
+		return MessageUtils.createSuccess("data", userService.selectPageBeanByNameLike(page, nameLike));
 	}
 }
