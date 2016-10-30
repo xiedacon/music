@@ -23,10 +23,10 @@ public class SongMenuReadServiceImpl implements SongMenuReadService {
 	}
 
 	@Override
-	public PageBean<SongMenu> selectPageBean(Integer page) {
+	public PageBean<SongMenu> selectPageBeanOrderByCreateTime(Integer page) {
 		int limit = Constant.LIMIT_DEFAULT;
 		int count = songMenuDao.selectCount();
-		List<SongMenu> beans = songMenuDao.selectLimit(limit * (page - 1), limit);
+		List<SongMenu> beans = songMenuDao.selectListOrderByCreateTimeLimit(limit * (page - 1), limit);
 		return new PageBean<>(page, limit, count, beans);
 	}
 
@@ -34,15 +34,15 @@ public class SongMenuReadServiceImpl implements SongMenuReadService {
 	public PageBean<SongMenu> selectPageBeanOrderByCollectionNum(Integer page) {
 		int limit = Constant.LIMIT_DEFAULT;
 		int count = songMenuDao.selectCount();
-		List<SongMenu> beans = songMenuDao.selectOrderByCollectionNumLimit(limit * (page - 1), limit);
+		List<SongMenu> beans = songMenuDao.selectListOrderByCollectionNumLimit(limit * (page - 1), limit);
 		return new PageBean<>(page, limit, count, beans);
 	}
 
 	@Override
-	public PageBean<SongMenu> selectPageBeanBySecondTagId(String secondTagId, Integer page) {
+	public PageBean<SongMenu> selectPageBeanBySecondTagIdOrderByCreateTime(String secondTagId, Integer page) {
 		int limit = Constant.LIMIT_DEFAULT;
 		int count = songMenuDao.selectCountBySecondTagId(secondTagId);
-		List<SongMenu> beans = songMenuDao.selectBySecondTagIdLimit(secondTagId, limit * (page - 1), limit);
+		List<SongMenu> beans = songMenuDao.selectListBySecondTagIdOrderByCreateTimeLimit(secondTagId, limit * (page - 1), limit);
 		return new PageBean<>(page, limit, count, beans);
 	}
 
@@ -50,7 +50,7 @@ public class SongMenuReadServiceImpl implements SongMenuReadService {
 	public PageBean<SongMenu> selectPageBeanBySecondTagIdOrderByCollectionNum(String secondTagId, Integer page) {
 		int limit = Constant.LIMIT_DEFAULT;
 		int count = songMenuDao.selectCountBySecondTagId(secondTagId);
-		List<SongMenu> beans = songMenuDao.selectBySecondTagIdOrderByCollectionNumLimit(secondTagId, limit * (page - 1),
+		List<SongMenu> beans = songMenuDao.selectListBySecondTagIdOrderByCollectionNumLimit(secondTagId, limit * (page - 1),
 				limit);
 		return new PageBean<>(page, limit, count, beans);
 	}

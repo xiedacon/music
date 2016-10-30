@@ -16,8 +16,8 @@ public class SongReadServiceImpl implements SongReadService {
 	private SongReadDao songDao;
 
 	@Override
-	public List<Song> selectListBySongMenuIdOrderByRank(String songMenuId) {
-		return songDao.selectListBySongMenuIdOrderByRank(songMenuId);
+	public List<Song> selectListBySongMenuIdOrderByTime(String songMenuId) {
+		return songDao.selectListBySongMenuIdOrderByTime(songMenuId);
 	}
 
 	@Override

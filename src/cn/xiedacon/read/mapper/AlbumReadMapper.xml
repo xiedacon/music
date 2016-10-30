@@ -5,104 +5,78 @@
 
 <mapper namespace="cn.xiedacon.read.dao.AlbumReadDao">
 
-	<sql id="required_SELECT">
+	<select id="selectById" resultType="cn.xiedacon.model.Album">
 		SELECT
 		a.id id,
 		a.name name,
 		a.icon icon,
 		a.singerId singerId,
 		a.singerName singerName,
-	</sql>
-
-	<sql id="simpleAlbumVo_SELECT">
-		<include refid="required_SELECT"></include>
-		a.createTime createTime
-	</sql>
-
-	<sql id="albumVo_SELECT">
-		<include refid="required_SELECT"></include>
 		a.createTime createTime,
 		a.remark remark,
-		a.createCompany
-		createCompany,
+		a.createCompany createCompany,
 		ar.playNum playNum,
 		ar.shareNum shareNum,
 		ar.commentNum commentNum,
-		a.introduction
-		introduction,
+		a.introduction introduction,
 		a.songNum songNum
-	</sql>
-
-	<sql id="count_SELECT">
-		SELECT
-		COUNT(a.id)
-	</sql>
-
-	<sql id="album_base_FROM">
 		FROM album_base a
-	</sql>
-
-	<sql id="album_record_JOIN">
 		INNER JOIN album_record ar ON a.id = ar.id
-	</sql>
-
-	<sql id="id_WHERE">
-		<where>a.id = #{id}</where>
-	</sql>
-
-	<sql id="tagId_WHERE">
-		<where>a.tagId = #{tagId}</where>
-	</sql>
-
-	<sql id="singerId_WHERE">
-		<where>a.singerId = #{singerId}</where>
-	</sql>
-
-	<sql id="createTime_ORDERBY">
-		ORDER BY a.createTime DESC
-	</sql>
-
-	<sql id="LIMIT">
-		LIMIT #{begin},#{limit}
-	</sql>
-
-	<select id="selectById" resultType="cn.xiedacon.model.Album">
-		<include refid="albumVo_SELECT"></include>
-		<include refid="album_base_FROM"></include>
-		<include refid="album_record_JOIN"></include>
-		<include refid="id_WHERE"></include>
+		WHERE a.id = #{id} AND a.visible = true
 	</select>
 
 	<select id="selectCountByTagId" resultType="int">
-		<include refid="count_SELECT"></include>
-		<include refid="album_base_FROM"></include>
-		<if test="tagId != null">
-			<include refid="tagId_WHERE"></include>
-		</if>
+		SELECT COUNT(a.id)
+		FROM album_base a
+		WHERE a.tagId = #{tagId} AND a.visible = true
 	</select>
 
 	<select id="selectListByTagIdOrderByCreateTimeLimit" resultType="cn.xiedacon.model.Album">
-		<include refid="simpleAlbumVo_SELECT"></include>
-		<include refid="album_base_FROM"></include>
-		<if test="tagId != null">
-			<include refid="tagId_WHERE"></include>
-		</if>
-		<include refid="createTime_ORDERBY"></include>
-		<include refid="LIMIT"></include>
+		SELECT
+		a.id id,
+		a.name name,
+		a.icon icon,
+		a.singerId singerId,
+		a.singerName singerName,
+		a.createTime createTime
+		FROM album_base a
+		WHERE a.tagId = #{tagId} AND a.visible = true
+		ORDER BY a.createTime DESC
+		LIMIT #{begin},#{limit}
 	</select>
 
 	<select id="selectCountBySingerId" resultType="int">
-		<include refid="count_SELECT"></include>
-		<include refid="album_base_FROM"></include>
-		<include refid="singerId_WHERE"></include>
+		SELECT COUNT(a.id)
+		FROM album_base a
+		WHERE a.singerId = #{singerId} AND a.visible = true
 	</select>
 
 	<select id="selectListBySingerIdOrderByCreateTimeLimit"
 		resultType="cn.xiedacon.model.Album">
-		<include refid="simpleAlbumVo_SELECT"></include>
-		<include refid="album_base_FROM"></include>
-		<include refid="singerId_WHERE"></include>
-		<include refid="createTime_ORDERBY"></include>
-		<include refid="LIMIT"></include>
+		SELECT
+		a.id id,
+		a.name name,
+		a.icon icon,
+		a.singerId singerId,
+		a.singerName singerName,
+		a.createTime createTime
+		FROM album_base a
+		WHERE a.singerId = #{singerId} AND a.visible = true
+		ORDER BY a.createTime DESC
+		LIMIT #{begin},#{limit}
+	</select>
+	
+	<select id="selectListOrderByCreateTimeLimit" resultType="cn.xiedacon.model.Album">
+		SELECT
+		a.id id,
+		a.name name,
+		a.icon icon,
+		a.singerId singerId,
+		a.singerName singerName,
+		a.createTime createTime
+		FROM album_base a
+		WHERE a.visible = true
+		ORDER BY a.createTime DESC
+		LIMIT #{begin},#{limit}
 	</select>
 </mapper>

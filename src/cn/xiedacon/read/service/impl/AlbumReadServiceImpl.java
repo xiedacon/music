@@ -23,7 +23,7 @@ public class AlbumReadServiceImpl implements AlbumReadService {
 	}
 
 	@Override
-	public PageBean<Album> selectPageBeanByTagIdOrderByCreateTimeLimit(String tagId, Integer page) {
+	public PageBean<Album> selectPageBeanByTagIdOrderByCreateTime(String tagId, Integer page) {
 		int limit = Constant.LIMIT_DEFAULT;
 		int count = albumDao.selectCountByTagId(tagId);
 		List<Album> beans = albumDao.selectListByTagIdOrderByCreateTimeLimit(tagId, limit * (page - 1), limit);
@@ -31,10 +31,18 @@ public class AlbumReadServiceImpl implements AlbumReadService {
 	}
 
 	@Override
-	public PageBean<Album> selectPageBeanBySingerIdOrderByCreateTimeLimit(String singerId, Integer page) {
+	public PageBean<Album> selectPageBeanBySingerIdOrderByCreateTime(String singerId, Integer page) {
 		int limit = Constant.LIMIT_DEFAULT;
 		int count = albumDao.selectCountBySingerId(singerId);
 		List<Album> beans = albumDao.selectListBySingerIdOrderByCreateTimeLimit(singerId, limit * (page - 1), limit);
+		return new PageBean<>(page, limit, count, beans);
+	}
+
+	@Override
+	public PageBean<Album> selectPageBeanOrderByCreateTime(Integer page) {
+		int limit = Constant.LIMIT_DEFAULT;
+		int count = albumDao.selectCount();
+		List<Album> beans = albumDao.selectListOrderByCreateTimeLimit(limit * (page - 1), limit);
 		return new PageBean<>(page, limit, count, beans);
 	}
 

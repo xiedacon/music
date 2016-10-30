@@ -5,7 +5,7 @@
 
 <mapper namespace="cn.xiedacon.read.dao.CommentReadDao">
 
-	<sql id="commentVo_SELECT">
+	<select id="selectListBySongMenuIdAndMINAgreeNum" resultType="cn.xiedacon.model.Comment">
 		SELECT
 		c.id id,
 		c.content content,
@@ -13,124 +13,144 @@
 		c.agreeNum agreeNum,
 		u.id creatorId,
 		u.name creatorName,
-		u.icon
-		creatorIcon
-	</sql>
-	<sql id="count_SELECT">
-		SELECT
-		COUNT(c.id) count
-	</sql>
-
-	<sql id="user_base_JOIN">
-		INNER JOIN user_base u ON c.creatorId = u.id
-	</sql>
-
-	<sql id="createTime_ORDERBY">
-		ORDER BY c.createTime DESC
-	</sql>
-
-	<sql id="LIMIT">
-		LIMIT #{begin},#{limit};
-	</sql>
-
-	<select id="selectListBySongMenuIdAndMINAgreeNum" resultType="cn.xiedacon.model.Comment">
-		<include refid="commentVo_SELECT"></include>
+		u.icon creatorIcon
 		FROM comment_songMenu c
-		<include refid="user_base_JOIN"></include>
+		INNER JOIN user_base u ON c.creatorId = u.id
 		WHERE c.songMenuId = #{songMenuId} AND c.agreeNum >= #{agreeNum}
-		<include refid="createTime_ORDERBY"></include>
+		ORDER BY c.createTime DESC
 	</select>
 
 	<select id="selectListBySongMenuIdLimit" resultType="cn.xiedacon.model.Comment">
-		<include refid="commentVo_SELECT"></include>
+		SELECT
+		c.id id,
+		c.content content,
+		c.createTime createTime,
+		c.agreeNum agreeNum,
+		u.id creatorId,
+		u.name creatorName,
+		u.icon creatorIcon
 		FROM comment_songMenu c
-		<include refid="user_base_JOIN"></include>
+		INNER JOIN user_base u ON c.creatorId = u.id
 		WHERE c.songMenuId = #{songMenuId}
-		<include refid="createTime_ORDERBY"></include>
-		<include refid="LIMIT"></include>
+		ORDER BY c.createTime DESC
+		LIMIT #{begin},#{limit};
 	</select>
 
 	<select id="selectCountBySongMenuId" resultType="java.lang.Integer">
-		<include refid="count_SELECT"></include>
+		SELECT COUNT(c.id)
 		FROM comment_songMenu c
 		WHERE c.songMenuId = #{songMenuId}
 	</select>
 
 	<select id="selectListByAlbumIdAndMINAgreeNum" resultType="cn.xiedacon.model.Comment">
-		<include refid="commentVo_SELECT"></include>
+		SELECT
+		c.id id,
+		c.content content,
+		c.createTime createTime,
+		c.agreeNum agreeNum,
+		u.id creatorId,
+		u.name creatorName,
+		u.icon creatorIcon
 		FROM comment_album c
-		<include refid="user_base_JOIN"></include>
+		INNER JOIN user_base u ON c.creatorId = u.id
 		WHERE c.albumId = #{albumId} AND c.agreeNum >= #{agreeNum}
-		<include refid="createTime_ORDERBY"></include>
+		ORDER BY c.createTime DESC
 	</select>
 
 	<select id="selectListByAlbumIdLimit" resultType="cn.xiedacon.model.Comment">
-		<include refid="commentVo_SELECT"></include>
-		FROM
-		comment_album c
-		<include refid="user_base_JOIN"></include>
-		WHERE
-		c.albumId = #{albumId}
-		<include refid="createTime_ORDERBY"></include>
-		<include refid="LIMIT"></include>
+		SELECT
+		c.id id,
+		c.content content,
+		c.createTime createTime,
+		c.agreeNum agreeNum,
+		u.id creatorId,
+		u.name creatorName,
+		u.icon creatorIcon
+		FROM comment_album c
+		INNER JOIN user_base u ON c.creatorId = u.id
+		WHERE c.albumId = #{albumId}
+		ORDER BY c.createTime DESC
+		LIMIT #{begin},#{limit};
 	</select>
 
 	<select id="selectCountByAlbumId" resultType="java.lang.Integer">
-		<include refid="count_SELECT"></include>
-		FROM
-		comment_Album c
-		WHERE
-		c.albumId = #{albumId}
+		SELECT COUNT(c.id)
+		FROM comment_Album c
+		WHERE c.albumId = #{albumId}
 	</select>
 
 	<select id="selectListBySongListIdLimit" resultType="cn.xiedacon.model.Comment">
-		<include refid="commentVo_SELECT"></include>
-		FROM
-		comment_songlist c
-		<include refid="user_base_JOIN"></include>
+		SELECT
+		c.id id,
+		c.content content,
+		c.createTime createTime,
+		c.agreeNum agreeNum,
+		u.id creatorId,
+		u.name creatorName,
+		u.icon creatorIcon
+		FROM comment_songlist c
+		INNER JOIN user_base u ON c.creatorId = u.id
 		WHERE c.songListId = #{songListId}
-		<include refid="createTime_ORDERBY"></include>
-		<include refid="LIMIT"></include>
+		ORDER BY c.createTime DESC
+		LIMIT #{begin},#{limit};
 	</select>
 
 	<select id="selectCountBySongListId" resultType="java.lang.Integer">
-		<include refid="count_SELECT"></include>
+		SELECT COUNT(c.id)
 		FROM comment_songlist c
 		WHERE c.songListId = #{songListId}
 	</select>
 
 	<select id="selectListBySongListIdAndMINAgreeNum" resultType="cn.xiedacon.model.Comment">
-		<include refid="commentVo_SELECT"></include>
-		FROM
-		comment_songlist c
-		<include refid="user_base_JOIN"></include>
+		SELECT
+		c.id id,
+		c.content content,
+		c.createTime createTime,
+		c.agreeNum agreeNum,
+		u.id creatorId,
+		u.name creatorName,
+		u.icon creatorIcon
+		FROM comment_songlist c
+		INNER JOIN user_base u ON c.creatorId = u.id
 		WHERE c.songListId = #{songListId} AND c.agreeNum >= #{agreeNum}
-		<include refid="createTime_ORDERBY"></include>
+		ORDER BY c.createTime DESC
 	</select>
 
 	<select id="selectListBySongIdLimit" resultType="cn.xiedacon.model.Comment">
-		<include refid="commentVo_SELECT"></include>
-		FROM
-		comment_song c
-		<include refid="user_base_JOIN"></include>
+		SELECT
+		c.id id,
+		c.content content,
+		c.createTime createTime,
+		c.agreeNum agreeNum,
+		u.id creatorId,
+		u.name creatorName,
+		u.icon creatorIcon
+		FROM comment_song c
+		INNER JOIN user_base u ON c.creatorId = u.id
 		WHERE c.songId = #{songId}
-		<include refid="createTime_ORDERBY"></include>
-		<include refid="LIMIT"></include>
+		ORDER BY c.createTime DESC
+		LIMIT #{begin},#{limit};
 	</select>
 
 	<select id="selectCountBySongId" resultType="java.lang.Integer">
-		<include refid="count_SELECT"></include>
+		SELECT COUNT(c.id)
 		FROM comment_song c
 		WHERE c.songId = #{songId}
 	</select>
 
 	<select id="selectListBySongIdAndMINAgreeNum" resultType="cn.xiedacon.model.Comment">
-		<include refid="commentVo_SELECT"></include>
-		FROM
-		comment_song c
-		<include refid="user_base_JOIN"></include>
+		SELECT
+		c.id id,
+		c.content content,
+		c.createTime createTime,
+		c.agreeNum agreeNum,
+		u.id creatorId,
+		u.name creatorName,
+		u.icon creatorIcon
+		FROM comment_song c
+		INNER JOIN user_base u ON c.creatorId = u.id
 		WHERE c.songId = #{songId} AND c.agreeNum >= #{agreeNum}
-		<include refid="createTime_ORDERBY"></include>
+		ORDER BY c.createTime DESC
 	</select>
 
 	<select id="selectSongMenuCommentById" resultType="cn.xiedacon.model.Comment">

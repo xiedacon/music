@@ -1,6 +1,6 @@
 package cn.xiedacon.read.controller;
 
-import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import cn.xiedacon.model.SongList;
 import cn.xiedacon.read.service.SongListReadService;
+import cn.xiedacon.util.MessageUtils;
 
 @Controller
 @ResponseBody
@@ -21,13 +21,13 @@ public class SongListReadController {
 	private SongListReadService songListService;
 
 	@RequestMapping("/{id:\\w+}")
-	public SongList getById(@PathVariable("id") String id) {
-		return songListService.selectById(id);
+	public Map<String, Object> selectById(@PathVariable("id") String id) {
+		return MessageUtils.createSuccess(songListService.selectById(id));
 	}
 
-	@RequestMapping("/s")
-	public List<SongList> getList() {
-		return songListService.selectList();
+	@RequestMapping("")
+	public Map<String, Object> selectList() {
+		return MessageUtils.createSuccess(songListService.selectList());
 	}
 
 }

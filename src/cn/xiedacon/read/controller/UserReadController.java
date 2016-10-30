@@ -1,5 +1,7 @@
 package cn.xiedacon.read.controller;
 
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -7,8 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import cn.xiedacon.model.User;
 import cn.xiedacon.read.service.UserReadService;
+import cn.xiedacon.util.MessageUtils;
 
 @ResponseBody
 @Controller
@@ -19,7 +21,7 @@ public class UserReadController {
 	private UserReadService userService;
 
 	@RequestMapping(value = "/{id:\\w+}")
-	public User getById(@PathVariable("id") String id) {
-		return userService.selectById(id);
+	public Map<String, Object> selectById(@PathVariable("id") String id) {
+		return MessageUtils.createSuccess(userService.selectById(id));
 	}
 }

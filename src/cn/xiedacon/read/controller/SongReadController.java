@@ -1,6 +1,5 @@
 package cn.xiedacon.read.controller;
 
-import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +9,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import cn.xiedacon.model.Song;
 import cn.xiedacon.read.service.SongReadService;
 import cn.xiedacon.util.Constant;
 import cn.xiedacon.util.MessageUtils;
@@ -25,33 +23,34 @@ public class SongReadController {
 	private SongReadService songService;
 
 	@RequestMapping("/{id:\\w+}")
-	public Song getById(@PathVariable("id") String id) {
-		return songService.selectById(id);
+	public Map<String, Object> selectById(@PathVariable("id") String id) {
+		return MessageUtils.createSuccess(songService.selectById(id));
 	}
 
-	@RequestMapping("/s/albumId_{albumId:\\w+}")
-	public List<Song> getListByAlbumId(@PathVariable("albumId") String albumId) {
-		return songService.selectListByAlbumIdOrderByRank(albumId);
+	@RequestMapping("/albumId_{albumId:\\w+}")
+	public Map<String, Object> selectListByAlbumIdOrderByRank(@PathVariable("albumId") String albumId) {
+		return MessageUtils.createSuccess(songService.selectListByAlbumIdOrderByRank(albumId));
 	}
 
-	@RequestMapping("/s/songMenuId_{songMenuId:\\w+}")
-	public List<Song> getListBySongMenuId(@PathVariable("songMenuId") String songMenuId) {
-		return songService.selectListBySongMenuIdOrderByRank(songMenuId);
+	@RequestMapping("/songMenuId_{songMenuId:\\w+}")
+	public Map<String, Object> selectListBySongMenuIdOrderByTime(@PathVariable("songMenuId") String songMenuId) {
+		return MessageUtils.createSuccess(songService.selectListBySongMenuIdOrderByTime(songMenuId));
 	}
 
-	@RequestMapping("/s/songListId_{songListId:\\w+}")
-	public List<Song> getListBySongListId(@PathVariable("songListId") String songListId) {
-		return songService.selectListBySongListIdOrderByRank(songListId);
+	@RequestMapping("/songListId_{songListId:\\w+}")
+	public Map<String, Object> selectListBySongListIdOrderByRank(@PathVariable("songListId") String songListId) {
+		return MessageUtils.createSuccess(songService.selectListBySongListIdOrderByRank(songListId));
 	}
 
-	@RequestMapping("/s/singerId_{singerId:\\w+}")
-	public List<Song> getListBySingerId(@PathVariable("singerId") String singerId) {
-		return songService.selectListBySingerIdOrderByCollectionNumLimit(singerId, Constant.BEGIN_DEFAULT,
-				Constant.SINGER_SHOW_SONGNUM);
+	@RequestMapping("/singerId_{singerId:\\w+}")
+	public Map<String, Object> selectListBySingerIdOrderByCollectionNumLimit(
+			@PathVariable("singerId") String singerId) {
+		return MessageUtils.createSuccess(songService.selectListBySingerIdOrderByCollectionNumLimit(singerId,
+				Constant.BEGIN_DEFAULT, Constant.SINGER_SHOW_SONGNUM));
 	}
 
 	@RequestMapping("/{id:\\w+}/lrc")
-	public Map<String, Object> getLrcById(@PathVariable("id") String id) {
-		return MessageUtils.createSuccess("lrc", ResourceLoader.getResourceAsString(songService.selectLyricUriById(id)));
+	public Map<String, Object> selectLrcById(@PathVariable("id") String id) {
+		return MessageUtils.createSuccess(ResourceLoader.getResourceAsString(songService.selectLyricUriById(id)));
 	}
 }

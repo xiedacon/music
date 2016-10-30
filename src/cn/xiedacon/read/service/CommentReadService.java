@@ -15,9 +15,9 @@ public interface CommentReadService {
 
 	PageBean<Comment> selectPageBeanByAlbumId(String albumId, Integer page);
 
-	List<Comment> selectHotBySongListId(String songListId);
+	List<Comment> selectForHotBySongListId(String songListId);
 
-	PageBean<Comment> selectPageBeanBySongListIdLimit(String songListId, Integer page);
+	PageBean<Comment> selectPageBeanBySongListId(String songListId, Integer page);
 
 	List<Comment> selectForHotBySongId(String songId);
 
@@ -30,4 +30,6 @@ public interface CommentReadService {
 	Comment selectSongListCommentById(String commentId);
 
 	Comment selectSongCommentById(String commentId);
+
+
 }

@@ -20,4 +20,8 @@ public interface AlbumReadDao {
 	List<Album> selectListBySingerIdOrderByCreateTimeLimit(@Param("singerId") String singerId,
 			@Param("begin") int begin, @Param("limit") int limit);
 
+	int selectCount();
+
+	List<Album> selectListOrderByCreateTimeLimit(@Param("begin") int begin, @Param("limit") int limit);
+
 }

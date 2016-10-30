@@ -44,12 +44,12 @@ public class CommentReadServiceImpl implements CommentReadService {
 	}
 
 	@Override
-	public List<Comment> selectHotBySongListId(String songListId) {
+	public List<Comment> selectForHotBySongListId(String songListId) {
 		return commentDao.selectListBySongListIdAndMINAgreeNum(songListId, Constant.COMMENT_HOT_AGREENUM);
 	}
 
 	@Override
-	public PageBean<Comment> selectPageBeanBySongListIdLimit(String songListId, Integer page) {
+	public PageBean<Comment> selectPageBeanBySongListId(String songListId, Integer page) {
 		int limit = Constant.LIMIT_DEFAULT;
 		int count = commentDao.selectCountBySongListId(songListId);
 		List<Comment> beans = commentDao.selectListBySongListIdLimit(songListId, limit * (page - 1), limit);

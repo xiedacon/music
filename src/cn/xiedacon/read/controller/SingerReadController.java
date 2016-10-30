@@ -1,7 +1,5 @@
 package cn.xiedacon.read.controller;
 
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,9 +9,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import cn.xiedacon.model.Singer;
 import cn.xiedacon.read.service.SingerReadService;
 import cn.xiedacon.util.Constant;
+import cn.xiedacon.util.MessageUtils;
 
 @Controller
 @ResponseBody
@@ -23,36 +21,33 @@ public class SingerReadController {
 	@Autowired
 	private SingerReadService singerService;
 
-	@RequestMapping("/s")
-	public List<Singer> getList() {
-		return singerService.selectListLimit(Constant.BEGIN_DEFAULT, Constant.SINGER_SHOW_NUM);
+	@RequestMapping("")
+	public Map<String, Object> selectList() {
+		return MessageUtils
+				.createSuccess(singerService.selectListLimit(Constant.BEGIN_DEFAULT, Constant.SINGER_SHOW_NUM));
 	}
 
-	@RequestMapping("/s/hot")
-	public List<Singer> getHotList() {
-		return singerService.selectListOrderByCollectionNumLimit(Constant.BEGIN_DEFAULT, Constant.SINGER_SHOW_NUM);
+	@RequestMapping("/hot")
+	public Map<String, Object> selectForHot() {
+		return MessageUtils.createSuccess(
+				singerService.selectListOrderByCollectionNumLimit(Constant.BEGIN_DEFAULT, Constant.SINGER_SHOW_NUM));
 	}
 
-	@RequestMapping("/s/classifyId_{classifyId:\\d{4}}")
-	public List<Singer> getListByClassifyId(@PathVariable("classifyId") Integer classifyId) {
-		return singerService.selectListByClassifyIdOrderByCollectionNumLimit(classifyId, Constant.BEGIN_DEFAULT,
-				Constant.SINGER_SHOW_NUM);
+	@RequestMapping("/classifyId_{classifyId:\\d{4}}")
+	public Map<String, Object> selectListByClassifyId(@PathVariable("classifyId") Integer classifyId) {
+		return MessageUtils.createSuccess(singerService.selectListByClassifyIdOrderByCollectionNumLimit(classifyId,
+				Constant.BEGIN_DEFAULT, Constant.SINGER_SHOW_NUM));
 	}
 
 	@RequestMapping("/{id:\\w+}")
-	public Singer getById(@PathVariable("id") String id) {
-		return singerService.selectById(id);
+	public Map<String, Object> selectById(@PathVariable("id") String id) {
+		return MessageUtils.createSuccess(singerService.selectById(id));
 	}
 
 	@RequestMapping("/{id:\\w+}/introduction")
-	public Map<String, Object> getIntroductionById(@PathVariable("id") String id) {
-		Map<String, Object> result = new HashMap<>();
-		String introduction = singerService.selectIntroductionById(id);
-
+	public Map<String, Object> selectIntroductionById(@PathVariable("id") String id) {
 		// 可能扩展为富文本
-		result.put("code", Constant.SUCCESS);
-		result.put("introduction", introduction);
-
-		return result;
+		String introduction = singerService.selectIntroductionById(id);
+		return MessageUtils.createSuccess(introduction);
 	}
 }

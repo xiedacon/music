@@ -6,7 +6,7 @@ import cn.xiedacon.model.Song;
 
 public interface SongReadService {
 
-	List<Song> selectListBySongMenuIdOrderByRank(String songMenuId);
+	List<Song> selectListBySongMenuIdOrderByTime(String songMenuId);
 
 	List<Song> selectListByAlbumIdOrderByRank(String albumId);
 
@@ -19,4 +19,5 @@ public interface SongReadService {
 	List<Song> selectListBySingerIdOrderByCollectionNumLimit(String singerId, Integer begin, Integer limit);
 
 	String selectFileUriById(String songId);
+
 }

@@ -30,190 +30,145 @@
 		<result property="name" column="secondTagName" />
 	</resultMap>
 
-	<sql id="required_SELECT">
+	<select id="selectById" resultMap="songMenuVo">
 		SELECT
 		s.id id,
 		s.name name,
 		s.icon icon,
-	</sql>
-	<sql id="min_simpleSongMenuVo_SELECT">
-		<include refid="required_SELECT"></include>
-		r.playNum playNum
-	</sql>
-	<sql id="simpleSongMenuVo_SELECT">
-		<include refid="required_SELECT"></include>
-		r.playNum playNum,
-		s.creatorId creatorId,
-		s.creatorName creatorName,
-		s.userId userId,
-		s.songNum songNum
-	</sql>
-	<sql id="songMenuVo_SELECT">
-		<include refid="required_SELECT"></include>
 		s.createTime createTime,
 		s.introduction introduction,
 		s.songnum songNum,
 		u.id creatorId,
 		u.name creatorName,
 		u.icon creatorIcon,
-		r.shareNum
-		shareNum,
+		r.shareNum shareNum,
 		r.commentNum commentNum,
 		r.playNum playNum,
-		r.collectionNum
-		collectionNum,
+		r.collectionNum collectionNum,
 		tss.id secondTagId,
 		s.userId userId,
-		tss.name
-		secondTagName
-	</sql>
-	<sql id="count_SELECT">
-		SELECT COUNT(s.id) count
-	</sql>
-
-	<sql id="songMenu_base_FROM">
+		tss.name secondTagName
 		FROM songMenu_base s
-	</sql>
-
-	<sql id="id_WHERE">
-		<where>
-			s.id = #{id}
-			AND s.visible = true
-		</where>
-	</sql>
-	<sql id="secondTagId_WHERE">
-		<where>
-			sgr.tag_songMenu_secondId = #{secondTagId}
-			AND s.userId is null
-			AND s.visible = true
-		</where>
-	</sql>
-	<sql id="creatorId_WHERE">
-		<where>
-			s.creatorId = #{creatorId}
-			AND s.visible = true
-		</where>
-	</sql>
-	<sql id="collectorId_WHERE">
-		<where>
-			ugs.collectorId = #{collectorId}
-			AND s.visible = true
-		</where>
-	</sql>
-	<sql id="exceptLove_WHERE">
-		<where>
-			s.userId is null
-			AND s.visible = true
-		</where>
-	</sql>
-
-	<sql id="songMenu_recored_JOIN">
 		INNER JOIN songMenu_record r ON s.id = r.id
-	</sql>
-	<sql id="smi_gl_rsms_JOIN">
 		LEFT JOIN smi_gl_rsms sgr ON s.id = sgr.songMenuId
-	</sql>
-	<sql id="user_base_JOIN">
 		INNER JOIN user_base u ON s.creatorId = u.id
-	</sql>
-	<sql id="tag_songmenu_second_JOIN">
-		LEFT JOIN tag_songmenu_second tss ON
-		sgr.tag_songMenu_secondId = tss.id
-	</sql>
-	<sql id="user_gl_songmenu_JOIN">
-		LEFT JOIN user_gl_songmenu ugs ON
-		ugs.songMenuId = s.id
-	</sql>
+		LEFT JOIN tag_songmenu_second tss ON sgr.tag_songMenu_secondId = tss.id
+		WHERE s.id = #{id} AND s.visible = true
+	</select>
 
-	<sql id="collectionNum_ORDERBY">
-		ORDER BY r.collectionNum DESC, s.createTime DESC
-	</sql>
-	<sql id="createTime_ORDERBY">
+	<select id="selectListOrderByCreateTimeLimit" resultType="cn.xiedacon.vo.SimpleSongMenuVo">
+		SELECT
+		s.id id,
+		s.name name,
+		s.icon icon,
+		r.playNum playNum,
+		s.creatorId creatorId,
+		s.creatorName creatorName,
+		s.userId userId,
+		s.songNum songNum
+		FROM songMenu_base s
+		INNER JOIN songMenu_record r ON s.id = r.id
+		WHERE s.userId is null AND s.visible = true
 		ORDER BY s.createTime DESC
-	</sql>
-	<sql id="userId_ORDERBY">
-		ORDER BY s.userId DESC
-	</sql>
-
-	<sql id="LIMIT">
 		LIMIT #{begin},#{limit}
-	</sql>
-
-	<select id="selectById" resultMap="songMenuVo">
-		<include refid="songMenuVo_SELECT"></include>
-		<include refid="songMenu_base_FROM"></include>
-		<include refid="songMenu_recored_JOIN"></include>
-		<include refid="smi_gl_rsms_JOIN"></include>
-		<include refid="user_base_JOIN"></include>
-		<include refid="tag_songmenu_second_JOIN"></include>
-		<include refid="id_WHERE"></include>
 	</select>
 
-	<select id="selectLimit" resultType="cn.xiedacon.vo.SimpleSongMenuVo">
-		<include refid="simpleSongMenuVo_SELECT"></include>
-		<include refid="songMenu_base_FROM"></include>
-		<include refid="songMenu_recored_JOIN"></include>
-		<include refid="exceptLove_WHERE"></include>
-		<include refid="createTime_ORDERBY"></include>
-		<include refid="LIMIT"></include>
-	</select>
-
-	<select id="selectOrderByCollectionNumLimit" resultType="cn.xiedacon.vo.SimpleSongMenuVo">
-		<include refid="simpleSongMenuVo_SELECT"></include>
-		<include refid="songMenu_base_FROM"></include>
-		<include refid="songMenu_recored_JOIN"></include>
-		<include refid="exceptLove_WHERE"></include>
-		<include refid="collectionNum_ORDERBY"></include>
-		<include refid="LIMIT"></include>
+	<select id="selectListOrderByCollectionNumLimit" resultType="cn.xiedacon.vo.SimpleSongMenuVo">
+		SELECT
+		s.id id,
+		s.name name,
+		s.icon icon,
+		r.playNum playNum,
+		s.creatorId creatorId,
+		s.creatorName creatorName,
+		s.userId userId,
+		s.songNum songNum
+		FROM songMenu_base s
+		INNER JOIN songMenu_record r ON s.id = r.id
+		WHERE s.userId is null AND s.visible = true
+		ORDER BY r.collectionNum DESC, s.createTime DESC
+		LIMIT #{begin},#{limit}
 	</select>
 
 	<select id="selectCount" resultType="int">
-		<include refid="count_SELECT"></include>
-		<include refid="songMenu_base_FROM"></include>
-		<include refid="exceptLove_WHERE"></include>
+		SELECT COUNT(s.id)
+		FROM songMenu_base s
+		WHERE s.userId is null AND s.visible = true
 	</select>
 
-	<select id="selectBySecondTagIdOrderByCollectionNumLimit"
+	<select id="selectListBySecondTagIdOrderByCollectionNumLimit"
 		resultType="cn.xiedacon.vo.SimpleSongMenuVo">
-		<include refid="simpleSongMenuVo_SELECT"></include>
-		<include refid="songMenu_base_FROM"></include>
-		<include refid="songMenu_recored_JOIN"></include>
-		<include refid="smi_gl_rsms_JOIN"></include>
-		<include refid="secondTagId_WHERE"></include>
-		<include refid="collectionNum_ORDERBY"></include>
-		<include refid="LIMIT"></include>
+		SELECT
+		s.id id,
+		s.name name,
+		s.icon icon,
+		r.playNum playNum,
+		s.creatorId creatorId,
+		s.creatorName creatorName,
+		s.userId userId,
+		s.songNum songNum
+		FROM songMenu_base s
+		INNER JOIN songMenu_record r ON s.id = r.id
+		LEFT JOIN smi_gl_rsms sgr ON s.id = sgr.songMenuId
+		WHERE sgr.tag_songMenu_secondId = #{secondTagId} AND s.userId is null AND s.visible = true
+		ORDER BY r.collectionNum DESC, s.createTime DESC
+		LIMIT #{begin},#{limit}
 	</select>
 
-	<select id="selectBySecondTagIdLimit" resultType="cn.xiedacon.vo.SimpleSongMenuVo">
-		<include refid="simpleSongMenuVo_SELECT"></include>
-		<include refid="songMenu_base_FROM"></include>
-		<include refid="songMenu_recored_JOIN"></include>
-		<include refid="smi_gl_rsms_JOIN"></include>
-		<include refid="secondTagId_WHERE"></include>
-		<include refid="createTime_ORDERBY"></include>
-		<include refid="LIMIT"></include>
+	<select id="selectListBySecondTagIdOrderByCreateTimeLimit" resultType="cn.xiedacon.vo.SimpleSongMenuVo">
+		SELECT
+		s.id id,
+		s.name name,
+		s.icon icon,
+		r.playNum playNum,
+		s.creatorId creatorId,
+		s.creatorName creatorName,
+		s.userId userId,
+		s.songNum songNum
+		FROM songMenu_base s
+		INNER JOIN songMenu_record r ON s.id = r.id
+		LEFT JOIN smi_gl_rsms sgr ON s.id = sgr.songMenuId
+		WHERE sgr.tag_songMenu_secondId = #{secondTagId} AND s.userId is null AND s.visible = true
+		ORDER BY s.createTime DESC
+		LIMIT #{begin},#{limit}
 	</select>
 
 	<select id="selectCountBySecondTagId" resultType="int">
-		<include refid="count_SELECT"></include>
-		<include refid="songMenu_base_FROM"></include>
-		<include refid="smi_gl_rsms_JOIN"></include>
-		<include refid="secondTagId_WHERE"></include>
+		SELECT COUNT(s.id)
+		FROM songMenu_base s
+		LEFT JOIN smi_gl_rsms sgr ON s.id = sgr.songMenuId
+		WHERE sgr.tag_songMenu_secondId = #{secondTagId} AND s.userId is null AND s.visible = true
 	</select>
 
 	<select id="selectListByCreatorId" resultType="cn.xiedacon.vo.SimpleSongMenuVo">
-		<include refid="simpleSongMenuVo_SELECT"></include>
-		<include refid="songMenu_base_FROM"></include>
-		<include refid="songMenu_recored_JOIN"></include>
-		<include refid="creatorId_WHERE"></include>
-		<include refid="userId_ORDERBY"></include>
+		SELECT
+		s.id id,
+		s.name name,
+		s.icon icon,
+		r.playNum playNum,
+		s.creatorId creatorId,
+		s.creatorName creatorName,
+		s.userId userId,
+		s.songNum songNum
+		FROM songMenu_base s
+		INNER JOIN songMenu_record r ON s.id = r.id
+		WHERE s.creatorId = #{creatorId} AND s.visible = true
+		ORDER BY s.userId DESC
 	</select>
 
 	<select id="selectListByCollectorId" resultType="cn.xiedacon.vo.SimpleSongMenuVo">
-		<include refid="simpleSongMenuVo_SELECT"></include>
-		<include refid="songMenu_base_FROM"></include>
-		<include refid="songMenu_recored_JOIN"></include>
-		<include refid="user_gl_songmenu_JOIN"></include>
-		<include refid="collectorId_WHERE"></include>
+		SELECT
+		s.id id,
+		s.name name,
+		s.icon icon,
+		r.playNum playNum,
+		s.creatorId creatorId,
+		s.creatorName creatorName,
+		s.userId userId,
+		s.songNum songNum
+		FROM songMenu_base s
+		INNER JOIN songMenu_record r ON s.id = r.id
+		LEFT JOIN user_gl_songmenu ugs ON ugs.songMenuId = s.id
+		WHERE ugs.collectorId = #{collectorId} AND s.visible = true
 	</select>
 </mapper>

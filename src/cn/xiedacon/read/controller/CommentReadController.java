@@ -1,6 +1,7 @@
 package cn.xiedacon.read.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -13,6 +14,7 @@ import cn.xiedacon.model.Comment;
 import cn.xiedacon.model.Comments;
 import cn.xiedacon.read.service.CommentReadService;
 import cn.xiedacon.util.Constant;
+import cn.xiedacon.util.MessageUtils;
 import cn.xiedacon.util.PageBean;
 
 @Controller
@@ -23,55 +25,55 @@ public class CommentReadController {
 	@Autowired
 	private CommentReadService commentService;
 
-	@RequestMapping("/s/albumId_{albumId:\\w+}")
-	public Comments getCommentsByAlbumId(@PathVariable("albumId") String albumId) {
+	@RequestMapping("/albumId_{albumId:\\w+}")
+	public Map<String, Object> selectCommentsByAlbumId(@PathVariable("albumId") String albumId) {
 		List<Comment> hotList = commentService.selectForHotByAlbumId(albumId);
 		PageBean<Comment> pageBean = commentService.selectPageBeanByAlbumId(albumId, Constant.PAGE_DEFAULT);
-		return new Comments(hotList, pageBean);
+		return MessageUtils.createSuccess(new Comments(hotList, pageBean));
 	}
 
-	@RequestMapping("/s/albumId_{albumId:\\w+}/{page:[1-9]\\d*}")
-	public PageBean<Comment> getPageBeanByAlbumId(@PathVariable("albumId") String albumId,
+	@RequestMapping("/albumId_{albumId:\\w+}/{page:[1-9]\\d*}")
+	public Map<String, Object> selectPageBeanByAlbumId(@PathVariable("albumId") String albumId,
 			@PathVariable("page") Integer page) {
-		return commentService.selectPageBeanByAlbumId(albumId, page);
+		return MessageUtils.createSuccess(commentService.selectPageBeanByAlbumId(albumId, page));
 	}
 
-	@RequestMapping("/s/songId_{songId:\\w+}")
-	public Comments getCommentsBySongId(@PathVariable("songId") String songId) {
+	@RequestMapping("/songId_{songId:\\w+}")
+	public Map<String, Object> selectCommentsBySongId(@PathVariable("songId") String songId) {
 		List<Comment> hotList = commentService.selectForHotBySongId(songId);
 		PageBean<Comment> pageBean = commentService.selectPageBeanBySongId(songId, Constant.PAGE_DEFAULT);
-		return new Comments(hotList, pageBean);
+		return MessageUtils.createSuccess(new Comments(hotList, pageBean));
 	}
 
-	@RequestMapping("/s/songId_{songId:\\w+}/{page:[1-9]\\d*}")
-	public PageBean<Comment> getPageBeanBySongId(@PathVariable("songId") String songId,
+	@RequestMapping("/songId_{songId:\\w+}/{page:[1-9]\\d*}")
+	public Map<String, Object> selectPageBeanBySongId(@PathVariable("songId") String songId,
 			@PathVariable("page") Integer page) {
-		return commentService.selectPageBeanBySongId(songId, page);
+		return MessageUtils.createSuccess(commentService.selectPageBeanBySongId(songId, page));
 	}
 
-	@RequestMapping("/s/songListId_{songListId:\\w+}")
-	public Comments getCommentsBySongListId(@PathVariable("songListId") String songListId) {
-		List<Comment> hotList = commentService.selectHotBySongListId(songListId);
-		PageBean<Comment> pageBean = commentService.selectPageBeanBySongListIdLimit(songListId, Constant.PAGE_DEFAULT);
-		return new Comments(hotList, pageBean);
+	@RequestMapping("/songListId_{songListId:\\w+}")
+	public Map<String, Object> selectCommentsBySongListId(@PathVariable("songListId") String songListId) {
+		List<Comment> hotList = commentService.selectForHotBySongListId(songListId);
+		PageBean<Comment> pageBean = commentService.selectPageBeanBySongListId(songListId, Constant.PAGE_DEFAULT);
+		return MessageUtils.createSuccess(new Comments(hotList, pageBean));
 	}
 
-	@RequestMapping("/s/songListId_{songListId:\\w+}/{page:[1-9]\\d*}")
-	public PageBean<Comment> getPageBeanBySongListId(@PathVariable("songListId") String songListId,
+	@RequestMapping("/songListId_{songListId:\\w+}/{page:[1-9]\\d*}")
+	public Map<String, Object> selectPageBeanBySongListId(@PathVariable("songListId") String songListId,
 			@PathVariable("page") Integer page) {
-		return commentService.selectPageBeanBySongListIdLimit(songListId, page);
+		return MessageUtils.createSuccess(commentService.selectPageBeanBySongListId(songListId, page));
 	}
 
-	@RequestMapping("/s/songMenuId_{songMenuId:\\w+}")
-	public Comments getCommentsBySongMenuId(@PathVariable("songMenuId") String songMenuId) {
+	@RequestMapping("/songMenuId_{songMenuId:\\w+}")
+	public Map<String, Object> selectCommentsBySongMenuId(@PathVariable("songMenuId") String songMenuId) {
 		List<Comment> hotList = commentService.selectForHotBySongMenuId(songMenuId);
 		PageBean<Comment> pageBean = commentService.selectPageBeanBySongMenuId(songMenuId, Constant.PAGE_DEFAULT);
-		return new Comments(hotList, pageBean);
+		return MessageUtils.createSuccess(new Comments(hotList, pageBean));
 	}
 
-	@RequestMapping("/s/songMenuId_{songMenuId:\\w+}/{page:[1-9]\\d*}")
-	public PageBean<Comment> getPageBeanBySongMenuId(@PathVariable("songMenuId") String songMenuId,
+	@RequestMapping("/songMenuId_{songMenuId:\\w+}/{page:[1-9]\\d*}")
+	public Map<String, Object> selectPageBeanBySongMenuId(@PathVariable("songMenuId") String songMenuId,
 			@PathVariable("page") Integer page) {
-		return commentService.selectPageBeanBySongMenuId(songMenuId, page);
+		return MessageUtils.createSuccess(commentService.selectPageBeanBySongMenuId(songMenuId, page));
 	}
 }

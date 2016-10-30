@@ -12,16 +12,16 @@ public interface SongMenuReadDao {
 
 	int selectCount();
 
-	List<SongMenu> selectLimit(@Param("begin") int begin, @Param("limit") int limit);
+	List<SongMenu> selectListOrderByCreateTimeLimit(@Param("begin") int begin, @Param("limit") int limit);
 
-	List<SongMenu> selectOrderByCollectionNumLimit(@Param("begin") int begin, @Param("limit") int limit);
+	List<SongMenu> selectListOrderByCollectionNumLimit(@Param("begin") int begin, @Param("limit") int limit);
 
 	int selectCountBySecondTagId(String secondTagId);
 
-	List<SongMenu> selectBySecondTagIdLimit(@Param("secondTagId") String secondTagId, @Param("begin") int begin,
-			@Param("limit") int limit);
+	List<SongMenu> selectListBySecondTagIdOrderByCreateTimeLimit(@Param("secondTagId") String secondTagId,
+			@Param("begin") int begin, @Param("limit") int limit);
 
-	List<SongMenu> selectBySecondTagIdOrderByCollectionNumLimit(@Param("secondTagId") String secondTagId,
+	List<SongMenu> selectListBySecondTagIdOrderByCollectionNumLimit(@Param("secondTagId") String secondTagId,
 			@Param("begin") int begin, @Param("limit") int limit);
 
 	List<SongMenu> selectListByCreatorId(String creatorId);

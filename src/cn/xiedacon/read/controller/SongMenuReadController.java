@@ -1,6 +1,6 @@
 package cn.xiedacon.read.controller;
 
-import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -9,9 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import cn.xiedacon.model.SongMenu;
 import cn.xiedacon.read.service.SongMenuReadService;
-import cn.xiedacon.util.PageBean;
+import cn.xiedacon.util.MessageUtils;
 
 @Controller
 @ResponseBody
@@ -22,39 +21,41 @@ public class SongMenuReadController {
 	private SongMenuReadService songMenuService;
 
 	@RequestMapping("/{id:\\w+}")
-	public SongMenu getById(@PathVariable("id") String id) {
-		return songMenuService.selectById(id);
+	public Map<String, Object> selectById(@PathVariable("id") String id) {
+		return MessageUtils.createSuccess(songMenuService.selectById(id));
 	}
 
-	@RequestMapping("/s/new_{page:[1-9]\\d*}")
-	public PageBean<SongMenu> getNewPageBean(@PathVariable("page") Integer page) {
-		return songMenuService.selectPageBean(page);
+	@RequestMapping("/new_{page:[1-9]\\d*}")
+	public Map<String, Object> selectPageBeanOrderByCreateTime(@PathVariable("page") Integer page) {
+		return MessageUtils.createSuccess(songMenuService.selectPageBeanOrderByCreateTime(page));
 	}
 
-	@RequestMapping("/s/hot_{page:[1-9]\\d*}")
-	public PageBean<SongMenu> getHotPageBean(@PathVariable("page") Integer page) {
-		return songMenuService.selectPageBeanOrderByCollectionNum(page);
+	@RequestMapping("/hot_{page:[1-9]\\d*}")
+	public Map<String, Object> selectPageBeanOrderByCollectionNum(@PathVariable("page") Integer page) {
+		return MessageUtils.createSuccess(songMenuService.selectPageBeanOrderByCollectionNum(page));
 	}
 
-	@RequestMapping("/s/hot_{page:[1-9]\\d*}/secondTagId_{secondTagId:\\w+}")
-	public PageBean<SongMenu> getHotPageBeanBySecondTagId(@PathVariable("secondTagId") String secondTagId,
-			@PathVariable("page") Integer page) {
-		return songMenuService.selectPageBeanBySecondTagIdOrderByCollectionNum(secondTagId, page);
+	@RequestMapping("/hot_{page:[1-9]\\d*}/secondTagId_{secondTagId:\\w+}")
+	public Map<String, Object> selectPageBeanBySecondTagIdOrderByCollectionNum(
+			@PathVariable("secondTagId") String secondTagId, @PathVariable("page") Integer page) {
+		return MessageUtils
+				.createSuccess(songMenuService.selectPageBeanBySecondTagIdOrderByCollectionNum(secondTagId, page));
 	}
 
-	@RequestMapping("/s/new_{page:[1-9]\\d*}/secondTagId_{secondTagId:\\w+}")
-	public PageBean<SongMenu> getNewPageBeanBySecondTagId(@PathVariable("secondTagId") String secondTagId,
-			@PathVariable("page") Integer page) {
-		return songMenuService.selectPageBeanBySecondTagId(secondTagId, page);
+	@RequestMapping("/new_{page:[1-9]\\d*}/secondTagId_{secondTagId:\\w+}")
+	public Map<String, Object> selectPageBeanBySecondTagIdOrderByCreateTime(
+			@PathVariable("secondTagId") String secondTagId, @PathVariable("page") Integer page) {
+		return MessageUtils
+				.createSuccess(songMenuService.selectPageBeanBySecondTagIdOrderByCreateTime(secondTagId, page));
 	}
 
-	@RequestMapping("/s/creatorId_{creatorId:\\w+}")
-	public List<SongMenu> getListByCreatorId(@PathVariable("creatorId") String creatorId) {
-		return songMenuService.selectListByCreatorId(creatorId);
+	@RequestMapping("/creatorId_{creatorId:\\w+}")
+	public Map<String, Object> selectListByCreatorId(@PathVariable("creatorId") String creatorId) {
+		return MessageUtils.createSuccess(songMenuService.selectListByCreatorId(creatorId));
 	}
 
-	@RequestMapping("/s/collectorId_{collectorId:\\w+}")
-	public List<SongMenu> getListByCollectorId(@PathVariable("collectorId") String collectorId) {
-		return songMenuService.selectListByCollectorId(collectorId);
+	@RequestMapping("/collectorId_{collectorId:\\w+}")
+	public Map<String, Object> selectListByCollectorId(@PathVariable("collectorId") String collectorId) {
+		return MessageUtils.createSuccess(songMenuService.selectListByCollectorId(collectorId));
 	}
 }

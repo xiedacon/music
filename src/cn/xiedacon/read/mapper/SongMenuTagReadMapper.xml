@@ -19,14 +19,11 @@
 	<select id="selectFirstTagList" resultMap="songMenuTagVoResultMap">
 		SELECT
 		tf.id tag_id,
-		tf.name
-		tag_name,
+		tf.name tag_name,
 		ts.id secondTag_id,
 		ts.name secondTag_name
-		FROM
-		tag_songmenu_first tf
-		RIGHT JOIN tag_songmenu_second ts ON tf.id =
-		ts.fid
+		FROM tag_songmenu_first tf
+		RIGHT JOIN tag_songmenu_second ts ON tf.id = ts.fid
 		ORDER BY tf.id ASC,ts.id ASC
 	</select>
 
@@ -34,8 +31,7 @@
 		SELECT
 		ts.id id,
 		ts.name name
-		FROM
-		tag_songmenu_second ts
+		FROM tag_songmenu_second ts
 		WHERE ts.id = #{id}
 	</select>
 </mapper>

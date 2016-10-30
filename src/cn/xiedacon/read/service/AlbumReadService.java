@@ -6,8 +6,10 @@ import cn.xiedacon.util.PageBean;
 public interface AlbumReadService {
 
 	Album selectById(String id);
-	
-	PageBean<Album> selectPageBeanByTagIdOrderByCreateTimeLimit(String tagId, Integer page);
 
-	PageBean<Album> selectPageBeanBySingerIdOrderByCreateTimeLimit(String singerId, Integer page);
+	PageBean<Album> selectPageBeanOrderByCreateTime(Integer page);
+
+	PageBean<Album> selectPageBeanByTagIdOrderByCreateTime(String tagId, Integer page);
+
+	PageBean<Album> selectPageBeanBySingerIdOrderByCreateTime(String singerId, Integer page);
 }
