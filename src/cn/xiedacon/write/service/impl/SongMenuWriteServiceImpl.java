@@ -1,12 +1,11 @@
 package cn.xiedacon.write.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import cn.xiedacon.admin.dao.BatchSqlDao;
 import cn.xiedacon.model.SongMenu;
-import cn.xiedacon.model.SongMenuSecondTag;
-import cn.xiedacon.model.SongMenu_SongMenuTagGL;
-import cn.xiedacon.util.UUIDUtils;
 import cn.xiedacon.write.dao.SongMenu_SongMenuTagGLDao;
 import cn.xiedacon.write.dao.SongMenuWriteDao;
 import cn.xiedacon.write.service.SongMenuWriteService;
@@ -16,6 +15,9 @@ public class SongMenuWriteServiceImpl implements SongMenuWriteService {
 
 	@Autowired
 	private SongMenuWriteDao songMenuDao;
+	@Autowired
+	@Qualifier("batchSqlDaoImpl")
+	private BatchSqlDao batchDao;
 	@Autowired
 	private SongMenu_SongMenuTagGLDao songMenu_SongMenuTagGLDao;
 
@@ -34,10 +36,7 @@ public class SongMenuWriteServiceImpl implements SongMenuWriteService {
 	public void update(SongMenu songMenu) {
 		songMenuDao.update(songMenu);
 		songMenu_SongMenuTagGLDao.deleteBySongMenuId(songMenu.getId());
-		for (SongMenuSecondTag tag : songMenu.getSongMenuSecondTagList()) {
-			songMenu_SongMenuTagGLDao
-					.insert(new SongMenu_SongMenuTagGL(UUIDUtils.randomUUID(), songMenu.getId(), tag.getId()));
-		}
+		batchDao.insertSongMenu_SongMenuTagGL(songMenu.getSongMenu_SongMenuTagGLList());
 	}
 
 	@Override

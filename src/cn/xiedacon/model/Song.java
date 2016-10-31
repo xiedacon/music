@@ -6,29 +6,34 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 @JsonInclude(Include.NON_NULL)
 public class Song {
 
+	// 基本信息
+	// 常用
 	private String id;
 	private String name;
 	private String icon;
 	private String time;
 	private String remark;
-
-	private String singerId;
-	private String singerName;
-	private String albumId;
-	private String albumName;
-
-	private Integer rank;
-	private Integer rankChange;
-
+	// 文件相关
+	private String lrcUri;
+	private String fileUri;
+	// 记录相关
 	private Integer commentNum;
 	private Integer collectionNum;
 	private Integer playNum;
-
-	private String fileUri;
-	private String lrcUri;
-
+	// 可见性相关
 	private Boolean visible;
-	
+
+	// 关联相关
+	// R
+	private String singerName;
+	private String albumName;
+	private String singerId;
+	private String albumId;
+	private Integer rank;
+	private Integer rankChange;
+	// CUD（谁拥有谁维护）
+	private SongMenu_SongGL songMenu_SongGL;
+
 	public Song() {
 		super();
 	}
@@ -37,6 +42,14 @@ public class Song {
 		super();
 		this.id = id;
 		this.name = name;
+	}
+
+	public SongMenu_SongGL getSongMenu_SongGL() {
+		return songMenu_SongGL;
+	}
+
+	public void setSongMenu_SongGL(SongMenu_SongGL songMenu_SongGL) {
+		this.songMenu_SongGL = songMenu_SongGL;
 	}
 
 	public Integer getPlayNum() {

@@ -9,6 +9,7 @@ import cn.xiedacon.model.SecondClassify;
 import cn.xiedacon.model.Singer;
 import cn.xiedacon.model.Song;
 import cn.xiedacon.model.SongList_SongGL;
+import cn.xiedacon.model.SongMenu_SongMenuTagGL;
 
 public interface BatchSqlDao {
 
@@ -33,5 +34,7 @@ public interface BatchSqlDao {
 	void insertAlbum(List<Album> albumList);
 
 	Map<String, SecondClassify> selectSecondClassifyById(List<String> classifyIdList);
+
+	void insertSongMenu_SongMenuTagGL(List<SongMenu_SongMenuTagGL> songMenu_SongMenuTagGLList);
 
 }

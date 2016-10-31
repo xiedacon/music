@@ -24,11 +24,11 @@ public class AlbumWriteController {
 	@Autowired
 	private AlbumReadService albumReadService;
 
-	@RequestMapping(value = "/{songListId:\\w+}/playNum", method = RequestMethod.PUT)
-	public Map<String, Object> updatePlayNumById(@PathVariable("songListId") String id) {
+	@RequestMapping(value = "/{id:\\w+}/playNum", method = RequestMethod.PUT)
+	public Map<String, Object> updatePlayNumById(@PathVariable("id") String id) {
 		Album album = albumReadService.selectById(id);
 		if (album == null) {
-			return MessageUtils.createError("专辑不存在");
+			return MessageUtils.createError("id", "专辑不存在");
 		}
 		albumWriteService.updatePlayNumById(album.getPlayNum() + 1, album.getId());
 		return MessageUtils.createSuccess();

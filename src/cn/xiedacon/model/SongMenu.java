@@ -9,6 +9,8 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 @JsonInclude(Include.NON_NULL)
 public class SongMenu {
 
+	// 基本信息
+	// 常用
 	private String id;
 	private String name;
 	private String icon;
@@ -19,17 +21,27 @@ public class SongMenu {
 	private Date createTime;
 	private String introduction;
 	private Integer songNum;
-
-	private Boolean isPublic;
-
+	// 记录相关
 	private Integer collectionNum;
 	private Integer shareNum;
 	private Integer commentNum;
 	private Integer playNum;
-
+	// 可见性相关
 	private Boolean visible;
 
+	// 关联
+	// R
 	private List<SongMenuSecondTag> songMenuSecondTagList;
+	// CUD（谁拥有谁维护）
+	private List<SongMenu_SongMenuTagGL> songMenu_SongMenuTagGLList;
+
+	public List<SongMenu_SongMenuTagGL> getSongMenu_SongMenuTagGLList() {
+		return songMenu_SongMenuTagGLList;
+	}
+
+	public void setSongMenu_SongMenuTagGLList(List<SongMenu_SongMenuTagGL> songMenu_SongMenuTagGLList) {
+		this.songMenu_SongMenuTagGLList = songMenu_SongMenuTagGLList;
+	}
 
 	public Boolean getVisible() {
 		return visible;
@@ -37,14 +49,6 @@ public class SongMenu {
 
 	public void setVisible(Boolean visible) {
 		this.visible = visible;
-	}
-
-	public Boolean getIsPublic() {
-		return isPublic;
-	}
-
-	public void setIsPublic(Boolean isPublic) {
-		this.isPublic = isPublic;
 	}
 
 	public List<SongMenuSecondTag> getSongMenuSecondTagList() {
@@ -167,13 +171,4 @@ public class SongMenu {
 		this.introduction = introduction;
 	}
 
-	@Override
-	public String toString() {
-		return "SongMenu [id=" + id + ", name=" + name + ", icon=" + icon + ", creatorId=" + creatorId
-				+ ", creatorName=" + creatorName + ", creatorIcon=" + creatorIcon + ", userId=" + userId
-				+ ", createTime=" + createTime + ", introduction=" + introduction + ", songNum=" + songNum
-				+ ", isPublic=" + isPublic + ", collectionNum=" + collectionNum + ", shareNum=" + shareNum
-				+ ", commentNum=" + commentNum + ", playNum=" + playNum + ", songMenuSecondTagList="
-				+ songMenuSecondTagList + "]";
-	}
 }

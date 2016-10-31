@@ -1,12 +1,11 @@
 package cn.xiedacon.write.service;
 
-import cn.xiedacon.model.Song;
-import cn.xiedacon.model.SongMenu;
+import cn.xiedacon.model.SongMenu_SongGL;
 
 public interface SongMenu_SongGLService {
 
-	String selectIdBySongIdAndSongMenuId(String songId, String songMenuId);
+	SongMenu_SongGL selectExistBySongIdAndSongMenuId(String songId, String songMenuId);
 
-	void insert(SongMenu songMenu, Song song);
+	void insert(SongMenu_SongGL songMenu_SongGL);
 
 }

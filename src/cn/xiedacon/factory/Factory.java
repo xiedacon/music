@@ -38,7 +38,6 @@ public class Factory {
 
 		configMap.put("icon", Constant.SONGMENU_IOCN_DEFAULT);
 		configMap.put("songNum", Constant.NUM_DEFAULT);
-		configMap.put("isPublic", Constant.SONGMENU_ISPUBLIC_DEFAULT);
 		configMap.put("collectionNum", Constant.NUM_DEFAULT);
 		configMap.put("shareNum", Constant.NUM_DEFAULT);
 		configMap.put("commentNum", Constant.NUM_DEFAULT);
@@ -107,7 +106,7 @@ public class Factory {
 		configMap.put("visible", Constant.VISIBLE_DEFAULT);
 
 		configMaps.put(cn.xiedacon.model.AlbumTag.class, configMap);
-		
+
 		configMap = new HashMap<>();
 
 		configMap.put("visible", Constant.VISIBLE_DEFAULT);
@@ -119,7 +118,7 @@ public class Factory {
 		configMap.put("visible", Constant.VISIBLE_DEFAULT);
 
 		configMaps.put(cn.xiedacon.model.SongMenuSecondTag.class, configMap);
-		
+
 		Iterator<Class> iterator = configMaps.keySet().iterator();
 
 		while (iterator.hasNext()) {

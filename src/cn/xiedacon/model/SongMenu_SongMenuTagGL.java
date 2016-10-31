@@ -6,23 +6,13 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 @JsonInclude(Include.NON_NULL)
 public class SongMenu_SongMenuTagGL {
 
-	private String id;
 	private String songMenuId;
 	private String songMenuTagId;
 
-	public SongMenu_SongMenuTagGL(String id, String songMenuId, String songMenuTagId) {
+	public SongMenu_SongMenuTagGL(String songMenuId, String songMenuTagId) {
 		super();
-		this.id = id;
 		this.songMenuId = songMenuId;
 		this.songMenuTagId = songMenuTagId;
-	}
-
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
 	}
 
 	public String getSongMenuId() {

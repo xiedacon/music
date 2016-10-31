@@ -23,41 +23,14 @@ public class Comment {
 	private String songListId;
 	private String songId;
 
-	private SongMenu songMenu;
-	private Album album;
-	private SongList songList;
-	private Song song;
+	private Integer total;
 
-	public SongMenu getSongMenu() {
-		return songMenu;
+	public Integer getTotal() {
+		return total;
 	}
 
-	public void setSongMenu(SongMenu songMenu) {
-		this.songMenu = songMenu;
-	}
-
-	public Album getAlbum() {
-		return album;
-	}
-
-	public void setAlbum(Album album) {
-		this.album = album;
-	}
-
-	public SongList getSongList() {
-		return songList;
-	}
-
-	public void setSongList(SongList songList) {
-		this.songList = songList;
-	}
-
-	public Song getSong() {
-		return song;
-	}
-
-	public void setSong(Song song) {
-		this.song = song;
+	public void setTotal(Integer total) {
+		this.total = total;
 	}
 
 	public Boolean getIsChecked() {

@@ -22,6 +22,7 @@ import cn.xiedacon.model.SecondClassify;
 import cn.xiedacon.model.Singer;
 import cn.xiedacon.model.Song;
 import cn.xiedacon.model.SongList_SongGL;
+import cn.xiedacon.model.SongMenu_SongMenuTagGL;
 
 @Repository
 public class BatchSqlDaoImpl implements BatchSqlDao {
@@ -404,6 +405,12 @@ public class BatchSqlDaoImpl implements BatchSqlDao {
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
+	}
+
+	@Override
+	public void insertSongMenu_SongMenuTagGL(List<SongMenu_SongMenuTagGL> songMenu_SongMenuTagGLList) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

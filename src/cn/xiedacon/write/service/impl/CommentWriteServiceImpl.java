@@ -28,25 +28,25 @@ public class CommentWriteServiceImpl implements CommentWriteService {
 	@Override
 	public void insertSongMenuComment(Comment comment) {
 		commentDao.insertComment_songMenu(comment);
-		songMenuDao.updateCommentNumById(comment.getSongMenu().getCollectionNum() + 1, comment.getSongMenu().getId());
+		songMenuDao.updateCommentNumById(comment.getTotal(), comment.getSongMenuId());
 	}
 
 	@Override
 	public void insertAlbumComment(Comment comment) {
 		commentDao.insertComment_album(comment);
-		albumDao.updateCommentNumById(comment.getAlbum().getCommentNum() + 1, comment.getAlbum().getId());
+		albumDao.updateCommentNumById(comment.getTotal(), comment.getSongMenuId());
 	}
 
 	@Override
 	public void insertSongComment(Comment comment) {
 		commentDao.insertComment_song(comment);
-		songDao.updateCommentNumById(comment.getSong().getCommentNum() + 1, comment.getSong().getId());
+		songDao.updateCommentNumById(comment.getTotal(), comment.getSongMenuId());
 	}
 
 	@Override
 	public void insertSongListComment(Comment comment) {
 		commentDao.insertComment_songlist(comment);
-		songListDao.updateCommentNumById(comment.getSongList().getCommentNum() + 1, comment.getSongList().getId());
+		songListDao.updateCommentNumById(comment.getTotal(), comment.getSongMenuId());
 	}
 
 	@Override

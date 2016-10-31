@@ -4,28 +4,36 @@ import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+
 @JsonInclude(Include.NON_NULL)
 public class SongMenu_SongGL {
 
-	private String id;
+	// 本表数据
 	private String songMenuId;
 	private String songId;
 	private Date time;
 
-	public SongMenu_SongGL(String id, String songMenuId, String songId, Date time) {
+	// 其他表数据（需要与主要数据在同一事务中完成）
+	private Integer songNum;
+
+	public SongMenu_SongGL() {
 		super();
-		this.id = id;
+	}
+
+	public SongMenu_SongGL(String songMenuId, String songId, Date time, Integer songNum) {
+		super();
 		this.songMenuId = songMenuId;
 		this.songId = songId;
 		this.time = time;
+		this.songNum = songNum;
 	}
 
-	public String getId() {
-		return id;
+	public Integer getSongNum() {
+		return songNum;
 	}
 
-	public void setId(String id) {
-		this.id = id;
+	public void setSongNum(Integer songNum) {
+		this.songNum = songNum;
 	}
 
 	public String getSongMenuId() {
