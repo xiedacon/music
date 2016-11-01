@@ -8,11 +8,13 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 @JsonInclude(Include.NON_NULL)
 public class SongMenuFirstTag {
 
+	// 本表数据
 	private String id;
 	private String name;
-	private List<SongMenuSecondTag> secondTagList;
-
 	private Boolean visible;
+
+	// 关联数据
+	private List<SongMenuSecondTag> secondTagList;
 
 	public Boolean getVisible() {
 		return visible;

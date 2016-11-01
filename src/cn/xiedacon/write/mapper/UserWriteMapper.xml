@@ -5,10 +5,6 @@
 
 <mapper namespace="cn.xiedacon.write.dao.UserWriteDao">
 
-	<sql id="id_WHERE">
-		WHERE u.id = #{id} AND u.visible = true
-	</sql>
-
 	<insert id="insertUser_base" parameterType="cn.xiedacon.model.User">
 		INSERT INTO user_base
 		VALUES(
@@ -48,27 +44,27 @@
 		)
 	</insert>
 
-	<update id="updateUsername" parameterType="cn.xiedacon.model.User">
+	<update id="updateUsernameById">
 		UPDATE user_base u
 		SET u.name = #{name}
-		<include refid="id_WHERE"></include>
+		WHERE u.id = #{id}
 	</update>
 
-	<update id="updatePassword" parameterType="cn.xiedacon.model.User">
+	<update id="updatePasswordById">
 		UPDATE user_relation u
 		SET u.password = #{password}
-		<include refid="id_WHERE"></include>
+		WHERE u.id = #{id}
 	</update>
 
 	<update id="updateCollectSongMenuNumById">
 		UPDATE user_base u
 		SET u.collectSongMenuNum = #{collectSongMenuNum}
-		<include refid="id_WHERE"></include>
+		WHERE u.id = #{id}
 	</update>
 
-	<update id="deleteUser" parameterType="cn.xiedacon.model.User">
+	<update id="delete" parameterType="cn.xiedacon.model.User">
 		UPDATE user_base u
 		SET u.visible = false
-		<include refid="id_WHERE"></include>
+		WHERE u.id = #{id}
 	</update>
 </mapper>

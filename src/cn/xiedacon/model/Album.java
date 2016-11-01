@@ -8,6 +8,7 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 @JsonInclude(Include.NON_NULL)
 public class Album {
 
+	// 本表数据
 	private String id;
 	private String name;
 	private String icon;
@@ -15,18 +16,15 @@ public class Album {
 	private Date createTime;
 	private String createCompany;
 	private String introduction;
-
+	private String singerId;
+	private String singerName;
+	private String tagId;
+	private Boolean visible;
+	// 记录相关
 	private Integer songNum;
 	private Integer playNum;
 	private Integer shareNum;
 	private Integer commentNum;
-
-	private String singerId;
-	private String singerName;
-
-	private String tagId;
-
-	private Boolean visible;
 
 	public Boolean getVisible() {
 		return visible;

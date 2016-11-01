@@ -20,6 +20,7 @@ import cn.xiedacon.factory.Factory;
 import cn.xiedacon.factory.SongMenuEnum;
 import cn.xiedacon.model.SongMenu;
 import cn.xiedacon.model.User;
+import cn.xiedacon.model.User_SongMenuGL;
 import cn.xiedacon.read.service.SongMenuReadService;
 import cn.xiedacon.read.service.UserReadService;
 import cn.xiedacon.util.MD5Util;
@@ -48,24 +49,21 @@ public class UserWriteController {
 	@Autowired
 	private Factory factory;
 
-	@RequestMapping(value = "/{id:\\w{32}}/username", method = RequestMethod.PATCH)
-	public Map<String, Object> updateUsername(HttpServletRequest request) {
-		String id = request.getParameter("id");
-		String username = request.getParameter("username");
-
+	@RequestMapping(value = "/{id:\\w{32}}/username", method = RequestMethod.PUT)
+	public Map<String, Object> updateUsernameById(@RequestParam("id") String id,
+			@RequestParam("username") String username) {
 		if (username == null || username.replaceAll("\\d", "").length() < 4) {
 			return MessageUtils.createError("username", "昵称格式错误！");
 		}
 
 		User dataUser = userReadService.selectById(id);
-
-		if (dataUser == null) { // 正常情况下不可能发生
+		if (dataUser == null) {
 			System.out.println("用户不存在：id=" + id);
 			return null;
 		}
 
 		dataUser.setName(username);
-		userWriteService.updateUsername(dataUser);
+		userWriteService.updateUsernameById(dataUser.getName(), dataUser.getId());
 
 		dataUser.setPassword(null);
 		return MessageUtils.createSuccess("user", dataUser);
@@ -83,9 +81,11 @@ public class UserWriteController {
 			return MessageUtils.createError("songMenuId", "歌单不存在");
 		}
 
-		String GLId = user_SongMenuGLService.selectIdBySongMenuIdAndCollectorId(songMenu.getId(), dataUser.getId());
-		if (GLId == null) {
-			user_SongMenuGLService.insert(dataUser, songMenu);
+		User_SongMenuGL gl = user_SongMenuGLService.selectExistBySongMenuIdAndCollectorId(songMenu.getId(),
+				dataUser.getId());
+		if (gl == null) {
+			user_SongMenuGLService.insert(new User_SongMenuGL(dataUser.getId(), songMenu.getId(),
+					songMenu.getCollectionNum() + 1, dataUser.getCollectSongMenuNum() + 1));
 			return MessageUtils.createSuccess();
 		} else {
 			return MessageUtils.createInfo("songMenuId", "已收藏");
@@ -95,7 +95,7 @@ public class UserWriteController {
 	@RequestMapping(value = "/oAuth_github", method = RequestMethod.GET)
 	public void oAuth_github(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		Map<String, Object> params = OAuthUtil.oAuthGithub(request);
+		Map<String, Object> params = OAuthUtil.oAuthGithub();
 		String githubId = ((String) params.get("id")).split(",")[0];
 
 		User dataUser = userReadService.selectByGitHubId(githubId);
@@ -105,7 +105,7 @@ public class UserWriteController {
 			String id = UUIDUtils.uuid(githubId);
 			dataUser.setId(id);
 			dataUser.setGithubId(githubId);
-			userWriteService.insertUser(dataUser);
+			userWriteService.insert(dataUser);
 		} else {
 			dataUser.setPassword(null);
 			request.setAttribute("user", dataUser);
@@ -116,10 +116,7 @@ public class UserWriteController {
 	}
 
 	@RequestMapping(value = "/login_phone", method = RequestMethod.POST)
-	public Map<String, Object> login(HttpServletRequest request) {
-		String phone = request.getParameter("phone");
-		String password = request.getParameter("password");
-
+	public Map<String, Object> login(@RequestParam("phone") String phone, @RequestParam("password") String password) {
 		if (phone == null || !phone.matches("1[3|4|5|8]\\d{9}")) {
 			return MessageUtils.createError("phone", "手机号格式错误！");
 		}
@@ -128,7 +125,6 @@ public class UserWriteController {
 		}
 
 		User dataUser = userReadService.selectByPhone(phone);
-
 		if (dataUser == null) {
 			return MessageUtils.createError("phone", "手机号未注册！");
 		}
@@ -145,10 +141,7 @@ public class UserWriteController {
 	}
 
 	@RequestMapping(value = "/regist", method = RequestMethod.POST)
-	public Map<String, Object> regist(HttpServletRequest request) {
-		String phone = request.getParameter("phone");
-		String password = request.getParameter("password");
-
+	public Map<String, Object> regist(@RequestParam("phone") String phone, @RequestParam("password") String password) {
 		if (phone == null || !phone.matches("1[3|4|5|8]\\d{9}")) {
 			return MessageUtils.createError("phone", "手机号格式错误！");
 		}
@@ -160,17 +153,15 @@ public class UserWriteController {
 
 		if (dataUser == null) {
 			dataUser = factory.get(User.class);
-			String id = UUIDUtils.uuid(phone);
-			dataUser.setId(id);
+			dataUser.setId(UUIDUtils.uuid(phone));
 			dataUser.setPhone(phone);
 			dataUser.setPassword(MD5Util.encode(password));
 			dataUser.setCreateSongMenuNum(1);
 
-			userWriteService.insertUser(dataUser);
+			userWriteService.insert(dataUser);
 
 			SongMenu songMenu = factory.get(SongMenu.class);
-			String songMenuId = UUIDUtils.randomUUID();
-			songMenu.setId(songMenuId);
+			songMenu.setId(UUIDUtils.randomUUID());
 			songMenu.setName(SongMenuEnum.LOVE.name);
 			songMenu.setCreatorId(dataUser.getId());
 			songMenu.setCreatorName(dataUser.getName());
@@ -181,7 +172,7 @@ public class UserWriteController {
 			songMenuWriteService.insert(songMenu);
 		} else if (dataUser.getName() == null) {
 			dataUser.setPassword(MD5Util.encode(password));
-			userWriteService.updatePassword(dataUser);
+			userWriteService.updatePasswordById(dataUser.getPassword(), dataUser.getId());
 		} else {
 			dataUser.setPassword(null);
 			return MessageUtils.createInfo("user", dataUser);

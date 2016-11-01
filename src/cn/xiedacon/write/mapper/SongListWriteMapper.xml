@@ -4,20 +4,16 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="cn.xiedacon.write.dao.SongListWriteDao">
-
-	<sql id="id_WHERE">
-		<where>s.id = #{id}</where>
-	</sql>
 	
 	<update id="updatePlayNumById">
 		UPDATE songlist_record s
 		SET s.playNum = #{playNum}
-		<include refid="id_WHERE"></include>
+		WHERE s.id = #{id}
 	</update>
 
 	<update id="updateCommentNumById">
 		UPDATE songlist_record s
 		SET s.commentNum = #{commentNum}
-		<include refid="id_WHERE"></include>
+		WHERE s.id = #{id}
 	</update>
 </mapper>

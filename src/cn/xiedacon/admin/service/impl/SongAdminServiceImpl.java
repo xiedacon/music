@@ -19,7 +19,6 @@ import cn.xiedacon.model.Album_SongGL;
 import cn.xiedacon.model.Song;
 import cn.xiedacon.util.Constant;
 import cn.xiedacon.util.PageBean;
-import cn.xiedacon.util.UUIDUtils;
 
 @Service
 public class SongAdminServiceImpl implements SongAdminService {
@@ -78,10 +77,7 @@ public class SongAdminServiceImpl implements SongAdminService {
 		songDao.insertSong_record(song);
 		albumDao.updateSongNumByIdAndAddNum(song.getAlbumId(), 1);
 
-		Album_SongGL album_SongGL = factory.get(Album_SongGL.class);
-		album_SongGL.setId(UUIDUtils.randomUUID());
-		album_SongGL.setAlbumId(song.getAlbumId());
-		album_SongGL.setSongId(song.getId());
+		Album_SongGL album_SongGL = new Album_SongGL(song.getId(), song.getAlbumId());
 		album_SongGlDao.insert(album_SongGL);
 	}
 
@@ -96,7 +92,6 @@ public class SongAdminServiceImpl implements SongAdminService {
 				num = num == null ? 1 : ++num;
 				albumMap.put(albumId, num);
 				Album_SongGL album_SongGL = factory.get(Album_SongGL.class);
-				album_SongGL.setId(UUIDUtils.randomUUID());
 				album_SongGL.setAlbumId(albumId);
 				album_SongGL.setSongId(song.getId());
 				album_SongGlList.add(album_SongGL);
@@ -109,7 +104,7 @@ public class SongAdminServiceImpl implements SongAdminService {
 	}
 
 	@Override
-	public Map<String,Song> batchSelectByName(List<String> songNames) {
+	public Map<String, Song> batchSelectByName(List<String> songNames) {
 		return batchDao.selectSongByName(songNames);
 	}
 

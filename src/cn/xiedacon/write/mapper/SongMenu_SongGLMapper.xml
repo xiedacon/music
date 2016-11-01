@@ -5,17 +5,11 @@
 
 <mapper namespace="cn.xiedacon.write.dao.SongMenu_SongGLDao">
 
-	<sql id="id_SELECT">
-		SELECT s.id id
-	</sql>
-
-	<sql id="song_gl_songmenu_FROM">
-		FROM song_gl_songmenu s
-	</sql>
-
 	<select id="selectExistBySongIdAndSongMenuId" resultType="cn.xiedacon.model.SongMenu_SongGL">
-		<include refid="id_SELECT"></include>
-		<include refid="song_gl_songmenu_FROM"></include>
+		SELECT 
+		s.songId songId,
+		s.songMenuId songMenuId
+		FROM song_gl_songmenu s
 		WHERE s.songId = #{songId} 
 		AND s.songMenuId = #{songMenuId}
 	</select>
@@ -23,7 +17,6 @@
 	<insert id="insert" parameterType="cn.xiedacon.model.SongMenu_SongGL">
 		INSERT INTO song_gl_songmenu
 		VALUES(
-		#{id},
 		#{songMenuId},
 		#{songId},
 		#{time})

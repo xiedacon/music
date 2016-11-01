@@ -6,9 +6,9 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 @JsonInclude(Include.NON_NULL)
 public class AlbumTag {
 
+	// 本表数据
 	private String id;
 	private String name;
-
 	private Boolean visible;
 
 	public Boolean getVisible() {

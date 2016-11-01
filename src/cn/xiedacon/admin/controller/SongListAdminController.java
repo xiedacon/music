@@ -153,8 +153,7 @@ public class SongListAdminController {
 				rankChange = 0;
 			}
 
-			songList_SongGLList
-					.add(new SongList_SongGL(UUIDUtils.randomUUID(), song.getId(), rank, songList.getId(), rankChange));
+			songList_SongGLList.add(new SongList_SongGL(song.getId(), rank, songList.getId(), rankChange));
 		}
 
 		songList_SongGLService.batchDeleteThenInsert(id, songList_SongGLList);

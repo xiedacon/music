@@ -10,6 +10,7 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 @JsonInclude(Include.NON_NULL)
 public class SongMenuSecondTag {
 
+	// 本表数据
 	private String id;
 	private String name;
 	private String firstTagId;

@@ -221,7 +221,7 @@ public class BatchSqlDaoImpl implements BatchSqlDao {
 
 	@Override
 	public void insertAlbum_SongGL(List<Album_SongGL> album_SongGLList) {
-		String song_gl_albumSql = "INSERT INTO song_gl_album VALUES(?,?,(SELECT COUNT(s.id) FROM song_gl_album s WHERE s.albumId = ?),?)";
+		String song_gl_albumSql = "INSERT INTO song_gl_album VALUES(?,(SELECT COUNT(s.id) FROM song_gl_album s WHERE s.albumId = ?),?)";
 
 		try (Connection conn = dataSource.getConnection();) {
 			conn.setAutoCommit(false);
@@ -229,10 +229,9 @@ public class BatchSqlDaoImpl implements BatchSqlDao {
 			PreparedStatement song_gl_albumStatement = conn.prepareStatement(song_gl_albumSql);
 			for (int i = 0; i < album_SongGLList.size(); i++) {
 				Album_SongGL album_SongGL = album_SongGLList.get(i);
-				song_gl_albumStatement.setString(1, album_SongGL.getId());
-				song_gl_albumStatement.setString(2, album_SongGL.getSongId());
+				song_gl_albumStatement.setString(1, album_SongGL.getSongId());
+				song_gl_albumStatement.setString(2, album_SongGL.getAlbumId());
 				song_gl_albumStatement.setString(3, album_SongGL.getAlbumId());
-				song_gl_albumStatement.setString(4, album_SongGL.getAlbumId());
 				song_gl_albumStatement.addBatch();
 
 				if ((i + 1) % batchSize == 0) {
@@ -285,7 +284,7 @@ public class BatchSqlDaoImpl implements BatchSqlDao {
 
 	@Override
 	public void insertSongList_SongGL(List<SongList_SongGL> songList_SongGLList) {
-		String song_gl_songlistSql = "INSERT INTO song_gl_songlist VALUES(?,?,?,?,?)";
+		String song_gl_songlistSql = "INSERT INTO song_gl_songlist VALUES(?,?,?,?)";
 		int batchSize = 100;
 
 		try (Connection conn = dataSource.getConnection();) {
@@ -294,11 +293,10 @@ public class BatchSqlDaoImpl implements BatchSqlDao {
 			PreparedStatement song_gl_songlistStatement = conn.prepareStatement(song_gl_songlistSql);
 			for (int i = 0; i < songList_SongGLList.size(); i++) {
 				SongList_SongGL songList_SongGL = songList_SongGLList.get(i);
-				song_gl_songlistStatement.setString(1, songList_SongGL.getId());
-				song_gl_songlistStatement.setString(2, songList_SongGL.getSongId());
-				song_gl_songlistStatement.setInt(3, songList_SongGL.getRank());
-				song_gl_songlistStatement.setString(4, songList_SongGL.getSongListId());
-				song_gl_songlistStatement.setInt(5, songList_SongGL.getRankChange());
+				song_gl_songlistStatement.setString(1, songList_SongGL.getSongId());
+				song_gl_songlistStatement.setInt(2, songList_SongGL.getRank());
+				song_gl_songlistStatement.setString(3, songList_SongGL.getSongListId());
+				song_gl_songlistStatement.setInt(4, songList_SongGL.getRankChange());
 				song_gl_songlistStatement.addBatch();
 
 				if ((i + 1) % batchSize == 0) {
@@ -410,7 +408,7 @@ public class BatchSqlDaoImpl implements BatchSqlDao {
 	@Override
 	public void insertSongMenu_SongMenuTagGL(List<SongMenu_SongMenuTagGL> songMenu_SongMenuTagGLList) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }

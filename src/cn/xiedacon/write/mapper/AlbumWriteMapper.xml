@@ -5,19 +5,15 @@
 
 <mapper namespace="cn.xiedacon.write.dao.AlbumWriteDao">
 
-	<sql id="id_WHERE">
-		<where>a.id = #{id}</where>
-	</sql>
-
 	<update id="updatePlayNumById">
 		UPDATE album_record a
 		SET a.playNum = #{playNum}
-		<include refid="id_WHERE"></include>
+		WHERE a.id = #{id}
 	</update>
 	
 	<update id="updateCommentNumById">
 		UPDATE album_record a
 		SET a.commentNum = #{commentNum}
-		<include refid="id_WHERE"></include>
+		WHERE a.id = #{id}
 	</update>
 </mapper>

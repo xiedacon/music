@@ -6,17 +6,15 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 @JsonInclude(Include.NON_NULL)
 public class Album_SongGL {
 
-	private String id;
+	// 本表数据
 	private String songId;
 	private Integer rank;
 	private String albumId;
 
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
+	public Album_SongGL(String songId, String albumId) {
+		super();
+		this.songId = songId;
+		this.albumId = albumId;
 	}
 
 	public String getSongId() {

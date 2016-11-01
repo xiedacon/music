@@ -5,19 +5,20 @@
 
 <mapper namespace="cn.xiedacon.write.dao.User_SongMenuGLDao">
 
-	<insert id="insert">
+	<insert id="insert" parameterType="cn.xiedacon.model.User_SongMenuGL">
 		INSERT INTO user_gl_songmenu
 		VALUES(
-		#{id},
 		#{collectorId},
-		#{songMenuId})
+		#{songMenuId}
+		)
 	</insert>
 
-	<select id="selectIdBySongMenuIdAndCollectorId" resultType="java.lang.String">
-		SELECT ugs.id
+	<select id="selectExistBySongMenuIdAndCollectorId" resultType="cn.xiedacon.model.User_SongMenuGL">
+		SELECT 
+		ugs.collectorId collectorId,
+		ugs.songMenuId songMenuId
 		FROM user_gl_songmenu ugs
-		WHERE ugs.songMenuId =
-		#{songMenuId} AND
-		ugs.collectorId = #{collectorId}
+		WHERE ugs.songMenuId = #{songMenuId} 
+		AND ugs.collectorId = #{collectorId}
 	</select>
 </mapper>

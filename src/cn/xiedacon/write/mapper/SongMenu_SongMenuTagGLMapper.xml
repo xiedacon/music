@@ -5,15 +5,17 @@
 
 <mapper namespace="cn.xiedacon.write.dao.SongMenu_SongMenuTagGLDao">
 
-	<delete id="deleteBySongMenuId">
-		DELETE FROM
-		smi_gl_rsms WHERE songMenuId =
-		#{songMenuId}
-	</delete>
+	<update id="deleteBySongMenuId">
+		DELETE FROM smi_gl_rsms
+		WHERE songMenuId = #{songMenuId}
+	</update>
 
 	<insert id="insert" parameterType="cn.xiedacon.model.SongMenu_SongMenuTagGL">
-		INSERT INTO smi_gl_rsms
-		VALUES
-		(#{id},#{songMenuId},#{songMenuTagId})
+		INSERT INTO song_gl_songmenu
+		VALUES(
+		#{songMenuId},
+		#{songId},
+		#{time}
+		)
 	</insert>
 </mapper>

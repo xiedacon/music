@@ -6,8 +6,13 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 @JsonInclude(Include.NON_NULL)
 public class SongMenu_SongMenuTagGL {
 
+	// 本表数据
 	private String songMenuId;
 	private String songMenuTagId;
+
+	public SongMenu_SongMenuTagGL() {
+		super();
+	}
 
 	public SongMenu_SongMenuTagGL(String songMenuId, String songMenuTagId) {
 		super();

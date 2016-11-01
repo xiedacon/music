@@ -8,7 +8,6 @@
 	<insert id="insert" parameterType="cn.xiedacon.model.Album_SongGL">
 		INSERT INTO song_gl_album 
 		VALUES(
-		#{id},
 		#{songId},
 		(SELECT COUNT(s.id) FROM song_gl_album s WHERE s.albumId = #{albumId}),
 		#{albumId}

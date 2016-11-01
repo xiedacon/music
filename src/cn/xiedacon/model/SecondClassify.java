@@ -6,10 +6,10 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 @JsonInclude(Include.NON_NULL)
 public class SecondClassify {
 
+	// 本表数据
 	private String id;
 	private String name;
 	private String firstClassifyId;
-
 	private Boolean visible;
 
 	public SecondClassify() {

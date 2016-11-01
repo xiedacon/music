@@ -9,7 +9,7 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 @JsonInclude(Include.NON_NULL)
 public class SongMenu {
 
-	// 基本信息
+	// 本表数据
 	// 常用
 	private String id;
 	private String name;
@@ -29,7 +29,7 @@ public class SongMenu {
 	// 可见性相关
 	private Boolean visible;
 
-	// 关联
+	// 关联表数据
 	// R
 	private List<SongMenuSecondTag> songMenuSecondTagList;
 	// CUD（谁拥有谁维护）

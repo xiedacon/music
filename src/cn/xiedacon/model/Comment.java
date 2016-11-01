@@ -8,20 +8,21 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 @JsonInclude(Include.NON_NULL)
 public class Comment {
 
+	// 本表数据
 	private String id;
 	private String content;
 	private Date createTime;
 	private Integer agreeNum;
 	private Boolean isChecked;
-
 	private String creatorId;
-	private String creatorName;
-	private String creatorIcon;
-
 	private String songMenuId;
 	private String albumId;
 	private String songListId;
 	private String songId;
+
+	// 关联数据
+	private String creatorName;
+	private String creatorIcon;
 
 	private Integer total;
 

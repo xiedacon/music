@@ -6,23 +6,36 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 @JsonInclude(Include.NON_NULL)
 public class User_SongMenuGL {
 
-	private String id;
+	// 本表数据
 	private String userId;
 	private String songMenuId;
 
-	public User_SongMenuGL(String id, String userId, String songMenuId) {
+	// 关联数据
+	private Integer collectionNum;
+	private Integer songMenuNum;
+
+	public User_SongMenuGL(String userId, String songMenuId, Integer collectionNum, Integer songMenuNum) {
 		super();
-		this.id = id;
 		this.userId = userId;
 		this.songMenuId = songMenuId;
+		this.collectionNum = collectionNum;
+		this.songMenuNum = songMenuNum;
 	}
 
-	public String getId() {
-		return id;
+	public Integer getCollectionNum() {
+		return collectionNum;
 	}
 
-	public void setId(String id) {
-		this.id = id;
+	public void setCollectionNum(Integer collectionNum) {
+		this.collectionNum = collectionNum;
+	}
+
+	public Integer getSongMenuNum() {
+		return songMenuNum;
+	}
+
+	public void setSongMenuNum(Integer songMenuNum) {
+		this.songMenuNum = songMenuNum;
 	}
 
 	public String getUserId() {

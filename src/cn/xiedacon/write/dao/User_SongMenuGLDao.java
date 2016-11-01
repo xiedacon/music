@@ -6,7 +6,7 @@ import cn.xiedacon.model.User_SongMenuGL;
 
 public interface User_SongMenuGLDao {
 
-	String selectIdBySongMenuIdAndCollectorId(@Param("songMenuId") String songMenuId,
+	User_SongMenuGL selectExistBySongMenuIdAndCollectorId(@Param("songMenuId") String songMenuId,
 			@Param("collectorId") String collectorId);
 
 	void insert(User_SongMenuGL gl);

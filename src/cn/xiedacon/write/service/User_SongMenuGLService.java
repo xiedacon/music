@@ -1,12 +1,11 @@
 package cn.xiedacon.write.service;
 
-import cn.xiedacon.model.SongMenu;
-import cn.xiedacon.model.User;
+import cn.xiedacon.model.User_SongMenuGL;
 
 public interface User_SongMenuGLService {
 
-	String selectIdBySongMenuIdAndCollectorId(String songMenuId, String collectorId);
+	User_SongMenuGL selectExistBySongMenuIdAndCollectorId(String songMenuId, String collectorId);
 
-	void insert(User dataUser, SongMenu songMenu);
+	void insert(User_SongMenuGL user_SongMenuGL);
 
 }

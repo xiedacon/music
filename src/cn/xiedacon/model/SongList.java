@@ -8,21 +8,20 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 @JsonInclude(Include.NON_NULL)
 public class SongList {
 
+	// 本表数据
 	private String id;
 	private String name;
 	private String icon;
 	private String refreshRate;
 	private Date refreshDate;
-	
 	private Boolean globe;
-
 	private Integer songNum;
+	private Boolean visible;
+	// 记录相关
 	private Integer collectionNum;
 	private Integer shareNum;
 	private Integer commentNum;
 	private Integer playNum;
-
-	private Boolean visible;
 
 	public Boolean getVisible() {
 		return visible;

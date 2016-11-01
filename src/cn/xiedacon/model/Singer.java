@@ -6,17 +6,16 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 @JsonInclude(Include.NON_NULL)
 public class Singer {
 
+	// 本表数据
 	private String id;
 	private String name;
 	private String icon;
 	private String remark;
 	private String introduction;
 	private String classifyId;
-
 	private String userId;
-
 	private Boolean visible;
-
+	// 记录相关
 	private Integer collectionNum;
 
 	public Singer() {

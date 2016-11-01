@@ -4,11 +4,12 @@ import cn.xiedacon.model.User;
 
 public interface UserWriteService {
 
-	void updateUsername(User dataUser);
+	void updateUsernameById(String username, String id);
 
-	void insertUser(User dataUser);
+	void insert(User dataUser);
 
-	void updatePassword(User dataUser);
+	void updatePasswordById(String password, String id);
 
-	void deleteUser(User user);
+	void delete(User user);
+
 }

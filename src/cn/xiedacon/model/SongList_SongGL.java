@@ -6,25 +6,22 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 @JsonInclude(Include.NON_NULL)
 public class SongList_SongGL {
 
-	private String id;
+	// 本表数据
 	private String songId;
-	private String songName;
 	private Integer rank;
 	private String songListId;
-	private String songListName;
 	private Integer rankChange;
 
-	public SongList_SongGL() {
-		super();
+	// 其他数据
+	private String songName;
+	private String songListName;
+
+	public String getSongListName() {
+		return songListName;
 	}
 
-	public SongList_SongGL(String id, String songId, Integer rank, String songListId, Integer rankChange) {
-		super();
-		this.id = id;
-		this.songId = songId;
-		this.rank = rank;
-		this.songListId = songListId;
-		this.rankChange = rankChange;
+	public void setSongListName(String songListName) {
+		this.songListName = songListName;
 	}
 
 	public String getSongName() {
@@ -35,20 +32,16 @@ public class SongList_SongGL {
 		this.songName = songName;
 	}
 
-	public String getSongListName() {
-		return songListName;
+	public SongList_SongGL() {
+		super();
 	}
 
-	public void setSongListName(String songListName) {
-		this.songListName = songListName;
-	}
-
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
+	public SongList_SongGL(String songId, Integer rank, String songListId, Integer rankChange) {
+		super();
+		this.songId = songId;
+		this.rank = rank;
+		this.songListId = songListId;
+		this.rankChange = rankChange;
 	}
 
 	public String getSongId() {

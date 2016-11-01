@@ -17,25 +17,25 @@ public class UserWriteServiceImpl implements UserWriteService {
 	private SongMenuWriteDao songMenuDao;
 
 	@Override
-	public void updateUsername(User dataUser) {
-		userDao.updateUsername(dataUser);
-		songMenuDao.updateCreatorNameByCreatorId(dataUser.getName(), dataUser.getId());
+	public void updateUsernameById(String username, String id) {
+		userDao.updateUsernameById(username, id);
+		songMenuDao.updateCreatorNameByCreatorId(username, id);
 	}
 
 	@Override
-	public void insertUser(User dataUser) {
+	public void insert(User dataUser) {
 		userDao.insertUser_base(dataUser);
 		userDao.insertUser_record(dataUser);
 	}
 
 	@Override
-	public void updatePassword(User dataUser) {
-		userDao.updatePassword(dataUser);
+	public void updatePasswordById(String password, String id) {
+		userDao.updatePasswordById(password, id);
 	}
 
 	@Override
-	public void deleteUser(User user) {
-		userDao.deleteUser(user);
+	public void delete(User user) {
+		userDao.delete(user);
 	}
 
 }

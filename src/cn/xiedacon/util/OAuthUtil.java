@@ -1,80 +1,51 @@
 package cn.xiedacon.util;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
-import javax.servlet.http.HttpServletRequest;
+import cn.xiedacon.util.http.HttpUtils;
 
 public class OAuthUtil {
 
-	public static Map<String, Object> oAuthGithub(HttpServletRequest request) {
-		Properties prop = getProperties(
-				request.getServletContext().getResourceAsStream("WEB-INF/classes/oauth_github.properties"));
+	private static String configLocaltion = "WEB-INF/classes/oauth_github.properties";
+
+	public static Map<String, Object> oAuthGithub() {
+		return OAuthUtil.oAuthGithub("", "");
+	}
+
+	public static Map<String, Object> oAuthGithub(String code, String state) {
+		Properties prop = getProperties(ResourceLoader.loadAsStream(configLocaltion));
 
 		// 设置相关证明参数
 		StringBuilder sb = new StringBuilder("https://github.com/login/oauth/access_token?");
 		sb.append("client_id=" + prop.getProperty("client_id")); // 必须
 		sb.append("&client_secret=" + prop.getProperty("client_secret")); // 必须
-		sb.append("&code=" + request.getParameter("code")); // 必须
-		sb.append("&state=" + request.getParameter("state")); // 可选
+		sb.append("&code=" + code); // 必须
+		sb.append("&state=" + state); // 可选
 
 		// 向第三方服务器发送请求
-		String responseBody = request(sb.toString(),"POST");
+		String responseBody = HttpUtils.post(sb.toString());
 		Map<String, Object> params = parseJSON(responseBody);
 
 		sb = new StringBuilder("https://api.github.com/user?");
 		sb.append("access_token=" + params.get("access_token"));
-		
+
 		// 向第三方服务器发送请求
-		responseBody = request(sb.toString(),"GET");
+		responseBody = HttpUtils.get(sb.toString());
 
 		return params = parseJSON(responseBody);
 	}
 
 	private static Properties getProperties(InputStream in) {
 		Properties prop = new Properties();
-
 		try {
 			prop.load(in);
 			return prop;
 		} catch (IOException e) {
 			throw new RuntimeException(e);
-		}
-	}
-
-	private static String request(String str,String method) {
-		BufferedReader br = null;
-		try {
-			URL url = new URL(str);
-			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-			connection.setRequestMethod(method);
-			connection.setRequestProperty("Accept", "application/json");
-
-			br = new BufferedReader(new InputStreamReader(connection.getInputStream(), "ISO-8859-1"));
-
-			String inputLine;
-			StringBuilder responseBody = new StringBuilder();
-			while ((inputLine = br.readLine()) != null) {
-				responseBody.append(inputLine);
-			}
-
-			return responseBody.toString();
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		} finally {
-			try {
-				if (br != null) {
-					br.close();
-				}
-			} catch (IOException e) {
-			}
 		}
 	}
 

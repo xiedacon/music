@@ -7,7 +7,6 @@
 
 	<select id="selectListBySongListIdOrderByRank" resultType="cn.xiedacon.model.SongList_SongGL">
 		SELECT 
-		sgs.id id,
 		sgs.songId songId,
 		sgs.rank rank,
 		sgs.songListId songListId,
