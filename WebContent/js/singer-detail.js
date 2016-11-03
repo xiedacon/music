@@ -4,12 +4,18 @@
 		success : loadSinger
 	});
 	AJAX({
-		url : "song/s/singerId_" + PageScope.params.singerId,
+		url : "song/singerId_" + PageScope.params.singerId,
 		success : loadSongs
 	});
 
-	function loadSinger(singer) {
-		var $singerEle = $("#singer");
+	function loadSinger(data) {
+		if(data.code != 200){
+			MMR.get("simpleMsg").showError(data.error.value);
+			return;
+		}
+		
+		var singer = data.data //
+		, $singerEle = $("#singer");
 
 		$singerEle.find("img").attr({
 			"src" : singer.icon
@@ -33,11 +39,17 @@
 		});
 	}
 
-	function loadSongs(songs) {
+	function loadSongs(data) {
+		if(data.code != 200){
+			MMR.get("simpleMsg").showError(data.error.value);
+			return;
+		}
+		
 		$("#songListHead").addClass("now") //
 		.siblings().removeClass("now");
 
-		var $songListEle = $("#songList");
+		var songs = data.data //
+		, $songListEle = $("#songList");
 		$songListEle.parents(".songList").removeAttr("style") //
 		.siblings().css("display", "none");
 		$songListEle.children().not(".prototype").remove();
@@ -84,11 +96,17 @@
 		}
 	}
 
-	function loadAlbums(pageBean) {
+	function loadAlbums(data) {
+		if(data.code != 200){
+			MMR.get("simpleMsg").showError(data.error.value);
+			return;
+		}
+		
 		$("#albumListHead").addClass("now") //
 		.siblings().removeClass("now");
 
-		var $albumListEle = $("#albumList");
+		var pageBean = data.data // 
+		, $albumListEle = $("#albumList");
 		$albumListEle.parent().removeAttr("style") //
 		.siblings().css("display", "none");
 		$albumListEle.children().not(".prototype").remove();
@@ -163,7 +181,7 @@
 				var page = $(this).attr("data-page");
 
 				AJAX({
-					url : "album/s/singerId_" + PageScope.params.singerId + "/" + page,
+					url : "album/singerId_" + PageScope.params.singerId + "/" + page,
 					success : function(pageBean) {
 						loadAlbumList(pageBean);
 					}
@@ -173,6 +191,12 @@
 	}
 
 	function loadIntroduction(data) {
+		if(data.code != 200){
+			MMR.get("simpleMsg").showError(data.error.value);
+			return;
+		}
+		
+		introduction = data.data;
 		$("#introductionHead").addClass("now") //
 		.siblings().removeClass("now");
 
@@ -181,7 +205,7 @@
 		.siblings().css("display", "none");
 
 		if (data.code == 200) {
-			$introduction.find("p").text(data.introduction) //
+			$introduction.find("p").text(introduction) //
 			.parent().removeAttr("style") //
 			.siblings().css("display", "none");
 		}
@@ -189,13 +213,13 @@
 
 	$("#songListHead").click(function() {
 		AJAX({
-			url : "song/s/singerId_" + PageScope.params.singerId,
+			url : "song/singerId_" + PageScope.params.singerId,
 			success : loadSongs
 		});
 	});
 	$("#albumListHead").click(function() {
 		AJAX({
-			url : "album/s/singerId_" + PageScope.params.singerId + "/1",
+			url : "album/singerId_" + PageScope.params.singerId + "/1",
 			success : loadAlbums
 		});
 	});

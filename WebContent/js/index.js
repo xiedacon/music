@@ -164,8 +164,14 @@
 	function loadSongs(songList, $songListEle, $prototype) {
 		var $songEle, song, $_prototype, flag;
 		AJAX({
-			url : "song/s/songListId_" + songList.id,
-			success : function(songs) {
+			url : "song/songListId_" + songList.id,
+			success : function(data) {
+				if(data.code != 200){
+					MMR.get("simpleMsg").showError(data.error.value);
+					return;
+				}
+				
+				var songs = data.data;
 				$_prototype = $prototype.find(".prototype").clone().removeClass("prototype");
 				flag = false;
 

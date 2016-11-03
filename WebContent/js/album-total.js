@@ -7,11 +7,11 @@
 		success : loadHotAlbumList
 	});
 	AJAX({
-		url : "album/s/tagId_" + PageScope["tagId"] + "/1",
+		url : "album/tagId_" + PageScope["tagId"] + "/1",
 		success : loadAlbumList
 	});
 	AJAX({
-		url : "albumTag/s",
+		url : "albumTag",
 		success : loadTagList
 	});
 
@@ -52,7 +52,7 @@
 			PageScope["tagId"] = id;
 
 			AJAX({
-				url : "album/s/tagId_" + PageScope["tagId"] + "/1",
+				url : "album/tagId_" + PageScope["tagId"] + "/1",
 				success : function(pageBean) {
 					loadAlbumList(pageBean);
 				}
@@ -77,7 +77,7 @@
 			},
 			click : function(page) {
 				AJAX({
-					url : "album/s/tagId_" + PageScope["tagId"] + "/" + page,
+					url : "album/tagId_" + PageScope["tagId"] + "/" + page,
 					success : function(pageBean) {
 						loadAlbumList(pageBean);
 					}

@@ -20,7 +20,7 @@ public class SongMenuReadController {
 	@Autowired
 	private SongMenuReadService songMenuService;
 
-	@RequestMapping("/{id:\\w+}")
+	@RequestMapping("/{id:[a-zA-Z0-9]+}")
 	public Map<String, Object> selectById(@PathVariable("id") String id) {
 		return MessageUtils.createSuccess(songMenuService.selectById(id));
 	}

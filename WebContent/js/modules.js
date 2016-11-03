@@ -548,7 +548,7 @@
 		var userId = UserManager.getUserId();
 		if (userId && songMenuId) {
 			$.ajax({
-				url : "user/" + userId + "/songMenu",
+				url : "user/" + userId + "/collectSongMenu",
 				type : "POST",
 				data : {
 					"songMenuId" : songMenuId
@@ -578,7 +578,7 @@
 	Tags.prototype = new Prototype();
 	Tags.prototype.show = function() {
 		$.ajax({
-			url : "songMenuTag/s",
+			url : "songMenuTag",
 			type : "GET",
 			dataType : "json",
 			success : function(tags) {
@@ -660,7 +660,7 @@
 		var userId = UserManager.getUserId();
 		if (userId) {
 			$.ajax({
-				url : "songMenu/s/creatorId_" + userId,
+				url : "songMenu/creatorId_" + userId,
 				dataType : "json",
 				type : "GET",
 				success : function(data) {
@@ -762,7 +762,7 @@
 			return;
 		}
 		var page = PageScope.page;
-		if (page) {
+		if (page && !sessionStorage["flag_agreed_" + commentId]) {
 			$.ajax({
 				url : "comment/" + commentId + "/" + page,
 				type : "PUT",

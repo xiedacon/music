@@ -1,7 +1,7 @@
 (function() {
 	var songId = PageScope.params.songId;
-	PageScope.loadForFirst = "comment/s/songId_" + songId;
-	PageScope.loadPageBean = "comment/s/songId_" + songId + "/";
+	PageScope.loadForFirst = "comment/songId_" + songId;
+	PageScope.loadPageBean = "comment/songId_" + songId + "/";
 	PageScope.page = "song";
 	
 	AJAX({
@@ -13,8 +13,13 @@
 		success : FUNCTION.loadForFirst
 	});
 
-	function loadSong(song) {
-		var $songEle = $("#song");
+	function loadSong(data) {
+		if(data.code != 200){
+			MMR.get("simpleMsg").showError(data.error.value);
+			return;
+		}
+		var song = data.data //
+		, $songEle = $("#song");
 
 		$songEle.find(".entityMessage_left img").attr({
 			"src" : song.icon
@@ -35,7 +40,7 @@
 
 		// 获取歌词
 		AJAX({
-			url : "lrc/" + PageScope.params.songId,
+			url : "song/" + PageScope.params.songId + "/lrc",
 			success : function(data) {
 				if (data.code == 200) {
 					var $lrcEle = $songEle.find(".details");

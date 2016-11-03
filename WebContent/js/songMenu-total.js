@@ -6,11 +6,11 @@
 		PageScope["supplement"] = "";
 	}
 	AJAX({
-		url : "songMenu/s/" + PageScope["orderBy"] + "_1" + PageScope["supplement"],
+		url : "songMenu/" + PageScope["orderBy"] + "_1" + PageScope["supplement"],
 		success : loadSongMenuList
 	});
 	AJAX({
-		url : "songMenuTag/s",
+		url : "songMenuTag",
 		success : loadSongMenuSecondTag
 	});
 
@@ -35,14 +35,20 @@
 			var orderBy = $(this).attr("data-orderBy");
 			PageScope["orderBy"] = orderBy;
 			AJAX({
-				url : "songMenu/s/" + orderBy + "_1" + PageScope["supplement"],
+				url : "songMenu/" + orderBy + "_1" + PageScope["supplement"],
 				success : loadSongMenuList
 			});
 		})
 	}
 
-	function loadSongMenuSecondTag(tagList) {
-		var $tagListEle = $("#secondTagList");
+	function loadSongMenuSecondTag(data) {
+		if(data.code != 200){
+			MMR.get("simpleMsg").showError(data.error.value);
+			return;
+		}
+		
+		var tagList = data.data //
+		, $tagListEle = $("#secondTagList");
 		var $prototype = $tagListEle.children(".prototype").clone().removeClass("prototype");
 		var tag, $tagEle, secondTagList, $secondTagListEle;
 
@@ -83,8 +89,14 @@
 		}
 	}
 
-	function loadSongMenuList(pageBean) {
-		var songMenuList = pageBean.beans;
+	function loadSongMenuList(data) {
+		if(data.code != 200){
+			MMR.get("simpleMsg").showError(data.error.value);
+			return;
+		}
+		
+		var pageBean = data.data //
+		, songMenuList = pageBean.beans;
 		var $songMenuListEle = $("#songMenuList");
 		$songMenuListEle.children().not(".prototype").remove();
 		var $prototype = $songMenuListEle.find(".prototype").clone().removeClass("prototype");
@@ -104,7 +116,7 @@
 			click : function(page) {
 				var orderBy = PageScope["orderBy"];
 				AJAX({
-					url : "songMenu/s/" + orderBy + "_" + page + PageScope["supplement"],
+					url : "songMenu/" + orderBy + "_" + page + PageScope["supplement"],
 					success : loadSongMenuList
 				});
 			}

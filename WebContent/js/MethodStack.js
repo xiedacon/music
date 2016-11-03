@@ -79,7 +79,6 @@
 			})
 		}
 
-		FUNCTION.loadEmojis();
 		FUNCTION.align($(".material_right"), $(".material_left"));
 	}
 	function loadPageBean_comment(pageBean, flag) {
@@ -109,7 +108,14 @@
 			},
 			click : function(page) {
 				var url = PageScope.loadPageBean + page;
-				var success = loadPageBean_comment;
+				var success = function(data){
+					if(data.code != 200){
+						MMR.get("simpleMsg").showError(data.error.value);
+						return;
+					}
+					
+					loadPageBean_comment(data.data);
+				}
 				if (page == 1) {
 					url = PageScope.loadForFirst;
 					success = FUNCTION.loadForFirst;
@@ -121,8 +127,14 @@
 			}
 		});
 	}
-	FUNCTION.loadForFirst = function loadForFirst(comments) {
-		var hotList = comments.hotList;
+	FUNCTION.loadForFirst = function loadForFirst(data) {
+		if(data.code != 200){
+			MMR.get("simpleMsg").showError(data.error.value);
+			return;
+		}
+		
+		var comments = data.data //
+		, hotList = comments.hotList;
 		var $commentListEle = $("#commentList");
 		$commentListEle.children().not(".prototype").remove();
 
@@ -138,10 +150,17 @@
 			}
 		}
 
+		FUNCTION.loadEmojis();
 		loadPageBean_comment(comments.pageBean, true);
 	}
-	FUNCTION.loadSongs = function loadSongList(songList, special) {
-		var $songListEle = $("#songList");
+	FUNCTION.loadSongs = function loadSongList(data, special) {
+		if(data.code != 200){
+			MMR.get("simpleMsg").showError(data.error.value);
+			return;
+		}
+		
+		var songList = data.data //
+		, $songListEle = $("#songList");
 		$songListEle.children().not(".prototype").remove();
 		var $prototype = $songListEle.find(".prototype").clone().removeClass("prototype");
 		var $songEle, song;
@@ -244,6 +263,25 @@
 	FUNCTION.loadEmojis = function() {
 		var $emojis = $("#emojis");
 		var $newComment = $("#newComment");
+		var emojis_flag;
+		FUNCTION.showEmojis = function() {
+			if (emojis_flag) {
+				$emojis.css("display", "none");
+				emojis_flag = false;
+			} else {
+				$emojis.css("display", "block");
+				emojis_flag = true;
+			}
+		}
+		$newComment.on("focusin", function() {
+			$newComment.on("keydown", function() {
+				$(this).parent().find(".num").text(200 - $(this).val().length);
+			});
+		});
+		$newComment.on("focusout", function() {
+			$newComment.off("keydown");
+		});
+		
 		AJAX({
 			url : "json/emoji",
 			success : function(emojis) {
@@ -279,23 +317,5 @@
 				})
 			}
 		})
-		var emojis_flag;
-		FUNCTION.showEmojis = function() {
-			if (emojis_flag) {
-				$emojis.css("display", "none");
-				emojis_flag = false;
-			} else {
-				$emojis.css("display", "block");
-				emojis_flag = true;
-			}
-		}
-		$newComment.on("focusin", function() {
-			$newComment.on("keydown", function() {
-				$(this).parent().find(".num").text(200 - $(this).val().length);
-			});
-		});
-		$newComment.on("focusout", function() {
-			$newComment.off("keydown");
-		});
 	}
 }())

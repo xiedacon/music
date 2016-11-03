@@ -14,6 +14,10 @@ public class User_SongMenuGL {
 	private Integer collectionNum;
 	private Integer songMenuNum;
 
+	public User_SongMenuGL() {
+		super();
+	}
+
 	public User_SongMenuGL(String userId, String songMenuId, Integer collectionNum, Integer songMenuNum) {
 		super();
 		this.userId = userId;

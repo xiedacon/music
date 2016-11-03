@@ -1,14 +1,14 @@
 (function() {
 	var albumId = PageScope.params.albumId;
-	PageScope.loadForFirst = "comment/s/albumId_" + albumId;
-	PageScope.loadPageBean = "comment/s/albumId_" + albumId + "/";
+	PageScope.loadForFirst = "comment/albumId_" + albumId;
+	PageScope.loadPageBean = "comment/albumId_" + albumId + "/";
 	PageScope.page = "album";
 	AJAX({
 		url : "album/" + albumId,
 		success : loadAlbum
 	});
 	AJAX({
-		url : "song/s/albumId_" + albumId,
+		url : "song/albumId_" + albumId,
 		success : FUNCTION.loadSongs
 	});
 	AJAX({
@@ -16,8 +16,14 @@
 		success : FUNCTION.loadForFirst
 	});
 
-	function loadAlbum(album) {
-		var $albumEle = $("#album");
+	function loadAlbum(data) {
+		if(data.code != 200){
+			MMR.get("simpleMsg").showError(data.error.value);
+			return;
+		}
+		
+		var album = data.data //
+		, $albumEle = $("#album");
 		$albumEle.find(".entityMessage_left img").attr({
 			"src" : album.icon
 		});

@@ -7,14 +7,14 @@ import org.springframework.stereotype.Service;
 
 import cn.xiedacon.model.SongMenuFirstTag;
 import cn.xiedacon.model.SongMenuSecondTag;
-import cn.xiedacon.read.dao.SongMenuReadTagDao;
+import cn.xiedacon.read.dao.SongMenuTagReadDao;
 import cn.xiedacon.read.service.SongMenuTagReadService;
 
 @Service
 public class SongMenuTagReadServiceImpl implements SongMenuTagReadService {
 
 	@Autowired
-	private SongMenuReadTagDao tagDao;
+	private SongMenuTagReadDao tagDao;
 
 	@Override
 	public List<SongMenuFirstTag> selectList() {

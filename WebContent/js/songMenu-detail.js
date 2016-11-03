@@ -1,23 +1,29 @@
 (function() {
 	var songMenuId = PageScope.params.songMenuId;
 	PageScope.page = "songMenu";
-	PageScope.loadForFirst = "comment/s/songMenuId_" + songMenuId;
-	PageScope.loadPageBean = "comment/s/songMenuId_" + songMenuId + "/";
+	PageScope.loadForFirst = "comment/songMenuId_" + songMenuId;
+	PageScope.loadPageBean = "comment/songMenuId_" + songMenuId + "/";
 	AJAX({
 		url : "songMenu/" + songMenuId,
 		success : loadSongMenu
 	});
 	AJAX({
-		url : "song/s/songMenuId_" + songMenuId,
+		url : "song/songMenuId_" + songMenuId,
 		success : FUNCTION.loadSongs
 	});
 	AJAX({
-		url : "comment/s/songMenuId_" + songMenuId,
+		url : "comment/songMenuId_" + songMenuId,
 		success : FUNCTION.loadForFirst
 	});
 
-	function loadSongMenu(songMenu) {
-		var $songMenuEle = $("#songMenu");
+	function loadSongMenu(data) {
+		if(data.code != 200){
+			MMR.get("simpleMsg").showError(data.error.value);
+			return;
+		}
+		
+		var songMenu = data.data //
+		, $songMenuEle = $("#songMenu");
 		$songMenuEle.find(".songMenuMessage_left img").attr({
 			"src" : songMenu.icon
 		});
