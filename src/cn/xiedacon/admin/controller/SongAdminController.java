@@ -270,7 +270,7 @@ public class SongAdminController {
 				return MessageUtils.createError("time", "时间格式错误");
 			}
 			if (lrcUri != null && !lrcUri.trim().isEmpty()) {
-				lrcUri = "lyric/" + lrcUri;
+				lrcUri = "lyrics/" + lrcUri;
 			}
 			if (fileUri == null || fileUri.trim().isEmpty()) {
 				return MessageUtils.createError("fileUri", "歌曲文件错误");

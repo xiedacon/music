@@ -15,8 +15,14 @@
 		success : loadTagList
 	});
 
-	function loadTagList(tagList) {
-		var $tagListEle = $("#tags");
+	function loadTagList(data) {
+		if(data.code != 200){
+			MMR.get("simpleMsg").showError(data.error.value);
+			return;
+		}
+		
+		var tagList = data.data //
+		, $tagListEle = $("#tags");
 		var $prototype = $tagListEle.find(".prototype").clone().removeClass("prototype");
 		var tag, $tagEle;
 
@@ -65,8 +71,14 @@
 		loadAlbumList_base($hotListEle, data.albums);
 	}
 
-	function loadAlbumList(pageBean) {
-		var $albumListEle = $("#albumList");
+	function loadAlbumList(data) {
+		if(data.code != 200){
+			MMR.get("simpleMsg").showError(data.error.value);
+			return;
+		}
+		
+		var pageBean = data.data //
+		, $albumListEle = $("#albumList");
 		$albumListEle.children().not(".prototype").remove();
 		
 		FUNCTION.loadPageBean({

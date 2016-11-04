@@ -42,6 +42,12 @@ public class SongReadController {
 		return MessageUtils.createSuccess(songService.selectListBySongListIdOrderByRank(songListId));
 	}
 
+	@RequestMapping("/songListId_{songListId:\\w+}/{limit:[0-9]\\d*}")
+	public Map<String, Object> selectListBySongListIdOrderByRankLimit(@PathVariable("songListId") String songListId,
+			@PathVariable("limit") Integer limit) {
+		return MessageUtils.createSuccess(songService.selectListBySongListIdOrderByRankLimit(songListId, limit));
+	}
+
 	@RequestMapping("/singerId_{singerId:\\w+}")
 	public Map<String, Object> selectListBySingerIdOrderByCollectionNumLimit(
 			@PathVariable("singerId") String singerId) {

@@ -23,4 +23,7 @@ public interface SongReadDao {
 
 	String selectFileUriById(String songId);
 
+	List<Song> selectListBySongListIdOrderByRankLimit(@Param("songListId") String songListId,
+			@Param("limit") Integer limit);
+
 }

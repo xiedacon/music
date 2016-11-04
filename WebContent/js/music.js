@@ -34,7 +34,7 @@
 			progressModule.init();
 			volumeDivModule.init();
 
-			var volume_default = 0.5;
+			var volume_default = 0.3;
 			audio.volume = volume_default;
 			volumeDivModule.changeVolumeHeight(volume_default);
 
@@ -683,14 +683,21 @@
 	}
 	function batchAdd(type, id, callback) {
 		$.ajax({
-			url : "song/s/" + type + "_" + id,
+			url : "song/" + type + "_" + id,
 			type : "GET",
 			dataType : "json",
-			success : function(songs) {
+			success : function(data) {
+				if (data.code != 200) {
+					MMR.get("simpleMsg").showError(data.error.value);
+					return;
+				}
+
+				var song //
+				, songs = data.data //
+				;
 				if (!songs || songs.length === 0) {
 					return;
 				}
-				var song;
 				for (var i = 0; i < songs.length; i++) {
 					song = songs[i];
 					music.add(JSON.stringify(song));
@@ -716,7 +723,7 @@
 	var $lrcEle = $playListDiv.find(".song_body .lrc");
 	function loadLrc(songId) {
 		$.ajax({
-			url : "lrc/" + songId,
+			url : "song/" + songId + "/lrc",
 			dataType : "json",
 			success : function(data) {
 				if (data.code === 200) {
@@ -781,7 +788,7 @@
 			$now.addClass("now") //
 			.prev().removeClass("now");
 			var ratio = now / total;
-			
+
 		}
 	}
 

@@ -39,7 +39,7 @@ public class SingerReadController {
 				Constant.BEGIN_DEFAULT, Constant.SINGER_SHOW_NUM));
 	}
 
-	@RequestMapping("/{id:\\w+}")
+	@RequestMapping("/{id:[a-zA-Z0-9]+}")
 	public Map<String, Object> selectById(@PathVariable("id") String id) {
 		return MessageUtils.createSuccess(singerService.selectById(id));
 	}

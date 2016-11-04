@@ -1,10 +1,10 @@
 (function() {
 	AJAX({
-		url : "songMenu/s/creatorId_" + PageScope.params.userId,
+		url : "songMenu/creatorId_" + PageScope.params.userId,
 		success : loadCreatedSongMenus
 	});
 	AJAX({
-		url : "songMenu/s/collectorId_" + PageScope.params.userId,
+		url : "songMenu/collectorId_" + PageScope.params.userId,
 		success : loadCollectedSongMenus
 	});
 
@@ -13,8 +13,8 @@
 		$songMenus.filter("li[data-id='" + songMenuId + "']").addClass("now") //
 		$songMenus.filter("li[data-id!='" + songMenuId + "']").removeClass("now");
 
-		PageScope.loadForFirst = "comment/s/songMenuId_" + songMenuId;
-		PageScope.loadPageBean = "comment/s/songMenuId_" + songMenuId + "/";
+		PageScope.loadForFirst = "comment/songMenuId_" + songMenuId;
+		PageScope.loadPageBean = "comment/songMenuId_" + songMenuId + "/";
 
 		$("#showPage").css("display", "block").siblings().css("display", "none");
 
@@ -23,7 +23,7 @@
 			success : _loadSongMenu
 		});
 		AJAX({
-			url : "song/s/songMenuId_" + songMenuId,
+			url : "song/songMenuId_" + songMenuId,
 			success : FUNCTION.loadSongs
 		});
 		AJAX({
@@ -33,7 +33,13 @@
 	}
 
 	function loadCreatedSongMenus(data) {
-		var $ele = $("#createdSongMenus");
+		if(data.code != 200){
+			MMR.get("simpleMsg").showError(data.error.value);
+			return;
+		}
+		
+		var data = data.data //
+		, $ele = $("#createdSongMenus");
 		if (data.length > 0) {
 			$ele.siblings("#createdSongMenusHead").find(".content").text("创建的歌单(" + data.length + ")");
 			loadSongMenus($ele, data);
@@ -44,7 +50,13 @@
 	}
 
 	function loadCollectedSongMenus(data) {
-		var $ele = $("#collectedSongMenus");
+		if(data.code != 200){
+			MMR.get("simpleMsg").showError(data.error.value);
+			return;
+		}
+		
+		var data = data.data //
+		, $ele = $("#collectedSongMenus");
 		if (data.length > 0) {
 			$ele.siblings("#collectedSongMenusHead").find(".content").text("收藏的歌单(" + data.length + ")");
 			loadSongMenus($ele, data);
@@ -114,7 +126,14 @@
 			url : "songMenu/" + songMenuId,
 			dataType : "json",
 			type : "GET",
-			success : function(songMenu) {
+			success : function(data) {
+				if(data.code != 200){
+					MMR.get("simpleMsg").showError(data.error.value);
+					return;
+				}
+				
+				var songMenu = data.data //
+				;
 				songMenu_globe = songMenu;
 				$editPage.attr("data-id", songMenu.id);
 				$editPage.find(".name").attr({
@@ -252,8 +271,14 @@
 		position = undefined;
 	}
 
-	function _loadSongMenu(songMenu) {
-		var $songMenuEle = $("#songMenu");
+	function _loadSongMenu(data) {
+		if(data.code != 200){
+			MMR.get("simpleMsg").showError(data.error.value);
+			return;
+		}
+		
+		var songMenu = data.data //
+		, $songMenuEle = $("#songMenu");
 		$songMenuEle.find(".songMenuMessage_left img").attr({
 			"src" : songMenu.icon
 		});

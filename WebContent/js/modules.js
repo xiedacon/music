@@ -581,7 +581,13 @@
 			url : "songMenuTag",
 			type : "GET",
 			dataType : "json",
-			success : function(tags) {
+			success : function(data) {
+				if(data.code != 200){
+					MMR.get("simpleMsg").showError(data.error.value);
+					return;
+				}
+				
+				var tags = data.data;
 				show($tagsDiv, function() {
 					var $existTags = $("#tags").find(".tag");
 					var tagIds = new Array();
@@ -664,13 +670,19 @@
 				dataType : "json",
 				type : "GET",
 				success : function(data) {
-					var $songMenus = $collectionDiv.find(".login_material");
+					if(data.code != 200){
+						MMR.get("simpleMsg").showError(data.error.value);
+						return;
+					}
+					
+					var songMenus = data.data //
+					, $songMenus = $collectionDiv.find(".login_material");
 					$songMenus.children("p[class='menu']").remove();
 					var $prototype = $songMenus.find(".prototype").clone().removeClass("prototype");
 					var $songMenu, songMenu;
 
-					for (var i = 0; i < data.length; i++) {
-						songMenu = data[i];
+					for (var i = 0; i < songMenus.length; i++) {
+						songMenu = songMenus[i];
 						$songMenu = $prototype.clone();
 
 						$songMenu.attr({
@@ -697,7 +709,7 @@
 	}
 	Collection.prototype.addToSongMenu = function(songMenuId, songId) {
 		$.ajax({
-			url : "songMenu/" + songMenuId + "/collectSongMenu",
+			url : "songMenu/" + songMenuId + "/song",
 			type : "POST",
 			data : {
 				"songId" : songId

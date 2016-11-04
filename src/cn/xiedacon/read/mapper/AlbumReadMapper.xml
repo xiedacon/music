@@ -66,6 +66,12 @@
 		LIMIT #{begin},#{limit}
 	</select>
 	
+	<select id="selectCount" resultType="int">
+		SELECT COUNT(a.id)
+		FROM album_base a
+		WHERE a.visible = true
+	</select>
+	
 	<select id="selectListOrderByCreateTimeLimit" resultType="cn.xiedacon.model.Album">
 		SELECT
 		a.id id,

@@ -1,10 +1,10 @@
 (function() {
-	var url = "singer/s";
+	var url = "singer";
 	if (PageScope.params.classifyId) {
 		if (PageScope.params.classifyId === "all") {
-			url = "singer/s";
+			url = "singer";
 		} else if (PageScope.params.classifyId === "hot") {
-			url = "singer/s/hot";
+			url = "singer/hot";
 		} else {
 			url += "/classifyId_" + PageScope.params.classifyId;
 		}
@@ -19,6 +19,7 @@
 	});
 
 	function loadClassify(classifyList) {
+		
 		if (!classifyList) {
 			return;
 		}
@@ -59,9 +60,14 @@
 	}
 
 	function loadFouction(data) {
+		if(data.code != 200){
+			MMR.get("simpleMsg").showError(data.error.value);
+			return;
+		}
+		
+		var data = data.data;
 		$("#singerList").css("display", "none");
 		$("#simpleSingerList").css("display", "none");
-console.log(PageScope.params.classifyId)
 		switch (PageScope.params.classifyId) {
 			case "all" :
 				$("h2").text("入驻歌手");
@@ -162,7 +168,7 @@ console.log(PageScope.params.classifyId)
 			$simpleSingerEle.find(".name").attr({
 				"title" : singer.name + "的音乐",
 				"data-href" : "singer?singerId=" + singer.id
-			}).text(singer.name);
+			}).text(limitStringLength(singer.name,5.5));
 			if (singer.userId) {
 				$simpleSingerEle.find(".icon").removeAttr("style").attr({
 					"title" : singer.name + "的个人主页",

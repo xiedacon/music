@@ -50,4 +50,9 @@ public class SongReadServiceImpl implements SongReadService {
 		return songDao.selectFileUriById(songId);
 	}
 
+	@Override
+	public List<Song> selectListBySongListIdOrderByRankLimit(String songListId, Integer limit) {
+		return songDao.selectListBySongListIdOrderByRankLimit(songListId,limit);
+	}
+
 }

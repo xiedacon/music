@@ -1,18 +1,18 @@
 (function() {
 	var songListId = PageScope.params.songListId;
-	PageScope.loadForFirst = "comment/s/songListId_" + songListId;
-	PageScope.loadPageBean = "comment/s/songListId_" + songListId + "/";
+	PageScope.loadForFirst = "comment/songListId_" + songListId;
+	PageScope.loadPageBean = "comment/songListId_" + songListId + "/";
 	PageScope.page = "songList";
 	AJAX({
 		url : "songList/" + PageScope.params.songListId,
 		success : loadSongList
 	});
 	AJAX({
-		url : "songList/s",
+		url : "songList",
 		success : loadSongLists
 	});
 	AJAX({
-		url : "song/s/songListId_" + PageScope.params.songListId,
+		url : "song/songListId_" + PageScope.params.songListId,
 		success : loadSongs
 	});
 	AJAX({
@@ -20,8 +20,14 @@
 		success : FUNCTION.loadForFirst
 	});
 
-	function loadSongLists(songLists) {
-		var $specialList = $("#specialList");
+	function loadSongLists(data) {
+		if(data.code != 200){
+			MMR.get("simpleMsg").showError(data.error.value);
+			return;
+		}
+		
+		var songLists = data.data //
+		, $specialList = $("#specialList");
 		var $globeList = $("#globeList");
 		var $prototype = $specialList.find(".prototype").clone().removeClass("prototype");
 
@@ -55,8 +61,14 @@
 		}
 	}
 
-	function loadSongList(songList) {
-		var $songListEle = $("#_songList");
+	function loadSongList(data) {
+		if(data.code != 200){
+			MMR.get("simpleMsg").showError(data.error.value);
+			return;
+		}
+		
+		var songList = data.data //
+		, $songListEle = $("#_songList");
 
 		$songListEle.find(".entityMessage_left img").attr({
 			"src" : songList.icon

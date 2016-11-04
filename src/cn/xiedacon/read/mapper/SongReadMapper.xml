@@ -55,6 +55,25 @@
 		WHERE sgs.songListId = #{songListId}
 		ORDER BY sgs.rank ASC
 	</select>
+	
+	<select id="selectListBySongListIdOrderByRankLimit" resultType="cn.xiedacon.model.Song">
+		SELECT
+		s.id id,
+		s.name name,
+		s.icon icon,
+		s.time time,
+		s.singerId singerId,
+		s.singerName singerName,
+		s.albumId albumId,
+		s.albumName albumName,
+		sgs.rank rank,
+		sgs.rankChange rankChange
+		FROM song_base s
+		INNER JOIN song_gl_songlist sgs ON sgs.songId = s.id
+		WHERE sgs.songListId = #{songListId}
+		ORDER BY sgs.rank ASC
+		LIMIT 0,#{limit}
+	</select>
 
 	<select id="selectById" resultType="cn.xiedacon.model.Song">
 		SELECT

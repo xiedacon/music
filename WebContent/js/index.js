@@ -164,7 +164,7 @@
 	function loadSongs(songList, $songListEle, $prototype) {
 		var $songEle, song, $_prototype, flag;
 		AJAX({
-			url : "song/songListId_" + songList.id,
+			url : "song/songListId_" + songList.id+"/10",
 			success : function(data) {
 				if(data.code != 200){
 					MMR.get("simpleMsg").showError(data.error.value);

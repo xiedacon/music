@@ -234,18 +234,18 @@
 		$albumEle.find("img").attr({
 			"src" : album.icon,
 			"title" : album.name,
-			"data-href" : "album/{" + album.id + "}"
+			"data-href" : "album?albumId=" + album.id
 		});
 		$albumEle.find(".play").attr({
 			"onclick" : "MMR.get('music').batchAddThenPlay('albumId','" + album.id + "')"
 		});
 		$albumEle.find(".name").attr({
 			"title" : album.name,
-			"data-href" : "album/{" + album.id + "}"
+			"data-href" : "album?albumId=" + album.id
 		}).text(album.name);
 		$albumEle.find(".songer").attr({
 			"title" : album.singerName,
-			"data-href" : "singer/{" + album.singerId + "}"
+			"data-href" : "singer?singerId=" + album.singerId
 		}).text(album.singerName);
 	}
 

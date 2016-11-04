@@ -42,7 +42,7 @@
 		AJAX({
 			url : "song/" + PageScope.params.songId + "/lrc",
 			success : function(data) {
-				if (data.code == 200) {
+				if (data.code == 200 && data.data) {
 					var $lrcEle = $songEle.find(".details");
 					$lrcEle.children("p").remove();
 					$lrcEle.children(".show_hidden").removeAttr("style").click(function() {

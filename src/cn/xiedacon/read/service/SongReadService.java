@@ -20,4 +20,6 @@ public interface SongReadService {
 
 	String selectFileUriById(String songId);
 
+	List<Song> selectListBySongListIdOrderByRankLimit(String songListId, Integer limit);
+
 }

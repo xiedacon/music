@@ -4,16 +4,22 @@
 		success : loadUser
 	});
 	AJAX({
-		url : "songMenu/s/creatorId_" + PageScope.params.userId,
+		url : "songMenu/creatorId_" + PageScope.params.userId,
 		success : loadSongMenus_create
 	});
 	AJAX({
-		url : "songMenu/s/collectorId_" + PageScope.params.userId,
+		url : "songMenu/collectorId_" + PageScope.params.userId,
 		success : loadSongMenus_collect
 	});
 
-	function loadUser(user) {
-		$userEle = $("#user");
+	function loadUser(data) {
+		if(data.code != 200){
+			MMR.get("simpleMsg").showError(data.error.value);
+			return;
+		}
+		
+		var user = data.data //
+		, $userEle = $("#user");
 
 		$userEle.find("img").attr("src", user.icon);
 		$userEle.find("h2").text(user.name);
@@ -65,13 +71,19 @@
 	}
 
 	function loadSongMenus(data, ele) {
-		var $songMenuListEle = $(ele);
+		if(data.code != 200){
+			MMR.get("simpleMsg").showError(data.error.value);
+			return;
+		}
+		
+		var songMenus = data.data //
+		, $songMenuListEle = $(ele);
 		var $prototype = $songMenuListEle.find(".prototype").clone().removeClass("prototype");
 		var $songMenuEle, songMenu;
 
-		for (var i = 0; i < data.length; i++) {
+		for (var i = 0; i < songMenus.length; i++) {
 			$songMenuEle = $prototype.clone();
-			songMenu = data[i];
+			songMenu = songMenus[i];
 			$songMenuEle.find("img").attr({
 				"alt" : songMenu.name,
 				"src" : songMenu.icon,
