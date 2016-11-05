@@ -99,7 +99,7 @@ public class XSSFUtils {
 			beginRowNum = 0;
 		}
 		int firstRowNum = sheet.getFirstRowNum() + beginRowNum;
-		int lastRowNum = sheet.getLastRowNum();
+		int lastRowNum = sheet.getPhysicalNumberOfRows();
 		if (rowLmit != null && rowLmit > 0) {
 			lastRowNum = firstRowNum + rowLmit;
 		}
@@ -124,8 +124,8 @@ public class XSSFUtils {
 	 * @param cellLimit
 	 * @return
 	 */
-	private static List<cn.xiedacon.util.excel.Cell> parseRow(Row row, Integer beginCellNum, Integer cellLimit) {
-		List<cn.xiedacon.util.excel.Cell> cellList = new ArrayList<>();
+	private static List<Cell> parseRow(Row row, Integer beginCellNum, Integer cellLimit) {
+		List<Cell> cellList = new ArrayList<>();
 		if (row == null) {
 			return cellList;
 		}
@@ -140,7 +140,7 @@ public class XSSFUtils {
 		}
 
 		for (int i = firstCellNum; i < lastCellNum + 1; i++) {
-			cellList.add(new cn.xiedacon.util.excel.Cell(row.getCell(i)));
+			cellList.add(new Cell(row.getCell(i)));
 		}
 
 		return cellList;

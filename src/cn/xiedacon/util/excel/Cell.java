@@ -8,7 +8,7 @@ public class Cell {
 
 	public Cell(org.apache.poi.ss.usermodel.Cell cell) {
 		super();
-		if(cell == null){
+		if (cell == null) {
 			cell = new DataCell(null);
 		}
 		this.cell = cell;
@@ -23,7 +23,12 @@ public class Cell {
 	}
 
 	public Integer getInteger() {
-		return ((Double) cell.getNumericCellValue()).intValue();
+		Double value = getDouble();
+		if (value == null) {
+			return null;
+		} else {
+			return value.intValue();
+		}
 	}
 
 	public Double getDouble() {

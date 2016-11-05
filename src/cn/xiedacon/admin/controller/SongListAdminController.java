@@ -129,19 +129,23 @@ public class SongListAdminController {
 		songExcel.delete();
 
 		List<String> songNames = new ArrayList<>();
-		for (List<Cell> songCells : cellData) {
-			songNames.add(songCells.get(1).getString());
+		for (int i = cellData.size() - 1; i >= 0; i--) {
+			List<Cell> songCells = cellData.get(i);
+			String songName = songCells.get(1).getString();
+			if (songName == null || songName.trim().isEmpty()) {
+				cellData.remove(songCells);
+				continue;
+			}
+
+			songNames.add(songName);
 		}
 		Map<String, Song> songMap = songService.batchSelectByName(songNames);
-		if (songNames.size() != songMap.size()) {
-			return MessageUtils.createError("songName", "存在未知歌曲");
-		}
 
 		List<SongList_SongGL> songList_SongGLList = new ArrayList<>();
-		for (List<Cell> cell : cellData) {
-			Song song = songMap.get(cell.get(1).getString());
-			Integer rank = cell.get(0).getInteger();
-			Integer rankChange = cell.get(2).getInteger();
+		for (List<Cell> cells : cellData) {
+			Song song = songMap.get(cells.get(1).getString());
+			Integer rank = cells.get(0).getInteger();
+			Integer rankChange = cells.get(2).getInteger();
 
 			if (song == null) {
 				return MessageUtils.createError("songName", "存在未知歌曲");
