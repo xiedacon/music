@@ -193,17 +193,11 @@
 					tags += "-";
 				}
 			}
-			var formData = new FormData();
-			formData.append("name", name);
-			formData.append("introduction", introduction);
-			formData.append("tags", tags);
+			
 			$.ajax({
 				url : "songMenu/" + $("#editPage").attr("data-id"),
 				type : "PUT",
-				processData : false,
-				contentType : false,
-				context : this,
-				data : formData,
+				data : {"name":name,"introduction":introduction,"tags":tags},
 				dataType : "json",
 				success : function(data) {
 					if (data.code === 200) {

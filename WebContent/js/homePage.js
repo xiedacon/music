@@ -1,4 +1,4 @@
-PageScope.params.userId = UserManager.getUserId();
+PageScope.params.userId? "" : PageScope.params.userId = UserManager.getUserId();
 (function() {
 	AJAX({
 		url : "user/" + PageScope.params.userId,

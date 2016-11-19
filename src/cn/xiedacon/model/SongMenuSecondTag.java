@@ -16,6 +16,20 @@ public class SongMenuSecondTag {
 	private String firstTagId;
 	private Boolean visible;
 
+	public SongMenuSecondTag() {
+	}
+
+	public SongMenuSecondTag(String id) {
+		super();
+		this.id = id;
+	}
+
+	public SongMenuSecondTag(String id, String name) {
+		super();
+		this.id = id;
+		this.name = name;
+	}
+
 	public String getFirstTagId() {
 		return firstTagId;
 	}
@@ -30,15 +44,6 @@ public class SongMenuSecondTag {
 
 	public void setVisible(Boolean visible) {
 		this.visible = visible;
-	}
-
-	public SongMenuSecondTag() {
-
-	}
-
-	public SongMenuSecondTag(String id) {
-		super();
-		this.id = id;
 	}
 
 	public String getId() {

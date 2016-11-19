@@ -23,6 +23,7 @@ import cn.xiedacon.model.SongMenuSecondTag;
 import cn.xiedacon.model.SongMenu_SongGL;
 import cn.xiedacon.model.SongMenu_SongMenuTagGL;
 import cn.xiedacon.model.User;
+import cn.xiedacon.read.service.SecondSongMenuTagReadService;
 import cn.xiedacon.read.service.SongMenuReadService;
 import cn.xiedacon.read.service.SongReadService;
 import cn.xiedacon.read.service.UserReadService;
@@ -32,7 +33,6 @@ import cn.xiedacon.util.UUIDUtils;
 import cn.xiedacon.util.upload.Base64FileItem;
 import cn.xiedacon.util.upload.Base64UploadUtils;
 import cn.xiedacon.write.service.SongMenu_SongGLService;
-import cn.xiedacon.write.service.SecondSongMenuTagReadService;
 import cn.xiedacon.write.service.SongMenuWriteService;
 import cn.xiedacon.util.ImageUtils;
 
@@ -53,7 +53,7 @@ public class SongMenuWriterController {
 	private UserReadService userService;
 	@Autowired
 	private SongMenu_SongGLService songMenu_SongGLService;
-
+	@Autowired
 	private SecondSongMenuTagReadService tagService;
 
 	@RequestMapping(value = "/{id:\\w{32}}", method = RequestMethod.DELETE)

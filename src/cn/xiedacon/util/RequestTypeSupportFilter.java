@@ -24,6 +24,8 @@ import org.apache.commons.io.IOUtils;
  */
 public class RequestTypeSupportFilter implements Filter {
 
+	private String[] emptyValues = new String[] { "" };
+
 	@Override
 	public void destroy() {
 	}
@@ -35,14 +37,13 @@ public class RequestTypeSupportFilter implements Filter {
 
 		String method = request.getMethod();
 		String contentType = request.getContentType();
-
 		if (method == "GET" || method == "POST"
 				|| (null != contentType && contentType.toLowerCase(Locale.ENGLISH).startsWith("multipart/"))) {
 			chain.doFilter(req, res);
 			return;
 		}
 
-		HttpServletRequest requestWapper = createRequestMethodSupportWrapper(request);
+		HttpServletRequest requestWapper = this.createRequestMethodSupportWrapper(request);
 		chain.doFilter(requestWapper, res);
 	}
 
@@ -61,11 +62,14 @@ public class RequestTypeSupportFilter implements Filter {
 			if (paramStrs.length == 1 && paramStrs[0].isEmpty()) {
 				return request;
 			}
-			
+
 			for (String paramStr : paramStrs) {
 				String[] paramEntry = paramStr.split("=");
 				String name = paramEntry[0];
-				String[] values = paramEntry[1].split(",");
+				String[] values = emptyValues;
+				if (paramEntry.length > 1) {
+					values = paramEntry[1].split(",");
+				}
 				remainParameterMap.put(name, values);
 			}
 			return new RequestMethodSupportWrapper(request, remainParameterMap);

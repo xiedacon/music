@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 
 import cn.xiedacon.admin.dao.BatchSqlDao;
 import cn.xiedacon.model.SongMenu;
-import cn.xiedacon.write.dao.SongMenu_SongMenuTagGLDao;
 import cn.xiedacon.write.dao.SongMenuWriteDao;
 import cn.xiedacon.write.service.SongMenuWriteService;
 
@@ -18,8 +17,6 @@ public class SongMenuWriteServiceImpl implements SongMenuWriteService {
 	@Autowired
 	@Qualifier("batchSqlDaoImpl")
 	private BatchSqlDao batchDao;
-	@Autowired
-	private SongMenu_SongMenuTagGLDao songMenu_SongMenuTagGLDao;
 
 	@Override
 	public void insert(SongMenu songMenu) {
@@ -34,9 +31,9 @@ public class SongMenuWriteServiceImpl implements SongMenuWriteService {
 
 	@Override
 	public void update(SongMenu songMenu) {
-		songMenuDao.update(songMenu);
-		songMenu_SongMenuTagGLDao.deleteBySongMenuId(songMenu.getId());
+		batchDao.deleteSongMenu_SongMenuTagGLBySongMenuId(songMenu.getId());
 		batchDao.insertSongMenu_SongMenuTagGL(songMenu.getSongMenu_SongMenuTagGLList());
+		songMenuDao.update(songMenu);
 	}
 
 	@Override

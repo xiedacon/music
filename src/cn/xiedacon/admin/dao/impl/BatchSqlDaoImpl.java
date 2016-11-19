@@ -1,10 +1,8 @@
 package cn.xiedacon.admin.dao.impl;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -22,7 +20,9 @@ import cn.xiedacon.model.SecondClassify;
 import cn.xiedacon.model.Singer;
 import cn.xiedacon.model.Song;
 import cn.xiedacon.model.SongList_SongGL;
+import cn.xiedacon.model.SongMenuSecondTag;
 import cn.xiedacon.model.SongMenu_SongMenuTagGL;
+import cn.xiedacon.util.jdbc.BatchSqlUtils;
 
 @Repository
 public class BatchSqlDaoImpl implements BatchSqlDao {
@@ -30,36 +30,32 @@ public class BatchSqlDaoImpl implements BatchSqlDao {
 	@Autowired
 	private ComboPooledDataSource dataSource;
 	private int batchSize = 100;
+	private int batchSize_select = 10;
 
 	@Override
 	public void insertSinger(List<Singer> singerList) {
 		String sql = "INSERT INTO singer VALUES(?,?,?,?,?,?,?,?,?)";
 
 		try (Connection conn = dataSource.getConnection();) {
-			conn.setAutoCommit(false);
-
-			PreparedStatement statement = conn.prepareStatement(sql);
+			List<List<Object>> rowDatas = new ArrayList<>();
 
 			for (int i = 0; i < singerList.size(); i++) {
+				List<Object> rowData = new ArrayList<>();
+
 				Singer singer = singerList.get(i);
-				statement.setString(1, singer.getId());
-				statement.setString(2, singer.getName());
-				statement.setString(3, singer.getIcon());
-				statement.setString(4, singer.getRemark());
-				statement.setString(5, singer.getIntroduction());
-				statement.setString(6, singer.getUserId());
-				statement.setInt(7, singer.getCollectionNum());
-				statement.setString(8, singer.getClassifyId());
-				statement.setBoolean(9, singer.getVisible());
+				rowData.add(singer.getId());
+				rowData.add(singer.getName());
+				rowData.add(singer.getIcon());
+				rowData.add(singer.getRemark());
+				rowData.add(singer.getIntroduction());
+				rowData.add(singer.getUserId());
+				rowData.add(singer.getCollectionNum());
+				rowData.add(singer.getClassifyId());
+				rowData.add(singer.getVisible());
 
-				statement.addBatch();
-
-				if ((i + 1) % batchSize == 0) {
-					statement.executeBatch();
-				}
+				rowDatas.add(rowData);
 			}
-			statement.executeBatch();
-			conn.commit();
+			BatchSqlUtils.excuteBatch(conn, sql, rowDatas, batchSize);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
@@ -67,31 +63,13 @@ public class BatchSqlDaoImpl implements BatchSqlDao {
 
 	@Override
 	public Map<String, Singer> selectSingerByName(List<String> singerNameList) {
-		String For1 = "SELECT s.id, s.name FROM singer s WHERE s.name = ?";
-		String For3 = "SELECT s.id, s.name FROM singer s WHERE s.name IN(?,?,?)";
-		String For10 = "SELECT s.id, s.name FROM singer s WHERE s.name IN(?,?,?,?,?,?,?,?,?,?)";
-		int num = singerNameList.size();
-		int begin = 0;
-		List<ResultSet> resultSetlist = new ArrayList<>();
+		String sql = "SELECT s.id, s.name FROM singer s WHERE s.name = ?";
 		try (Connection conn = dataSource.getConnection();) {
-			while (num > 0) {
-				if (num % 10 == 0) {
-					resultSetlist.add(queryForList(conn, begin, 10, For10, singerNameList));
-					begin += 10;
-					num -= 10;
-				} else if (num % 3 == 0) {
-					resultSetlist.add(queryForList(conn, begin, 3, For3, singerNameList));
-					begin += 3;
-					num -= 3;
-				} else {
-					resultSetlist.add(queryForList(conn, begin, 1, For1, singerNameList));
-					begin += 1;
-					num -= 1;
-				}
-			}
+			List<ResultSet> resultSets = BatchSqlUtils.excuteBatchForSelect(conn, sql, singerNameList,
+					batchSize_select);
 
 			Map<String, Singer> result = new HashMap<>();
-			for (ResultSet resultSet : resultSetlist) {
+			for (ResultSet resultSet : resultSets) {
 				while (resultSet.next()) {
 					result.put(resultSet.getString(2), new Singer(resultSet.getString(1), resultSet.getString(2)));
 				}
@@ -102,42 +80,14 @@ public class BatchSqlDaoImpl implements BatchSqlDao {
 		}
 	}
 
-	private ResultSet queryForList(Connection conn, Integer begin, Integer num, String sql, List<String> list)
-			throws SQLException {
-		PreparedStatement statement = conn.prepareStatement(sql);
-		for (int i = begin; i < begin + num; i++) {
-			statement.setString(i - begin + 1, list.get(i));
-		}
-		return statement.executeQuery();
-	}
-
 	@Override
 	public Map<String, Album> selectAlbumByName(List<String> albumNameList) {
-		String For1 = "SELECT ab.id, ab.name FROM album_base ab WHERE ab.name = ?";
-		String For3 = "SELECT ab.id, ab.name FROM album_base ab WHERE ab.name IN(?,?,?)";
-		String For10 = "SELECT ab.id, ab.name FROM album_base ab WHERE ab.name IN(?,?,?,?,?,?,?,?,?,?)";
-		int num = albumNameList.size();
-		int begin = 0;
-		List<ResultSet> resultSetlist = new ArrayList<>();
+		String sql = "SELECT ab.id, ab.name FROM album_base ab WHERE ab.name = ?";
 		try (Connection conn = dataSource.getConnection();) {
-			while (num > 0) {
-				if (num % 10 == 0) {
-					resultSetlist.add(queryForList(conn, begin, 10, For10, albumNameList));
-					begin += 10;
-					num -= 10;
-				} else if (num % 3 == 0) {
-					resultSetlist.add(queryForList(conn, begin, 3, For3, albumNameList));
-					begin += 3;
-					num -= 3;
-				} else {
-					resultSetlist.add(queryForList(conn, begin, 1, For1, albumNameList));
-					begin += 1;
-					num -= 1;
-				}
-			}
+			List<ResultSet> resultSets = BatchSqlUtils.excuteBatchForSelect(conn, sql, albumNameList, batchSize_select);
 
 			Map<String, Album> result = new HashMap<>();
-			for (ResultSet resultSet : resultSetlist) {
+			for (ResultSet resultSet : resultSets) {
 				while (resultSet.next()) {
 					result.put(resultSet.getString(2), new Album(resultSet.getString(1), resultSet.getString(2)));
 				}
@@ -153,22 +103,14 @@ public class BatchSqlDaoImpl implements BatchSqlDao {
 		String sql = "UPDATE album_base ab SET ab.songNum = ? + ab.songNum WHERE ab.id = ?";
 
 		try (Connection conn = dataSource.getConnection();) {
-			conn.setAutoCommit(false);
-
-			PreparedStatement statement = conn.prepareStatement(sql);
-			int i = 0;
+			List<List<Object>> rowDatas = new ArrayList<>();
 			for (Map.Entry<String, Integer> entry : albumMap.entrySet()) {
-				statement.setInt(1, entry.getValue());
-				statement.setString(2, entry.getKey());
-				statement.addBatch();
-
-				if ((i + 1) % batchSize == 0) {
-					statement.executeBatch();
-				}
-				i++;
+				List<Object> rowData = new ArrayList<>();
+				rowData.add(entry.getValue());
+				rowData.add(entry.getKey());
+				rowDatas.add(rowData);
 			}
-			statement.executeBatch();
-			conn.commit();
+			BatchSqlUtils.excuteBatch(conn, sql, rowDatas, batchSize);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
@@ -180,40 +122,36 @@ public class BatchSqlDaoImpl implements BatchSqlDao {
 		String song_recordSql = "INSERT INTO song_record VALUES(?,?,?,?)";
 
 		try (Connection conn = dataSource.getConnection();) {
-			conn.setAutoCommit(false);
-
-			PreparedStatement song_baseStatement = conn.prepareStatement(song_baseSql);
-			PreparedStatement song_recordStatement = conn.prepareStatement(song_recordSql);
+			List<List<Object>> song_baseRowDatas = new ArrayList<>();
+			List<List<Object>> song_recordRowDatas = new ArrayList<>();
 			for (int i = 0; i < songList.size(); i++) {
+				List<Object> song_baseRowData = new ArrayList<>();
+				List<Object> song_recordRowData = new ArrayList<>();
+
 				Song song = songList.get(i);
-				song_baseStatement.setString(1, song.getId());
-				song_baseStatement.setString(2, song.getName());
-				song_baseStatement.setString(3, song.getIcon());
-				song_baseStatement.setString(4, song.getTime());
-				song_baseStatement.setString(5, song.getLrcUri());
-				song_baseStatement.setString(6, song.getFileUri());
-				song_baseStatement.setString(7, song.getSingerName());
-				song_baseStatement.setString(8, song.getAlbumName());
-				song_baseStatement.setString(9, song.getRemark());
-				song_baseStatement.setString(10, song.getSingerId());
-				song_baseStatement.setString(11, song.getAlbumId());
-				song_baseStatement.setBoolean(12, song.getVisible());
-				song_baseStatement.addBatch();
+				song_baseRowData.add(song.getId());
+				song_baseRowData.add(song.getName());
+				song_baseRowData.add(song.getIcon());
+				song_baseRowData.add(song.getTime());
+				song_baseRowData.add(song.getLrcUri());
+				song_baseRowData.add(song.getFileUri());
+				song_baseRowData.add(song.getSingerName());
+				song_baseRowData.add(song.getAlbumName());
+				song_baseRowData.add(song.getRemark());
+				song_baseRowData.add(song.getSingerId());
+				song_baseRowData.add(song.getAlbumId());
+				song_baseRowData.add(song.getVisible());
 
-				song_recordStatement.setString(1, song.getId());
-				song_recordStatement.setInt(2, song.getCommentNum());
-				song_recordStatement.setInt(3, song.getPlayNum());
-				song_recordStatement.setInt(4, song.getCollectionNum());
-				song_recordStatement.addBatch();
+				song_recordRowData.add(song.getId());
+				song_recordRowData.add(song.getCommentNum());
+				song_recordRowData.add(song.getPlayNum());
+				song_recordRowData.add(song.getCollectionNum());
 
-				if ((i + 1) % batchSize == 0) {
-					song_baseStatement.executeBatch();
-					song_recordStatement.executeBatch();
-				}
+				song_baseRowDatas.add(song_baseRowData);
+				song_recordRowDatas.add(song_recordRowData);
 			}
-			song_baseStatement.executeBatch();
-			song_recordStatement.executeBatch();
-			conn.commit();
+			BatchSqlUtils.excuteBatch(conn, song_baseSql, song_baseRowDatas, batchSize);
+			BatchSqlUtils.excuteBatch(conn, song_recordSql, song_recordRowDatas, batchSize);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
@@ -224,22 +162,18 @@ public class BatchSqlDaoImpl implements BatchSqlDao {
 		String song_gl_albumSql = "INSERT INTO song_gl_album VALUES(?,(SELECT COUNT(s.id) FROM song_gl_album s WHERE s.albumId = ?),?)";
 
 		try (Connection conn = dataSource.getConnection();) {
-			conn.setAutoCommit(false);
-
-			PreparedStatement song_gl_albumStatement = conn.prepareStatement(song_gl_albumSql);
+			List<List<Object>> rowDatas = new ArrayList<>();
 			for (int i = 0; i < album_SongGLList.size(); i++) {
-				Album_SongGL album_SongGL = album_SongGLList.get(i);
-				song_gl_albumStatement.setString(1, album_SongGL.getSongId());
-				song_gl_albumStatement.setString(2, album_SongGL.getAlbumId());
-				song_gl_albumStatement.setString(3, album_SongGL.getAlbumId());
-				song_gl_albumStatement.addBatch();
+				List<Object> rowData = new ArrayList<>();
 
-				if ((i + 1) % batchSize == 0) {
-					song_gl_albumStatement.executeBatch();
-				}
+				Album_SongGL album_SongGL = album_SongGLList.get(i);
+				rowData.add(album_SongGL.getSongId());
+				rowData.add(album_SongGL.getRank());
+				rowData.add(album_SongGL.getAlbumId());
+
+				rowDatas.add(rowData);
 			}
-			song_gl_albumStatement.executeBatch();
-			conn.commit();
+			BatchSqlUtils.excuteBatch(conn, song_gl_albumSql, rowDatas, batchSize);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
@@ -247,31 +181,12 @@ public class BatchSqlDaoImpl implements BatchSqlDao {
 
 	@Override
 	public Map<String, Song> selectSongByName(List<String> songNames) {
-		String For1 = "SELECT sb.id, sb.name FROM song_base sb WHERE sb.name = ?";
-		String For3 = "SELECT sb.id, sb.name FROM song_base sb WHERE sb.name IN(?,?,?)";
-		String For10 = "SELECT sb.id, sb.name FROM song_base sb WHERE sb.name IN(?,?,?,?,?,?,?,?,?,?)";
-		int num = songNames.size();
-		int begin = 0;
-		List<ResultSet> resultSetlist = new ArrayList<>();
+		String sql = "SELECT sb.id, sb.name FROM song_base sb WHERE sb.name = ?";
 		try (Connection conn = dataSource.getConnection();) {
-			while (num > 0) {
-				if (num % 10 == 0) {
-					resultSetlist.add(queryForList(conn, begin, 10, For10, songNames));
-					begin += 10;
-					num -= 10;
-				} else if (num % 3 == 0) {
-					resultSetlist.add(queryForList(conn, begin, 3, For3, songNames));
-					begin += 3;
-					num -= 3;
-				} else {
-					resultSetlist.add(queryForList(conn, begin, 1, For1, songNames));
-					begin += 1;
-					num -= 1;
-				}
-			}
+			List<ResultSet> resultSets = BatchSqlUtils.excuteBatchForSelect(conn, sql, songNames, batchSize_select);
 
 			Map<String, Song> result = new HashMap<>();
-			for (ResultSet resultSet : resultSetlist) {
+			for (ResultSet resultSet : resultSets) {
 				while (resultSet.next()) {
 					result.put(resultSet.getString(2), new Song(resultSet.getString(1), resultSet.getString(2)));
 				}
@@ -288,23 +203,19 @@ public class BatchSqlDaoImpl implements BatchSqlDao {
 		int batchSize = 100;
 
 		try (Connection conn = dataSource.getConnection();) {
-			conn.setAutoCommit(false);
-
-			PreparedStatement song_gl_songlistStatement = conn.prepareStatement(song_gl_songlistSql);
+			List<List<Object>> rowDatas = new ArrayList<>();
 			for (int i = 0; i < songList_SongGLList.size(); i++) {
-				SongList_SongGL songList_SongGL = songList_SongGLList.get(i);
-				song_gl_songlistStatement.setString(1, songList_SongGL.getSongId());
-				song_gl_songlistStatement.setInt(2, songList_SongGL.getRank());
-				song_gl_songlistStatement.setString(3, songList_SongGL.getSongListId());
-				song_gl_songlistStatement.setInt(4, songList_SongGL.getRankChange());
-				song_gl_songlistStatement.addBatch();
+				List<Object> rowData = new ArrayList<>();
 
-				if ((i + 1) % batchSize == 0) {
-					song_gl_songlistStatement.executeBatch();
-				}
+				SongList_SongGL songList_SongGL = songList_SongGLList.get(i);
+				rowData.add(songList_SongGL.getSongId());
+				rowData.add(songList_SongGL.getRank());
+				rowData.add(songList_SongGL.getSongListId());
+				rowData.add(songList_SongGL.getRankChange());
+
+				rowDatas.add(rowData);
 			}
-			song_gl_songlistStatement.executeBatch();
-			conn.commit();
+			BatchSqlUtils.excuteBatch(conn, song_gl_songlistSql, rowDatas, batchSize);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
@@ -328,40 +239,34 @@ public class BatchSqlDaoImpl implements BatchSqlDao {
 		String album_recordSql = "INSERT INTO album_record VALUES(?,?,?,?)";
 
 		try (Connection conn = dataSource.getConnection();) {
-			conn.setAutoCommit(false);
-
-			PreparedStatement album_baseStatement = conn.prepareStatement(album_baseSql);
-			PreparedStatement album_recordStatement = conn.prepareStatement(album_recordSql);
+			List<List<Object>> album_baseRowDatas = new ArrayList<>();
+			List<List<Object>> album_recordRowDatas = new ArrayList<>();
 			for (int i = 0; i < albumList.size(); i++) {
+				List<Object> album_baseRowData = new ArrayList<>();
+				List<Object> album_recordRowData = new ArrayList<>();
 				Album album = albumList.get(i);
-				album_baseStatement.setString(1, album.getId());
-				album_baseStatement.setString(2, album.getName());
-				album_baseStatement.setString(3, album.getIcon());
-				album_baseStatement.setString(4, album.getRemark());
-				album_baseStatement.setString(5, album.getSingerName());
-				album_baseStatement.setDate(6, new Date(album.getCreateTime().getTime()));
-				album_baseStatement.setString(7, album.getCreateCompany());
-				album_baseStatement.setString(8, album.getIntroduction());
-				album_baseStatement.setInt(9, album.getSongNum());
-				album_baseStatement.setString(10, album.getSingerId());
-				album_baseStatement.setString(11, album.getTagId());
-				album_baseStatement.setBoolean(12, album.getVisible());
-				album_baseStatement.addBatch();
+				album_baseRowData.add(album.getId());
+				album_baseRowData.add(album.getName());
+				album_baseRowData.add(album.getIcon());
+				album_baseRowData.add(album.getRemark());
+				album_baseRowData.add(album.getCreateTime());
+				album_baseRowData.add(album.getCreateCompany());
+				album_baseRowData.add(album.getIntroduction());
+				album_baseRowData.add(album.getSongNum());
+				album_baseRowData.add(album.getSingerId());
+				album_baseRowData.add(album.getTagId());
+				album_baseRowData.add(album.getVisible());
 
-				album_recordStatement.setString(1, album.getId());
-				album_recordStatement.setInt(2, album.getShareNum());
-				album_recordStatement.setInt(3, album.getCommentNum());
-				album_recordStatement.setInt(4, album.getPlayNum());
-				album_recordStatement.addBatch();
+				album_recordRowData.add(album.getId());
+				album_recordRowData.add(album.getShareNum());
+				album_recordRowData.add(album.getCommentNum());
+				album_recordRowData.add(album.getPlayNum());
 
-				if ((i + 1) % batchSize == 0) {
-					album_baseStatement.executeBatch();
-					album_recordStatement.executeBatch();
-				}
+				album_baseRowDatas.add(album_baseRowData);
+				album_recordRowDatas.add(album_recordRowData);
 			}
-			album_baseStatement.executeBatch();
-			album_recordStatement.executeBatch();
-			conn.commit();
+			BatchSqlUtils.excuteBatch(conn, album_baseSql, album_baseRowDatas, batchSize);
+			BatchSqlUtils.excuteBatch(conn, album_recordSql, album_recordRowDatas, batchSize);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
@@ -369,31 +274,13 @@ public class BatchSqlDaoImpl implements BatchSqlDao {
 
 	@Override
 	public Map<String, SecondClassify> selectSecondClassifyById(List<String> classifyIdList) {
-		String For1 = "SELECT sc.id, sc.name FROM classify_second sc WHERE sc.id = ?";
-		String For3 = "SELECT sc.id, sc.name FROM classify_second sc WHERE sc.id IN(?,?,?)";
-		String For10 = "SELECT sc.id, sc.name FROM classify_second sc WHERE sc.id IN(?,?,?,?,?,?,?,?,?,?)";
-		int num = classifyIdList.size();
-		int begin = 0;
-		List<ResultSet> resultSetlist = new ArrayList<>();
+		String sql = "SELECT sc.id, sc.name FROM classify_second sc WHERE sc.id = ?";
 		try (Connection conn = dataSource.getConnection();) {
-			while (num > 0) {
-				if (num % 10 == 0) {
-					resultSetlist.add(queryForList(conn, begin, 10, For10, classifyIdList));
-					begin += 10;
-					num -= 10;
-				} else if (num % 3 == 0) {
-					resultSetlist.add(queryForList(conn, begin, 3, For3, classifyIdList));
-					begin += 3;
-					num -= 3;
-				} else {
-					resultSetlist.add(queryForList(conn, begin, 1, For1, classifyIdList));
-					begin += 1;
-					num -= 1;
-				}
-			}
+			List<ResultSet> resultSets = BatchSqlUtils.excuteBatchForSelect(conn, sql, classifyIdList,
+					batchSize_select);
 
 			Map<String, SecondClassify> result = new HashMap<>();
-			for (ResultSet resultSet : resultSetlist) {
+			for (ResultSet resultSet : resultSets) {
 				while (resultSet.next()) {
 					result.put(resultSet.getString(1),
 							new SecondClassify(resultSet.getString(1), resultSet.getString(2)));
@@ -407,8 +294,51 @@ public class BatchSqlDaoImpl implements BatchSqlDao {
 
 	@Override
 	public void insertSongMenu_SongMenuTagGL(List<SongMenu_SongMenuTagGL> songMenu_SongMenuTagGLList) {
-		// TODO Auto-generated method stub
+		try (Connection conn = dataSource.getConnection()) {
+			List<List<Object>> rowDatas = new ArrayList<>();
+			for (SongMenu_SongMenuTagGL gl : songMenu_SongMenuTagGLList) {
+				List<Object> rowData = new ArrayList<>();
+				rowData.add(gl.getSongMenuId());
+				rowData.add(gl.getSongMenuTagId());
 
+				rowDatas.add(rowData);
+			}
+			BatchSqlUtils.excuteBatch(conn, "INSERT INTO smi_gl_rsms VALUES(?,?)", rowDatas, batchSize);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	@Override
+	public Map<String, SongMenuSecondTag> selectSecondSongMenuTagById(List<String> tagIdList) {
+		String sql = "SELECT tss.id, tss.name FROM tag_songmenu_second tss WHERE tss.id = ?";
+		try (Connection conn = dataSource.getConnection();) {
+			List<ResultSet> resultSets = BatchSqlUtils.excuteBatchForSelect(conn, sql, tagIdList,
+					batchSize_select);
+
+			Map<String, SongMenuSecondTag> result = new HashMap<>();
+			for (ResultSet resultSet : resultSets) {
+				while (resultSet.next()) {
+					result.put(resultSet.getString(1),
+							new SongMenuSecondTag(resultSet.getString(1), resultSet.getString(2)));
+				}
+			}
+			return result;
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	@Override
+	public void deleteSongMenu_SongMenuTagGLBySongMenuId(String id) {
+		String sql = "DELETE FROM smi_gl_rsms WHERE songMenuId = ?";
+		try (Connection conn = dataSource.getConnection();) {
+			PreparedStatement statement = conn.prepareStatement(sql);
+			statement.setString(1, id);
+			statement.execute();
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 }
