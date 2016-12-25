@@ -10,90 +10,8 @@
 <link rel="stylesheet" type="text/css" href="css/reset.css">
 <link rel="stylesheet" type="text/css" href="css/common.css">
 <link rel="icon" href="image/web.jpg">
-<title></title>
+<title>主页</title>
 </head>
-<script type="text/javascript" src="js/jquery-1.12.1.js"></script>
-<script type="text/javascript" src="js/router.js"></script>
-<script type="text/javascript">
-	window.router.start({
-		view : '#body',
-		routerMap : {
-			'index' : {
-				templateUrl : 'html/index',
-				controller : 'js/index.js'
-			},
-			'songMenu' : {
-				templateUrl : 'html/songMenu-detail',
-				controller : 'js/songMenu-detail.js'
-			},
-			'album' : {
-				templateUrl : 'html/album-detail',
-				controller : 'js/album-detail.js'
-			},
-			'albums' : {
-				templateUrl : 'html/album-total',
-				controller : 'js/album-total.js'
-			},
-			'home' : {
-				templateUrl : 'html/homePage',
-				controller : 'js/homePage.js'
-			},
-			'myMessage' : {
-				templateUrl : 'html/myMessage',
-				controller : 'js/myMessage.js'
-			},
-			'myMusic' : {
-				templateUrl : 'html/myMusic',
-				controller : 'js/myMusic.js'
-			},
-			'personal' : {
-				templateUrl : 'html/personalPage',
-				controller : 'js/personalPage.js'
-			},
-			'song' : {
-				templateUrl : 'html/song-detail',
-				controller : 'js/song.js'
-			},
-			'singer' : {
-				templateUrl : 'html/singer-detail',
-				controller : 'js/singer-detail.js'
-			},
-			'singers' : {
-				templateUrl : 'html/singer-total',
-				controller : 'js/singer-total.js'
-			},
-			'songList' : {
-				templateUrl : 'html/songList',
-				controller : 'js/songList.js'
-			},
-			'songMenus' : {
-				templateUrl : 'html/songMenu-total',
-				controller : 'js/songMenu-total.js'
-			}
-		},
-		defaults : 'index'
-	})
-
-	function jump(ele) {
-		if ($(ele).hasClass(".selected")) {
-			return false;
-		}
-		var url = $(ele).attr("data-url");
-		$(".head .subnav li").removeClass("selected");
-		if (url) {
-			$(".head .subnav li[data-url=" + url + "]").addClass("selected");
-		}
-
-		var href = $(ele).attr("data-href");
-
-		if (!href) {
-			href = url;
-		}
-		if (href) {
-			router.startRouter(href);
-		}
-	}
-</script>
 <body>
 	<div id="hiddenDiv" class="hiddenDiv" style="visibility: hidden; -webkit-user-select: none;">
 		<div id="loginDiv" class="loginDiv" style="display: none;">
@@ -196,7 +114,7 @@
 			<div class="login_material" style="text-align: center;">
 				<p></p>
 				<span class="login" style="margin: 20px 0 0 20px !important; display: inline-block; background: #e60000; border-color: #ff5353 !important;">确定</span>
-				<span class="regist" style="width: 30%; display: inline-block;">取消</span> 
+				<span class="regist" style="width: 30%; display: inline-block;">取消</span>
 			</div>
 		</div>
 		<div id="collectionDiv" class="collectionDiv loginDiv" style="display: none">
@@ -208,9 +126,9 @@
 					<i class="icomoon"></i> <span class="new">新歌单</span>
 				</p>
 				<p class="menu prototype">
-					<img src=""> 
-					<span class="menu_right"> 
-						<span class="name"></span> 
+					<img src="">
+					<span class="menu_right">
+						<span class="name"></span>
 						<span class="num"></span>
 					</span>
 				</p>
@@ -339,13 +257,13 @@
 					</li>
 					<li class="song prototype"><a href="javascript:void(0);" class="songName"></a>
 						<p class="song_hidden">
-							<i class="collection icomoon" onclick="hiddenDiv.collection();" title="收藏"></i> 
-							<i class="share icomoon" title="分享"></i> 
-							<i class="download icomoon" title="下载"></i> 
+							<i class="collection icomoon" onclick="hiddenDiv.collection();" title="收藏"></i>
+							<i class="share icomoon" title="分享"></i>
+							<i class="download icomoon" title="下载"></i>
 							<i class="delete icomoon" title="删除"></i>
-						</p> 
-						<a href="javascript:void(0);" onclick="jump(this);" class="songer"></a> 
-						<span class="time"></span> 
+						</p>
+						<a href="javascript:void(0);" onclick="jump(this);" class="songer"></a>
+						<span class="time"></span>
 						<i class="icomoon from" onclick="jump(this);" style="display: none;"></i>
 					</li>
 				</ul>
@@ -384,18 +302,23 @@
 	<div class="head">
 		<div class="head_top">
 			<h1>
-				<a href="index">我的音乐网</a>
+				<a href="/music">我的音乐网</a>
 			</h1>
 			<ul class="nav">
-				<li id="findMusic" data-href="index" onclick="jump(this);" class="selected">发现音乐<i></i></li>
-				<li id="myMusic" onclick="MMR.get('login').show();">我的音乐</li>
+				<li id="findMusic" class="selected">
+					<a href="#index">发现音乐</a>
+					<i></i>
+				</li>
+				<li id="myMusic" onclick="MMR.get('login').show();">
+					<a href="">我的音乐</a>
+				</li>
 				<li onclick="alert('暂无')">朋友</li>
 				<li onclick="alert('暂无')">下载客户端</li>
 			</ul>
 			<div class="search">
 				<i></i> <input id="search_global" class="search_input" type="text" name="song" placeholder="单曲/歌手/专辑/歌单/MV/用户">
 			</div>
-			<span data-url="myMessage" onclick="jump(this);" class="msg"></span>
+			<span class="msg"></span>
 			<div id="userDiv" class="user">
 				<span class="username">登录</span>
 				<ul class="user_nav nav_login" style="display: none;">
@@ -403,7 +326,7 @@
 					<li>
 						<ul>
 							<li data-href="home" onclick="jump(this);">我的主页</li>
-							<!-- 
+							<!--
 							<li onclick="alert('暂无');">我的等级</li>
 							<li onclick="alert('暂无');">付费音乐包</li>
 							<li onclick="alert('暂无');">积分商城</li>
@@ -434,12 +357,22 @@
 		</div>
 		<div class="head_bottom">
 			<ul class="subnav">
-				<li class="selected" data-url="index" onclick="jump(this);">推荐</li>
-				<li data-url="songList" data-href="" onclick="jump(this);">排行榜</li>
-				<li data-url="songMenus" onclick="jump(this);">歌单</li>
+				<li class="selected">
+					<a href="#index">推荐</a>
+				</li>
+				<li>
+					<a href="#">排行榜</a>
+				</li>
+				<li>
+					<a href="#songMenus">歌单</a>
+				</li>
 				<li onclick="alert('暂无')">主播电台</li>
-				<li data-url="singers" data-href="singers?classifyId=hot" onclick="jump(this);">歌手</li>
-				<li data-url="albums" onclick="jump(this);">新碟上架</li>
+				<li>
+					<a href="#singers?classifyId=hot">歌手</a>
+				</li>
+				<li>
+					<a href="#albums">新碟上架</a>
+				</li>
 			</ul>
 		</div>
 	</div>
@@ -447,12 +380,137 @@
 	<div class="foot">
 		<p>&copy;2016</p>
 	</div>
-	<div id="back" title="返回上一页" style="display: block" onclick="router.back();"><</div>
-	<div id="top" title="返回顶部">Top</div>
+	<div id="loading"></div>
 </body>
-<script type="text/javascript" src="js/common.js"></script>
+<script type="text/javascript" src="js/jquery-1.12.1.js"></script>
+<script type="text/javascript" src="js/template.js"></script>
 <script type="text/javascript" src="js/md5.js"></script>
+<script type="text/javascript" src="js/router.js"></script>
+<script type="text/javascript" src="js/common.js"></script>
+<script type="text/javascript" src="js/utils.js"></script>
 <script type="text/javascript">
+	Template.helper("lengthLimit",function(data, length){
+		return limitStringLength(data,length);
+	})
+	Template.helper("dateFormatter",function(data, reg){
+		return new DateFormatter(reg).format(data);
+	})
+	window.Router.start({
+		view : {
+			'main' : $("#body")[0],
+			'loading' : $("#loading")[0],
+			'title' : $('title')[0],
+			'index' : '#index'
+		},
+		routerMap : {
+			'#index' : {
+				title : '主页',
+				frame : 'stage/index',
+				controller : 'js/index.js',
+				csses : ['css/index.css']
+			},
+			'#songMenu' : {
+				title : '歌单详情页',
+				frame : 'stage/songMenu-detail',
+				controller : 'js/songMenu-detail.js',
+				csses : ['css/detail.css']
+			},
+			'#album' : {
+				title : '专辑详细页',
+				frame : 'stage/album-detail',
+				controller : 'js/album-detail.js',
+				csses : ['css/detail.css']
+			},
+			'#albums' : {
+				title : '专辑总页',
+				frame : 'stage/album-total',
+				controller : 'js/album-total.js',
+				csses : ['css/total.css']
+			},
+			'#home' : {
+				title : '个人首页',
+				frame : 'stage/homePage',
+				controller : 'js/homePage.js',
+				csses : ['css/total.css']
+			},
+			'#myMessage' : {
+				title : '我的消息',
+				frame : 'stage/myMessage',
+				controller : 'js/myMessage.js'
+			},
+			'#myMusic' : {
+				title : '我的音乐',
+				frame : 'stage/myMusic',
+				controller : 'js/myMusic.js',
+				csses : ['css/detail.css', 'css/jquery.Jcrop.css']
+			},
+			'#personal' : {
+				title : '个人设置',
+				frame : 'stage/personalPage',
+				controller : 'js/personalPage.js'
+			},
+			'#song' : {
+				title : '歌曲详情页',
+				frame : 'stage/song-detail',
+				controller : 'js/song.js',
+				csses : ['css/detail.css']
+			},
+			'#singer' : {
+				title : '歌手详情页',
+				frame : 'stage/singer-detail',
+				controller : 'js/singer-detail.js',
+				csses : ['css/detail.css']
+			},
+			'#singers' : {
+				title : '歌手总页',
+				frame : 'stage/singer-total',
+				controller : 'js/singer-total.js',
+				csses : ['css/total.css']
+			},
+			'#songList' : {
+				title : '榜单页',
+				frame : 'stage/songList',
+				controller : 'js/songList.js',
+				csses : ['css/detail.css']
+			},
+			'#songMenus' : {
+				title : '歌单总页',
+				frame : 'stage/songMenu-total',
+				controller : 'js/songMenu-total.js',
+				csses : ['css/total.css']
+			}
+		}
+	})
+
+	function process(data){
+		if(data.code != 200){
+			MMR.get("simpleMsg").showError(data.error.value);
+			throw "数据处理错误";
+		}
+	}
+
+	function jump(ele) {
+		if ($(ele).hasClass(".selected")) {
+			return false;
+		}
+		var url = $(ele).attr("data-url");
+		$(".head .subnav li").removeClass("selected");
+		if (url) {
+			$(".head .subnav li[data-url=" + url + "]").addClass("selected");
+		}
+
+		var href = $(ele).attr("data-href");
+
+		if (!href) {
+			href = url;
+		}
+		if (href) {
+			router.startRouter(href);
+		}
+	}
+
+	window.FUNCTION = {};
+
 	$(".head_top .nav").children("li[id]").click(function() {
 		$(this).addClass("selected") //
 		.siblings().removeClass("selected");

@@ -8,13 +8,15 @@ import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Base64;
+import java.util.Base64.Decoder;
 import java.util.Date;
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileItemHeaders;
 import org.apache.commons.io.IOUtils;
 
-import sun.misc.BASE64Decoder;
+//import sun.misc.BASE64Decoder;
 
 public class Base64FileItem implements FileItem {
 
@@ -143,7 +145,8 @@ public class Base64FileItem implements FileItem {
 	private byte[] data = null;
 
 	private void parseBase64() {
-		BASE64Decoder decoder = new BASE64Decoder();
+		//BASE64Decoder decoder = new BASE64Decoder();
+		Decoder decoder = Base64.getDecoder();
 		try (InputStream in = fileItem.getInputStream()) {
 			String base64 = IOUtils.toString(in);
 			String[] strs = base64.split(";base64,");
@@ -152,7 +155,8 @@ public class Base64FileItem implements FileItem {
 			//
 			type = type.split("/")[1];
 
-			data = decoder.decodeBuffer(strs[1]);
+			//data = decoder.decodeBuffer(strs[1]);
+			data = decoder.decode(strs[1]);
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}

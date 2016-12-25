@@ -9,7 +9,7 @@
 	font-style: normal;
 }
 body{
-	font-family: "Arial, Helvetica, sans-serif";
+	font-family: Arial, Helvetica, sans-serif;
 }
 .icomoon {
 	font-family: "icomoon";
@@ -495,7 +495,7 @@ body .foot {
 }
 
 .loginByPhone {
-	
+
 }
 
 .loginByPhone .login_material {
@@ -1527,7 +1527,7 @@ body .foot {
 }
 
 .addMenuDiv .login_material {
-	
+
 }
 
 .addMenuDiv .login_material .material {
@@ -1705,7 +1705,7 @@ body .foot {
     z-index: 10;
 }
 #tagsDiv .login_material ul{
-	
+
 }
 #tagsDiv .login_material li{
 	padding: 0 0 20px 0;
@@ -1744,7 +1744,7 @@ display: inline-block;
 	background: #fff;
 }
 #tagsDiv .button .content{
-	
+
 }
 #tagsDiv .button .flag{
     position: absolute;

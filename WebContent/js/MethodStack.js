@@ -113,7 +113,7 @@
 						MMR.get("simpleMsg").showError(data.error.value);
 						return;
 					}
-					
+
 					loadPageBean_comment(data.data);
 				}
 				if (page == 1) {
@@ -132,7 +132,7 @@
 			MMR.get("simpleMsg").showError(data.error.value);
 			return;
 		}
-		
+
 		var comments = data.data //
 		, hotList = comments.hotList;
 		var $commentListEle = $("#commentList");
@@ -158,7 +158,7 @@
 			MMR.get("simpleMsg").showError(data.error.value);
 			return;
 		}
-		
+
 		var songList = data.data //
 		, $songListEle = $("#songList");
 		$songListEle.children().not(".prototype").remove();
@@ -281,7 +281,7 @@
 		$newComment.on("focusout", function() {
 			$newComment.off("keydown");
 		});
-		
+
 		AJAX({
 			url : "json/emoji",
 			success : function(emojis) {

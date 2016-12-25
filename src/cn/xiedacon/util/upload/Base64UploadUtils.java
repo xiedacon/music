@@ -20,55 +20,56 @@ import org.apache.commons.io.FileCleaningTracker;
 
 public class Base64UploadUtils {
 
-	private static FileItemFactory factory = null;
-	private static Properties properties = null;
+    private static FileItemFactory factory = null;
+    private static Properties properties = null;
 
-	@SuppressWarnings("deprecation")
-	public static Map<String, Base64FileItem> parseRequest(HttpServletRequest req) {
-		try {
-			List<FileItem> fileList = getFileUpload(req).parseRequest(req);
-			Map<String, Base64FileItem> map = new HashMap<>();
-			for (FileItem i : fileList) {
-				map.put(i.getFieldName(), new Base64FileItem(i));
-			}
-			return map;
-		} catch (FileUploadException e) {
-			throw new RuntimeException(e);
-		}
+    @SuppressWarnings("deprecation")
+    public static Map<String, Base64FileItem> parseRequest(HttpServletRequest req) {
+	try {
+	    List<FileItem> fileList = getFileUpload(req).parseRequest(req);
+	    Map<String, Base64FileItem> map = new HashMap<>();
+	    for (FileItem i : fileList) {
+		map.put(i.getFieldName(), new Base64FileItem(i));
+	    }
+	    return map;
+	} catch (FileUploadException e) {
+	    throw new RuntimeException(e);
 	}
+    }
 
-	private static FileUpload getFileUpload(HttpServletRequest req) {
-		FileUpload upload = new FileUpload(getFactory(req));
-		upload.setFileSizeMax(Integer.valueOf(properties.getProperty("fileSizeMax")));
-		upload.setHeaderEncoding(properties.getProperty("encoding"));
-		upload.setSizeMax(Integer.valueOf(properties.getProperty("sizeMax")));
-		return upload;
-	}
+    private static FileUpload getFileUpload(HttpServletRequest req) {
+	FileUpload upload = new FileUpload(getFactory(req));
+	upload.setFileSizeMax(Integer.valueOf(properties.getProperty("fileSizeMax")));
+	upload.setHeaderEncoding(properties.getProperty("encoding"));
+	upload.setSizeMax(Integer.valueOf(properties.getProperty("sizeMax")));
+	return upload;
+    }
 
-	private static FileItemFactory getFactory(HttpServletRequest req) {
+    private static FileItemFactory getFactory(HttpServletRequest req) {
+	if (factory == null) {
+	    synchronized (Base64UploadUtils.class) {
 		if (factory == null) {
-			synchronized (Base64UploadUtils.class) {
-				if (factory == null) {
-					properties = new Properties();
-					try {
-						properties.load(new FileInputStream(getRealPath(req, "WEB-INF/classes/upload.properties")));
-					} catch (IOException e) {
-						throw new RuntimeException(e);
-					}
-					DiskFileItemFactory factory = new DiskFileItemFactory();
-					factory.setSizeThreshold(Integer.valueOf(properties.getProperty("sizeThreshold")));
-					factory.setRepository(new File(getRealPath(req, properties.getProperty("repository"))));
-					//临时文件清除器
-					FileCleaningTracker fileCleaningTracker = FileCleanerCleanup.getFileCleaningTracker(req.getServletContext());
-					factory.setFileCleaningTracker(fileCleaningTracker);
-					Base64UploadUtils.factory = factory;
-				}
-			}
+		    properties = new Properties();
+		    try {
+			properties.load(new FileInputStream(getRealPath(req, "WEB-INF/classes/upload.properties")));
+		    } catch (IOException e) {
+			throw new RuntimeException(e);
+		    }
+		    DiskFileItemFactory factory = new DiskFileItemFactory();
+		    factory.setSizeThreshold(Integer.valueOf(properties.getProperty("sizeThreshold")));
+		    factory.setRepository(new File(getRealPath(req, properties.getProperty("repository"))));
+		    // 临时文件清除器
+		    FileCleaningTracker fileCleaningTracker = FileCleanerCleanup
+			    .getFileCleaningTracker(req.getServletContext());
+		    factory.setFileCleaningTracker(fileCleaningTracker);
+		    Base64UploadUtils.factory = factory;
 		}
-		return factory;
+	    }
 	}
+	return factory;
+    }
 
-	private static String getRealPath(HttpServletRequest req, String url) {
-		return req.getServletContext().getRealPath(url);
-	}
+    private static String getRealPath(HttpServletRequest req, String url) {
+	return req.getServletContext().getRealPath(url);
+    }
 }

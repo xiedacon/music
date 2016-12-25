@@ -18,7 +18,9 @@
 						http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd">
 
 	<!-- 指定扫描范围 -->
-	<context:component-scan base-package="cn.xiedacon.*"></context:component-scan>
+	<context:component-scan base-package="cn.xiedacon.*.service"></context:component-scan>
+	<context:component-scan base-package="cn.xiedacon.*.dao"></context:component-scan>
+	<context:component-scan base-package="cn.xiedacon.factory"></context:component-scan>
 
 	<!-- 导入外部文件 -->
 	<context:property-placeholder location="classpath:jdbc.properties" />

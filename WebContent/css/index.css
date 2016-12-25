@@ -1,6 +1,7 @@
 .body .images {
 	position: relative;
 	padding: 10px 0;
+  font-family: initial;
 }
 
 .images .after {
@@ -504,26 +505,47 @@ h2 i i {
 }
 
 .lists .bottom .even {
-	
+
 }
 
 .lists .bottom li li .num {
-	font-size: 1em;
+	font-size: 14px;
 	font-weight: bolder;
 	color: #e60000;
 	line-height: 30px;
-	float: left;
-	padding: 0 6% 0 10%;
+	padding: 0 0% 0 10%;
 	margin: -1% 0 0 0;
 	cursor: default;
 	visibility: visible;
+	display: inline-block;
+	width: 9%;
 }
 
 .lists .bottom li li .name {
-    line-height: 30px;
-    font-size: 0.8em;
-    float: left;
-    cursor: pointer;
+	line-height: 30px;
+  cursor: pointer;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  word-wrap: normal;
+  font-size: 12px;
+  vertical-align: bottom;
+  display: inline-block;
+}
+
+.lists .bottom li li:hover .name {
+	width: 100px;
+}
+
+.lists .bottom li li:hover .hidden {
+	display: inline;
+}
+
+.lists .bottom li li .hidden {
+	display: none;
+	float: right;
+	font-size: 18px;
+	width: 80px;
 }
 
 .lists .bottom li li .name:hover {
@@ -533,12 +555,12 @@ h2 i i {
 .lists .bottom li li i {
 	font-family: "icomoon";
 	line-height: 30px;
-	float: right;
 	opacity: 0.7;
 	padding: 0 5% 0 0;
 	font-size: 1em;
 	cursor: pointer;
 	visibility: hidden;
+	display: inline-block;
 }
 
 .lists .bottom li li i:hover {
@@ -772,7 +794,7 @@ h2 i i {
     float: left;
     height: 40px;
     font-size: 0.8em;
-    
+
     font-family: Arial, Helvetica, sans-serif;
     width: 40px;
     padding: 0 0 0 10px;

@@ -1,12 +1,3 @@
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="utf-8">
-<link rel="stylesheet" type="text/css" href="css/index.css">
-<title>主页</title>
-</head>
-<body>
-	<div class="body">
 		<div class="images">
 			<i id="image_before" class="before">&lt;</i>
 			<ul class="" style="overflow: hidden;">
@@ -33,22 +24,11 @@
 							<i><i></i></i><a href="#">热门推荐</a>
 						</h2>
 						<ul id="songMenuSecondTagList">
-							<li id='' data-href='' data-url='' class="prototype" onclick="jump(this)"></li>
 						</ul>
-						<span class="more" data-url="songMenus" data-href="songMenus?secondTagName=全部" onclick="jump(this);">更多<i class="icomoon"> </i></span>
+						<a class="more" href="#songMenus?secondTagName=全部">更多<i class="icomoon"> </i></a>
 					</div>
 					<div class="bottom" style="min-height: 440px;">
 						<ul id="songMenuList">
-							<li class="song prototype">
-								<div id="" class="image">
-									<a href="javascript:void(0);" data-url="" data-href="" onclick="jump(this);"> <img alt="name" src="" title="name">
-									</a>
-									<div class="image_bottom">
-										<i></i> <span class="num"></span> 
-										<i class="playthis" title="播放"></i>
-									</div>
-								</div> <a href="javascript:void(0);" class="name" href="" data-url="" data-href="" onclick="jump(this);" title="name"></a>
-							</li>
 						</ul>
 					</div>
 				</div>
@@ -57,23 +37,13 @@
 						<h2>
 							<i><i></i></i><a href="#">新碟上架</a>
 						</h2>
-						<span class="more" data-url="albums" data-href="albums" onclick="jump(this);">更多<i class="icomoon"> </i></span>
+						<a class="more" href="#albums">更多<i class="icomoon"> </i></a>
 					</div>
 					<div class="bottom">
 						<ul id="albumDiv" class="albumDiv">
 							<i class="previous">&lt;</i>
 							<div class="album_hidden">
 								<ul id="albumList1">
-									<li class="album prototype">
-										<div class="image" title="name">
-											<a href="javascript:void(0);" data-href="" data-url="" onclick="jump(this);"><img src=""></a>
-											<div class="image_left">
-												<span class="circle"></span> <span class="rectangle"></span> <span class="triangle"></span>
-											</div>
-											<i class="play" title="播放"></i>
-										</div> <a title="name" class="name" href="javascript:void(0);" data-href="" data-url="" onclick="jump(this);"></a> <a title="singerName"
-										class="songer" href="javascript:void(0);" data-href="" data-url="" onclick="jump(this);"></a>
-									</li>
 								</ul>
 								<ul id="albumList2" style="left: 100%">
 								</ul>
@@ -87,28 +57,10 @@
 						<h2>
 							<i><i></i></i><a href="#">榜单</a>
 						</h2>
-						<span class="more" data-url="songList" onclick="jump(this);">更多<i class="icomoon"> </i></span>
+						<a class="more" href="">更多<i class="icomoon"> </i></a>
 					</div>
 					<div class="bottom">
 						<ul id="songLists">
-							<li class="prototype">
-								<ul>
-									<li><img data-url="songList" data-href="" onclick="jump(this);" title="name" src="">
-										<div class="right">
-											<h3 title="name" data-url="songList" data-href="" onclick="jump(this);"></h3>
-											<i class="play" title="播放" style="-webkit-user-select: none;"></i> 
-											<!-- <i class="collection" title="收藏" style="-webkit-user-select: none;"></i> -->
-										</div></li>
-									<li class="prototype">
-										<i class="num" style="-webkit-user-select: none;"></i> 
-										<a title="name" class="name" href="javascript:void(0);" data-url="" data-href="" onclick="jump(this);"></a> 
-										<span class="hidden" style="display: none; -webkit-user-select: none;"> 
-										<i class="collection" title="收藏"></i> 
-										<i class="add" title="添加到播放列表"></i> 
-										<i class="play" title="播放"></i>
-									</span></li>
-								</ul>
-							</li>
 						</ul>
 					</div>
 				</div>
@@ -124,8 +76,8 @@
 							<img src="">
 						</a>
 						<div class="image_left">
-							<a href="javascript:void(0);" onclick="jump(this);" class="name">阿斯克</a><br> 
-							<a class="level" onclick="alert('暂无')">Lv.1</a><br> 
+							<a href="javascript:void(0);" onclick="jump(this);" class="name">阿斯克</a><br>
+							<a class="level" onclick="alert('暂无')">Lv.1</a><br>
 							<span class="button">签 到</span>
 						</div>
 						<ul class="userDiv_bottom">
@@ -140,10 +92,6 @@
 						<span>入驻歌手</span> <span class="all" data-url="singers" data-href="singers?classifyId=all" onclick="jump(this);">查看全部 ></span>
 					</p>
 					<ul id="userList" class="singers">
-						<li class="prototype" data-href="" data-url="" onclick="jump(this);"><img src="">
-							<p>
-								<span class="name"></span> <span class="desc"></span>
-							</p></li>
 					</ul>
 					<div class="applySinger">
 						<span class="button" onclick="alert('暂不支持');">申请成为音乐人</span>
@@ -151,9 +99,3 @@
 				</div>
 			</div>
 		</div>
-	</div>
-	<div class="foot">
-		<p>@2016</p>
-	</div>
-</body>
-</html>

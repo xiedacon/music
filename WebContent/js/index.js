@@ -1,227 +1,152 @@
 (function() {
-	AJAX({
+	$.ajax({
 		url : "json/index",
-		success : index
+		type : "GET",
+		dataType : "json"
+	}).done(function(data){
+		loadSongMenuList(data);
+		loadSongMenuSecondTagList(data);
+		loadAlbums(data);
+		loadUsers(data);
+		loadSongLists(data);
 	});
 
-	function index(data) {
-		loadSongMenus(data.songMenus);
-		loadSongMenuSecondTags(data.songMenuTags);
-		loadAlbums(data.albums);
-		loadUsers(data.users);
-		loadSongLists(data.songLists);
-	}
-	function loadSongMenus(data) {
-		var $songMenuListEle = $("#songMenuList");
-		var $prototype = $songMenuListEle.find(".prototype").clone().removeClass("prototype");
-		var $songMenuEle, songMenu;
+	function loadSongMenuSecondTagList(data){
+		var template = '{{each songMenuTags as tag}}'
+		+                '<li>'
+		+	                 '<a href="#songMenus?secondTagId={{tag.id}}">{{tag.name}}</a>'
+		+                '</li>'
+		+              '{{/each}}';
 
-		for (var i = 0; i < data.length; i++) {
-			$songMenuEle = $prototype.clone();
-			songMenu = data[i];
-			$songMenuEle.find("img").attr({
-				"alt" : songMenu.name,
-				"src" : songMenu.icon,
-				"title" : songMenu.name
-			});
-			$songMenuEle.find("img").parent().attr({
-				"data-href" : "songMenu?songMenuId=" + songMenu.id
-			});
-			$songMenuEle.find(".num").text(songMenu.playNum);
-			$songMenuEle.find(".playthis").attr({
-				"onclick" : "MMR.get('music').batchAddThenPlay('songMenuId','" + songMenu.id + "')"
-			});
-			$songMenuEle.find(".name").attr({
-				"title" : songMenu.name,
-				"data-href" : "songMenu?songMenuId=" + songMenu.id
-			}).text(limitStringLength(songMenu.name, 20));
-
-			$songMenuEle.attr("id", songMenu.id);
-
-			$songMenuEle.appendTo($songMenuListEle);
-		}
+		document.querySelector("ul#songMenuSecondTagList").innerHTML = Template.compile(template)(data);
 	}
 
-	function loadSongMenuSecondTags(data) {
-		var $songMenuSecondTagListEle = $("#songMenuSecondTagList");
-		var $prototype = $songMenuSecondTagListEle.find(".prototype").clone().removeClass("prototype");
-		var songMenuSecondTag, $songMenuSecondTagEle;
-		for (var i = 0; i < data.length; i++) {
-			songMenuSecondTag = data[i];
-			$songMenuSecondTagEle = $prototype.clone().attr({
-				"id" : songMenuSecondTag.id,
-				"data-href" : "songMenus?secondTagId=" + songMenuSecondTag.id + "&secondTagName=" + songMenuSecondTag.name,
-				"data-url" : "songMenus",
-			}).text(songMenuSecondTag.name);
+	function loadSongMenuList(data){
+		var template = '{{each songMenus as songMenu}}'
+		+                '<li id="{{songMenu.id}}" class="song">'
+		+               	 '<div class="image">'
+		+		                 '<a href="#songMenu?id={{songMenu.id}}">'
+		+                      '<img alt="{{songMenu.name}}" src="{{songMenu.icon}}" title="{{songMenu.name}}">'
+		+                    '</a>'
+		+                    '<div class="image_bottom">'
+		+                      '<i></i> <span class="num">{{songMenu.playNum}}</span>'
+		+                      '<i class="playthis" title="播放" onclick="MMR.get(\'music\').batchAddThenPlay(\'songMenuId\',\'{{songMenu.id}}\')"></i>'
+		+                    '</div>'
+		+                  '</div>'
+		+                '<a href="#songMenu?id={{songMenu.id}}" class="name" title="{{songMenu.name}}">{{songMenu.name | lengthLimit:\'20\'}}</a>'
+		+              '</li>'
+		+            '{{/each}}';
 
-			$songMenuSecondTagListEle.append($songMenuSecondTagEle);
-		}
+		document.querySelector("ul#songMenuList").innerHTML = Template.compile(template)(data);
 	}
 
 	function loadAlbums(data) {
-		var $albumListEle = $("#albumList1");
-		var $prototype = $albumListEle.find(".prototype").clone().removeClass("prototype");
-		var album, $albumEle;
+		var source1 = {
+			albums : []
+		}, //
+		source2 = {
+			albums : []
+		};
 
-		for (var i = 0; i < data.length; i++) {
-			album = data[i];
-			$albumEle = $prototype.clone();
-			$albumEle.find("img").attr({
-				"src" : album.icon,
-				"title" : album.name,
-				"alt" : album.name
-			});
-			$albumEle.find("img").parent().attr({
-				"data-href" : "album?albumId=" + album.id
-			});
-			$albumEle.find(".play").attr({
-				"onclick" : "MMR.get('music').batchAddThenPlay('albumId','" + album.id + "')"
-			});
-
-			$albumEle.find(".name").attr({
-				"title" : album.name,
-				"data-href" : "album?albumId=" + album.id
-			}).text(limitStringLength(album.name, 6));
-			$albumEle.find(".songer").attr({
-				"title" : album.singerName,
-				"data-href" : "singer?singerId=" + album.singerId
-			}).text(limitStringLength(album.singerName, 6));
-
-			if (i > 4) {
-				$albumListEle = $("#albumList2");
+		data.albums.forEach(function(album,index){
+			if(index > 4){
+				source2.albums.push(album);
+			}else{
+				source1.albums.push(album)
 			}
-			$albumListEle.append($albumEle);
-		}
+		})
+
+		var template = '{{each albums as album}}'
+		+              '<li class="album">'
+		+	               '<div class="image">'
+		+		               '<a href="#album?id={{album.id}}">'
+		+			               '<img src="{{album.icon}}" title="{{album.name}}" alt="{{album.name}}">'
+		+                  '</a>'
+		+		             '<div class="image_left">'
+		+			             '<span class="circle"></span> <span class="rectangle"></span> <span class="triangle"></span>'
+		+		             '</div>'
+		+		             '<i class="play" title="播放" onclick="MMR.get(\'music\').batchAddThenPlay(\'albumId\',\'{{album.id}}\')"></i>'
+		+	             '</div>'
+		+	             '<a title="{{album.name}}" class="name" href="#album?id={{album.id}}">{{album.name | lengthLimit:\'6\'}}</a>'
+		+		           '<a title="{{album.singerName}}"class="songer" href="#singer?id={{album.singerId}}">{{album.singerName | lengthLimit:\'6\'}}</a>'
+		+						 '</li>'
+		+            '{{/each}}';
+
+		document.querySelector("ul#albumList1").innerHTML = Template.compile(template)(source1);
+		document.querySelector("ul#albumList2").innerHTML = Template.compile(template)(source2);
+		albumDiv.init();
 	}
 
-	function loadUsers(data) {
-		var $userListEle = $("#userList");
-		var $prototype = $userListEle.find(".prototype").clone().removeClass("prototype");
-		var user, $userEle;
+	function loadUsers(data){
+		var template = `{{each users as user}}
+		<li>
+			<a href="#home?id={{user.id}}">
+				<img src="{{user.icon}}" title="{{user.name}}" alt="{{user.name}}">
+				<p>
+					<span class="name" title="{{user.name}}">{{user.name | lengthLimit:'9'}}</span>
+					<span class="desc" title="{{user.singerName}}">{{user.introduction | lengthLimit:'9'}}</span>
+				</p>
+			</a>
+		</li>
+		{{/each}}`;
 
-		for (var i = 0; i < data.length; i++) {
-			user = data[i];
-			$userEle = $prototype.clone();
-			$userEle.find("img").attr({
-				"src" : user.icon,
-				"alt" : user.name
-			});
-
-			$userEle.find(".name").attr({
-				"title" : user.name
-			}).text(limitStringLength(user.name, 9));
-			$userEle.find(".desc").attr({
-				"title" : user.singerName
-			}).text(limitStringLength(user.introduction, 9));
-
-			$userEle.attr({
-				"data-href" : "home?userId=" + user.id
-			})
-
-			$userListEle.append($userEle);
-		}
+		document.querySelector("ul#userList").innerHTML = Template.compile(template)(data);
 	}
 
 	function loadSongLists(data) {
-		var $songListsEle = $("#songLists");
-		var $prototype = $songListsEle.children(".prototype").clone().removeClass("prototype");
-		var songList, $songListEle, $head;
+		var template = `{{each songLists as songList}}
+		<li id="{{songList.id}}">
+			<ul>
 
-		$songListsEle.parents(".lists").find(".more").attr({
-			"data-href" : "songList?songListId=" + data[0].id
-		})
-		$(".head_bottom .subnav li:eq(1)").attr({
-			"data-href" : "songList?songListId=" + data[0].id
-		})
+			</ul>
+		</li>
+		{{/each}}`;
 
-		for (var i = 0; i < data.length; i++) {
-			songList = data[i];
-			$songListEle = $prototype.clone();
-			$head = $songListEle.find("li").eq(0);
-			$head.find("img").attr({
-				"src" : songList.icon,
-				"alt" : songList.name,
-				"title" : songList.name,
-				"data-href" : "songList?songListId=" + songList.id
-			});
-			$head.find("h3").attr({
-				"title" : songList.name,
-				"data-href" : "songList?songListId=" + songList.id
-			}).text(songList.name);
-			$head.find(".play").attr({
-				"onclick" : "MMR.get('music').batchAddThenPlay('songListId','" + songList.id + "')"
-			});
-			$head.find(".collection").attr({
-			// "onclick" : "hiddenDiv.playFromSongList('" + songList.id + "')"
-			});
+		var songListsEle = document.querySelector("ul#songLists");
+		songListsEle.innerHTML = Template.compile(template)(data);
+		var songListEles = songListsEle.querySelectorAll("ul");
+		document.querySelectorAll(".head_bottom .subnav li")[1].children[0].href = "#songList?songListId=" + data.songLists[0].id;
+		document.querySelector(".lists .more").href = "#songList?songListId=" + data.songLists[0].id;
 
-			loadSongs(songList, $songListEle.find("ul"), $prototype);
-
-			$songListEle.attr("id", songList.id);
-			$songListsEle.append($songListEle);
-		}
+		data.songLists.forEach(function(songList, index){
+			loadSongs(songList, songListEles[index]);
+		});
 	}
-	function loadSongs(songList, $songListEle, $prototype) {
-		var $songEle, song, $_prototype, flag;
-		AJAX({
-			url : "song/songListId_" + songList.id+"/10",
+	function loadSongs(songList, songListEle) {
+		var template = `<li>
+			<a href="#songList?id={{id}}">
+				<img title="{{name}}" src="{{icon}}" alt="{{name}}">
+			</a>
+			<div class="right">
+				<a href="#songList?id={{id}}">
+					<h3 title="{{name}}">{{name}}</h3>
+				</a>
+				<i class="play" title="播放" style="-webkit-user-select: none;" onclick="MMR.get('music').batchAddThenPlay('songListId','{{id}}')"></i>
+				<!-- <i class="collection" title="收藏" style="-webkit-user-select: none;"></i> -->
+			</div>
+		</li>
+		{{each songs as song index}}
+		<li id={{song.id}} class="{{if index%2==0}}odd{{else}}even{{/if}}">
+			<i class="num" style="-webkit-user-select: none;">{{song.rank}}</i>
+			<a title="{{song.name}}" class="name" href="#song?id={{song.id}}">{{song.name | lengthLimit:'13'}}</a>
+			<span class="hidden">
+				<i class="play" title="播放" onclick="MMR.get('music').addThenPlay('{{song.id}}');"></i>
+				<i class="add" title="添加到播放列表" onclick="MMR.get('music').add('{{song.id}}');"></i>
+				<i class="collection" title="收藏" onclick="MMR.get('collection').collect('{{song.id}}');"></i>
+			</span>
+		</li>
+		{{/each}}
+		<li>
+			<a class='all' href='#songList?id={{id}}'>查看全部></a>
+		</li>`;
+		$.ajax({
+			url : "song/songListId_" + songList.id+ "/10",
+			type : "GET",
+			dataType : "json",
 			success : function(data) {
-				if(data.code != 200){
-					MMR.get("simpleMsg").showError(data.error.value);
-					return;
-				}
-				
-				var songs = data.data;
-				$_prototype = $prototype.find(".prototype").clone().removeClass("prototype");
-				flag = false;
-
-				for (var j = 0; j < songs.length; j++) {
-					song = songs[j];
-					$songEle = $_prototype.clone();
-					$songEle.find(".num").text(song.rank);
-					$songEle.find(".name").attr({
-						"title" : song.name,
-						"data-name" : limitStringLength(song.name, 13),
-						"data-href" : "song?songId=" + song.id
-					}).text(limitStringLength(song.name, 13));
-
-					if (flag) {
-						$songEle.addClass("even");
-						flag = false;
-					} else {
-						$songEle.addClass("odd");
-						flag = true;
-					}
-					var songSerialized = MMR.get("music").serialize(song);
-					$songEle.find(".hidden .add").attr({
-						"onclick" : "MMR.get('music').add('" + songSerialized + "');"
-					})
-					$songEle.find(".hidden .play").attr({
-						"onclick" : "MMR.get('music').addThenPlay('" + songSerialized + "');"
-					})
-					$songEle.find(".hidden .play").attr({
-						"onclick" : "MMR.get('music').addThenPlay('" + songSerialized + "');"
-					})
-					$songEle.find(".hidden .collection").attr({
-						"onclick" : "MMR.get('collection').collect('" + song.id + "');"
-					})
-					$songEle.bind("mouseover", function() {
-						var name = $(this).find(".name").text();
-						$(this).find(".hidden").css("display", "block");
-						$(this).find(".name").text(limitStringLength(name, 6));
-					})
-					$songEle.bind("mouseout", function() {
-						var name = $(this).find(".name").attr("data-name");
-						$(this).find(".hidden").css("display", "none");
-						$(this).find(".name").text(name);
-					})
-					$songEle.attr({
-						"id" : song.id
-					})
-					$songListEle.append($songEle);
-				}
-				$songListEle.append("<li><span class='all' data-url='songList' data-href='songList/{" + songList.id
-						+ "}' onclick='jump(this);'>查看全部></span></li>");
+				process(data);
+				songList.songs = data.data;
+				songListEle.innerHTML = Template.compile(template)(songList);
 			}
 		})
 	}
@@ -422,6 +347,5 @@
 		}
 	}
 	imageDiv.init();
-	albumDiv.init();
 	userDiv();
 })()
