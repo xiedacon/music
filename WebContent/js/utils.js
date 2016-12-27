@@ -1,3 +1,4 @@
+//只有逻辑，保证每个work执行完成后才会执行done
 //works：[Function,Function]
 //WorkGroup(works).done(function(){});
 function WorkGroup(works) {
@@ -48,6 +49,8 @@ function WorkGroup(works) {
   return group;
 }
 
+//只有执行逻辑
+//只能保证执行顺序正确，不能保证结果正确
 //addEle：根据给出的页数，执行添加方法，前一页、后一页不在其中
 //addPrevious/addNext：执行前一页或后一页的添加方法
 //totalPage：总页数

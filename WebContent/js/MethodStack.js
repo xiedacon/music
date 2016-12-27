@@ -1,158 +1,135 @@
 (function() {
-	function loadComment(data) {
-		var comment = data.comment;
-		var $commentListEle = data.$commentListEle;
-		var $prototype = $commentListEle.find(".prototype").clone().removeClass("prototype");
-		var $commentEle = $prototype.clone();
+	function loadComments(selector, data) {
+		var template = `
+			{{if hotList && hotList.length > 0}}
+			<h3>最热评论<span>{{hotList.length}}</span></h3>
+			{{each hotList as comment}}
+			<li class="comment">
+				<a href="#home?id={{comment.creatorId}}">
+					<img src="{{comment.creatorIcon}}">
+				</a>
+				<div class="comment_left">
+					<p class="comment_material">
+						<a class="name" href="#home?id={{comment.creatorId}}" title="{{comment.creatorName}}">
+							{{comment.creatorName}}
+						</a>
+						<span class="content">
+							:{{#comment.content}}
+						</span>
+					</p>
+					<p class="comment_reply" style="display: none">
+						<i></i> <a class="name" href="javascript:void(0);" data-href="" onclick="jump(this);"></a> <span class="content"></span>
+					</p>
+					<div class="comment_bottom">
+						<span class="createTime">
+							{{comment.createTime | dateFormatter:'MM月dd号 HH:mm'}}
+						</span>
+						<div class="right">
+							<p>
+								<i class="icomoon"></i>
+								<span class="num" onclick="MMR.agreeComment(this,'{{comment.id}}');">
+									{{comment.agreeNum}}
+								</span>
+							</p>
+							<span class="interval">|</span> <span class="reply">回复</span>
+						</div>
+					</div>
+				</div>
+			</li>
+			{{/each}}
+			{{/if}}
+			<h3>最新评论<span>{{pageBean.count}}</span></h3>
+			{{each pageBean.beans as comment}}
+			<li class="comment">
+				<a href="#home?id={{comment.creatorId}}">
+					<img src="{{comment.creatorIcon}}">
+				</a>
+				<div class="comment_left">
+					<p class="comment_material">
+						<a class="name" href="#home?id={{comment.creatorId}}" title="{{comment.creatorName}}">
+							{{comment.creatorName}}
+						</a>
+						<span class="content">
+							:{{#comment.content}}
+						</span>
+					</p><!--
+					<p class="comment_reply" style="display: none">
+						<i></i> <a class="name" href="javascript:void(0);" data-href="" onclick="jump(this);"></a> <span class="content"></span>
+					</p>-->
+					<div class="comment_bottom">
+						<span class="createTime">
+							{{comment.createTime | dateFormatter:'MM月dd号 HH:mm'}}
+						</span>
+						<div class="right">
+							<p onclick="MMR.agreeComment(this,'{{comment.id}}');">
+								<i class="icomoon"></i>
+								<span class="num">
+									{{comment.agreeNum}}
+								</span>
+							</p>
+							<span class="interval">|</span> <span class="reply">回复</span>
+						</div>
+					</div>
+				</div>
+			</li>
+			{{/each}}
+		`;
 
-		$commentEle.find("img").attr({
-			"src" : comment.creatorIcon,
-			"data-href" : "home?userId=" + comment.creatorId
-		});
-		$commentEle.find(".comment_material .name").attr({
-			"data-href" : "home?userId=" + comment.creatorId,
-			"title" : comment.creatorName
-		}).text(comment.creatorName);
-		$commentEle.find(".comment_material .content").html(":" + comment.content);
-		$commentEle.find(".comment_bottom .createTime").text(new DateFormatter("MM月dd号 HH:mm").format(comment.createTime));
-		$commentEle.find(".comment_bottom .right .num").text(comment.agreeNum).attr("onclick", "MMR.agreeComment(this,'" + comment.id + "');");
-		$commentEle.find(".comment_bottom .right .num").siblings().on("click", {
-			id : comment.id
-		}, function(e) {
-			MMR.agreeComment($(this).siblings().eq(0)[0], e.data.id);
-		})
-		if (sessionStorage["flag_agreed_" + comment.id]) {
-			$commentEle.find(".comment_bottom .right .num").siblings().css("color", "#ff0000");
-		} else {
-			$commentEle.find(".comment_bottom .right .num").siblings().removeAttr("style");
-		}
-
-		$commentListEle.append($commentEle);
+		document.querySelector(selector).innerHTML = Template.compile(template)(data);
 	}
-	FUNCTION.loadPageBean = function _loadPageBean(data) {
+	function loadPages(selector, data) {
 		var pageBean = data.pageBean;
-		var $pagesEle = data.$pagesEle;
-		$pagesEle.empty();
-
-		data.loadBeans();
-
-		if (pageBean.totalPage !== 0 && pageBean.totalPage !== 1) {
-			var begin = pageBean.page - 2;
-			var end = pageBean.page + 2;
-			if (pageBean.page < 3) {
-				begin = 1;
-				end = 5;
-			}
-			if (pageBean.totalPage < 5) {
-				end = pageBean.totalPage;
-			} else if (end > pageBean.totalPage) {
-				end = pageBean.totalPage;
-			}
-
-			var $previousPage = $("<li class='button' data-page='" + (pageBean.page - 1) + "'>< 上一页</li>");
-			if (pageBean.page === 1) {
-				$previousPage.addClass("unable");
-			} else {
-				$previousPage.addClass("enable");
-			}
-			$pagesEle.append($previousPage);
-
-			var $pageEle;
-			for (var i = begin; i < end + 1; i++) {
-				$pageEle = $("<li class='button num' data-page='" + i + "'>" + i + "</li>");
-				if (i === pageBean.page) {
-					$pageEle.removeClass("num").addClass("now");
-				}
-				$pagesEle.append($pageEle);
-			}
-
-			var $nextPage = $("<li class='button' data-page='" + (pageBean.page + 1) + "'>下一页 ></li>");
-			if (pageBean.page === pageBean.totalPage) {
-				$nextPage.addClass("unable");
-			} else {
-				$nextPage.addClass("enable");
-			}
-			$pagesEle.append($nextPage);
-
-			$pagesEle.find(".button").not(".unable").not(".now").click(function() {
-				data.click($(this).attr("data-page"));
-			})
-		}
-
-		FUNCTION.align($(".material_right"), $(".material_left"));
-	}
-	function loadPageBean_comment(pageBean, flag) {
-		var $commentListEle = $("#commentList");
-
-		if (!flag) {
-			$commentListEle.children().not(".prototype").remove();
-		}
-
-		FUNCTION.loadPageBean({
-			pageBean : pageBean,
-			$pagesEle : $("#pages"),
-			loadBeans : function() {
-				var newList = pageBean.beans;
-
-				if (newList.length > 0) {
-					if (pageBean.page === 1) {
-						$commentListEle.append("<h3>最新评论<span>(" + pageBean.count + ")</span></h3>");
-					}
-					for (var i = 0; i < newList.length; i++) {
-						loadComment({
-							comment : newList[i],
-							$commentListEle : $commentListEle
-						})
-					}
-				}
-			},
-			click : function(page) {
-				var url = PageScope.loadPageBean + page;
-				var success = function(data){
-					if(data.code != 200){
-						MMR.get("simpleMsg").showError(data.error.value);
-						return;
-					}
-
-					loadPageBean_comment(data.data);
-				}
-				if (page == 1) {
-					url = PageScope.loadForFirst;
-					success = FUNCTION.loadForFirst;
-				}
-				AJAX({
-					url : url,
-					success : success
-				})
-			}
-		});
-	}
-	FUNCTION.loadForFirst = function loadForFirst(data) {
-		if(data.code != 200){
-			MMR.get("simpleMsg").showError(data.error.value);
+		if (pageBean.totalPage < 2) {
 			return;
 		}
 
-		var comments = data.data //
-		, hotList = comments.hotList;
-		var $commentListEle = $("#commentList");
-		$commentListEle.children().not(".prototype").remove();
+		var pagesEle = document.querySelector(selector), //
+		template = '';
+		Array.from(pagesEle.children?pagesEle.children:[]).forEach(function(pageEle){
+			pagesEle.removeChild(pageEle);
+		})
 
-		var $prototype = $commentListEle.find(".prototype").clone().removeClass("prototype");
-		var $commentEle, comment;
-		if (hotList.length > 0) {
-			$commentListEle.append("<h3>最热评论<span>(" + hotList.length + ")</span></h3>")
-			for (var i = 0; i < hotList.length; i++) {
-				loadComment({
-					comment : hotList[i],
-					$commentListEle : $commentListEle
-				});
-			}
-		}
+		Page({
+			addEle : function(index) {
+				var className = "button num ";
+				if (index == pageBean.page) {
+					className += "unable ";
+				}
+				template += '<li class="'+className+'" data-page="'+index+'">' + index + '</li>';
+			},
+			addPrevious : function() {
+				template += '<li class="button" data-page="'+(pageBean.page-1)+'">上一页</li>';
+			},
+			addNext : function() {
+				template += '<li class="button" data-page="'+(pageBean.page+1)+'">下一页</li>';
+			},
+			totalPage : pageBean.totalPage,
+			page : pageBean.page,
+			limit : pageBean.limit
+		});
 
-		FUNCTION.loadEmojis();
-		loadPageBean_comment(comments.pageBean, true);
+		pagesEle.innerHTML = template;
+		pagesEle.addEventListener("click", function(e) {
+			$.ajax({
+				url : data.urlPrefix + e.target.attributes["data-page"].value,
+				dataType : "json",
+				type : "GET"
+			}).done(function(source) {
+				process(source);
+				source.data.urlPrefix = data.urlPrefix;
+				FUNCTION.loadCommentsAndPages(source.data);
+			});
+		})
+
+		FUNCTION.align($(".material_right"), $(".material_left"));
 	}
+
+	FUNCTION.loadCommentsAndPages = function loadCommentsAndPages(data){
+		loadComments("ul#commentList", data);
+		loadPages("ul#pages", data);
+		FUNCTION.loadEmojis();
+	}
+
 	FUNCTION.loadSongs = function loadSongList(data, special) {
 		if(data.code != 200){
 			MMR.get("simpleMsg").showError(data.error.value);
@@ -207,6 +184,7 @@
 			$songListEle.append($songEle);
 		}
 	}
+
 	FUNCTION.loadSongMenu = function loadSongMenu(songMenu, $songMenuEle, i) {
 		$songMenuEle.find("img").attr({
 			"src" : songMenu.icon,
@@ -260,7 +238,7 @@
 		$ele2.css("min-height", max);
 	}
 
-	FUNCTION.loadEmojis = function() {
+	FUNCTION.loadEmojis = function(selector) {
 		var $emojis = $("#emojis");
 		var $newComment = $("#newComment");
 		var emojis_flag;
@@ -282,10 +260,12 @@
 			$newComment.off("keydown");
 		});
 
-		AJAX({
+		$.ajax({
 			url : "json/emoji",
+			type : "GET",
+			dataType : "json",
 			success : function(emojis) {
-				PageScope.emojis = emojis;
+				console.log(emojis)
 				var shortnames = new Array();
 				emojis.forEach(function(emoji) {
 					$emojis.append('<img class="emoji" data-name="' + emoji.shortname + '" alt="" src="svg/' + emoji.unicode + '.svg">');

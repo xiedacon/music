@@ -1,8 +1,5 @@
 (function() {
-	var id = PageScope.params.id, //
-	page = "songMenu", //
-	loadForFirst = "comment/songMenuId_" + id, //
-	loadPageBean = "comment/songMenuId_" + id + "/";
+	var id = PageScope.params.id;
 
 	$.ajax({
 		url : "songMenu/" + id,
@@ -79,7 +76,7 @@
 		if (user) {
 			document.querySelector("img#userIcon").src = user.icon;
 		}
-		document.querySelector("span#addComment").addEventListener("onclick",function(){
+		document.querySelector("span#addComment").addEventListener("click",function(){
 			MMR.addComment('songMenu',data.data.id);
 		})
 	});
@@ -124,87 +121,13 @@
 		document.querySelector("tbody#songList").innerHTML = Template.compile(template)(data);
 	});
 	$.ajax({
-		url : "comment/songMenuId_" + id,
+		url : "comment/songMenuId_" + id + "/1",
 		type : "GET",
 		dataType : "json"
-	}).done(function(data){
-		process(data);
+	}).done(function(source){
+		process(source);
 
-		var template = `
-			{{if hotList.length > 0}}
-			<h3>最热评论<span>{{hotList.length}}</span></h3>
-			{{each hotList as comment}}
-			<li class="comment">
-				<a href="#home?id={{comment.creatorId}}">
-					<img src="{{comment.creatorIcon}}">
-				</a>
-				<div class="comment_left">
-					<p class="comment_material">
-						<a class="name" href="#home?id={{comment.creatorId}}" title="{{comment.creatorName}}">
-							{{comment.creatorName}}
-						</a>
-						<span class="content">
-							:{{#comment.content}}
-						</span>
-					</p>
-					<p class="comment_reply" style="display: none">
-						<i></i> <a class="name" href="javascript:void(0);" data-href="" onclick="jump(this);"></a> <span class="content"></span>
-					</p>
-					<div class="comment_bottom">
-						<span class="createTime">
-							{{comment.createTime | dateFormatter:'MM月dd号 HH:mm'}}
-						</span>
-						<div class="right">
-							<p>
-								<i class="icomoon"></i>
-								<span class="num" onclick="MMR.agreeComment(this,'{{comment.id}}');">
-									{{comment.agreeNum}}
-								</span>
-							</p>
-							<span class="interval">|</span> <span class="reply">回复</span>
-						</div>
-					</div>
-				</div>
-			</li>
-			{{/each}}
-			{{/if}}
-			<h3>最新评论<span>{{pageBean.count}}</span></h3>
-			{{each pageBean.beans as comment}}
-			<li class="comment">
-				<a href="#home?id={{comment.creatorId}}">
-					<img src="{{comment.creatorIcon}}">
-				</a>
-				<div class="comment_left">
-					<p class="comment_material">
-						<a class="name" href="#home?id={{comment.creatorId}}" title="{{comment.creatorName}}">
-							{{comment.creatorName}}
-						</a>
-						<span class="content">
-							:{{#comment.content}}
-						</span>
-					</p>
-					<p class="comment_reply" style="display: none">
-						<i></i> <a class="name" href="javascript:void(0);" data-href="" onclick="jump(this);"></a> <span class="content"></span>
-					</p>
-					<div class="comment_bottom">
-						<span class="createTime">
-							{{comment.createTime | dateFormatter:'MM月dd号 HH:mm'}}
-						</span>
-						<div class="right">
-							<p>
-								<i class="icomoon"></i>
-								<span class="num" onclick="MMR.agreeComment(this,'{{comment.id}}');">
-									{{comment.agreeNum}}
-								</span>
-							</p>
-							<span class="interval">|</span> <span class="reply">回复</span>
-						</div>
-					</div>
-				</div>
-			</li>
-			{{/each}}
-		`;
-
-		document.querySelector("ul#commentList").innerHTML = Template.compile(template)(data.data);
+		source.data.urlPrefix = "comment/songMenuId_" + id + "/";
+		FUNCTION.loadCommentsAndPages(source.data);
 	});
 }())
