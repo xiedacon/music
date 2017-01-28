@@ -586,7 +586,7 @@
 					MMR.get("simpleMsg").showError(data.error.value);
 					return;
 				}
-				
+
 				var tags = data.data;
 				show($tagsDiv, function() {
 					var $existTags = $("#tags").find(".tag");
@@ -674,7 +674,7 @@
 						MMR.get("simpleMsg").showError(data.error.value);
 						return;
 					}
-					
+
 					var songMenus = data.data //
 					, $songMenus = $collectionDiv.find(".login_material");
 					$songMenus.children("p[class='menu']").remove();
@@ -757,7 +757,7 @@
 					if (data.code == 200) {
 						MMR.get("simpleMsg").showSuccess("评论成功");
 
-						router.startRouter(type + "?" + type + "Id=" + PageScope.params[type + "Id"], true);
+						Router.goto("#" + type + "?id=" + PageScope.params["id"]);
 					} else {
 						MMR.get("simpleMsg").showError("评论失败")
 					}

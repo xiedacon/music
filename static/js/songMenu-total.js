@@ -46,7 +46,7 @@
 			MMR.get("simpleMsg").showError(data.error.value);
 			return;
 		}
-		
+
 		var tagList = data.data //
 		, $tagListEle = $("#secondTagList");
 		var $prototype = $tagListEle.children(".prototype").clone().removeClass("prototype");
@@ -90,11 +90,21 @@
 	}
 
 	function loadSongMenuList(data) {
-		if(data.code != 200){
-			MMR.get("simpleMsg").showError(data.error.value);
-			return;
-		}
-		
+		process(data);
+
+		var template = `
+		{{each }}
+		<li class="songMenu entity">
+			<div class="image">
+				<img alt="" src="" title="" data-href="" onclick="jump(this);">
+				<div class="image_bottom">
+					<i></i> <span class="num"></span> <i class="playthis" title="播放"></i>
+				</div>
+			</div> <a class="name" href="javascript:void(0);" title="" data-href="" onclick="jump(this);"></a> <span class="by">by</span> <a class="songer"
+			href="javascript:void(0);" title="" data-href="" onclick="jump(this);"></a>
+		</li>
+		{{/each}}`
+
 		var pageBean = data.data //
 		, songMenuList = pageBean.beans;
 		var $songMenuListEle = $("#songMenuList");

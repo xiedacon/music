@@ -45,10 +45,8 @@ public class Base64UploadUtils {
 	return upload;
     }
 
-    private static FileItemFactory getFactory(HttpServletRequest req) {
+    private static synchronized FileItemFactory getFactory(HttpServletRequest req) {
 	if (factory == null) {
-	    synchronized (Base64UploadUtils.class) {
-		if (factory == null) {
 		    properties = new Properties();
 		    try {
 			properties.load(new FileInputStream(getRealPath(req, "WEB-INF/classes/upload.properties")));
@@ -63,8 +61,6 @@ public class Base64UploadUtils {
 			    .getFileCleaningTracker(req.getServletContext());
 		    factory.setFileCleaningTracker(fileCleaningTracker);
 		    Base64UploadUtils.factory = factory;
-		}
-	    }
 	}
 	return factory;
     }

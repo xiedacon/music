@@ -65,7 +65,7 @@ public class OAuthUtil {
 				params.put(key, null);
 				continue;
 			}
-			if ("{".equals(value.indexOf(0))) {
+			if ("{".equals(value.substring(0, 1))) {
 				params.put(key, parseJSON(value));
 			} else {
 				params.put(key, value.replace("\"", ""));

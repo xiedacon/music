@@ -265,7 +265,6 @@
 			type : "GET",
 			dataType : "json",
 			success : function(emojis) {
-				console.log(emojis)
 				var shortnames = new Array();
 				emojis.forEach(function(emoji) {
 					$emojis.append('<img class="emoji" data-name="' + emoji.shortname + '" alt="" src="svg/' + emoji.unicode + '.svg">');
