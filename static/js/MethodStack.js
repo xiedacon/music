@@ -1,4 +1,14 @@
 (function() {
+	FUNCTION.loadSongMenusAndPages = function(source){
+		loadSongMenus("ul#songMenuList", source.data);
+		loadPages("ul#pages", source.data, FUNCTION.loadSongMenusAndPages);
+	}
+	FUNCTION.loadCommentsAndPages = function (source){
+		loadComments("ul#commentList", source.data);
+		loadPages("ul#pages", source.data.pageBean, FUNCTION.loadCommentsAndPages);
+		loadEmojis();
+	}
+
 	function loadComments(selector, data) {
 		var template = `
 			{{if hotList && hotList.length > 0}}
@@ -77,8 +87,85 @@
 
 		document.querySelector(selector).innerHTML = Template.compile(template)(data);
 	}
-	function loadPages(selector, data) {
-		var pageBean = data.pageBean;
+	FUNCTION.loadSongs = function loadSongs(selector, source) {
+		var template = `
+		{{each data as song index}}
+			<tr id="{{song.id}}" class="{{if index%2==0}}{{else}}singular{{/if}}">
+				<td>
+					<span class="num">{{index + 1}}</span>
+					<i class="play icomoon" onclick="MMR.get('music').addThenPlay('aaa');"></i>
+				</td>
+				<td>
+					<a class="songName" href="#song?id={{song.id}}" title="{{song.name}}">
+						{{song.name | lengthLimit:'20'}}
+					</a>
+				</td>
+				<td>
+					<span class="time">{{song.time}}</span>
+					<p class="hidden">
+						<span class="addToPlaylist icomoon" onclick="MMR.get('music').add('{{song.id}}');"></span>
+						<span class="collection icomoon" onclick="MMR.get('collection').collect('{{song.id}}');"></span>
+						<span class="share icomoon"></span>
+						<span class="download icomoon"></span>
+					</p></td>
+				<td>
+					<a class="songer" href="#singer?id={{song.singerId}}" title="{{song.singerName}}">
+						{{song.singerName | lengthLimit:'5'}}
+					</a>
+				</td>
+				<td>
+					<a class="special" href="#album?id={{song.albumId}}" title="{{song.albumName}}">
+						{{song.albumName | lengthLimit:'7'}}
+					</a>
+				</td>
+			</tr>
+		{{/each}}
+		`;
+		document.querySelector(selector).innerHTML = Template.compile(template)(source);
+	}
+	function loadSongMenus(selector, pageBean) {
+		var template = `
+		{{each beans as songMenu index}}
+		<li class="songMenu entity" style="{{if (index+1)%5===0}}padding-right:0{{/if}}">
+			<div class="image">
+				<a href="#songMenu?id={{songMenu.id}}">
+					<img alt="{{songMenu.name}}" src="{{songMenu.icon}}" title="{{songMenu.name}}">
+				</a>
+				<div class="image_bottom">
+					<i></i>
+					<span class="num">{{songMenu.playNum}}</span>
+					<i class="playthis" title="播放" onclick="MMR.get('music').batchAddThenPlay('songMenuId','{{songMenu.id}}')"></i>
+				</div>
+			</div>
+			<a class="name" href="#songMenu?id={{songMenu.id}}" title="{{songMenu.name}}">{{songMenu.name}}</a>
+			<span class="by">by</span>
+			<a class="songer" href="#home?id={{songMenu.creatorId}}" title="{{songMenu.creatorName}}">{{songMenu.creatorName}}</a>
+		</li>
+		{{/each}}
+		`;
+
+		document.querySelector(selector).innerHTML = Template.compile(template)(pageBean);
+	}
+	FUNCTION.loadAlbum = function loadAlbum(album, $albumEle) {
+		$albumEle.find("img").attr({
+			"src" : album.icon,
+			"title" : album.name,
+			"data-href" : "album?albumId=" + album.id
+		});
+		$albumEle.find(".play").attr({
+			"onclick" : "MMR.get('music').batchAddThenPlay('albumId','" + album.id + "')"
+		});
+		$albumEle.find(".name").attr({
+			"title" : album.name,
+			"data-href" : "album?albumId=" + album.id
+		}).text(album.name);
+		$albumEle.find(".songer").attr({
+			"title" : album.singerName,
+			"data-href" : "singer?singerId=" + album.singerId
+		}).text(album.singerName);
+	}
+
+	function loadPages(selector, pageBean, callback) {
 		if (pageBean.totalPage < 2) {
 			return;
 		}
@@ -110,135 +197,33 @@
 
 		pagesEle.innerHTML = template;
 		pagesEle.addEventListener("click", function(e) {
+			var prefix = data.urlPrefix ? data.urlPrefix : "", //
+			suffix = data.urlSuffix ? data.urlSuffix : "" //
+			;
+
 			$.ajax({
-				url : data.urlPrefix + e.target.attributes["data-page"].value,
+				url : prefix + e.target.attributes["data-page"].value + suffix,
 				dataType : "json",
 				type : "GET"
 			}).done(function(source) {
 				process(source);
+
 				source.data.urlPrefix = data.urlPrefix;
-				FUNCTION.loadCommentsAndPages(source.data);
+				source.data.urlSuffix = data.urlSuffix;
+				callback(source);
 			});
 		})
 
 		FUNCTION.align($(".material_right"), $(".material_left"));
 	}
-
-	FUNCTION.loadCommentsAndPages = function loadCommentsAndPages(data){
-		loadComments("ul#commentList", data);
-		loadPages("ul#pages", data);
-		FUNCTION.loadEmojis();
-	}
-
-	FUNCTION.loadSongs = function loadSongList(data, special) {
-		if(data.code != 200){
-			MMR.get("simpleMsg").showError(data.error.value);
-			return;
-		}
-
-		var songList = data.data //
-		, $songListEle = $("#songList");
-		$songListEle.children().not(".prototype").remove();
-		var $prototype = $songListEle.find(".prototype").clone().removeClass("prototype");
-		var $songEle, song;
-
-		for (var i = 0; i < songList.length; i++) {
-			song = songList[i];
-			$songEle = $prototype.clone();
-			$songEle.attr({
-				"id" : song.id
-			});
-			if (i % 2 != 0) {
-				$songEle.addClass("singular");
-			}
-
-			if (special) {
-				special($songEle, song, i);
-			}
-
-			$songEle.find(".num").text(i + 1);
-			var songSerialized = MMR.get('music').serialize(song);
-			$songEle.find(".play").attr({
-				"onclick" : "MMR.get('music').addThenPlay('" + songSerialized + "');"
-			});
-			$songEle.find(".addToPlaylist").attr({
-				"onclick" : "MMR.get('music').add('" + song.id + "');"
-			});
-			$songEle.find(".hidden .collection").attr({
-				"onclick" : "MMR.get('collection').collect('" + song.id + "');"
-			})
-			$songEle.find(".songName").attr({
-				"data-href" : "song?songId=" + song.id,
-				"title" : song.name
-			}).text(limitStringLength(song.name, 20));
-			$songEle.find(".time").text(song.time);
-			$songEle.find(".songer").attr({
-				"data-href" : "singer?singerId=" + song.singerId,
-				"title" : song.singerName
-			}).text(limitStringLength(song.singerName, 5));
-			$songEle.find(".special").attr({
-				"data-href" : "album?albumId=" + song.albumId,
-				"title" : song.albumName
-			}).text(limitStringLength(song.albumName, 7));
-
-			$songListEle.append($songEle);
-		}
-	}
-
-	FUNCTION.loadSongMenu = function loadSongMenu(songMenu, $songMenuEle, i) {
-		$songMenuEle.find("img").attr({
-			"src" : songMenu.icon,
-			"alt" : songMenu.name,
-			"title" : songMenu.name,
-			"data-href" : "songMenu?songMenuId=" + songMenu.id
-		});
-		$songMenuEle.find(".num").text(songMenu.playNum);
-		$songMenuEle.find(".playthis").attr({
-			"onclick" : "MMR.get('music').batchAddThenPlay('songMenuId','" + songMenu.id + "')"
-		});
-		$songMenuEle.find(".name").attr({
-			"title" : songMenu.name,
-			"data-href" : "songMenu?songMenuId=" + songMenu.id
-		}).text(songMenu.name);
-		$songMenuEle.find(".songer").attr({
-			"title" : songMenu.creatorName,
-			"data-href" : "home?userId=" + songMenu.creatorId
-		}).text(songMenu.creatorName);
-		if ((i + 1) % 5 === 0) {
-			$songMenuEle.css("padding-right", 0);
-		}
-	}
-	FUNCTION.loadAlbum = function loadAlbum(album, $albumEle) {
-		$albumEle.find("img").attr({
-			"src" : album.icon,
-			"title" : album.name,
-			"data-href" : "album?albumId=" + album.id
-		});
-		$albumEle.find(".play").attr({
-			"onclick" : "MMR.get('music').batchAddThenPlay('albumId','" + album.id + "')"
-		});
-		$albumEle.find(".name").attr({
-			"title" : album.name,
-			"data-href" : "album?albumId=" + album.id
-		}).text(album.name);
-		$albumEle.find(".songer").attr({
-			"title" : album.singerName,
-			"data-href" : "singer?singerId=" + album.singerId
-		}).text(album.singerName);
-	}
-
 	// 保持高度相等
 	FUNCTION.align = function align($ele1, $ele2) {
-		$ele1.css("min-height", "inherit");
-		$ele2.css("min-height", "inherit");
-		var height1 = $ele1.outerHeight();
-		var height2 = $ele2.outerHeight();
-		var max = height1 > height2 ? height1 : height2;
+		var max = Math.max($ele1.outerHeight(), $ele2.outerHeight());
 		$ele1.css("min-height", max);
 		$ele2.css("min-height", max);
 	}
 
-	FUNCTION.loadEmojis = function(selector) {
+	 function loadEmojis(selector) {
 		var $emojis = $("#emojis");
 		var $newComment = $("#newComment");
 		var emojis_flag;

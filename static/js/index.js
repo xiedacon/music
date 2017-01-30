@@ -11,14 +11,16 @@
 		loadSongLists(data);
 	});
 
-	function loadSongMenuSecondTagList(data){
-		var template = '{{each songMenuTags as tag}}'
-		+                '<li>'
-		+	                 '<a href="#songMenus?secondTagId={{tag.id}}">{{tag.name}}</a>'
-		+                '</li>'
-		+              '{{/each}}';
+	function loadSongMenuSecondTagList(source){
+		var template = `
+		{{each songMenuTags as tag}}
+		<li>
+		  <a href="#songMenus?secondTagId={{tag.id}}&secondTagName={{tag.name}}">{{tag.name}}</a>
+		</li>
+		{{/each}}
+		`;
 
-		document.querySelector("ul#songMenuSecondTagList").innerHTML = Template.compile(template)(data);
+		document.querySelector("ul#songMenuSecondTagList").innerHTML = Template.compile(template)(source);
 	}
 
 	function loadSongMenuList(data){

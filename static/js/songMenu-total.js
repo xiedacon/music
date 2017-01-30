@@ -1,20 +1,55 @@
 (function() {
-	PageScope["orderBy"] = "hot";
-	if (PageScope.params["secondTagId"]) {
-		PageScope["supplement"] = "/secondTagId_" + PageScope.params["secondTagId"];
-	} else {
-		PageScope["supplement"] = "";
-	}
-	AJAX({
-		url : "songMenu/" + PageScope["orderBy"] + "_1" + PageScope["supplement"],
-		success : loadSongMenuList
-	});
-	AJAX({
-		url : "songMenuTag",
-		success : loadSongMenuSecondTag
+	var orderBy = "hot", //
+	supplement = PageScope.params.secondTagId ? ("/secondTagId_" + PageScope.params.secondTagId) : "" //
+	;
+
+	$.ajax({
+		url : "songMenu/" + orderBy + "_1" + supplement,
+		type : "GET",
+		dataType : "json"
+	}).done(function(source){
+		process(source);
+
+		source.data.urlPrefix = "songMenu/" + orderBy + "_";
+		source.data.urlSuffix = supplement;
+		FUNCTION.loadSongMenusAndPages(source);
 	});
 
-	init();
+	$.ajax({
+		url : "songMenuTag",
+		type : "GET",
+		dataType : "json"
+	}).done(function(source){
+			process(source);
+
+			var id = PageScope.params.secondTagId, //
+			name = PageScope.params.secondTagName, //
+			href = "#songMenus?" + (id?("secondTagId="+id):"") + (name?("&secondTagName="+name):""), //
+			template = `
+			<div class="nav_top">
+				<i class="triangle"></i>
+				<a class="nav_top_button" title="`+ name +`" href="` + href + `">`+ name +`</span>
+			</div>
+			{{each data as tag}}
+			<li class="subnav">
+				<h3>
+					<i class="icomoon"></i>
+					<span>{{tag.name}}</span>
+				</h3>
+				<div class="types">
+
+					{{each tag.secondTagList as secondTag index}}
+					<a href="#songMenus?secondTagId={{secondTag.id}}&secondTagName={{secondTag.name}}" title="{{secondTag.name}}" class="type {{if secondTag.id == `+ id +`}}select{{/if}}">{{secondTag.name}}</a>
+					{{if index < tag.secondTagList.length - 1}}<span>|</span>{{/if}}
+					{{/each}}
+				</div>
+			</li>
+			{{/each}}
+			`;
+			document.querySelector("ul#secondTagList").innerHTML = Template.compile(template)(source);
+	});
+
+	//init();
 
 	function init() {
 		$("#tagName").text(PageScope.params["secondTagName"]);
@@ -39,97 +74,5 @@
 				success : loadSongMenuList
 			});
 		})
-	}
-
-	function loadSongMenuSecondTag(data) {
-		if(data.code != 200){
-			MMR.get("simpleMsg").showError(data.error.value);
-			return;
-		}
-
-		var tagList = data.data //
-		, $tagListEle = $("#secondTagList");
-		var $prototype = $tagListEle.children(".prototype").clone().removeClass("prototype");
-		var tag, $tagEle, secondTagList, $secondTagListEle;
-
-		for (var i = 0; i < tagList.length; i++) {
-			tag = tagList[i];
-			$tagEle = $prototype.clone();
-
-			$tagEle.find("h3 span").text(tag.name);
-
-			secondTagList = tag.secondTagList;
-			$secondTagListEle = $tagEle.find(".types");
-
-			var $_prototype = $secondTagListEle.find(".prototype").clone().removeClass("prototype");
-			var secondTag, $secondTagEle;
-
-			for (var j = 0; j < secondTagList.length; j++) {
-				secondTag = secondTagList[j];
-				$secondTagEle = $_prototype.clone();
-
-				$secondTagEle.attr({
-					"data-href" : "songMenus?secondTagId=" + secondTag.id + "&secondTagName=" + secondTag.name,
-					"title" : secondTag.name
-				}).text(secondTag.name)
-
-				if (secondTag.id == PageScope.params["secondTagId"]) {
-					$secondTagEle.addClass("select");
-				}
-
-				$secondTagListEle.append($secondTagEle);
-
-				if (j == secondTagList.length - 1) {
-					continue;
-				}
-				$secondTagListEle.append("<span>|</span>");
-			}
-
-			$tagListEle.append($tagEle);
-		}
-	}
-
-	function loadSongMenuList(data) {
-		process(data);
-
-		var template = `
-		{{each }}
-		<li class="songMenu entity">
-			<div class="image">
-				<img alt="" src="" title="" data-href="" onclick="jump(this);">
-				<div class="image_bottom">
-					<i></i> <span class="num"></span> <i class="playthis" title="播放"></i>
-				</div>
-			</div> <a class="name" href="javascript:void(0);" title="" data-href="" onclick="jump(this);"></a> <span class="by">by</span> <a class="songer"
-			href="javascript:void(0);" title="" data-href="" onclick="jump(this);"></a>
-		</li>
-		{{/each}}`
-
-		var pageBean = data.data //
-		, songMenuList = pageBean.beans;
-		var $songMenuListEle = $("#songMenuList");
-		$songMenuListEle.children().not(".prototype").remove();
-		var $prototype = $songMenuListEle.find(".prototype").clone().removeClass("prototype");
-		var songMenu, $songMenuEle;
-
-		FUNCTION.loadPageBean({
-			pageBean : pageBean,
-			$pagesEle : $("#pages"),
-			loadBeans : function() {
-				for (var i = 0; i < songMenuList.length; i++) {
-					songMenu = songMenuList[i];
-					$songMenuEle = $prototype.clone();
-					FUNCTION.loadSongMenu(songMenu, $songMenuEle, i);
-					$songMenuListEle.append($songMenuEle);
-				}
-			},
-			click : function(page) {
-				var orderBy = PageScope["orderBy"];
-				AJAX({
-					url : "songMenu/" + orderBy + "_" + page + PageScope["supplement"],
-					success : loadSongMenuList
-				});
-			}
-		});
 	}
 }())

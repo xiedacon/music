@@ -5,10 +5,11 @@
 		url : "songMenu/" + id,
 		type : "GET",
 		dataType : "json"
-	}).done(function(data){
-		process(data);
+	}).done(function(source){
+		process(source);
 
-		var template = `<div class="songMenuMessage_left entityMessage_left">
+		var template = `
+		<div class="songMenuMessage_left entityMessage_left">
 			<img src="{{icon}}">
 		</div>
 		<div class="songMenuMessage_right entityMessage_right">
@@ -66,59 +67,29 @@
 					{{/if}}
 				</p>
 			</div>
-		</div>`;
+		</div>
+		`;
 
-		document.querySelector("div#songMenu").innerHTML = Template.compile(template)(data.data);
-		document.querySelector("span#songNum").innerHTML = data.data.songNum + "首歌";
-		document.querySelector("i#playNum").innerHTML = data.data.playNum;
-		document.querySelector("span#commentNum").innerHTML = "共" + data.data.commentNum + "条评论";
+		document.querySelector("div#songMenu").innerHTML = Template.compile(template)(source.data);
+		document.querySelector("span#songNum").innerHTML = source.data.songNum + "首歌";
+		document.querySelector("i#playNum").innerHTML = source.data.playNum;
+		document.querySelector("span#commentNum").innerHTML = "共" + source.data.commentNum + "条评论";
 		var user = UserManager.getUser();
 		if (user) {
 			document.querySelector("img#userIcon").src = user.icon;
 		}
 		document.querySelector("span#addComment").addEventListener("click",function(){
-			MMR.addComment('songMenu',data.data.id);
+			MMR.addComment('songMenu',source.data.id);
 		})
 	});
 	$.ajax({
 		url : "song/songMenuId_" + id,
 		type : "GET",
 		dataType : "json"
-	}).done(function(data){
-		process(data);
+	}).done(function(source){
+		process(source);
 
-		var template = `{{each data as song index}}
-			<tr id="{{song.id}}" class="{{if index%2==0}}{{else}}singular{{/if}}">
-				<td>
-					<span class="num">{{index + 1}}</span>
-					<i class="play icomoon" onclick="MMR.get('music').addThenPlay('aaa');"></i>
-				</td>
-				<td>
-					<a class="songName" href="#song?id={{song.id}}" title="{{song.name}}">
-						{{song.name | lengthLimit:'20'}}
-					</a>
-				</td>
-				<td>
-					<span class="time">{{song.time}}</span>
-					<p class="hidden">
-						<span class="addToPlaylist icomoon" onclick="MMR.get('music').add('{{song.id}}');"></span>
-						<span class="collection icomoon" onclick="MMR.get('collection').collect('{{song.id}}');"></span>
-						<span class="share icomoon"></span>
-						<span class="download icomoon"></span>
-					</p></td>
-				<td>
-					<a class="songer" href="#singer?id={{song.singerId}}" title="{{song.singerName}}">
-						{{song.singerName | lengthLimit:'5'}}
-					</a>
-				</td>
-				<td>
-					<a class="special" href="#album?id={{song.albumId}}" title="{{song.albumName}}">
-						{{song.albumName | lengthLimit:'7'}}
-					</a>
-				</td>
-			</tr>
-		{{/each}}`;
-		document.querySelector("tbody#songList").innerHTML = Template.compile(template)(data);
+		FUNCTION.loadSongs("tbody#songList", source);
 	});
 	$.ajax({
 		url : "comment/songMenuId_" + id + "/1",
@@ -128,6 +99,6 @@
 		process(source);
 
 		source.data.urlPrefix = "comment/songMenuId_" + id + "/";
-		FUNCTION.loadCommentsAndPages(source.data);
+		FUNCTION.loadCommentsAndPages(source);
 	});
 }())

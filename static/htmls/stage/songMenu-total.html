@@ -1,29 +1,9 @@
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="utf-8">
-<link rel="stylesheet" type="text/css" href="css/total.css">
-<title>歌单总页</title>
-</head>
-<body>
-	<div class="body">
 		<div class="material">
 			<div class="material_top">
 				<h2 id="tagName"></h2>
 				<div class="nav_button">
 					<span class="button" data-flag="hidden" id="select">选择分类<i></i></span>
 					<ul id="secondTagList" class="nav" style="display: none">
-						<div class="nav_top">
-							<i class="triangle"></i> <span class="nav_top_button" title="全部风格" data-url="songMenus" data-href="songMenus" onclick="jump(this);">全部风格</span>
-						</div>
-						<li class="subnav prototype">
-							<h3>
-								<i class="icomoon"></i><span></span>
-							</h3>
-							<div class="types">
-								<a href="javascript:void(0);" class="type prototype" data-url="songMenus" data-href="" onclick="jump(this);"></a>
-							</div>
-						</li>
 					</ul>
 				</div>
 				<div class="material_top_right">
@@ -31,24 +11,9 @@
 				</div>
 			</div>
 			<ul id="songMenuList" class="songMenus entitys material_middle">
-				<li class="prototype songMenu entity">
-					<div class="image">
-						<img alt="" src="" title="" data-href="" onclick="jump(this);">
-						<div class="image_bottom">
-							<i></i> <span class="num"></span> <i class="playthis" title="播放"></i>
-						</div>
-					</div> <a class="name" href="javascript:void(0);" title="" data-href="" onclick="jump(this);"></a> <span class="by">by</span> <a class="songer"
-					href="javascript:void(0);" title="" data-href="" onclick="jump(this);"></a>
-				</li>
 			</ul>
 			<div class="material_bottom ">
 				<ul id="pages" class="buttons">
 				</ul>
 			</div>
 		</div>
-	</div>
-	<div class="foot">
-		<p>@2016</p>
-	</div>
-</body>
-</html>
