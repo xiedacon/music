@@ -15,6 +15,12 @@ import java.util.List;
  */
 public class BatchSqlUtils {
 
+	private static int defaultBatchSize = 100;
+
+	public static void excuteBatch(Connection conn, String sql, List<List<Object>> rowDatas) throws SQLException {
+		excuteBatch(conn, sql, rowDatas, defaultBatchSize);
+	}
+
 	/**
 	 * 批处理
 	 * 
@@ -28,6 +34,10 @@ public class BatchSqlUtils {
 	 */
 	public static void excuteBatch(Connection conn, String sql, List<List<Object>> rowDatas, int batchSize)
 			throws SQLException {
+		if (batchSize <= 0) {
+			return;
+		}
+
 		// 执行批处理必须关闭自动提交
 		Boolean autoCommit = conn.getAutoCommit();
 		conn.setAutoCommit(false);
@@ -46,6 +56,11 @@ public class BatchSqlUtils {
 
 		conn.commit();
 		conn.setAutoCommit(autoCommit);
+	}
+
+	public static List<ResultSet> excuteBatchForSelect(Connection conn, String sql, List<String> params)
+			throws SQLException {
+		return excuteBatchForSelect(conn, sql, params, defaultBatchSize);
 	}
 
 	/**

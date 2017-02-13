@@ -11,9 +11,25 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+/**
+ * <h1>xssf操作工具类</h1>
+ * <h3>功能：</h3>
+ * <ul>
+ * <li>解析指定xssf文件</li>
+ * <li>将Cell集合写入xssf文件内</li>
+ * </ul>
+ * <h3>依赖：</h3>
+ * <ul>
+ * <li>poi</li>
+ * </ul>
+ * 
+ * @author xiedacon
+ * @version v0.0.0
+ *
+ */
 public class XSSFUtils {
 
-	public static List<List<cn.xiedacon.util.excel.Cell>> parse(File file) {
+	public static List<List<Cell>> parse(File file) {
 		return parse(file, 0, null, 0, null, 0, null);
 	}
 
@@ -24,7 +40,7 @@ public class XSSFUtils {
 	 * @param beginRowNum
 	 * @return
 	 */
-	public static List<List<cn.xiedacon.util.excel.Cell>> parse(File file, Integer beginRowNum) {
+	public static List<List<Cell>> parse(File file, Integer beginRowNum) {
 		return parse(file, 0, null, beginRowNum, null, 0, null);
 	}
 
@@ -36,7 +52,7 @@ public class XSSFUtils {
 	 * @param cellLimit
 	 * @return
 	 */
-	public static List<List<cn.xiedacon.util.excel.Cell>> parse(File file, Integer beginRowNum, Integer cellLimit) {
+	public static List<List<Cell>> parse(File file, Integer beginRowNum, Integer cellLimit) {
 		return parse(file, 0, null, beginRowNum, null, 0, cellLimit);
 	}
 
@@ -52,9 +68,9 @@ public class XSSFUtils {
 	 * @param cellLimit
 	 * @return
 	 */
-	public static List<List<cn.xiedacon.util.excel.Cell>> parse(File file, Integer beginSheetNum, Integer sheetLimit,
-			Integer beginRowNum, Integer rowLmit, Integer beginCellNum, Integer cellLimit) {
-		List<List<cn.xiedacon.util.excel.Cell>> result = new ArrayList<>();
+	public static List<List<Cell>> parse(File file, Integer beginSheetNum, Integer sheetLimit, Integer beginRowNum,
+			Integer rowLmit, Integer beginCellNum, Integer cellLimit) {
+		List<List<Cell>> result = new ArrayList<>();
 		if (file == null) {
 			return result;
 		}
@@ -88,9 +104,9 @@ public class XSSFUtils {
 	 * @param cellLimit
 	 * @return
 	 */
-	private static List<List<cn.xiedacon.util.excel.Cell>> parseSheet(Sheet sheet, Integer beginRowNum, Integer rowLmit,
-			Integer beginCellNum, Integer cellLimit) {
-		List<List<cn.xiedacon.util.excel.Cell>> rowList = new ArrayList<>();
+	private static List<List<Cell>> parseSheet(Sheet sheet, Integer beginRowNum, Integer rowLmit, Integer beginCellNum,
+			Integer cellLimit) {
+		List<List<Cell>> rowList = new ArrayList<>();
 		if (sheet == null) {
 			return rowList;
 		}
@@ -105,7 +121,7 @@ public class XSSFUtils {
 		}
 
 		for (int i = firstRowNum; i < lastRowNum + 1; i++) {
-			List<cn.xiedacon.util.excel.Cell> row = parseRow(sheet.getRow(i), beginCellNum, cellLimit);
+			List<Cell> row = parseRow(sheet.getRow(i), beginCellNum, cellLimit);
 			if (row.isEmpty()) {
 				break;
 			} else {
@@ -140,7 +156,7 @@ public class XSSFUtils {
 		}
 
 		for (int i = firstCellNum; i < lastCellNum + 1; i++) {
-			cellList.add(new Cell(row.getCell(i)));
+			cellList.add(new XSSFCell(row.getCell(i)));
 		}
 
 		return cellList;
@@ -175,9 +191,8 @@ public class XSSFUtils {
 	private static void createRow(List<Cell> dataCells, Row row, Integer beginCellNum) {
 		int endCellNum = beginCellNum + dataCells.size();
 		for (int j = beginCellNum; j < endCellNum; j++) {
-			org.apache.poi.ss.usermodel.Cell cell = row.createCell(j);
 			Cell dataCell = dataCells.get(j);
-			dataCell.copyTo(cell);
+			dataCell.copyDataTo(new XSSFCell(row.createCell(j)));
 		}
 	}
 }

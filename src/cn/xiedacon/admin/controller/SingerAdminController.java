@@ -25,7 +25,7 @@ import cn.xiedacon.util.Constant;
 import cn.xiedacon.util.MessageUtils;
 import cn.xiedacon.util.ResourceLoader;
 import cn.xiedacon.util.ZipUtils;
-import cn.xiedacon.util.excel.Cell;
+import cn.xiedacon.util.excel.XSSFCell;
 import cn.xiedacon.util.excel.XSSFUtils;
 import cn.xiedacon.util.upload.Base64FileItem;
 import cn.xiedacon.util.upload.Base64UploadUtils;
@@ -156,7 +156,7 @@ public class SingerAdminController {
 		Base64FileItem excelItem = fileItems.get("excel");
 		File excelFile = excelItem
 				.getFile(ResourceLoader.getRealPath("temp") + "/" + UUIDUtils.randomUUID() + excelItem.getType());
-		List<List<Cell>> cellData = XSSFUtils.parse(excelFile, Constant.EXCEL_BEGINNUM);
+		List<List<XSSFCell>> cellData = XSSFUtils.parse(excelFile, Constant.EXCEL_BEGINNUM);
 		// !!!!!!!
 		excelFile.delete();
 		Base64FileItem zipitem = fileItems.get("zip");
@@ -167,13 +167,13 @@ public class SingerAdminController {
 		zipFile.delete();
 
 		List<String> classifyIdList = new ArrayList<>();
-		for (List<Cell> cells : cellData) {
+		for (List<XSSFCell> cells : cellData) {
 			classifyIdList.add(cells.get(5).getString());
 		}
 		Map<String, SecondClassify> classifyMap = classifyService.batchSelectById(classifyIdList);
 
 		List<Singer> singerList = new ArrayList<>();
-		for (List<Cell> cells : cellData) {
+		for (List<XSSFCell> cells : cellData) {
 			String name = cells.get(1).getString();
 			String icon = "image/singer/" + cells.get(2).getString();
 			String remark = cells.get(3).getString();

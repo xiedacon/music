@@ -2,72 +2,44 @@ package cn.xiedacon.util.excel;
 
 import java.util.Date;
 
-public class Cell {
+/**
+ * <h1>Cell接口</h1>
+ * <h3>功能：</h3>
+ * <ul>
+ * <li>poi中Cell的数据接口</li>
+ * <li>copyTo方法用于复制两个Cell中的数据</li>
+ * </ul>
+ * <h3>依赖：</h3>
+ * <ul>
+ * <li>poi</li>
+ * </ul>
+ * 
+ * @author xiedacon
+ * @version v0.0.0
+ *
+ */
 
-	private org.apache.poi.ss.usermodel.Cell cell;
+public interface Cell {
 
-	public Cell(org.apache.poi.ss.usermodel.Cell cell) {
-		super();
-		if (cell == null) {
-			cell = new DataCell(null);
-		}
-		this.cell = cell;
-	}
+	public String getString();
 
-	public Cell(Object data) {
-		this.cell = new DataCell(data);
-	}
+	public Integer getInteger();
 
-	public String getString() {
-		return cell.getStringCellValue();
-	}
+	public Double getDouble();
 
-	public Integer getInteger() {
-		Double value = getDouble();
-		if (value == null) {
-			return null;
-		} else {
-			return value.intValue();
-		}
-	}
+	public Date getDate();
 
-	public Double getDouble() {
-		return cell.getNumericCellValue();
-	}
+	public Boolean getBoolean();
 
-	public Date getDate() {
-		return cell.getDateCellValue();
-	}
+	public void setString(String value);
 
-	public Boolean getBoolean() {
-		return cell.getBooleanCellValue();
-	}
+	public void setInteger(Integer value);
 
-	public void setString(String value) {
-		cell.setCellValue(value);
-	}
+	public void setDouble(Double value);
 
-	public void setInteger(Integer value) {
-		cell.setCellValue(value.doubleValue());
-	}
+	public void setDate(Date value);
 
-	public void setDouble(Double value) {
-		cell.setCellValue(value);
-	}
+	public void setBoolean(Boolean value);
 
-	public void setDate(Date value) {
-		cell.setCellValue(value);
-	}
-
-	public void setBoolean(Boolean value) {
-		cell.setCellValue(value);
-	}
-
-	public void copyTo(org.apache.poi.ss.usermodel.Cell cell) {
-		if (this.cell instanceof DataCell) {
-			((DataCell) (this.cell)).copyTo(cell);
-		} else {
-			throw new RuntimeException("Cell真实类型不是DataCell");
-		}
-	}
+	public void copyDataTo(Cell cell);
 }

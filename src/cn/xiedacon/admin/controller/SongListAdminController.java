@@ -29,7 +29,7 @@ import cn.xiedacon.util.MessageUtils;
 import cn.xiedacon.util.ResourceLoader;
 import cn.xiedacon.util.UUIDUtils;
 import cn.xiedacon.util.download.DownLoadUtlils;
-import cn.xiedacon.util.excel.Cell;
+import cn.xiedacon.util.excel.XSSFCell;
 import cn.xiedacon.util.excel.XSSFUtils;
 import cn.xiedacon.util.file.FileUtils;
 import cn.xiedacon.util.upload.Base64FileItem;
@@ -124,13 +124,13 @@ public class SongListAdminController {
 		Base64FileItem excelItem = fileItems.get("songsExcel");
 		File songExcel = excelItem
 				.getFile(ResourceLoader.getRealPath("temp") + "/" + UUIDUtils.randomUUID() + excelItem.getType());
-		List<List<Cell>> cellData = XSSFUtils.parse(songExcel, Constant.EXCEL_BEGINNUM, 3);
+		List<List<XSSFCell>> cellData = XSSFUtils.parse(songExcel, Constant.EXCEL_BEGINNUM, 3);
 		// !!!!!!!
 		songExcel.delete();
 
 		List<String> songNames = new ArrayList<>();
 		for (int i = cellData.size() - 1; i >= 0; i--) {
-			List<Cell> songCells = cellData.get(i);
+			List<XSSFCell> songCells = cellData.get(i);
 			String songName = songCells.get(1).getString();
 			if (songName == null || songName.trim().isEmpty()) {
 				cellData.remove(songCells);
@@ -142,7 +142,7 @@ public class SongListAdminController {
 		Map<String, Song> songMap = songService.batchSelectByName(songNames);
 
 		List<SongList_SongGL> songList_SongGLList = new ArrayList<>();
-		for (List<Cell> cells : cellData) {
+		for (List<XSSFCell> cells : cellData) {
 			Song song = songMap.get(cells.get(1).getString());
 			Integer rank = cells.get(0).getInteger();
 			Integer rankChange = cells.get(2).getInteger();
@@ -174,12 +174,12 @@ public class SongListAdminController {
 		List<SongList_SongGL> songList_SongGLList = songList_SongGLService
 				.selectListBySongListIdOrderByRank(songList.getId());
 
-		List<List<Cell>> dataCellsList = new ArrayList<>();
+		List<List<XSSFCell>> dataCellsList = new ArrayList<>();
 		for (SongList_SongGL gl : songList_SongGLList) {
-			List<Cell> dataCells = new ArrayList<>();
-			dataCells.add(new Cell(gl.getRank()));
-			dataCells.add(new Cell(gl.getSongName()));
-			dataCells.add(new Cell(gl.getRankChange()));
+			List<XSSFCell> dataCells = new ArrayList<>();
+			dataCells.add(new XSSFCell(gl.getRank()));
+			dataCells.add(new XSSFCell(gl.getSongName()));
+			dataCells.add(new XSSFCell(gl.getRankChange()));
 			dataCellsList.add(dataCells);
 		}
 
