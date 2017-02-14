@@ -3,10 +3,18 @@ package cn.xiedacon.util.jdbc.setter;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-public class IntegerSetter extends DataSetter {
+import cn.xiedacon.util.jdbc.Setter;
+
+/**
+ * 
+ * @author xiedacon
+ * @version v0.0.0
+ *
+ */
+public class IntegerSetter implements Setter {
 
 	@Override
-	public void reallySet(PreparedStatement statement, int index, Object data) throws SQLException {
+	public void done(PreparedStatement statement, int index, Object data) throws SQLException {
 		statement.setInt(index, (Integer) data);
 	}
 

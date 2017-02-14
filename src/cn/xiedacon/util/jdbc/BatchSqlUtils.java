@@ -8,9 +8,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * <h1>批处理工具类</h1>
  * 
  * @author xieda
- * @version 1.0
+ * @version v0.0.0
  *
  */
 public class BatchSqlUtils {

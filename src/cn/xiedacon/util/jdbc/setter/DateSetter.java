@@ -4,10 +4,18 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-public class DateSetter extends DataSetter {
+import cn.xiedacon.util.jdbc.Setter;
+
+/**
+ * 
+ * @author xiedacon
+ * @version v0.0.0
+ *
+ */
+public class DateSetter implements Setter {
 
 	@Override
-	public void reallySet(PreparedStatement statement, int index, Object data) throws SQLException {
+	public void done(PreparedStatement statement, int index, Object data) throws SQLException {
 		statement.setDate(index, new Date(((java.util.Date) data).getTime()));
 	}
 

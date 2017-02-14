@@ -5,9 +5,10 @@ import java.sql.SQLException;
 import java.util.List;
 
 /**
+ * <h1>Statement包装类</h1>
  * 
  * @author xieda
- * @version 1.0
+ * @version v0.0.0
  *
  */
 public class Statement {
@@ -26,7 +27,11 @@ public class Statement {
 	}
 
 	public void setData(int index, Object data) {
-		SetDataExcuter.execute(statement, index, data);
+		try {
+			SetExecuter.execute(statement, index, data);
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	public void addBatch() throws SQLException {
