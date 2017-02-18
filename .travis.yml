@@ -5,7 +5,7 @@ jdk:
   - # oraclejdk7
   - # openjdk6
  
- script:
+script:
   - jdk_switcher use oraclejdk8
   - # do stuff with Java 8
   - # jdk_switcher use oraclejdk7
