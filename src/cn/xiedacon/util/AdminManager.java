@@ -7,6 +7,12 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+/**
+ * 
+ * @author xiedacon
+ * @version v0.0.0
+ *
+ */
 public class AdminManager {
 
 	private static Map<String, Cookie> map = new WeakHashMap<>();

@@ -1,16 +1,36 @@
 package cn.xiedacon.util;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.Reader;
+import java.io.StringReader;
+import java.net.URL;
 import java.util.Collection;
 import java.util.List;
 
-import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.map.type.TypeFactory;
+import org.apache.commons.io.IOUtils;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.type.TypeFactory;
+
+/**
+ * <h1>JSON工具类</h1>
+ * <h3>依赖：</h3>
+ * <ul>
+ * <li>jackson</li>
+ * <li>commons-io</li>
+ * </ul>
+ * 
+ * @author xiedacon
+ * @version v0.0.0
+ *
+ */
 public class JsonUtils {
 
 	private static ObjectMapper objectMapper = new ObjectMapper();
+	private static String charset = "UFT-8";
 
 	public static <T> T parse(String json, Class<T> c) {
 		try {
@@ -20,24 +40,82 @@ public class JsonUtils {
 		}
 	}
 
-	@SuppressWarnings("deprecation")
+	public static <T> List<T> parseList(byte[] jsonBytes, Class<T> c) {
+		return JsonUtils.parseCollection(jsonBytes, List.class, c);
+	}
+
+	public static <T> List<T> parseList(URL jsonURL, Class<T> c) {
+		return JsonUtils.parseCollection(jsonURL, List.class, c);
+	}
+
 	public static <T> List<T> parseList(String json, Class<T> c) {
-		try {
-			return objectMapper.readValue(json, TypeFactory.collectionType(List.class, c));
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
+		return JsonUtils.parseCollection(json, List.class, c);
 	}
 
 	public static <T> List<T> parseList(File jsonFile, Class<T> c) {
 		return JsonUtils.parseCollection(jsonFile, List.class, c);
 	}
 
-	@SuppressWarnings({ "deprecation", "rawtypes" })
-	public static <T> List<T> parseCollection(File jsonFile, Class<? extends Collection> collectionType,
+	public static <T> List<T> parseList(Reader in, Class<T> c) {
+		return JsonUtils.parseCollection(in, List.class, c);
+	}
+
+	public static <T> List<T> parseList(InputStream in, Class<T> c) {
+		return JsonUtils.parseCollection(in, List.class, c);
+	}
+
+	@SuppressWarnings({ "rawtypes" })
+	public static <T> List<T> parseCollection(byte[] jsonBytes, Class<? extends Collection> collectionType,
 			Class<T> elementType) {
 		try {
-			return objectMapper.readValue(jsonFile, TypeFactory.collectionType(collectionType, elementType));
+			return objectMapper.readValue(jsonBytes,
+					TypeFactory.defaultInstance().constructCollectionType(collectionType, elementType));
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	@SuppressWarnings("rawtypes")
+	public static <T> List<T> parseCollection(URL jsonURL, Class<? extends Collection> collectionType,
+			Class<T> elementType) {
+		try {
+			return parseCollection(jsonURL.openStream(), collectionType, elementType);
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	@SuppressWarnings({ "rawtypes" })
+	public static <T> List<T> parseCollection(String json, Class<? extends Collection> collectionType,
+			Class<T> elementType) {
+		return parseCollection(new StringReader(json), collectionType, elementType);
+	}
+
+	@SuppressWarnings("rawtypes")
+	public static <T> List<T> parseCollection(File jsonFile, Class<? extends Collection> collectionType,
+			Class<T> elementType) {
+		try (FileInputStream in = new FileInputStream(jsonFile)) {
+			return parseCollection(in, collectionType, elementType);
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	@SuppressWarnings({ "rawtypes" })
+	public static <T> List<T> parseCollection(Reader in, Class<? extends Collection> collectionType,
+			Class<T> elementType) {
+		try {
+			return parseCollection(IOUtils.toByteArray(in, charset), collectionType, elementType);
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	@SuppressWarnings({ "rawtypes" })
+	public static <T> List<T> parseCollection(InputStream in, Class<? extends Collection> collectionType,
+			Class<T> elementType) {
+		try {
+			return parseCollection(IOUtils.toByteArray(in), collectionType, elementType);
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}

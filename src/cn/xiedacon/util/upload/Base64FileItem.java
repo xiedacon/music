@@ -16,15 +16,24 @@ import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileItemHeaders;
 import org.apache.commons.io.IOUtils;
 
-//import sun.misc.BASE64Decoder;
-
+/**
+ * 
+ * @author xiedacon
+ * @version v0.0.0
+ *
+ */
 public class Base64FileItem implements FileItem {
 
 	private static final long serialVersionUID = 8319514483825183494L;
 	private FileItem fileItem;
 
 	public Base64FileItem(FileItem fileItem) {
+		this(fileItem, "UTF-8");
+	}
+	
+	public Base64FileItem(FileItem fileItem, String charset) {
 		this.fileItem = fileItem;
+		this.charset = charset;
 	}
 
 	@Override
@@ -143,19 +152,20 @@ public class Base64FileItem implements FileItem {
 
 	private String type = null;
 	private byte[] data = null;
+	private String charset;
 
 	private void parseBase64() {
-		//BASE64Decoder decoder = new BASE64Decoder();
+		// BASE64Decoder decoder = new BASE64Decoder();
 		Decoder decoder = Base64.getDecoder();
 		try (InputStream in = fileItem.getInputStream()) {
-			String base64 = IOUtils.toString(in);
+			String base64 = IOUtils.toString(in, charset);
 			String[] strs = base64.split(";base64,");
 			type = strs[0].substring(5);
 
 			//
 			type = type.split("/")[1];
 
-			//data = decoder.decodeBuffer(strs[1]);
+			// data = decoder.decodeBuffer(strs[1]);
 			data = decoder.decode(strs[1]);
 		} catch (IOException e) {
 			throw new RuntimeException(e);

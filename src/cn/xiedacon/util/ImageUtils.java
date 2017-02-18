@@ -7,6 +7,13 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+/**
+ * <h1>图片工具类</h1>
+ * 
+ * @author xiedacon
+ * @version v0.0.0
+ *
+ */
 public class ImageUtils {
 
 	public static File resize(File imageFile, Double xRatio, Double yRatio, Double widthRatio, Double heightRatio) {

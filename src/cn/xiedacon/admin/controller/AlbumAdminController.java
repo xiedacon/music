@@ -28,7 +28,7 @@ import cn.xiedacon.util.MessageUtils;
 import cn.xiedacon.util.ResourceLoader;
 import cn.xiedacon.util.UUIDUtils;
 import cn.xiedacon.util.ZipUtils;
-import cn.xiedacon.util.excel.XSSFCell;
+import cn.xiedacon.util.excel.Cell;
 import cn.xiedacon.util.excel.XSSFUtils;
 import cn.xiedacon.util.upload.Base64FileItem;
 import cn.xiedacon.util.upload.Base64UploadUtils;
@@ -175,19 +175,19 @@ public class AlbumAdminController {
 
 		File excelFile = fileItems.get("excel")
 				.getFile(ResourceLoader.getRealPath("temp") + "/" + UUIDUtils.randomUUID());
-		List<List<XSSFCell>> cellData = XSSFUtils.parse(excelFile, Constant.EXCEL_BEGINNUM, 8);
+		List<List<Cell>> cellData = XSSFUtils.parse(excelFile, Constant.EXCEL_BEGINNUM, 8);
 
 		File zipFile = fileItems.get("iconZip").getFile(ResourceLoader.getRealPath("temp") + UUIDUtils.randomUUID());
 		ZipUtils.upZip(zipFile, ResourceLoader.getRealPath("image/album"));
 
 		List<String> singerNameList = new ArrayList<>();
-		for (List<XSSFCell> cells : cellData) {
+		for (List<Cell> cells : cellData) {
 			singerNameList.add(cells.get(3).getString());
 		}
 
 		Map<String, Singer> singerMap = singerService.batchSelectByName(singerNameList);
 		List<Album> albumList = new ArrayList<>();
-		for (List<XSSFCell> cells : cellData) {
+		for (List<Cell> cells : cellData) {
 			String name = cells.get(1).getString();
 			String icon = "image/album/" + cells.get(2).getString();
 			Singer singer = singerMap.get(cells.get(3).getString());

@@ -98,7 +98,7 @@ public class XSSFCell implements Cell {
 		}
 	}
 
-	private class DataCell implements org.apache.poi.ss.usermodel.Cell {
+	class DataCell implements org.apache.poi.ss.usermodel.Cell {
 		private Object data = null;
 
 		public DataCell(Object data) {
