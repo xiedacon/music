@@ -3,15 +3,26 @@ package cn.xiedacon.util;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * 
+ * @author xiedacon
+ * @version v0.0.0
+ *
+ */
 public class MessageUtils {
+
+	public static Integer SUCCESS = 200;
+	public static Integer INFO = 302;
+	public static Integer ERROR = 404;
+	public static String SUCCESS_RETURNNAME = "data";
 
 	/**
 	 * 创建默认的成功返回
 	 * 
 	 * @return
 	 */
-	public static Map<String, Object> createSuccess() {
-		return createSuccess(null, null);
+	public static Map<String, Object> success() {
+		return success(null, null);
 	}
 
 	/**
@@ -19,8 +30,8 @@ public class MessageUtils {
 	 * 
 	 * @return
 	 */
-	public static Map<String, Object> createSuccess(Object data) {
-		return createSuccess(Constant.SUCCESS_RETURNNAME, data);
+	public static Map<String, Object> success(Object data) {
+		return success(SUCCESS_RETURNNAME, data);
 	}
 
 	/**
@@ -28,8 +39,8 @@ public class MessageUtils {
 	 * 
 	 * @return
 	 */
-	public static Map<String, Object> createSuccess(String name, Object value) {
-		return createMessage(Constant.SUCCESS, null, name, value);
+	public static Map<String, Object> success(String name, Object value) {
+		return message(SUCCESS, null, name, value);
 	}
 
 	/**
@@ -37,8 +48,8 @@ public class MessageUtils {
 	 * 
 	 * @return
 	 */
-	public static Map<String, Object> createInfo() {
-		return createInfo(null, null, null);
+	public static Map<String, Object> info() {
+		return info(null, null, null);
 	}
 
 	/**
@@ -46,8 +57,8 @@ public class MessageUtils {
 	 * 
 	 * @return
 	 */
-	public static Map<String, Object> createInfo(String message) {
-		return createInfo(message, null, null);
+	public static Map<String, Object> info(String message) {
+		return info(message, null, null);
 	}
 
 	/**
@@ -55,8 +66,8 @@ public class MessageUtils {
 	 * 
 	 * @return
 	 */
-	public static Map<String, Object> createInfo(String name, Object value) {
-		return createInfo(null, name, value);
+	public static Map<String, Object> info(String name, Object value) {
+		return info(null, name, value);
 	}
 
 	/**
@@ -64,8 +75,8 @@ public class MessageUtils {
 	 * 
 	 * @return
 	 */
-	public static Map<String, Object> createInfo(String message, String name, Object value) {
-		return createMessage(Constant.INFO, message, name, value);
+	public static Map<String, Object> info(String message, String name, Object value) {
+		return message(INFO, message, name, value);
 	}
 
 	/**
@@ -73,8 +84,8 @@ public class MessageUtils {
 	 * 
 	 * @return
 	 */
-	public static Map<String, Object> createError() {
-		return createError(null, null, null);
+	public static Map<String, Object> error() {
+		return error(null, null, null);
 	}
 
 	/**
@@ -82,8 +93,8 @@ public class MessageUtils {
 	 * 
 	 * @return
 	 */
-	public static Map<String, Object> createError(String message) {
-		return createError(message, null, null);
+	public static Map<String, Object> error(String message) {
+		return error(message, null, null);
 	}
 
 	/**
@@ -91,8 +102,8 @@ public class MessageUtils {
 	 * 
 	 * @return
 	 */
-	public static Map<String, Object> createError(String name, Object value) {
-		return createError(null, name, value);
+	public static Map<String, Object> error(String name, Object value) {
+		return error(null, name, value);
 	}
 
 	/**
@@ -100,16 +111,16 @@ public class MessageUtils {
 	 * 
 	 * @return
 	 */
-	public static Map<String, Object> createError(String message, String name, Object value) {
+	public static Map<String, Object> error(String message, String name, Object value) {
 		Map<String, Object> error = new HashMap<>();
 		if (name != null && value != null) {
 			error.put("name", name);
 			error.put("value", value);
 		}
-		return createMessage(Constant.ERROR, message, "error", error);
+		return message(ERROR, message, "error", error);
 	}
 
-	private static Map<String, Object> createMessage(int code, String message, String name, Object value) {
+	private static Map<String, Object> message(int code, String message, String name, Object value) {
 		Map<String, Object> result = new HashMap<>();
 		result.put("code", code);
 		if (message != null) {

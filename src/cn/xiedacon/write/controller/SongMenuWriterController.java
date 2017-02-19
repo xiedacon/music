@@ -63,7 +63,7 @@ public class SongMenuWriterController {
 			songMenuWriteService.delete(songMenu);
 		}
 
-		return MessageUtils.createSuccess();
+		return MessageUtils.success();
 	}
 
 	@RequestMapping(value = "/{id:\\w{32}}", method = RequestMethod.PUT)
@@ -71,12 +71,12 @@ public class SongMenuWriterController {
 			@RequestParam("introduction") String introduction, @RequestParam("tags") String tags) {
 		SongMenu songMenu = songMenuReadService.selectById(id);
 		if (songMenu == null) {
-			return MessageUtils.createError("id", "歌单不存在");
+			return MessageUtils.error("id", "歌单不存在");
 		}
 		List<SongMenu_SongMenuTagGL> glList = new ArrayList<>();
 
 		if (name == null || name.trim().isEmpty()) {
-			return MessageUtils.createError("name", "歌单名不能为空");
+			return MessageUtils.error("name", "歌单名不能为空");
 		}
 		if (tags != null) {
 			List<String> tagIdList = new ArrayList<>();
@@ -86,7 +86,7 @@ public class SongMenuWriterController {
 			Map<String, SongMenuSecondTag> tagMap = tagService.batchSelectById(tagIdList);
 
 			if (tagIdList.size() != tagMap.size()) {
-				return MessageUtils.createError("tags", "标签错误");
+				return MessageUtils.error("tags", "标签错误");
 			}
 			for (Map.Entry<String, SongMenuSecondTag> entry : tagMap.entrySet()) {
 				SongMenuSecondTag tag = entry.getValue();
@@ -99,19 +99,19 @@ public class SongMenuWriterController {
 		songMenu.setSongMenu_SongMenuTagGLList(glList);
 
 		songMenuWriteService.update(songMenu);
-		return MessageUtils.createSuccess(songMenu);
+		return MessageUtils.success(songMenu);
 	}
 
 	@RequestMapping(method = RequestMethod.POST)
 	public Map<String, Object> insert(@RequestParam("name") String name, @RequestParam("creatorId") String creatorId) {
 		User creator = userService.selectById(creatorId);
 		if (creator == null) {
-			return MessageUtils.createError("creatorId", "用户不存在！");
+			return MessageUtils.error("creatorId", "用户不存在！");
 		}
 		Date createTime = new Date();
 
 		if (name == null || name.trim().isEmpty()) {
-			return MessageUtils.createError("name", "歌单名不能为空");
+			return MessageUtils.error("name", "歌单名不能为空");
 		}
 
 		SongMenu songMenu = factory.get(SongMenu.class);
@@ -123,14 +123,14 @@ public class SongMenuWriterController {
 		songMenu.setCreateTime(createTime);
 
 		songMenuWriteService.insert(songMenu);
-		return MessageUtils.createSuccess(songMenu);
+		return MessageUtils.success(songMenu);
 	}
 
 	@RequestMapping(value = "/{id:\\w{32}}/icon", method = RequestMethod.PUT)
 	public Map<String, Object> updateIconById(HttpServletRequest request, @PathVariable("id") String id) {
 		SongMenu songMenu = songMenuReadService.selectById(id);
 		if (songMenu == null) {
-			return MessageUtils.createError("id", "歌单不存在");
+			return MessageUtils.error("id", "歌单不存在");
 		}
 
 		Map<String, Base64FileItem> fileItems = Base64UploadUtils.parseRequest(request);
@@ -154,28 +154,28 @@ public class SongMenuWriterController {
 
 		songMenu.setIcon(icon);
 		songMenuWriteService.updateIconById(icon, songMenu.getId());
-		return MessageUtils.createSuccess(songMenu);
+		return MessageUtils.success(songMenu);
 	}
 
 	@RequestMapping(value = "/{id:\\w{32}}/song", method = RequestMethod.POST)
 	public Map<String, Object> addSong(@RequestParam("songId") String songId, @PathVariable("id") String id) {
 		SongMenu songMenu = songMenuReadService.selectById(id);
 		if (songMenu == null) {
-			return MessageUtils.createError("id", "歌单不存在");
+			return MessageUtils.error("id", "歌单不存在");
 		}
 
 		Song song = songReadService.selectById(songId);
 		if (song == null) {
-			return MessageUtils.createError("songId", "歌曲不存在");
+			return MessageUtils.error("songId", "歌曲不存在");
 		}
 
 		SongMenu_SongGL gl = songMenu_SongGLService.selectExistBySongIdAndSongMenuId(songId, id);
 		if (gl == null) {
 			songMenu_SongGLService
 					.insert(new SongMenu_SongGL(songMenu.getId(), song.getId(), new Date(), songMenu.getSongNum() + 1));
-			return MessageUtils.createSuccess();
+			return MessageUtils.success();
 		} else {
-			return MessageUtils.createError("songId", "歌曲已在歌单中");
+			return MessageUtils.error("songId", "歌曲已在歌单中");
 		}
 	}
 
@@ -183,9 +183,9 @@ public class SongMenuWriterController {
 	public Map<String, Object> updatePlayNumById(@PathVariable("id") String id) {
 		SongMenu songMenu = songMenuReadService.selectById(id);
 		if (songMenu == null) {
-			return MessageUtils.createError("id", "歌单不存在");
+			return MessageUtils.error("id", "歌单不存在");
 		}
 		songMenuWriteService.updatePlayNumById(songMenu.getPlayNum() + 1, songMenu.getId());
-		return MessageUtils.createSuccess();
+		return MessageUtils.success();
 	}
 }

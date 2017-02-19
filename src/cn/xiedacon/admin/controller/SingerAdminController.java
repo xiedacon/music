@@ -45,7 +45,7 @@ public class SingerAdminController {
 
 	@RequestMapping(value = "/page/{page:[1-9]\\d*}", method = RequestMethod.GET)
 	public Map<String, Object> selectPageBean(@PathVariable("page") Integer page) {
-		return MessageUtils.createSuccess(singerService.selectPageBean(page));
+		return MessageUtils.success(singerService.selectPageBean(page));
 	}
 
 	@RequestMapping(value = "/{id:\\w+}", method = RequestMethod.DELETE)
@@ -54,26 +54,26 @@ public class SingerAdminController {
 		if (singer != null) {
 			singerService.delete(singer);
 		}
-		return MessageUtils.createSuccess();
+		return MessageUtils.success();
 	}
 
 	@RequestMapping(value = "/name/{name:.+}/page/{page:[1-9]\\d*}", method = RequestMethod.GET)
 	public Map<String, Object> selectPageBeanByNameLike(@PathVariable("name") String name,
 			@PathVariable("page") Integer page) {
 		String nameLike = "%" + CharsetUtils.change(name, "ISO-8859-1", "UTF-8") + "%";
-		return MessageUtils.createSuccess(singerService.selectPageBeanByNameLike(page, nameLike));
+		return MessageUtils.success(singerService.selectPageBeanByNameLike(page, nameLike));
 	}
 
 	@RequestMapping(value = "/{id:\\w+}", method = RequestMethod.GET)
 	public Map<String, Object> selectById(@PathVariable("id") String id) {
-		return MessageUtils.createSuccess(singerService.selectById(id));
+		return MessageUtils.success(singerService.selectById(id));
 	}
 
 	@RequestMapping(value = "/{id:\\w+}", method = RequestMethod.PUT)
 	public Map<String, Object> update(@PathVariable("id") String id, HttpServletRequest request) {
 		Singer singer = singerService.selectById(id);
 		if (singer == null) {
-			return MessageUtils.createError("id", "歌手错误");
+			return MessageUtils.error("id", "歌手错误");
 		}
 
 		Map<String, Base64FileItem> fileItems = Base64UploadUtils.parseRequest(request);
@@ -85,7 +85,7 @@ public class SingerAdminController {
 		String introduction = fileItems.get("introduction").getString();
 
 		if (name == null || name.trim().isEmpty()) {
-			return MessageUtils.createError("name", "歌手名不能为空");
+			return MessageUtils.error("name", "歌手名不能为空");
 		}
 		Base64FileItem fileItem = fileItems.get("icon");
 		if (fileItem != null) {
@@ -99,7 +99,7 @@ public class SingerAdminController {
 		}
 		SecondClassify classify = classifyService.selectById(classifyId);
 		if (classify == null) {
-			return MessageUtils.createError("classifyId", "分类错误");
+			return MessageUtils.error("classifyId", "分类错误");
 		}
 
 		singer.setName(name);
@@ -109,7 +109,7 @@ public class SingerAdminController {
 		singer.setIntroduction(introduction);
 
 		singerService.update(singer);
-		return MessageUtils.createSuccess();
+		return MessageUtils.success();
 	}
 
 	@RequestMapping(value = "", method = RequestMethod.POST)
@@ -123,18 +123,18 @@ public class SingerAdminController {
 		String introduction = fileItems.get("introduction").getString();
 
 		if (name == null || name.trim().isEmpty()) {
-			return MessageUtils.createError("name", "歌手名不能为空");
+			return MessageUtils.error("name", "歌手名不能为空");
 		}
 		Base64FileItem fileItem = fileItems.get("icon");
 		if (fileItem == null) {
-			return MessageUtils.createError("icon", "图片不能为空");
+			return MessageUtils.error("icon", "图片不能为空");
 		}
 		icon = UUIDUtils.uuid(new Date().getTime()) + "." + fileItem.getType();
 		fileItem.getFile(ResourceLoader.getRealPath("image/singer") + "/" + icon);
 		icon = "image/singer/" + icon;
 		SecondClassify classify = classifyService.selectById(classifyId);
 		if (classify == null) {
-			return MessageUtils.createError("classifyId", "分类错误");
+			return MessageUtils.error("classifyId", "分类错误");
 		}
 
 		Singer singer = factory.get(Singer.class);
@@ -146,7 +146,7 @@ public class SingerAdminController {
 		singer.setIntroduction(introduction);
 
 		singerService.insert(singer);
-		return MessageUtils.createSuccess();
+		return MessageUtils.success();
 	}
 
 	@RequestMapping(value = "/excel", method = RequestMethod.POST)
@@ -181,13 +181,13 @@ public class SingerAdminController {
 			SecondClassify classify = classifyMap.get(cells.get(5).getString());
 
 			if (name == null || name.trim().isEmpty()) {
-				return MessageUtils.createError("name", "歌手名不能为空");
+				return MessageUtils.error("name", "歌手名不能为空");
 			}
 			if (icon == null || icon.trim().isEmpty()) {
-				return MessageUtils.createError("icon", "图片不能为空");
+				return MessageUtils.error("icon", "图片不能为空");
 			}
 			if (classify == null) {
-				return MessageUtils.createError("classifyId", "分类错误");
+				return MessageUtils.error("classifyId", "分类错误");
 			}
 
 			Singer singer = factory.get(Singer.class);
@@ -201,6 +201,6 @@ public class SingerAdminController {
 		}
 
 		singerService.batchInsert(singerList);
-		return MessageUtils.createSuccess();
+		return MessageUtils.success();
 	}
 }

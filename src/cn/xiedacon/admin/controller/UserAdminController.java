@@ -24,7 +24,7 @@ public class UserAdminController {
 
 	@RequestMapping(value = "/page/{page:[1-9]\\d*}", method = RequestMethod.GET)
 	public Map<String, Object> selectPageBean(@PathVariable("page") Integer page) {
-		return MessageUtils.createSuccess(userService.selectPageBean(page));
+		return MessageUtils.success(userService.selectPageBean(page));
 	}
 
 	@RequestMapping(value = "/{id:\\w+}", method = RequestMethod.DELETE)
@@ -33,13 +33,13 @@ public class UserAdminController {
 		if (user != null) {
 			userService.delete(user);
 		}
-		return MessageUtils.createSuccess();
+		return MessageUtils.success();
 	}
 
 	@RequestMapping(value = "/name/{name:.+}/page/{page:[1-9]\\d*}", method = RequestMethod.GET)
 	public Map<String, Object> selectPageBeanByNameLike(@PathVariable("name") String name,
 			@PathVariable("page") Integer page) {
 		String nameLike = "%" + CharsetUtils.change(name, "ISO-8859-1", "UTF-8") + "%";
-		return MessageUtils.createSuccess("data", userService.selectPageBeanByNameLike(page, nameLike));
+		return MessageUtils.success("data", userService.selectPageBeanByNameLike(page, nameLike));
 	}
 }

@@ -52,7 +52,7 @@ public class SongListAdminController {
 
 	@RequestMapping(value = "/page/{page:[1-9]\\d*}", method = RequestMethod.GET)
 	public Map<String, Object> selectPageBean(@PathVariable("page") Integer page) {
-		return MessageUtils.createSuccess(songListService.selectPageBean(page));
+		return MessageUtils.success(songListService.selectPageBean(page));
 	}
 
 	@RequestMapping(value = "/{id:\\w+}", method = RequestMethod.DELETE)
@@ -61,26 +61,26 @@ public class SongListAdminController {
 		if (songList != null) {
 			songListService.delete(songList);
 		}
-		return MessageUtils.createSuccess();
+		return MessageUtils.success();
 	}
 
 	@RequestMapping(value = "/name/{name:.+}/page/{page:[1-9]\\d*}", method = RequestMethod.GET)
 	public Map<String, Object> selectPageBeanByNameLike(@PathVariable("name") String name,
 			@PathVariable("page") Integer page) {
 		String nameLike = "%" + CharsetUtils.change(name, "ISO-8859-1", "UTF-8") + "%";
-		return MessageUtils.createSuccess(songListService.selectPageBeanByNameLike(page, nameLike));
+		return MessageUtils.success(songListService.selectPageBeanByNameLike(page, nameLike));
 	}
 
 	@RequestMapping(value = "/{id:\\w+}", method = RequestMethod.GET)
 	public Map<String, Object> selectById(@PathVariable("id") String id) {
-		return MessageUtils.createSuccess(songListService.selectById(id));
+		return MessageUtils.success(songListService.selectById(id));
 	}
 
 	@RequestMapping(value = "/{id:\\w+}", method = RequestMethod.PUT)
 	public Map<String, Object> update(@PathVariable("id") String id, HttpServletRequest request) {
 		SongList songList = songListService.selectById(id);
 		if (songList == null) {
-			return MessageUtils.createError("id", "榜单错误");
+			return MessageUtils.error("id", "榜单错误");
 		}
 
 		Map<String, Base64FileItem> fileItems = Base64UploadUtils.parseRequest(request);
@@ -92,7 +92,7 @@ public class SongListAdminController {
 		Boolean globe = fileItems.get("globe").getBoolean();
 
 		if (name == null || name.trim().isEmpty()) {
-			return MessageUtils.createError("name", "榜单名错误");
+			return MessageUtils.error("name", "榜单名错误");
 		}
 		Base64FileItem iconItem = fileItems.get("icon");
 		if (iconItem != null) {
@@ -101,7 +101,7 @@ public class SongListAdminController {
 			icon = "image/songList/" + icon;
 		}
 		if (globe == null) {
-			return MessageUtils.createError("globe", "未知错误");
+			return MessageUtils.error("globe", "未知错误");
 		}
 
 		songList.setName(name);
@@ -111,14 +111,14 @@ public class SongListAdminController {
 		songList.setGlobe(globe);
 
 		songListService.update(songList);
-		return MessageUtils.createSuccess();
+		return MessageUtils.success();
 	}
 
 	@RequestMapping(value = "/{id:\\w+}/excel", method = RequestMethod.PUT)
 	public Map<String, Object> updateSongs(@PathVariable("id") String id, HttpServletRequest request) {
 		SongList songList = songListService.selectById(id);
 		if (songList == null) {
-			return MessageUtils.createError("id", "榜单错误");
+			return MessageUtils.error("id", "榜单错误");
 		}
 
 		Map<String, Base64FileItem> fileItems = Base64UploadUtils.parseRequest(request);
@@ -149,10 +149,10 @@ public class SongListAdminController {
 			Integer rankChange = cells.get(2).getInteger();
 
 			if (song == null) {
-				return MessageUtils.createError("songName", "存在未知歌曲");
+				return MessageUtils.error("songName", "存在未知歌曲");
 			}
 			if (rank == null || rank < 0) {
-				return MessageUtils.createError("rank", "排名错误");
+				return MessageUtils.error("rank", "排名错误");
 			}
 			if (rankChange == null) {
 				rankChange = 0;
@@ -162,7 +162,7 @@ public class SongListAdminController {
 		}
 
 		songList_SongGLService.batchDeleteThenInsert(id, songList_SongGLList);
-		return MessageUtils.createSuccess();
+		return MessageUtils.success();
 	}
 
 	@RequestMapping(value = "/{id:\\w+}/excel", method = RequestMethod.GET)
@@ -212,17 +212,17 @@ public class SongListAdminController {
 		Boolean globe = fileItems.get("globe").getBoolean();
 
 		if (name == null || name.trim().isEmpty()) {
-			return MessageUtils.createError("name", "榜单名错误");
+			return MessageUtils.error("name", "榜单名错误");
 		}
 		Base64FileItem iconItem = fileItems.get("icon");
 		if (iconItem == null) {
-			return MessageUtils.createError("icon", "图片不能为空");
+			return MessageUtils.error("icon", "图片不能为空");
 		}
 		icon = UUIDUtils.randomUUID() + "." + iconItem.getType();
 		iconItem.getFile(ResourceLoader.getRealPath("image/songList") + "/" + icon);
 		icon = "image/songList/" + icon;
 		if (globe == null) {
-			return MessageUtils.createError("globe", "未知错误");
+			return MessageUtils.error("globe", "未知错误");
 		}
 
 		SongList songList = factory.get(SongList.class);
@@ -234,6 +234,6 @@ public class SongListAdminController {
 		songList.setGlobe(globe);
 
 		songListService.insert(songList);
-		return MessageUtils.createSuccess();
+		return MessageUtils.success();
 	}
 }

@@ -21,6 +21,6 @@ public class SongMenuTagReadController {
 
 	@RequestMapping("")
 	public Map<String, Object> selectList() {
-		return MessageUtils.createSuccess(tagService.selectList());
+		return MessageUtils.success(tagService.selectList());
 	}
 }

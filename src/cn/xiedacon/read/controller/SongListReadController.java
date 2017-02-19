@@ -22,12 +22,12 @@ public class SongListReadController {
 
 	@RequestMapping("/{id:\\w+}")
 	public Map<String, Object> selectById(@PathVariable("id") String id) {
-		return MessageUtils.createSuccess(songListService.selectById(id));
+		return MessageUtils.success(songListService.selectById(id));
 	}
 
 	@RequestMapping("")
 	public Map<String, Object> selectList() {
-		return MessageUtils.createSuccess(songListService.selectList());
+		return MessageUtils.success(songListService.selectList());
 	}
 
 }

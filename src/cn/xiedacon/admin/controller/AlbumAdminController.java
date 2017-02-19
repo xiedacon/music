@@ -49,7 +49,7 @@ public class AlbumAdminController {
 
 	@RequestMapping(value = "/page/{page:[1-9]\\d*}", method = RequestMethod.GET)
 	public Map<String, Object> selectPageBean(@PathVariable("page") Integer page) {
-		return MessageUtils.createSuccess(albumService.selectPageBean(page));
+		return MessageUtils.success(albumService.selectPageBean(page));
 	}
 
 	@RequestMapping(value = "/{id:\\w+}", method = RequestMethod.DELETE)
@@ -58,26 +58,26 @@ public class AlbumAdminController {
 		if (album != null) {
 			albumService.delete(album);
 		}
-		return MessageUtils.createSuccess();
+		return MessageUtils.success();
 	}
 
 	@RequestMapping(value = "/name/{name:.+}/page/{page:[1-9]\\d*}", method = RequestMethod.GET)
 	public Map<String, Object> selectPageBeanByNameLike(@PathVariable("name") String name,
 			@PathVariable("page") Integer page) {
 		String nameLike = "%" + CharsetUtils.change(name, "ISO-8859-1", "UTF-8") + "%";
-		return MessageUtils.createSuccess(albumService.selectPageBeanByNameLike(page, nameLike));
+		return MessageUtils.success(albumService.selectPageBeanByNameLike(page, nameLike));
 	}
 
 	@RequestMapping(value = "/{id:\\w+}", method = RequestMethod.GET)
 	public Map<String, Object> selectById(@PathVariable("id") String id) {
-		return MessageUtils.createSuccess(albumService.selectById(id));
+		return MessageUtils.success(albumService.selectById(id));
 	}
 
 	@RequestMapping(value = "/{id:\\w+}", method = RequestMethod.PUT)
 	public Map<String, Object> update(@PathVariable("id") String id, HttpServletRequest request) {
 		Album album = albumService.selectById(id);
 		if (album == null) {
-			return MessageUtils.createError(id, "未知错误");
+			return MessageUtils.error(id, "未知错误");
 		}
 
 		Map<String, Base64FileItem> fileItems = Base64UploadUtils.parseRequest(request);
@@ -91,7 +91,7 @@ public class AlbumAdminController {
 		String introduction = fileItems.get("introduction").getString();
 
 		if (name == null || name.isEmpty()) {
-			return MessageUtils.createError("name", "专辑名错误");
+			return MessageUtils.error("name", "专辑名错误");
 		}
 		Base64FileItem iconItem = fileItems.get("icon");
 		if (iconItem != null) {
@@ -100,11 +100,11 @@ public class AlbumAdminController {
 			icon = "image/album/" + icon;
 		}
 		if (createTime == null) {
-			return MessageUtils.createError("createTime", "日期错误");
+			return MessageUtils.error("createTime", "日期错误");
 		}
 		AlbumTag tag = tagService.selectById(tagId);
 		if (tag == null) {
-			return MessageUtils.createError("tagId", "分类错误");
+			return MessageUtils.error("tagId", "分类错误");
 		}
 
 		album.setName(name);
@@ -116,7 +116,7 @@ public class AlbumAdminController {
 		album.setIntroduction(introduction);
 
 		albumService.update(album);
-		return MessageUtils.createSuccess();
+		return MessageUtils.success();
 	}
 
 	@RequestMapping(value = "", method = RequestMethod.POST)
@@ -133,22 +133,22 @@ public class AlbumAdminController {
 		String introduction = fileItems.get("introduction").getString();
 
 		if (name == null || name.trim().isEmpty()) {
-			return MessageUtils.createError("name", "专辑名错误");
+			return MessageUtils.error("name", "专辑名错误");
 		}
 		Base64FileItem iconItem = fileItems.get("icon");
 		if (iconItem == null) {
-			return MessageUtils.createError("icon", "图片错误");
+			return MessageUtils.error("icon", "图片错误");
 		}
 		icon = UUIDUtils.randomUUID() + "." + iconItem.getType();
 		iconItem.getFile(ResourceLoader.getRealPath("image/album") + "/" + icon);
 		icon = "image/album/" + icon;
 		Singer singer = singerService.selectByName(singerName);
 		if (createTime == null) {
-			return MessageUtils.createError("createTime", "日期错误");
+			return MessageUtils.error("createTime", "日期错误");
 		}
 		AlbumTag tag = tagService.selectById(tagId);
 		if (tag == null) {
-			return MessageUtils.createError("tagId", "分类错误");
+			return MessageUtils.error("tagId", "分类错误");
 		}
 
 		Album album = factory.get(Album.class);
@@ -166,7 +166,7 @@ public class AlbumAdminController {
 		}
 
 		albumService.insert(album);
-		return MessageUtils.createSuccess();
+		return MessageUtils.success();
 	}
 
 	@RequestMapping(value = "/excel", method = RequestMethod.POST)
@@ -198,17 +198,17 @@ public class AlbumAdminController {
 			String introduction = cells.get(8).getString();
 
 			if (name == null || name.trim().isEmpty()) {
-				return MessageUtils.createError("name", "专辑名错误");
+				return MessageUtils.error("name", "专辑名错误");
 			}
 			if (icon == null || icon.trim().isEmpty()) {
-				return MessageUtils.createError("icon", "图片错误");
+				return MessageUtils.error("icon", "图片错误");
 			}
 			if (createTime == null) {
-				return MessageUtils.createError("createTime", "日期错误");
+				return MessageUtils.error("createTime", "日期错误");
 			}
 			AlbumTag tag = tagService.selectById(tagId);
 			if (tag == null) {
-				return MessageUtils.createError("tagId", "分类错误");
+				return MessageUtils.error("tagId", "分类错误");
 			}
 
 			Album album = factory.get(Album.class);
@@ -229,6 +229,6 @@ public class AlbumAdminController {
 		}
 
 		albumService.batchInsert(albumList);
-		return MessageUtils.createSuccess();
+		return MessageUtils.success();
 	}
 }

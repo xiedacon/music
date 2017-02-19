@@ -22,40 +22,40 @@ public class SongMenuReadController {
 
 	@RequestMapping("/{id:[a-zA-Z0-9]+}")
 	public Map<String, Object> selectById(@PathVariable("id") String id) {
-		return MessageUtils.createSuccess(songMenuService.selectById(id));
+		return MessageUtils.success(songMenuService.selectById(id));
 	}
 
 	@RequestMapping("/new_{page:[1-9]\\d*}")
 	public Map<String, Object> selectPageBeanOrderByCreateTime(@PathVariable("page") Integer page) {
-		return MessageUtils.createSuccess(songMenuService.selectPageBeanOrderByCreateTime(page));
+		return MessageUtils.success(songMenuService.selectPageBeanOrderByCreateTime(page));
 	}
 
 	@RequestMapping("/hot_{page:[1-9]\\d*}")
 	public Map<String, Object> selectPageBeanOrderByCollectionNum(@PathVariable("page") Integer page) {
-		return MessageUtils.createSuccess(songMenuService.selectPageBeanOrderByCollectionNum(page));
+		return MessageUtils.success(songMenuService.selectPageBeanOrderByCollectionNum(page));
 	}
 
 	@RequestMapping("/hot_{page:[1-9]\\d*}/secondTagId_{secondTagId:\\w+}")
 	public Map<String, Object> selectPageBeanBySecondTagIdOrderByCollectionNum(
 			@PathVariable("secondTagId") String secondTagId, @PathVariable("page") Integer page) {
 		return MessageUtils
-				.createSuccess(songMenuService.selectPageBeanBySecondTagIdOrderByCollectionNum(secondTagId, page));
+				.success(songMenuService.selectPageBeanBySecondTagIdOrderByCollectionNum(secondTagId, page));
 	}
 
 	@RequestMapping("/new_{page:[1-9]\\d*}/secondTagId_{secondTagId:\\w+}")
 	public Map<String, Object> selectPageBeanBySecondTagIdOrderByCreateTime(
 			@PathVariable("secondTagId") String secondTagId, @PathVariable("page") Integer page) {
 		return MessageUtils
-				.createSuccess(songMenuService.selectPageBeanBySecondTagIdOrderByCreateTime(secondTagId, page));
+				.success(songMenuService.selectPageBeanBySecondTagIdOrderByCreateTime(secondTagId, page));
 	}
 
 	@RequestMapping("/creatorId_{creatorId:\\w+}")
 	public Map<String, Object> selectListByCreatorId(@PathVariable("creatorId") String creatorId) {
-		return MessageUtils.createSuccess(songMenuService.selectListByCreatorId(creatorId));
+		return MessageUtils.success(songMenuService.selectListByCreatorId(creatorId));
 	}
 
 	@RequestMapping("/collectorId_{collectorId:\\w+}")
 	public Map<String, Object> selectListByCollectorId(@PathVariable("collectorId") String collectorId) {
-		return MessageUtils.createSuccess(songMenuService.selectListByCollectorId(collectorId));
+		return MessageUtils.success(songMenuService.selectListByCollectorId(collectorId));
 	}
 }

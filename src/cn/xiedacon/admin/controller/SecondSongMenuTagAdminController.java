@@ -32,7 +32,7 @@ public class SecondSongMenuTagAdminController {
 
 	@RequestMapping(value = "", method = RequestMethod.GET)
 	public Map<String, Object> selectList() {
-		return MessageUtils.createSuccess(secondTagService.selectList());
+		return MessageUtils.success(secondTagService.selectList());
 	}
 
 	@RequestMapping(value = "", method = RequestMethod.POST)
@@ -40,10 +40,10 @@ public class SecondSongMenuTagAdminController {
 			@RequestParam("firstTagId") String firstTagId) {
 		SongMenuFirstTag firstTag = firstTagService.selectById(firstTagId);
 		if (firstTag == null) {
-			return MessageUtils.createError("firstTagId", "一级分类错误");
+			return MessageUtils.error("firstTagId", "一级分类错误");
 		}
 		if (name == null || name.trim().isEmpty()) {
-			return MessageUtils.createError("name", "分类名不能为空");
+			return MessageUtils.error("name", "分类名不能为空");
 		}
 
 		SongMenuSecondTag secondTag = factory.get(SongMenuSecondTag.class);
@@ -52,7 +52,7 @@ public class SecondSongMenuTagAdminController {
 		secondTag.setFirstTagId(firstTag.getId());
 
 		secondTagService.insert(secondTag);
-		return MessageUtils.createSuccess();
+		return MessageUtils.success();
 	}
 
 	@RequestMapping(value = "/{id:\\w+}", method = RequestMethod.PUT)
@@ -60,22 +60,22 @@ public class SecondSongMenuTagAdminController {
 			@RequestParam("firstTagId") String firstTagId) {
 		SongMenuSecondTag secondTag = secondTagService.selectById(id);
 		if (secondTag == null) {
-			return MessageUtils.createError("id", "分类不存在");
+			return MessageUtils.error("id", "分类不存在");
 		}
 
 		SongMenuFirstTag firstTag = firstTagService.selectById(firstTagId);
 		if (firstTag == null) {
-			return MessageUtils.createError("firstTagId", "一级分类错误");
+			return MessageUtils.error("firstTagId", "一级分类错误");
 		}
 		if (name == null || name.trim().isEmpty()) {
-			return MessageUtils.createError("name", "分类名不能为空");
+			return MessageUtils.error("name", "分类名不能为空");
 		}
 
 		secondTag.setName(name);
 		secondTag.setFirstTagId(firstTag.getId());
 
 		secondTagService.update(secondTag);
-		return MessageUtils.createSuccess();
+		return MessageUtils.success();
 	}
 
 	@RequestMapping(value = "/{id:\\w+}", method = RequestMethod.DELETE)
@@ -85,6 +85,6 @@ public class SecondSongMenuTagAdminController {
 			secondTagService.delete(secondTag);
 		}
 
-		return MessageUtils.createSuccess();
+		return MessageUtils.success();
 	}
 }

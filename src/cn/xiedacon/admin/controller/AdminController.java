@@ -35,15 +35,15 @@ public class AdminController {
 		dataPassword = MD5Util.encode(dataPassword);
 		if (dataName.equals(name) && dataPassword.equals(password)) {
 			AdminManager.sign(name, response);
-			return MessageUtils.createSuccess("url", "/music/admin/html/index");
+			return MessageUtils.success("url", "/music/admin/html/index");
 		}
-		return MessageUtils.createError("password", "密码错误");
+		return MessageUtils.error("password", "密码错误");
 	}
 
 	@RequestMapping(value = "/logout", method = RequestMethod.GET)
 	public Map<String, Object> logout(HttpServletRequest request) {
 		AdminManager.signout(request);
-		return MessageUtils.createSuccess("url", "/music/admin");
+		return MessageUtils.success("url", "/music/admin");
 	}
 
 	private synchronized Properties getAdminProperties() {

@@ -59,7 +59,7 @@ public class CommentWriteController {
 			@RequestParam("comment") String content) {
 		User creator = userService.selectById(creatorId);
 		if (creator == null) {
-			return MessageUtils.createError("creatorId", "用户不存在");
+			return MessageUtils.error("creatorId", "用户不存在");
 		}
 
 		Comment comment = factory.get(Comment.class);
@@ -74,7 +74,7 @@ public class CommentWriteController {
 		case "songMenu":
 			SongMenu songMenu = songMenuReadService.selectById(typeId);
 			if (songMenu == null) {
-				return MessageUtils.createError("typeId", "歌单不存在");
+				return MessageUtils.error("typeId", "歌单不存在");
 			}
 
 			comment.setSongMenuId(songMenu.getId());
@@ -84,7 +84,7 @@ public class CommentWriteController {
 		case "album":
 			Album album = albumReadService.selectById(typeId);
 			if (album == null) {
-				return MessageUtils.createError("typeId", "专辑不存在");
+				return MessageUtils.error("typeId", "专辑不存在");
 			}
 
 			comment.setAlbumId(album.getId());
@@ -94,7 +94,7 @@ public class CommentWriteController {
 		case "songList":
 			SongList songList = songListReadService.selectById(typeId);
 			if (songList == null) {
-				return MessageUtils.createError("typeId", "榜单不存在");
+				return MessageUtils.error("typeId", "榜单不存在");
 			}
 
 			comment.setSongListId(songList.getId());
@@ -104,7 +104,7 @@ public class CommentWriteController {
 		case "song":
 			Song song = songReadService.selectById(typeId);
 			if (song == null) {
-				return MessageUtils.createError("typeId", "歌曲不存在");
+				return MessageUtils.error("typeId", "歌曲不存在");
 			}
 
 			comment.setSongId(song.getId());
@@ -112,9 +112,9 @@ public class CommentWriteController {
 			commentWriteService.insertSongComment(comment);
 			break;
 		default:
-			return MessageUtils.createError("类型不存在");
+			return MessageUtils.error("类型不存在");
 		}
-		return MessageUtils.createSuccess();
+		return MessageUtils.success();
 	}
 
 	@RequestMapping(value = "/{id:\\w+}/{type:\\w+}", method = RequestMethod.PUT)
@@ -122,7 +122,7 @@ public class CommentWriteController {
 			@PathVariable("type") String type) throws IOException {
 		User creator = userService.selectById(creatorId);
 		if (creator == null) {
-			return MessageUtils.createError("creatorId", "用户不存在");
+			return MessageUtils.error("creatorId", "用户不存在");
 		}
 
 		Comment comment;
@@ -130,7 +130,7 @@ public class CommentWriteController {
 		case "songMenu":
 			comment = commentReadService.selectSongMenuCommentById(id);
 			if (comment == null) {
-				return MessageUtils.createError("id", "评论不存在");
+				return MessageUtils.error("id", "评论不存在");
 			}
 
 			commentWriteService.updateSongMenuCommentAgreeNumById(comment.getAgreeNum() + 1, comment.getId());
@@ -138,7 +138,7 @@ public class CommentWriteController {
 		case "album":
 			comment = commentReadService.selectAlbumCommentById(id);
 			if (comment == null) {
-				return MessageUtils.createError("id", "评论不存在");
+				return MessageUtils.error("id", "评论不存在");
 			}
 
 			commentWriteService.updateAlbumCommentAgreeNumById(comment.getAgreeNum() + 1, comment.getId());
@@ -146,7 +146,7 @@ public class CommentWriteController {
 		case "songList":
 			comment = commentReadService.selectSongListCommentById(id);
 			if (comment == null) {
-				return MessageUtils.createError("id", "评论不存在");
+				return MessageUtils.error("id", "评论不存在");
 			}
 
 			commentWriteService.updateSongListCommentAgreeNumById(comment.getAgreeNum() + 1, comment.getId());
@@ -154,15 +154,15 @@ public class CommentWriteController {
 		case "song":
 			comment = commentReadService.selectSongCommentById(id);
 			if (comment == null) {
-				return MessageUtils.createError("id", "评论不存在");
+				return MessageUtils.error("id", "评论不存在");
 			}
 
 			commentWriteService.updateSongCommentAgreeNumById(comment.getAgreeNum() + 1, comment.getId());
 			break;
 		default:
-			return MessageUtils.createError("type", "不存在的类型");
+			return MessageUtils.error("type", "不存在的类型");
 		}
 
-		return MessageUtils.createSuccess();
+		return MessageUtils.success();
 	}
 }

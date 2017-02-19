@@ -28,9 +28,9 @@ public class AlbumWriteController {
 	public Map<String, Object> updatePlayNumById(@PathVariable("id") String id) {
 		Album album = albumReadService.selectById(id);
 		if (album == null) {
-			return MessageUtils.createError("id", "专辑不存在");
+			return MessageUtils.error("id", "专辑不存在");
 		}
 		albumWriteService.updatePlayNumById(album.getPlayNum() + 1, album.getId());
-		return MessageUtils.createSuccess();
+		return MessageUtils.success();
 	}
 }

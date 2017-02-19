@@ -22,6 +22,6 @@ public class UserReadController {
 
 	@RequestMapping(value = "/{id:\\w+}")
 	public Map<String, Object> selectById(@PathVariable("id") String id) {
-		return MessageUtils.createSuccess(userService.selectById(id));
+		return MessageUtils.success(userService.selectById(id));
 	}
 }

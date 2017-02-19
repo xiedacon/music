@@ -49,7 +49,7 @@ public class SongAdminController {
 
 	@RequestMapping(value = "/page/{page:[1-9]\\d*}", method = RequestMethod.GET)
 	public Map<String, Object> selectPageBean(@PathVariable("page") Integer page) {
-		return MessageUtils.createSuccess(songService.selectPageBean(page));
+		return MessageUtils.success(songService.selectPageBean(page));
 	}
 
 	@RequestMapping(value = "/{id:\\w+}", method = RequestMethod.DELETE)
@@ -58,26 +58,26 @@ public class SongAdminController {
 		if (song != null) {
 			songService.delete(song);
 		}
-		return MessageUtils.createSuccess();
+		return MessageUtils.success();
 	}
 
 	@RequestMapping(value = "/name/{name:.+}/page/{page:[1-9]\\d*}", method = RequestMethod.GET)
 	public Map<String, Object> selectPageBeanByNameLike(@PathVariable("name") String name,
 			@PathVariable("page") Integer page) {
 		String nameLike = "%" + CharsetUtils.change(name, "ISO-8859-1", "UTF-8") + "%";
-		return MessageUtils.createSuccess(songService.selectPageBeanByNameLike(page, nameLike));
+		return MessageUtils.success(songService.selectPageBeanByNameLike(page, nameLike));
 	}
 
 	@RequestMapping(value = "/{id:\\w+}", method = RequestMethod.GET)
 	public Map<String, Object> selectById(@PathVariable("id") String id) {
-		return MessageUtils.createSuccess(songService.selectById(id));
+		return MessageUtils.success(songService.selectById(id));
 	}
 
 	@RequestMapping(value = "/{id:\\w+}", method = RequestMethod.PUT)
 	public Map<String, Object> update(@PathVariable("id") String id, HttpServletRequest request) {
 		Song song = songService.selectById(id);
 		if (song == null) {
-			return MessageUtils.createError("id", "歌曲错误");
+			return MessageUtils.error("id", "歌曲错误");
 		}
 
 		Map<String, Base64FileItem> fileItems = Base64UploadUtils.parseRequest(request);
@@ -92,7 +92,7 @@ public class SongAdminController {
 		String remark = fileItems.get("remark").getString();
 
 		if (name == null || name.trim().isEmpty()) {
-			return MessageUtils.createError("name", "歌曲名不能为空");
+			return MessageUtils.error("name", "歌曲名不能为空");
 		}
 		Base64FileItem iconItem = fileItems.get("icon");
 		if (iconItem != null) {
@@ -106,7 +106,7 @@ public class SongAdminController {
 		if (timeM != null && timeS != null && timeM.matches("[0-5]\\d") && timeS.matches("[0-5]\\d")) {
 			time = timeM + ":" + timeS;
 		} else {
-			return MessageUtils.createError("time", "时间格式错误");
+			return MessageUtils.error("time", "时间格式错误");
 		}
 		Base64FileItem songItem = fileItems.get("songFile");
 		if (songItem != null) {
@@ -145,7 +145,7 @@ public class SongAdminController {
 		song.setRemark(remark);
 
 		songService.update(song);
-		return MessageUtils.createSuccess();
+		return MessageUtils.success();
 	}
 
 	@RequestMapping(value = "", method = RequestMethod.POST)
@@ -165,7 +165,7 @@ public class SongAdminController {
 
 		Base64FileItem iconItem = fileItems.get("icon");
 		if (iconItem == null) {
-			return MessageUtils.createError("icon", "不能为空");
+			return MessageUtils.error("icon", "不能为空");
 		}
 		icon = UUIDUtils.uuid(new Date().getTime()) + "." + iconItem.getType();
 		iconItem.getFile(ResourceLoader.getRealPath("image/song") + "/" + icon);
@@ -173,11 +173,11 @@ public class SongAdminController {
 		if (timeM != null && timeS != null && timeM.matches("[0-5]\\d") && timeS.matches("[0-5]\\d")) {
 			time = timeM + ":" + timeS;
 		} else {
-			return MessageUtils.createError("time", "时间格式错误");
+			return MessageUtils.error("time", "时间格式错误");
 		}
 		Base64FileItem songItem = fileItems.get("songFile");
 		if (songItem == null) {
-			return MessageUtils.createError("songFile", "不能为空");
+			return MessageUtils.error("songFile", "不能为空");
 		}
 		fileUri = UUIDUtils.uuid(new Date().getTime()) + "." + songItem.getType();
 		songItem.getFile(ResourceLoader.getRealPath("music") + "/" + fileUri);
@@ -207,7 +207,7 @@ public class SongAdminController {
 		song.setRemark(remark);
 
 		songService.insert(song);
-		return MessageUtils.createSuccess();
+		return MessageUtils.success();
 	}
 
 	@RequestMapping(value = "/excel", method = RequestMethod.POST)
@@ -260,20 +260,20 @@ public class SongAdminController {
 			String remark = cells.get(8).getString();
 
 			if (name == null || name.trim().isEmpty()) {
-				return MessageUtils.createError("name", "歌曲名不能为空");
+				return MessageUtils.error("name", "歌曲名不能为空");
 			}
 			if (icon == null || icon.trim().isEmpty()) {
-				return MessageUtils.createError("icon", "图片错误");
+				return MessageUtils.error("icon", "图片错误");
 			}
 			icon = "image/song/" + icon;
 			if (!time.matches("[0-5]\\d:[0-5]\\d")) {
-				return MessageUtils.createError("time", "时间格式错误");
+				return MessageUtils.error("time", "时间格式错误");
 			}
 			if (lrcUri != null && !lrcUri.trim().isEmpty()) {
 				lrcUri = "lyrics/" + lrcUri;
 			}
 			if (fileUri == null || fileUri.trim().isEmpty()) {
-				return MessageUtils.createError("fileUri", "歌曲文件错误");
+				return MessageUtils.error("fileUri", "歌曲文件错误");
 			}
 			fileUri = "music/" + fileUri;
 
@@ -298,6 +298,6 @@ public class SongAdminController {
 		}
 
 		songService.batchInsert(songList);
-		return MessageUtils.createSuccess();
+		return MessageUtils.success();
 	}
 }

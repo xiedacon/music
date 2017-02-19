@@ -28,7 +28,7 @@ public class AlbumTagAdminController {
 
 	@RequestMapping(value = "", method = RequestMethod.GET)
 	public Map<String, Object> selectList() {
-		return MessageUtils.createSuccess(albumTagService.selectList());
+		return MessageUtils.success(albumTagService.selectList());
 	}
 
 	@RequestMapping(value = "/{id:\\w+}", method = RequestMethod.DELETE)
@@ -38,29 +38,29 @@ public class AlbumTagAdminController {
 			albumTagService.delete(albumTag);
 		}
 
-		return MessageUtils.createSuccess();
+		return MessageUtils.success();
 	}
 
 	@RequestMapping(value = "/{id:\\w+}", method = RequestMethod.PUT)
 	public Map<String, Object> update(@PathVariable("id") String id, @RequestParam("name") String name) {
 		if (name == null || name.trim().isEmpty()) {
-			return MessageUtils.createError("name", "分类名称不能为空");
+			return MessageUtils.error("name", "分类名称不能为空");
 		}
 
 		AlbumTag albumTag = albumTagService.selectById(id);
 		if (albumTag == null) {
-			return MessageUtils.createError("id", "分类不存在");
+			return MessageUtils.error("id", "分类不存在");
 		}
 
 		albumTag.setName(name);
 		albumTagService.update(albumTag);
-		return MessageUtils.createSuccess();
+		return MessageUtils.success();
 	}
 
 	@RequestMapping(value = "", method = RequestMethod.POST)
 	public Map<String, Object> insert(@RequestParam("name") String name) {
 		if (name == null || name.trim().isEmpty()) {
-			return MessageUtils.createError("name", "分类名称不能为空");
+			return MessageUtils.error("name", "分类名称不能为空");
 		}
 
 		AlbumTag albumTag = factory.get(AlbumTag.class);
@@ -68,6 +68,6 @@ public class AlbumTagAdminController {
 		albumTag.setName(name);
 
 		albumTagService.insert(albumTag);
-		return MessageUtils.createSuccess();
+		return MessageUtils.success();
 	}
 }

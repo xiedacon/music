@@ -24,30 +24,30 @@ public class SingerReadController {
 	@RequestMapping("")
 	public Map<String, Object> selectList() {
 		return MessageUtils
-				.createSuccess(singerService.selectListLimit(Constant.BEGIN_DEFAULT, Constant.SINGER_SHOW_NUM));
+				.success(singerService.selectListLimit(Constant.BEGIN_DEFAULT, Constant.SINGER_SHOW_NUM));
 	}
 
 	@RequestMapping("/hot")
 	public Map<String, Object> selectForHot() {
-		return MessageUtils.createSuccess(
+		return MessageUtils.success(
 				singerService.selectListOrderByCollectionNumLimit(Constant.BEGIN_DEFAULT, Constant.SINGER_SHOW_NUM));
 	}
 
 	@RequestMapping("/classifyId_{classifyId:\\d{4}}")
 	public Map<String, Object> selectListByClassifyId(@PathVariable("classifyId") Integer classifyId) {
-		return MessageUtils.createSuccess(singerService.selectListByClassifyIdOrderByCollectionNumLimit(classifyId,
+		return MessageUtils.success(singerService.selectListByClassifyIdOrderByCollectionNumLimit(classifyId,
 				Constant.BEGIN_DEFAULT, Constant.SINGER_SHOW_NUM));
 	}
 
 	@RequestMapping("/{id:[a-zA-Z0-9]+}")
 	public Map<String, Object> selectById(@PathVariable("id") String id) {
-		return MessageUtils.createSuccess(singerService.selectById(id));
+		return MessageUtils.success(singerService.selectById(id));
 	}
 
 	@RequestMapping("/{id:\\w+}/introduction")
 	public Map<String, Object> selectIntroductionById(@PathVariable("id") String id) {
 		// 可能扩展为富文本
 		String introduction = singerService.selectIntroductionById(id);
-		return MessageUtils.createSuccess(introduction);
+		return MessageUtils.success(introduction);
 	}
 }

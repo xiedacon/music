@@ -32,7 +32,7 @@ public class CommentReadController {
 			hotList = commentService.selectForHotByAlbumId(albumId);			
 		}
 		PageBean<Comment> pageBean = commentService.selectPageBeanByAlbumId(albumId, page);
-		return MessageUtils.createSuccess(new Comments(hotList, pageBean));
+		return MessageUtils.success(new Comments(hotList, pageBean));
 	}
 
 	@RequestMapping("/songId_{songId:\\w+}/{page:[1-9]\\d*}")
@@ -43,7 +43,7 @@ public class CommentReadController {
 			hotList = commentService.selectForHotBySongId(songId);
 		}
 		PageBean<Comment> pageBean = commentService.selectPageBeanBySongId(songId, page);
-		return MessageUtils.createSuccess(new Comments(hotList, pageBean));
+		return MessageUtils.success(new Comments(hotList, pageBean));
 	}
 	
 	@RequestMapping("/songListId_{songListId:\\w+}/{page:[1-9]\\d*}")
@@ -54,7 +54,7 @@ public class CommentReadController {
 			hotList = commentService.selectForHotBySongListId(songListId);
 		}
 		PageBean<Comment> pageBean = commentService.selectPageBeanBySongListId(songListId, page);
-		return MessageUtils.createSuccess(new Comments(hotList, pageBean));
+		return MessageUtils.success(new Comments(hotList, pageBean));
 	}
 
 	@RequestMapping("/songMenuId_{songMenuId:\\w+}/{page:[1-9]\\d*}")
@@ -65,6 +65,6 @@ public class CommentReadController {
 			hotList = commentService.selectForHotBySongMenuId(songMenuId);
 		}
 		PageBean<Comment> pageBean = commentService.selectPageBeanBySongMenuId(songMenuId, page);
-		return MessageUtils.createSuccess(new Comments(hotList, pageBean));
+		return MessageUtils.success(new Comments(hotList, pageBean));
 	}
 }

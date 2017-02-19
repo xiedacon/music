@@ -28,7 +28,7 @@ public class FirstClassifyAdminController {
 
 	@RequestMapping(value = "", method = RequestMethod.GET)
 	public Map<String, Object> selectList() {
-		return MessageUtils.createSuccess(classifyService.selectList());
+		return MessageUtils.success(classifyService.selectList());
 	}
 
 	@RequestMapping(value = "/{id:\\w+}", method = RequestMethod.DELETE)
@@ -38,29 +38,29 @@ public class FirstClassifyAdminController {
 			classifyService.delete(classify);
 		}
 
-		return MessageUtils.createSuccess();
+		return MessageUtils.success();
 	}
 
 	@RequestMapping(value = "/{id:\\w+}", method = RequestMethod.PUT)
 	public Map<String, Object> update(@PathVariable("id") String id, @RequestParam("name") String name) {
 		if (name == null || name.trim().isEmpty()) {
-			return MessageUtils.createError("name", "分类名称不能为空");
+			return MessageUtils.error("name", "分类名称不能为空");
 		}
 
 		FirstClassify classify = classifyService.selectById(id);
 		if (classify == null) {
-			return MessageUtils.createError("id", "分类不存在");
+			return MessageUtils.error("id", "分类不存在");
 		}
 
 		classify.setName(name);
 		classifyService.update(classify);
-		return MessageUtils.createSuccess();
+		return MessageUtils.success();
 	}
 
 	@RequestMapping(value = "", method = RequestMethod.POST)
 	public Map<String, Object> insert(@RequestParam("name") String name) {
 		if (name == null || name.trim().isEmpty()) {
-			return MessageUtils.createError("name", "分类名称不能为空");
+			return MessageUtils.error("name", "分类名称不能为空");
 		}
 
 		FirstClassify classify = factory.get(FirstClassify.class);
@@ -68,6 +68,6 @@ public class FirstClassifyAdminController {
 		classify.setName(name);
 
 		classifyService.insert(classify);
-		return MessageUtils.createSuccess();
+		return MessageUtils.success();
 	}
 }

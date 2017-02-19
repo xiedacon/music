@@ -2,6 +2,7 @@ package cn.xiedacon.util;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
@@ -32,9 +33,45 @@ public class JsonUtils {
 	private static ObjectMapper objectMapper = new ObjectMapper();
 	private static String charset = "UFT-8";
 
-	public static <T> T parse(String json, Class<T> c) {
+	public static <T> T parse(byte[] jsonBytes, Class<T> c) {
 		try {
-			return objectMapper.readValue(json, c);
+			return objectMapper.readValue(jsonBytes, c);
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	public static <T> T parse(URL jsonURL, Class<T> c) {
+		try {
+			return JsonUtils.parse(new FileInputStream(jsonURL.getPath()), c);
+		} catch (FileNotFoundException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	public static <T> T parse(String json, Class<T> c) {
+		return JsonUtils.parse(new StringReader(json), c);
+	}
+
+	public static <T> T parse(File jsonFile, Class<T> c) {
+		try (FileInputStream in = new FileInputStream(jsonFile)) {
+			return JsonUtils.parse(in, c);
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	public static <T> T parse(Reader in, Class<T> c) {
+		try {
+			return JsonUtils.parse(IOUtils.toByteArray(in, charset), c);
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	public static <T> T parse(InputStream in, Class<T> c) {
+		try {
+			return JsonUtils.parse(IOUtils.toByteArray(in), c);
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
@@ -79,7 +116,7 @@ public class JsonUtils {
 	public static <T> List<T> parseCollection(URL jsonURL, Class<? extends Collection> collectionType,
 			Class<T> elementType) {
 		try {
-			return parseCollection(jsonURL.openStream(), collectionType, elementType);
+			return parseCollection(new FileInputStream(jsonURL.getPath()), collectionType, elementType);
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}

@@ -22,21 +22,21 @@ public class AlbumReadController {
 
 	@RequestMapping("/{id:\\w+}")
 	public Map<String, Object> selectById(@PathVariable("id") String id) {
-		return MessageUtils.createSuccess(albumService.selectById(id));
+		return MessageUtils.success(albumService.selectById(id));
 	}
 
 	@RequestMapping("/tagId_{tagId:\\w+}/{page:[1-9]\\d*}")
 	public Map<String, Object> selectPageBeanByTagId(@PathVariable("tagId") String tagId,
 			@PathVariable("page") Integer page) {
 		if ("all".equals(tagId)) {
-			return MessageUtils.createSuccess(albumService.selectPageBeanOrderByCreateTime(page));
+			return MessageUtils.success(albumService.selectPageBeanOrderByCreateTime(page));
 		}
-		return MessageUtils.createSuccess(albumService.selectPageBeanByTagIdOrderByCreateTime(tagId, page));
+		return MessageUtils.success(albumService.selectPageBeanByTagIdOrderByCreateTime(tagId, page));
 	}
 
 	@RequestMapping("/singerId_{singerId:\\w+}/{page:[1-9]\\d*}")
 	public Map<String, Object> selectPageBeanBySingerId(@PathVariable("singerId") String singerId,
 			@PathVariable("page") Integer page) {
-		return MessageUtils.createSuccess(albumService.selectPageBeanBySingerIdOrderByCreateTime(singerId, page));
+		return MessageUtils.success(albumService.selectPageBeanBySingerIdOrderByCreateTime(singerId, page));
 	}
 }

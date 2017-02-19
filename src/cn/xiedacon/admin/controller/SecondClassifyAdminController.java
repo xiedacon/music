@@ -32,7 +32,7 @@ public class SecondClassifyAdminController {
 
 	@RequestMapping(value = "", method = RequestMethod.GET)
 	public Map<String, Object> selectList() {
-		return MessageUtils.createSuccess(secondlassifyService.selectList());
+		return MessageUtils.success(secondlassifyService.selectList());
 	}
 
 	@RequestMapping(value = "", method = RequestMethod.POST)
@@ -40,10 +40,10 @@ public class SecondClassifyAdminController {
 			@RequestParam("firstClassifyId") String firstClassifyId) {
 		FirstClassify firstClassify = firstClassifyService.selectById(firstClassifyId);
 		if (firstClassify == null) {
-			return MessageUtils.createError("firstClassifyId", "一级分类错误");
+			return MessageUtils.error("firstClassifyId", "一级分类错误");
 		}
 		if (name == null || name.trim().isEmpty()) {
-			return MessageUtils.createError("name", "分类名不能为空");
+			return MessageUtils.error("name", "分类名不能为空");
 		}
 
 		SecondClassify secondClassify = factory.get(SecondClassify.class);
@@ -52,7 +52,7 @@ public class SecondClassifyAdminController {
 		secondClassify.setFirstClassifyId(firstClassify.getId());
 
 		secondlassifyService.insert(secondClassify);
-		return MessageUtils.createSuccess();
+		return MessageUtils.success();
 	}
 
 	@RequestMapping(value = "/{id:\\w+}", method = RequestMethod.PUT)
@@ -60,22 +60,22 @@ public class SecondClassifyAdminController {
 			@RequestParam("firstClassifyId") String firstClassifyId) {
 		SecondClassify secondClassify = secondlassifyService.selectById(id);
 		if(secondClassify == null){
-			return MessageUtils.createError("id", "分类不存在");
+			return MessageUtils.error("id", "分类不存在");
 		}
 		
 		FirstClassify firstClassify = firstClassifyService.selectById(firstClassifyId);
 		if (firstClassify == null) {
-			return MessageUtils.createError("firstClassifyId", "一级分类错误");
+			return MessageUtils.error("firstClassifyId", "一级分类错误");
 		}
 		if (name == null || name.trim().isEmpty()) {
-			return MessageUtils.createError("name", "分类名不能为空");
+			return MessageUtils.error("name", "分类名不能为空");
 		}
 		
 		secondClassify.setName(name);
 		secondClassify.setFirstClassifyId(firstClassify.getId());
 		
 		secondlassifyService.update(secondClassify);
-		return MessageUtils.createSuccess();
+		return MessageUtils.success();
 	}
 
 	@RequestMapping(value = "/{id:\\w+}", method = RequestMethod.DELETE)
@@ -85,6 +85,6 @@ public class SecondClassifyAdminController {
 			secondlassifyService.delete(secondClassify);
 		}
 		
-		return MessageUtils.createSuccess();
+		return MessageUtils.success();
 	}
 }

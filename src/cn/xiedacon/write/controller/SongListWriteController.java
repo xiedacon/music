@@ -28,9 +28,9 @@ public class SongListWriteController {
 	public Map<String, Object> updatePlayNumById(@PathVariable("songListId") String id) {
 		SongList songList = songListReadService.selectById(id);
 		if (songList == null) {
-			return MessageUtils.createError("songListId", "榜单不存在");
+			return MessageUtils.error("songListId", "榜单不存在");
 		}
 		songListWriteService.updatePlayNumById(songList.getPlayNum() + 1, songList.getId());
-		return MessageUtils.createSuccess();
+		return MessageUtils.success();
 	}
 }

@@ -24,7 +24,7 @@ public class SongMenuAdminController {
 
 	@RequestMapping(value = "/page/{page:[1-9]\\d*}", method = RequestMethod.GET)
 	public Map<String, Object> selectPageBean(@PathVariable("page") Integer page) {
-		return MessageUtils.createSuccess(songMenuService.selectPageBeanOrderByCreateTime(page));
+		return MessageUtils.success(songMenuService.selectPageBeanOrderByCreateTime(page));
 	}
 
 	@RequestMapping(value = "/{id:\\w+}", method = RequestMethod.DELETE)
@@ -33,13 +33,13 @@ public class SongMenuAdminController {
 		if (songMenu != null) {
 			songMenuService.delete(songMenu);
 		}
-		return MessageUtils.createSuccess();
+		return MessageUtils.success();
 	}
 
 	@RequestMapping(value = "/name/{name:.+}/page/{page:[1-9]\\d*}", method = RequestMethod.GET)
 	public Map<String, Object> selectPageBeanByNameLike(@PathVariable("name") String name,
 			@PathVariable("page") Integer page) {
 		String nameLike = "%" + CharsetUtils.change(name, "ISO-8859-1", "UTF-8") + "%";
-		return MessageUtils.createSuccess("data", songMenuService.selectPageBeanByNameLike(page, nameLike));
+		return MessageUtils.success("data", songMenuService.selectPageBeanByNameLike(page, nameLike));
 	}
 }
