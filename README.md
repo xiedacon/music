@@ -1,3 +1,5 @@
+![travis-ci](https://travis-ci.org/xiedacon/music.svg?branch=master)
+
 # music
 一个简单的音乐网站项目，采用前后端分离架构，由js控制页面渲染
 
@@ -43,4 +45,3 @@
 - 页面html、css重构（兼容性、命名规则、使用规范）
 - 评论消息提醒（消息队列）
 - 添加关注、粉丝、签到、经验、等级、个人设置等功能
-
