@@ -2,6 +2,14 @@ package cn.xiedacon.util;
 
 import java.util.List;
 
+/**
+ * <h1>分页工具类</h1>
+ * 
+ * @author xiedacon
+ * @version v0.0.0
+ *
+ * @param <T>
+ */
 public class PageBean<T> {
 
 	private Integer page;

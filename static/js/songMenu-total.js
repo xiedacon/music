@@ -23,12 +23,10 @@
 			process(source);
 
 			var id = PageScope.params.secondTagId, //
-			name = PageScope.params.secondTagName, //
-			href = "#songMenus?" + (id?("secondTagId="+id):"") + (name?("&secondTagName="+name):""), //
 			template = `
 			<div class="nav_top">
 				<i class="triangle"></i>
-				<a class="nav_top_button" title="`+ name +`" href="` + href + `">`+ name +`</span>
+				<a class="nav_top_button" title="全部分类" href="#songMenus?secondTagName=全部分类">全部分类</span>
 			</div>
 			{{each data as tag}}
 			<li class="subnav">
@@ -37,7 +35,6 @@
 					<span>{{tag.name}}</span>
 				</h3>
 				<div class="types">
-
 					{{each tag.secondTagList as secondTag index}}
 					<a href="#songMenus?secondTagId={{secondTag.id}}&secondTagName={{secondTag.name}}" title="{{secondTag.name}}" class="type {{if secondTag.id == `+ id +`}}select{{/if}}">{{secondTag.name}}</a>
 					{{if index < tag.secondTagList.length - 1}}<span>|</span>{{/if}}
@@ -50,19 +47,22 @@
 	});
 
 	//init();
+	document.querySelector("h2#tagName").innerHTML = PageScope.params.secondTagName;
+	var select = document.querySelector("span#select"), //
+	secondTagList = document.querySelector("ul#secondTagList");
+
+	select["hidden"] = true;
+	select.addEventListener("click",function(){
+		if(select["hidden"]){
+			select["hidden"] = false;
+			secondTagList.style.display = "block";
+		}else{
+			select["hidden"] = true;
+			secondTagList.style.display = "none";
+		}
+	})
 
 	function init() {
-		$("#tagName").text(PageScope.params["secondTagName"]);
-		$("#select").click(function() {
-			var flag = $(this).attr("data-flag");
-			if (flag === "hidden") {
-				$(this).siblings().removeAttr("style");
-				$(this).attr("data-flag", "show");
-			} else {
-				$(this).siblings().attr("style", "display: none");
-				$(this).attr("data-flag", "hidden");
-			}
-		})
 		$(".orderBy").click(function() {
 			$(this).addClass("now");
 			$(this).siblings().removeClass("now");

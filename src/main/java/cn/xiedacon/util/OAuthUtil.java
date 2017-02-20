@@ -8,19 +8,27 @@ import java.util.Properties;
 
 import cn.xiedacon.util.http.HttpUtils;
 
+/**
+ * <h1>oauth工具类</h1>
+ * 
+ * @author xiedacon
+ * @version v0.0.0
+ *
+ */
 public class OAuthUtil {
 
 	private static String configLocaltion = "WEB-INF/classes/oauth_github.properties";
+	private static String oauthPrefix = "https://github.com/login/oauth/access_token?";
 
 	public static Map<String, Object> oAuthGithub() {
-		return OAuthUtil.oAuthGithub("", "");
+		return OAuthUtil.oAuthGithub(configLocaltion, oauthPrefix, "", "");
 	}
 
-	public static Map<String, Object> oAuthGithub(String code, String state) {
+	public static Map<String, Object> oAuthGithub(String configLocaltion, String prefix, String code, String state) {
 		Properties prop = getProperties(ResourceLoader.loadAsStream(configLocaltion));
 
 		// 设置相关证明参数
-		StringBuilder sb = new StringBuilder("https://github.com/login/oauth/access_token?");
+		StringBuilder sb = new StringBuilder(prefix);
 		sb.append("client_id=" + prop.getProperty("client_id")); // 必须
 		sb.append("&client_secret=" + prop.getProperty("client_secret")); // 必须
 		sb.append("&code=" + code); // 必须
