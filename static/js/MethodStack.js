@@ -1,15 +1,11 @@
 (function() {
-	FUNCTION.loadSongMenusAndPages = function(source){
-		loadSongMenus("ul#songMenuList", source.data);
-		loadPages("ul#pages", source.data, FUNCTION.loadSongMenusAndPages);
-	}
-	FUNCTION.loadCommentsAndPages = function (source){
-		loadComments("ul#commentList", source.data);
-		loadPages("ul#pages", source.data.pageBean, FUNCTION.loadCommentsAndPages);
+	FUNCTION.loadCommentsAndPages = function (data){
+		loadComments("ul#commentList", data);
+		loadPages("ul#pages", data.pageBean, FUNCTION.loadCommentsAndPages);
 		loadEmojis();
 	}
 
-	function loadComments(selector, data) {
+	FUNCTION.loadComments = function (selector, data) {
 		var template = `
 			{{if hotList && hotList.length > 0}}
 			<h3>最热评论<span>{{hotList.length}}</span></h3>
@@ -87,7 +83,7 @@
 
 		document.querySelector(selector).innerHTML = Template.compile(template)(data);
 	}
-	FUNCTION.loadSongs = function loadSongs(selector, source) {
+	FUNCTION.loadSongs = function loadSongs(selector, data) {
 		var template = `
 		{{each data as song index}}
 			<tr id="{{song.id}}" class="{{if index%2==0}}{{else}}singular{{/if}}">
@@ -121,11 +117,11 @@
 			</tr>
 		{{/each}}
 		`;
-		document.querySelector(selector).innerHTML = Template.compile(template)(source);
+		document.querySelector(selector).innerHTML = Template.compile(template)(data);
 	}
-	function loadSongMenus(selector, pageBean) {
+	FUNCTION.loadSongMenus = function (selector, data) {
 		var template = `
-		{{each beans as songMenu index}}
+		{{each pageBean.beans as songMenu index}}
 		<li class="songMenu entity" style="{{if (index+1)%5===0}}padding-right:0{{/if}}">
 			<div class="image">
 				<a href="#songMenu?id={{songMenu.id}}">
@@ -144,7 +140,7 @@
 		{{/each}}
 		`;
 
-		document.querySelector(selector).innerHTML = Template.compile(template)(pageBean);
+		document.querySelector(selector).innerHTML = Template.compile(template)(data);
 	}
 	FUNCTION.loadAlbum = function loadAlbum(album, $albumEle) {
 		$albumEle.find("img").attr({
@@ -165,7 +161,8 @@
 		}).text(album.singerName);
 	}
 
-	function loadPages(selector, pageBean, callback) {
+	FUNCTION.loadPages = function (selector, data, excutor) {
+		var pageBean = data.pageBean;
 		if (pageBean.totalPage < 2) {
 			return;
 		}
@@ -196,7 +193,7 @@
 		});
 
 		pagesEle.innerHTML = template;
-		pagesEle.addEventListener("click", function(e) {
+		pagesEle.onclick = function(e) {
 			var prefix = data.urlPrefix ? data.urlPrefix : "", //
 			suffix = data.urlSuffix ? data.urlSuffix : "" //
 			;
@@ -206,15 +203,10 @@
 				dataType : "json",
 				type : "GET"
 			}).done(function(source) {
-				process(source);
-
-				source.data.urlPrefix = data.urlPrefix;
-				source.data.urlSuffix = data.urlSuffix;
-				callback(source);
+				excutor.source = source;
+				excutor.excute();
 			});
-		})
-
-		FUNCTION.align($(".material_right"), $(".material_left"));
+		};
 	}
 	// 保持高度相等
 	FUNCTION.align = function align($ele1, $ele2) {
@@ -223,7 +215,7 @@
 		$ele2.css("min-height", max);
 	}
 
-	 function loadEmojis(selector) {
+	 FUNCTION.loadEmojis = function (selector) {
 		var $emojis = $("#emojis");
 		var $newComment = $("#newComment");
 		var emojis_flag;

@@ -96,9 +96,16 @@
 		type : "GET",
 		dataType : "json"
 	}).done(function(source){
-		process(source);
-
-		source.data.urlPrefix = "comment/songMenuId_" + id + "/";
-		FUNCTION.loadCommentsAndPages(source);
+		Excutor(source, {
+			urlPrefix : "comment/songMenuId_" + id + "/"
+		}, function(source, data, excutor){
+			source = process(source);
+			data.hotList = source.hotList;
+			data.pageBean = source.pageBean;
+		}, function(source, data, excutor){
+			FUNCTION.loadComments("ul#commentList", data);
+			FUNCTION.loadPages("ul#pages", data, excutor);
+			FUNCTION.loadEmojis();
+		}).excute();
 	});
 }())

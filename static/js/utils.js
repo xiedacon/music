@@ -95,3 +95,25 @@ function Page(config) {//分页的计算模块
     addNext();
   }
 }
+
+//
+function Excutor(source, data, before, excute, after){
+  var defaultFunction = function(){};
+  before = before ? before : defaultFunction;
+  excute = excute ? excute : defaultFunction;
+  after = after ? after : defaultFunction;
+
+  return {
+    source : source,
+    data : data,
+    before : before,
+    do : excute,
+    after : after,
+    excute : function(){
+      before(this.source, this.data, this);
+      excute(this.source, this.data, this);
+      after(this.source, this.data, this);
+      return this;
+    }
+  }
+}

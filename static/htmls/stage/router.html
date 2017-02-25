@@ -482,11 +482,12 @@
 		}
 	})
 
-	function process(data){
-		if(data.code != 200){
-			MMR.get("simpleMsg").showError(data.error.value);
+	function process(source){
+		if(source.code != 200){
+			MMR.get("simpleMsg").showError(source.error.value);
 			throw "数据处理错误";
 		}
+		return source.data;
 	}
 
 	function jump(ele) {

@@ -1,18 +1,22 @@
 (function() {
 	var orderBy = "hot", //
-	supplement = PageScope.params.secondTagId ? ("/secondTagId_" + PageScope.params.secondTagId) : "" //
-	;
+	supplement = PageScope.params.secondTagId ? ("/secondTagId_" + PageScope.params.secondTagId) : "", //
+	songMenusExcutor;
 
 	$.ajax({
 		url : "songMenu/" + orderBy + "_1" + supplement,
 		type : "GET",
 		dataType : "json"
 	}).done(function(source){
-		process(source);
-
-		source.data.urlPrefix = "songMenu/" + orderBy + "_";
-		source.data.urlSuffix = supplement;
-		FUNCTION.loadSongMenusAndPages(source);
+		songMenusExcutor = Excutor(source, {
+			urlPrefix : "songMenu/" + orderBy + "_",
+			urlSuffix : supplement
+		}, function(source, data, excutor){
+			data.pageBean = process(source);
+		}, function(source, data, excutor){
+			FUNCTION.loadSongMenus("ul#songMenuList", data);
+			FUNCTION.loadPages("ul#pages", data, excutor);
+		}).excute();
 	});
 
 	$.ajax({
@@ -62,17 +66,29 @@
 		}
 	})
 
-	function init() {
-		$(".orderBy").click(function() {
-			$(this).addClass("now");
-			$(this).siblings().removeClass("now");
+	document.querySelector("div#orderBy").addEventListener("click", function(e){
+		var tag = e.target;
+		if(tag.innerHTML === "热门"){
+			tag.className = "orderbyHot orderBy now";
+			tag.nextSibling.nextSibling.className = "orderbyNew orderBy";
+			orderBy = "hot";
+		} else {
+			tag.className = "orderbyNew orderBy now";
+			tag.previousSibling.previousSibling.className = "orderbyHot orderBy";
+			orderBy = "new";
+		}
 
-			var orderBy = $(this).attr("data-orderBy");
-			PageScope["orderBy"] = orderBy;
-			AJAX({
-				url : "songMenu/" + orderBy + "_1" + PageScope["supplement"],
-				success : loadSongMenuList
-			});
-		})
-	}
+		$.ajax({
+			url : "songMenu/" + orderBy + "_1" + supplement,
+			type : "GET",
+			dataType : "json"
+		}).done(function(source){
+			songMenusExcutor.source = source;
+			songMenusExcutor.data = {
+				urlPrefix : "songMenu/" + orderBy + "_",
+				urlSuffix : supplement
+			};
+			songMenusExcutor.excute();
+		});
+	})
 }())
