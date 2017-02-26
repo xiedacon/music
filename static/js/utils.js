@@ -97,11 +97,13 @@ function Page(config) {//分页的计算模块
 }
 
 //
-function Excutor(source, data, before, excute, after){
-  var defaultFunction = function(){};
-  before = before ? before : defaultFunction;
-  excute = excute ? excute : defaultFunction;
-  after = after ? after : defaultFunction;
+function Excutor(arguments){
+  var defaultFunction = function(){}, //
+  source = arguments.source, //
+  data = arguments.data, //
+  before = arguments.before ? arguments.before : defaultFunction, //
+  excute = arguments.excute ? arguments.excute : defaultFunction, //
+  after = arguments.after ? arguments.after : defaultFunction;
 
   return {
     source : source,

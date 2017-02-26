@@ -11,7 +11,7 @@
 		loadSongLists(data);
 	});
 
-	function loadSongMenuSecondTagList(source){
+	function loadSongMenuSecondTagList(data){
 		var template = `
 		{{each songMenuTags as tag}}
 		<li>
@@ -20,24 +20,26 @@
 		{{/each}}
 		`;
 
-		document.querySelector("ul#songMenuSecondTagList").innerHTML = Template.compile(template)(source);
+		document.querySelector("ul#songMenuSecondTagList").innerHTML = Template.compile(template)(data);
 	}
 
 	function loadSongMenuList(data){
-		var template = '{{each songMenus as songMenu}}'
-		+                '<li id="{{songMenu.id}}" class="song">'
-		+               	 '<div class="image">'
-		+		                 '<a href="#songMenu?id={{songMenu.id}}">'
-		+                      '<img alt="{{songMenu.name}}" src="{{songMenu.icon}}" title="{{songMenu.name}}">'
-		+                    '</a>'
-		+                    '<div class="image_bottom">'
-		+                      '<i></i> <span class="num">{{songMenu.playNum}}</span>'
-		+                      '<i class="playthis" title="播放" onclick="MMR.get(\'music\').batchAddThenPlay(\'songMenuId\',\'{{songMenu.id}}\')"></i>'
-		+                    '</div>'
-		+                  '</div>'
-		+                '<a href="#songMenu?id={{songMenu.id}}" class="name" title="{{songMenu.name}}">{{songMenu.name | lengthLimit:\'20\'}}</a>'
-		+              '</li>'
-		+            '{{/each}}';
+		var template = `
+		{{each songMenus as songMenu}}
+			<li id="{{songMenu.id}}" class="song">
+				<div class="image">
+					<a href="#songMenu?id={{songMenu.id}}">
+						<img alt="{{songMenu.name}}" src="{{songMenu.icon}}" title="{{songMenu.name}}">
+					</a>
+					<div class="image_bottom">
+						<i></i>
+						<span class="num">{{songMenu.playNum}}</span>
+						<i class="playthis" title="播放" onclick="MMR.get('music').batchAddThenPlay('songMenuId','{{songMenu.id}}')"></i>
+					</div>
+				</div>
+				<a href="#songMenu?id={{songMenu.id}}" class="name" title="{{songMenu.name}}">{{songMenu.name | lengthLimit:'20'}}</a>
+			</li>
+		{{/each}}`;
 
 		document.querySelector("ul#songMenuList").innerHTML = Template.compile(template)(data);
 	}
@@ -58,21 +60,22 @@
 			}
 		})
 
-		var template = '{{each albums as album}}'
-		+              '<li class="album">'
-		+	               '<div class="image">'
-		+		               '<a href="#album?id={{album.id}}">'
-		+			               '<img src="{{album.icon}}" title="{{album.name}}" alt="{{album.name}}">'
-		+                  '</a>'
-		+		             '<div class="image_left">'
-		+			             '<span class="circle"></span> <span class="rectangle"></span> <span class="triangle"></span>'
-		+		             '</div>'
-		+		             '<i class="play" title="播放" onclick="MMR.get(\'music\').batchAddThenPlay(\'albumId\',\'{{album.id}}\')"></i>'
-		+	             '</div>'
-		+	             '<a title="{{album.name}}" class="name" href="#album?id={{album.id}}">{{album.name | lengthLimit:\'6\'}}</a>'
-		+		           '<a title="{{album.singerName}}"class="songer" href="#singer?id={{album.singerId}}">{{album.singerName | lengthLimit:\'6\'}}</a>'
-		+						 '</li>'
-		+            '{{/each}}';
+		var template = `
+		{{each albums as album}}
+			<li class="album">
+				<div class="image">
+					<a href="#album?id={{album.id}}">
+						<img src="{{album.icon}}" title="{{album.name}}" alt="{{album.name}}">
+					</a>
+					<div class="image_left">
+						<span class="circle"></span> <span class="rectangle"></span> <span class="triangle"></span>
+					</div>
+					<i class="play" title="播放" onclick="MMR.get('music').batchAddThenPlay('albumId','{{album.id}}')"></i>
+				</div>
+				<a title="{{album.name}}" class="name" href="#album?id={{album.id}}">{{album.name | lengthLimit:'6'}}</a>
+				<a title="{{album.singerName}}"class="songer" href="#singer?id={{album.singerId}}">{{album.singerName | lengthLimit:'6'}}</a>
+			</li>
+		{{/each}}`;
 
 		document.querySelector("ul#albumList1").innerHTML = Template.compile(template)(source1);
 		document.querySelector("ul#albumList2").innerHTML = Template.compile(template)(source2);
@@ -80,7 +83,8 @@
 	}
 
 	function loadUsers(data){
-		var template = `{{each users as user}}
+		var template = `
+		{{each users as user}}
 		<li>
 			<a href="#home?id={{user.id}}">
 				<img src="{{user.icon}}" title="{{user.name}}" alt="{{user.name}}">
@@ -96,10 +100,10 @@
 	}
 
 	function loadSongLists(data) {
-		var template = `{{each songLists as songList}}
+		var template = `
+		{{each songLists as songList}}
 		<li id="{{songList.id}}">
 			<ul>
-
 			</ul>
 		</li>
 		{{/each}}`;
@@ -115,19 +119,20 @@
 		});
 	}
 	function loadSongs(songList, songListEle) {
-		var template = `<li>
-			<a href="#songList?id={{id}}">
-				<img title="{{name}}" src="{{icon}}" alt="{{name}}">
+		var template = `
+		<li>
+			<a href="#songList?id={{songList.id}}">
+				<img title="{{songList.name}}" src="{{songList.icon}}" alt="{{songList.name}}">
 			</a>
 			<div class="right">
-				<a href="#songList?id={{id}}">
-					<h3 title="{{name}}">{{name}}</h3>
+				<a href="#songList?id={{songList.id}}">
+					<h3 title="{{songList.name}}">{{songList.name}}</h3>
 				</a>
-				<i class="play" title="播放" style="-webkit-user-select: none;" onclick="MMR.get('music').batchAddThenPlay('songListId','{{id}}')"></i>
+				<i class="play" title="播放" style="-webkit-user-select: none;" onclick="MMR.get('music').batchAddThenPlay('songListId','{{songList.id}}')"></i>
 				<!-- <i class="collection" title="收藏" style="-webkit-user-select: none;"></i> -->
 			</div>
 		</li>
-		{{each songs as song index}}
+		{{each songList.songs as song index}}
 		<li id={{song.id}} class="{{if index%2==0}}odd{{else}}even{{/if}}">
 			<i class="num" style="-webkit-user-select: none;">{{song.rank}}</i>
 			<a title="{{song.name}}" class="name" href="#song?id={{song.id}}">{{song.name | lengthLimit:'13'}}</a>
@@ -139,16 +144,18 @@
 		</li>
 		{{/each}}
 		<li>
-			<a class='all' href='#songList?id={{id}}'>查看全部></a>
+			<a class='all' href='#songList?id={{songList.id}}'>查看全部></a>
 		</li>`;
+
 		$.ajax({
 			url : "song/songListId_" + songList.id+ "/10",
 			type : "GET",
 			dataType : "json",
-			success : function(data) {
-				process(data);
-				songList.songs = data.data;
-				songListEle.innerHTML = Template.compile(template)(songList);
+			success : function(source) {
+				songList.songs = process(source);
+				songListEle.innerHTML = Template.compile(template)({
+					songList : songList
+				});
 			}
 		})
 	}

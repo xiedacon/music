@@ -8,14 +8,19 @@
 		type : "GET",
 		dataType : "json"
 	}).done(function(source){
-		songMenusExcutor = Excutor(source, {
-			urlPrefix : "songMenu/" + orderBy + "_",
-			urlSuffix : supplement
-		}, function(source, data, excutor){
-			data.pageBean = process(source);
-		}, function(source, data, excutor){
-			FUNCTION.loadSongMenus("ul#songMenuList", data);
-			FUNCTION.loadPages("ul#pages", data, excutor);
+		songMenusExcutor = Excutor({
+			source : source,
+			data : {
+				urlPrefix : "songMenu/" + orderBy + "_",
+				urlSuffix : supplement
+			},
+			before : function(source, data, excutor){
+				data.pageBean = process(source);
+			},
+			excute : function(source, data, excutor){
+				FUNCTION.loadSongMenus("ul#songMenuList", data);
+				FUNCTION.loadPages("ul#pages", data, excutor);
+			}
 		}).excute();
 	});
 
@@ -24,15 +29,13 @@
 		type : "GET",
 		dataType : "json"
 	}).done(function(source){
-			process(source);
-
 			var id = PageScope.params.secondTagId, //
 			template = `
 			<div class="nav_top">
 				<i class="triangle"></i>
 				<a class="nav_top_button" title="全部分类" href="#songMenus?secondTagName=全部分类">全部分类</span>
 			</div>
-			{{each data as tag}}
+			{{each tags as tag}}
 			<li class="subnav">
 				<h3>
 					<i class="icomoon"></i>
@@ -46,8 +49,11 @@
 				</div>
 			</li>
 			{{/each}}
-			`;
-			document.querySelector("ul#secondTagList").innerHTML = Template.compile(template)(source);
+			`, //
+			data = {
+				tags : process(source)
+			};
+			document.querySelector("ul#secondTagList").innerHTML = Template.compile(template)(data);
 	});
 
 	//init();

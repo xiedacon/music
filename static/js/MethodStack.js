@@ -85,7 +85,7 @@
 	}
 	FUNCTION.loadSongs = function loadSongs(selector, data) {
 		var template = `
-		{{each data as song index}}
+		{{each songs as song index}}
 			<tr id="{{song.id}}" class="{{if index%2==0}}{{else}}singular{{/if}}">
 				<td>
 					<span class="num">{{index + 1}}</span>
