@@ -20,7 +20,7 @@
 			MMR.get("simpleMsg").showError(data.error.value);
 			return;
 		}
-		
+
 		var tagList = data.data //
 		, $tagListEle = $("#tags");
 		var $prototype = $tagListEle.find(".prototype").clone().removeClass("prototype");
@@ -76,11 +76,11 @@
 			MMR.get("simpleMsg").showError(data.error.value);
 			return;
 		}
-		
+
 		var pageBean = data.data //
 		, $albumListEle = $("#albumList");
 		$albumListEle.children().not(".prototype").remove();
-		
+
 		FUNCTION.loadPageBean({
 			pageBean : pageBean,
 			$pagesEle : $("#pages"),

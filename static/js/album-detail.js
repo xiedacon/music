@@ -64,47 +64,38 @@
 				无
 				{{/if}}
 			</p>
-			<span class="show_hidden" style="display: none">展开<i></i></span>
+			<span id="show" class="show_hidden" style="{{if album.introduction.length < 195}}display: none{{/if}}">展开</span>
 		</div>
 		`, //
 		data = {
 			album : process(source)
 		};
 		document.querySelector("div#album").innerHTML = Template.compile(template)(data);
-	});
-	/*
-	function loadAlbum(data) {
-
-		if (album.introduction) {
-			var introduction_limit = limitStringLength(album.introduction, 195);
-			$albumEle.find(".details .introduction").attr({
-				"data-content" : album.introduction
-			}).text("介绍：" + introduction_limit);
-			if (introduction_limit !== album.introduction) {
-				$albumEle.find(".details .show_hidden").removeAttr("style").click(function() {
-					var $introduction = $(this).siblings(".introduction");
-					var data_content = $introduction.attr("data-content");
-					var content = $introduction.text();
-					$introduction.attr("data-content", content);
-					$introduction.text(data_content);
-
-					if ($(this).text() === "展开") {
-						$(this).text("收起");
-					} else {
-						$(this).text("展开");
-					}
-				});
+		var flag = true, //
+		temp;
+		document.querySelector("span#show").addEventListener("click",function(e){
+			if(flag){
+				e.target.innerHTML = "收起";
+				temp = e.target.previousSibling.previousSibling.innerHTML;
+				e.target.previousSibling.previousSibling.innerHTML = "介绍：" + data.album.introduction;
+				flag = false;
+			}else{
+				e.target.innerHTML = "展开";
+				flag = true;
+				e.target.previousSibling.previousSibling.innerHTML = temp;
 			}
-		}
-		$(".songList .songList_detail").text(album.songNum + " 首歌");
-		$(".commentList .commentList_detail").text("共" + album.commentNum + "条评论");
+		});
+		document.querySelector("span#songNum").innerHTML = data.album.songNum + " 首歌";
+		document.querySelector("span#commentNum").innerHTML = "共" + data.album.commentNum + "条评论";
 		var user = UserManager.getUser();
 		if (user) {
-			$(".commentList .newComment_left").attr("src", user.icon);
+			document.querySelector("img#userIcon").src = user.icon;
 		}
-		$(".commentList .button").attr("onclick", "MMR.addComment('album','" + album.id + "')");
-	}
-	*/
+		document.querySelector("span#addComment").addEventListener("click",function(){
+			MMR.addComment('album', data.album.id);
+		});
+	});
+
 	$.ajax({
 		url : "song/albumId_" + id,
 		type : "GET",

@@ -171,7 +171,7 @@
 				<div class="songList">
 					<div class="songList_top">
 						<h2>包含歌曲列表</h2>
-						<span class="songList_detail"></span>
+						<span id="songNum" class="songList_detail"></span>
 					</div>
 					<table>
 						<thead>
@@ -190,11 +190,11 @@
 				<div class="commentList">
 					<div class="commentList_top">
 						<h2>评论表</h2>
-						<span class="commentList_detail"></span>
+						<span id="commentNum" class="commentList_detail"></span>
 					</div>
 					<div class="commentList_middle">
 						<div class="newComment">
-							<img class="newComment_left" src="image/default.jpg">
+							<img id="userIcon" class="newComment_left" src="image/default.jpg">
 							<div class="newComment_right">
 								<s></s>
 								<textarea id="newComment" class="content"></textarea>
@@ -207,7 +207,8 @@
 										</div>
 									</div>
 									<div class="right">
-										<span class="num">200</span> <span class="button">评论</span>
+										<span class="num">200</span>
+										<span id="addComment" class="button">评论</span>
 									</div>
 								</div>
 							</div>
