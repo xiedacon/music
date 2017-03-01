@@ -118,42 +118,29 @@
 }
 </style>
 
-		<div class="material">
-			<div class="material_top">
-				<h2>热门新碟</h2>
-			</div>
-			<ul id="hotList" class="albums entitys material_middle newAlbums">
-				<li class="album entity prototype">
-					<div class="image">
-						<img src="" title="" data-url="" data-href="" onclick="jump(this);">
-						<div class="image_left">
-							<span class="circle"></span> <span class="rectangle"></span> <span class="triangle"></span>
-						</div>
-						<i class="play" title="播放"></i>
-					</div> <span title="" data-url="" data-href="" onclick="jump(this);" class="name"></span> <span title="" data-url="" data-href=""
-					onclick="jump(this);" class="songer"></span>
-				</li>
-			</ul>
-			<div class="material_top">
-				<h2>全部</h2>
-				<p id="tags" class="types">
-					<a class="type prototype" href="javascript:void(0);" data-id=""></a>
-				</p>
-			</div>
-			<ul id="albumList" class="albums entitys material_middle allAlbums">
-				<li class="album entity prototype">
-					<div class="image">
-						<img src="" title="" data-url="" data-href="" onclick="jump(this);">
-						<div class="image_left">
-							<span class="circle"></span> <span class="rectangle"></span> <span class="triangle"></span>
-						</div>
-						<i class="play" title="播放"></i>
-					</div> <span title="" data-url="" data-href="" onclick="jump(this);" class="name"></span> <span title="" data-url="" data-href=""
-					onclick="jump(this);" class="songer"></span>
-				</li>
-			</ul>
-			<div class="material_bottom ">
-				<ul id="pages" class="buttons">
-				</ul>
-			</div>
-		</div>
+<div class="material">
+	<div class="material_top">
+		<h2>热门新碟</h2>
+	</div>
+	<ul id="hotList" class="albums entitys material_middle newAlbums">
+	</ul>
+	<div id="tags" class="material_top">
+		<h2>全部</h2>
+		<p class="types">
+			<a class="type" href="#albums">全部</a>
+			<span>|</span>
+			{{each tags as tag index}}
+			<a class="type" href="#albums?tagId={{tag.id}}">{{tag.name}}</a>
+			{{if index < tags.length - 1}}
+			<span>|</span>
+			{{/if}}
+			{{/each}}
+		</p>
+	</div>
+	<ul id="albumList" class="albums entitys material_middle allAlbums">
+	</ul>
+	<div class="material_bottom ">
+		<ul id="pages" class="buttons">
+		</ul>
+	</div>
+</div>

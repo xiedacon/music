@@ -1,113 +1,59 @@
 (function() {
 
-	PageScope["tagId"] = "all";
+	PageScope.params.tagId = PageScope.params.tagId ? PageScope.params.tagId : "all";
 
-	AJAX({
+	$.ajax({
 		url : "json/index",
-		success : loadHotAlbumList
-	});
-	AJAX({
-		url : "album/tagId_" + PageScope["tagId"] + "/1",
-		success : loadAlbumList
-	});
-	AJAX({
-		url : "albumTag",
-		success : loadTagList
+		type : "GET",
+		dataType : "json"
+	}).done(function(source){
+		FUNCTION.loadAlbums("ul#hotList",source);
 	});
 
-	function loadTagList(data) {
-		if(data.code != 200){
-			MMR.get("simpleMsg").showError(data.error.value);
-			return;
-		}
-
-		var tagList = data.data //
-		, $tagListEle = $("#tags");
-		var $prototype = $tagListEle.find(".prototype").clone().removeClass("prototype");
-		var tag, $tagEle;
-
-		// 全部
-		$tagEle = $prototype.clone();
-		$tagEle.attr({
-			"data-id" : "all"
-		}).text("全部");
-		$tagListEle.append($tagEle);
-		$tagListEle.append("<span>|</span>");
-
-		for (var i = 0; i < tagList.length; i++) {
-			tag = tagList[i];
-			$tagEle = $prototype.clone();
-			$tagEle.attr({
-				"data-id" : tag.id
-			}).text(tag.name);
-
-			$tagListEle.append($tagEle);
-
-			if (i === tagList.length - 1) {
-				continue;
-			}
-
-			$tagListEle.append("<span>|</span>");
-		}
-
-		$tagListEle.find(".type").not(".prototype").click(function() {
-			var id = $(this).attr("data-id");
-			var name = $(this).text();
-			$("#tags").siblings().text(name);
-
-			PageScope["tagId"] = id;
-
-			AJAX({
-				url : "album/tagId_" + PageScope["tagId"] + "/1",
-				success : function(pageBean) {
-					loadAlbumList(pageBean);
-				}
-			});
-		})
-	}
-
-	function loadHotAlbumList(data) {
-		var $hotListEle = $("#hotList");
-		loadAlbumList_base($hotListEle, data.albums);
-	}
-
-	function loadAlbumList(data) {
-		if(data.code != 200){
-			MMR.get("simpleMsg").showError(data.error.value);
-			return;
-		}
-
-		var pageBean = data.data //
-		, $albumListEle = $("#albumList");
-		$albumListEle.children().not(".prototype").remove();
-
-		FUNCTION.loadPageBean({
-			pageBean : pageBean,
-			$pagesEle : $("#pages"),
-			loadBeans : function() {
-				loadAlbumList_base($albumListEle, pageBean.beans);
+	$.ajax({
+		url : "album/tagId_" + PageScope.params.tagId + "/1",
+		type : "GET",
+		dataType : "json"
+	}).done(function(source){
+		Excutor({
+			source : source,
+			data : {
+				urlPrefix : "album/tagId_" + PageScope.params.tagId + "/"
 			},
-			click : function(page) {
-				AJAX({
-					url : "album/tagId_" + PageScope["tagId"] + "/" + page,
-					success : function(pageBean) {
-						loadAlbumList(pageBean);
-					}
-				});
+			before : function(source,data){
+				data.pageBean = process(source);
+				data.albums = data.pageBean.beans;
+			},
+			excute : function(source, data, excutor){
+				FUNCTION.loadAlbums("ul#albumList", data);
+				FUNCTION.loadPages("ul#pages", data, excutor);
 			}
-		});
-	}
+		}).excute();
+	});
 
-	function loadAlbumList_base($albumListEle, albumList) {
-		var $prototype = $albumListEle.find(".prototype").clone().removeClass("prototype");
-		var album, $albumEle;
+	$.ajax({
+		url : "albumTag",
+		type : "GET",
+		dataType : "json"
+	}).done(function(source){
+		var template = `
+		<h2>{{if }}全部{{else}}{{/if}}</h2>
+		<p class="types">
+			<a class="type" href="#albums">全部</a>
+			<span>|</span>
+			{{each tags as tag index}}
+			<a class="type" href="#albums?tagId={{tag.id}}">{{tag.name}}</a>
+			{{if index < tags.length - 1}}
+			<span>|</span>
+			{{/if}}
+			{{/each}}
+		</p>
+		`, //
+		data = {
+			tags : process(source)
+		};
 
-		for (var i = 0; i < albumList.length; i++) {
-			album = albumList[i];
-			$albumEle = $prototype.clone();
-			FUNCTION.loadAlbum(album, $albumEle);
-			$albumListEle.append($albumEle);
-		}
-	}
+		document.querySelector("p#tags").innerHTML = Template.compile(template)(data);
+	});
 
 }())

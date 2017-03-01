@@ -142,23 +142,28 @@
 
 		document.querySelector(selector).innerHTML = Template.compile(template)(data);
 	}
-	FUNCTION.loadAlbum = function loadAlbum(album, $albumEle) {
-		$albumEle.find("img").attr({
-			"src" : album.icon,
-			"title" : album.name,
-			"data-href" : "album?albumId=" + album.id
-		});
-		$albumEle.find(".play").attr({
-			"onclick" : "MMR.get('music').batchAddThenPlay('albumId','" + album.id + "')"
-		});
-		$albumEle.find(".name").attr({
-			"title" : album.name,
-			"data-href" : "album?albumId=" + album.id
-		}).text(album.name);
-		$albumEle.find(".songer").attr({
-			"title" : album.singerName,
-			"data-href" : "singer?singerId=" + album.singerId
-		}).text(album.singerName);
+	FUNCTION.loadAlbums = function (selector, data) {
+		var template = `
+		{{each albums as album}}
+		<li class="album entity">
+			<div class="image">
+				<a href="#album?id={{album.id}}">
+					<img src="{{album.icon}}" title="{{album.name}}">
+				</a>
+				<div class="image_left">
+					<span class="circle"></span>
+					<span class="rectangle"></span>
+					<span class="triangle"></span>
+				</div>
+				<i class="play" title="播放" onclick="MMR.get('music').batchAddThenPlay('albumId','{{album.id}}')"></i>
+			</div>
+			<a href="#album?id={{album.id}}" title="{{album.name}}" class="name">{{album.name}}</a>
+			<a href="#singer?id={{album.singerId}}" title="{{album.singerName}}" class="songer">{{album.singerName}}</a>
+		</li>
+		{{/each}}
+		`;
+
+		document.querySelector(selector).innerHTML = Template.compile(template)(data);
 	}
 
 	FUNCTION.loadPages = function (selector, data, excutor) {
