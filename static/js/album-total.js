@@ -1,7 +1,5 @@
 (function() {
 
-	PageScope.params.tagId = PageScope.params.tagId ? PageScope.params.tagId : "all";
-
 	$.ajax({
 		url : "json/index",
 		type : "GET",
@@ -37,12 +35,12 @@
 		dataType : "json"
 	}).done(function(source){
 		var template = `
-		<h2>{{if }}全部{{else}}{{/if}}</h2>
+		<h2>`+ PageScope.params.tagName +`</h2>
 		<p class="types">
 			<a class="type" href="#albums">全部</a>
 			<span>|</span>
 			{{each tags as tag index}}
-			<a class="type" href="#albums?tagId={{tag.id}}">{{tag.name}}</a>
+			<a class="type" href="#albums?tagId={{tag.id}}&tagName={{tag.name}}">{{tag.name}}</a>
 			{{if index < tags.length - 1}}
 			<span>|</span>
 			{{/if}}
@@ -53,7 +51,7 @@
 			tags : process(source)
 		};
 
-		document.querySelector("p#tags").innerHTML = Template.compile(template)(data);
+		document.querySelector("div#tags").innerHTML = Template.compile(template)(data);
 	});
 
 }())
