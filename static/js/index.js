@@ -111,8 +111,8 @@
 		var songListsEle = document.querySelector("ul#songLists");
 		songListsEle.innerHTML = Template.compile(template)(data);
 		var songListEles = songListsEle.querySelectorAll("ul");
-		document.querySelectorAll(".head_bottom .subnav li")[1].children[0].href = "#songList?songListId=" + data.songLists[0].id;
-		document.querySelector(".lists .more").href = "#songList?songListId=" + data.songLists[0].id;
+		document.querySelectorAll(".head_bottom .subnav li")[1].children[0].href = "#songList?id=" + data.songLists[0].id;
+		document.querySelector(".lists .more").href = "#songList?id=" + data.songLists[0].id;
 
 		data.songLists.forEach(function(songList, index){
 			loadSongs(songList, songListEles[index]);

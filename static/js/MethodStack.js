@@ -103,7 +103,8 @@
 						<span class="collection icomoon" onclick="MMR.get('collection').collect('{{song.id}}');"></span>
 						<span class="share icomoon"></span>
 						<span class="download icomoon"></span>
-					</p></td>
+					</p>
+				</td>
 				<td>
 					<a class="songer" href="#singer?id={{song.singerId}}" title="{{song.singerName}}">
 						{{song.singerName | lengthLimit:'5'}}
