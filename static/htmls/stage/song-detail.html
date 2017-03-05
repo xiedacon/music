@@ -1,10 +1,3 @@
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="utf-8">
-<link rel="stylesheet" type="text/css" href="css/detail.css">
-<title>歌曲详情页</title>
-</head>
 <style type="text/css">
 .entityMessage_right .creator_time_company .creator {
 	font-size: 0.8em;
@@ -56,7 +49,6 @@
 .lrc {
 	line-height: 25px;
     font-size: 0.8em;
-    height: 300px;
     overflow: hidden;
     position: relative;
     font-family: Arial, Helvetica, sans-serif;
@@ -69,145 +61,37 @@
 	line-height: 20px;
 }
 </style>
-<body>
-	<div class="head">
-		<div class="head_top">
-			<h1>
-				<a href="#">我的音乐网</a>
-			</h1>
-			<ul class="nav">
-				<li class="selected">发现音乐<i></i></li>
-				<li>我的音乐</li>
-				<li>朋友</li>
-				<li>下载客户端</li>
-			</ul>
-			<div class="search">
-				<i></i> <input id="search_global" class="search_input" type="input" name="song" placeholder="单曲/歌手/专辑/歌单/MV/用户">
-			</div>
-			<span class="msg"></span>
-			<div id="userDiv" class="user">
-				<span class="username"><img src="image/default.jpg">xiedacon<i></i></span>
-				<ul class="user_nav nav_login" style="display: none;">
-					<i></i>
-					<li>
-						<ul>
-							<li>我的主页</li>
-							<li>我的等级</li>
-							<li>付费音乐包</li>
-							<li>积分商城</li>
-						</ul>
-					</li>
-					<li>
-						<ul>
-							<li>个人设置</li>
-							<li>导入歌单</li>
-						</ul>
-					</li>
-					<li class="exit">退出</li>
-				</ul>
-				<ul class="user_nav nav_logout" style="display: none;">
-					<i></i>
-					<li>
-						<ul>
-							<li id="toLoginByPhoneDiv">手机号登录</li>
-							<li>微信登录</li>
-							<li>QQ登录</li>
-							<li>Github登录</li>
-						</ul>
-					</li>
-				</ul>
-			</div>
-		</div>
-		<div class="head_bottom">
-			<ul class="subnav">
-				<li class="selected">推荐</li>
-				<li>排行榜</li>
-				<li>歌单</li>
-				<li>主播电台</li>
-				<li>歌手</li>
-				<li>新碟上架</li>
-			</ul>
-		</div>
-	</div>
-	<div class="body">
 		<div class="material">
 			<div class="material_left">
 				<div id="song" class="entityMessage">
-					<div class="entityMessage_left">
-						<img src="">
-					</div>
-					<div class="entityMessage_right">
-						<div class="label">
-							<span class="content">单曲</span> <span class="triangle"><i></i></span>
-						</div>
-						<h2>
-							<span></span> <span class="remark"></span>
-						</h2>
-						<div class="creator_time_company">
-							<div class="creator">
-								歌手：<a href="javascript:void(0);" onclick="jump(this);" class="creatorName"></a>
-							</div>
-							<div class="creator album">
-								所属专辑：<a href="javascript:void(0);" onclick="jump(this);" class="creatorName"></a>
-							</div>
-						</div>
-						<div class="buttons">
-							<div class="play_addToPlayList">
-								<span class="play"><i class="icomoon"></i><span>播放</span></span> <span class="addToPlaylist icomoon"></span>
-							</div>
-							<span class="collection button"><i class="icomoon"></i>收藏</span> <span class="share button"><i class="icomoon"></i>分享</span> <span
-								class="download button"><i class="icomoon"></i>下载</span> <span class="comment button"></span>
-						</div>
-						<div class="details lrc">
-							<p>暂无歌词</p>
-							<span class="show_hidden" data-flag="close" style="display: none">展开<i></i></span>
-						</div>
-					</div>
 				</div>
 				<div class="commentList">
 					<div class="commentList_top">
 						<h2>评论表</h2>
-						<span class="commentList_detail"></span>
+						<span id="commentNum" class="commentList_detail"></span>
 					</div>
 					<div class="commentList_middle">
 						<div class="newComment">
-							<img class="newComment_left" src="image/default.jpg">
+							<img id="userIcon" class="newComment_left" src="image/default.jpg">
 							<div class="newComment_right">
 								<s></s>
 								<textarea id="newComment" class="content"></textarea>
 								<div class="right_bottom">
 									<div class="left">
-										<i class="icomoon face" onclick="FUNCTION.showEmojis();"></i> 
+										<i class="icomoon face" onclick="FUNCTION.showEmojis();"></i>
 										<i class="icomoon at"></i>
 										<div id="emojis" class="emojis" style="display: none;">
 											<i class="triangle"></i>
 										</div>
 									</div>
 									<div class="right">
-										<span class="num">200</span> <span class="button">评论</span>
+										<span class="num">200</span>
+										<span id="addComment" class="button">评论</span>
 									</div>
 								</div>
 							</div>
 						</div>
 						<ul id="commentList" class="comments">
-							<li class="comment prototype"><img src="" data-href="" onclick="jump(this);">
-								<div class="comment_left">
-									<p class="comment_material">
-										<a class="name" href="javascript:void(0);" data-href="" onclick="jump(this);"></a> <span class="content"></span>
-									</p>
-									<p class="comment_reply" style="display: none">
-										<i></i> <a class="name" href="javascript:void(0);" data-href="" onclick="jump(this);"></a> <span class="content"></span>
-									</p>
-									<div class="comment_bottom">
-										<span class="createTime"></span>
-										<div class="right">
-											<p>
-												<i class="icomoon"></i> <span class="num"></span>
-											</p>
-											<span class="interval">|</span> <span class="reply">回复</span>
-										</div>
-									</div>
-								</div></li>
 						</ul>
 					</div>
 					<div class="commentList_bottom">
@@ -230,9 +114,3 @@
 				</ul>
 			</div>
 		</div>
-	</div>
-	<div class="foot">
-		<p>@2016</p>
-	</div>
-</body>
-</html>
