@@ -53,3 +53,7 @@ logs/
 .classpath
 .project
 /target/
+WebContent/image/
+WebContent/lyrics/
+WebContent/META-INF/
+WebContent/music/
