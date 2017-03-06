@@ -1,4 +1,5 @@
 (function() {
+	window.FUNCTION = {};
 	FUNCTION.loadCommentsAndPages = function (data){
 		loadComments("ul#commentList", data);
 		loadPages("ul#pages", data.pageBean, FUNCTION.loadCommentsAndPages);

@@ -1,201 +1,191 @@
 (function() {
-	AJAX({
-		url : "singer/" + PageScope.params.singerId,
-		success : loadSinger
+
+	$.ajax({
+		url : "singer/" + PageScope.params.id,
+		type : "GET",
+		dataType : "json"
+	}).done(function(source){
+		var template = `
+		<img src="{{singer.icon}}">
+		<div class="entityMessage_bottom">
+			<h2>
+				<span>{{singer.name}}</span>
+				{{if singer.remark}}
+				<span class="remark">{{singer.remark}}</span>
+				{{/if}}
+			</h2>
+			{{if singer.userId}}
+			<a href="#home?id={{singer.userId}}" class="homePage" title="{{singer.name}}的个人主页">
+				<span class="icon">
+					<i class="icomoon"></i>
+				</span>
+				<span>Ta的个人主页</span>
+			</a>
+			{{/if}}
+			<span class="collectionButton">
+				<i class="icomoon"></i>收藏
+			</span>
+		</div>
+		`, //
+		data = {
+			singer : process(source)
+		};
+
+		document.querySelector("div#singer").innerHTML = Template.compile(template)(data);
 	});
-	AJAX({
-		url : "song/singerId_" + PageScope.params.singerId,
-		success : loadSongs
-	});
 
-	function loadSinger(data) {
-		if(data.code != 200){
-			MMR.get("simpleMsg").showError(data.error.value);
-			return;
-		}
-		
-		var singer = data.data //
-		, $singerEle = $("#singer");
+	$.ajax({
+		url : "song/singerId_" + PageScope.params.id,
+		type : "GET",
+		dataType : "json"
+	}).done(function(source){
+		var template = `
+		<div class="buttons">
+			<div class="play_addToPlayList">
+				<span class="play" title="播放" onclick="MMR.get('music').batchAddThenPlay('singerId','`+ PageScope.params.id +`')">
+					<i class="icomoon"></i>
+					<span>播放</span>
+				</span>
+				<span class="addToPlaylist icomoon" onclick="MMR.get('music').batchAdd('singerId','`+ PageScope.params.id +`')"></span>
+			</div>
+			<span class="collection button"> <i class="icomoon"></i>收藏热门50
+			</span>
+		</div>
+		<table style="border: 0;">
+			<tbody>
+				{{each songs as song index}}
+				<tr class="{{if index%2 != 0}}singular{{/if}}">
+					<td style="width: 14%;">
+						<span class="num">{{index + 1}}</span>
+						<i class="play icomoon" onclick="MMR.get('music').addThenPlay('{{song.id}}')"></i>
+					</td>
+					<td style="width: 31%;">
+						<a class="songName" title="{{song.name}}" href="#song?id={{song.id}}">{{song.name}}</a>
+					</td>
+					<td style="width: 14%;">
+						<span class="time">{{song.time}}</span>
+						<p class="hidden">
+							<span class="addToPlaylist icomoon"></span>
+							<span class="collection icomoon"></span>
+							<span class="share icomoon"></span>
+							<span class="download icomoon"></span>
+						</p></td>
+					<td style="width: 19%;">
+						{{if song.albumName}}
+						<a class="special" title="{{song.albumName}}" href="#album?id={{song.albumId}}">{{song.albumName}}</a>
+						{{/if}}
+					</td>
+					<td class="maxtd" style="width: 22%;">
+						<p class="max">
+							<span class="hot" style="width:{{if song.collectionNum >= 1000}}100{{else if song.collectionNum < 75}}0{{else}}{{song.collectionNum / 10}}{{/if}}%"></span>
+						</p>
+					</td>
+				</tr>
+				{{/each}}
+			</tbody>
+		</table>
+		`, //
+		data = {
+			songs : process(source)
+		};
 
-		$singerEle.find("img").attr({
-			"src" : singer.icon
-		});
-		$singerEle.find("h2 span").not(".remark").text(singer.name);
-		if (singer.remark) {
-			$singerEle.find("h2 .remark").text(singer.remark);
-		}
-		if (singer.userId) {
-			$singerEle.find(".homePage").attr({
-				"title" : singer.name + "的个人主页",
-				"data-href" : "home?userId=" + singer.userId
-			}).removeAttr("style");
-		}
-		var $songList = $(".songList .play_addToPlayList");
-		$songList.find(".play").attr({
-			"onclick" : "MMR.get('music').batchAddThenPlay('singerId','" + singer.id + "')"
-		});
-		$songList.find(".addToPlaylist").attr({
-			"onclick" : "MMR.get('music').batchAdd('singerId','" + singer.id + "')"
-		});
-	}
+		document.querySelector("div#songs").innerHTML = Template.compile(template)(data);
 
-	function loadSongs(data) {
-		if(data.code != 200){
-			MMR.get("simpleMsg").showError(data.error.value);
-			return;
-		}
-		
-		$("#songListHead").addClass("now") //
-		.siblings().removeClass("now");
-
-		var songs = data.data //
-		, $songListEle = $("#songList");
-		$songListEle.parents(".songList").removeAttr("style") //
-		.siblings().css("display", "none");
-		$songListEle.children().not(".prototype").remove();
-
-		var $prototype = $songListEle.find(".prototype").clone().removeClass("prototype");
-		var $songEle, song;
-
-		for (var i = 0; i < songs.length; i++) {
-			$songEle = $prototype.clone();
-			song = songs[i];
-
-			if (i % 2 != 0) {
-				$songEle.addClass("singular");
-			}
-
-			$songEle.find(".num").text(i + 1);
-			var songSerialized = MMR.get('music').serialize(song);
-			$songEle.find(".play").attr({
-				"onclick" : "MMR.get('music').addThenPlay('" + songSerialized + "')"
-			});
-			$songEle.find(".songName").attr({
-				"title" : song.name,
-				"data-href" : "song?songId=" + song.id
-			}).text(song.name);
-			$songEle.find(".addToPlaylist").attr({
-				"onclick" : "MMR.get('music').add('','" + songSerialized + "')"
-			});
-			$songEle.find(".time").text(song.time);
-			if (song.albumName) {
-				$songEle.find(".special").attr({
-					"title" : song.albumName,
-					"data-href" : song.albumId
-				}).text(song.albumName);
-			}
-			var ratio = parseFloat(song.collectionNum) / 1000;
-			if (ratio > 0 && ratio < 0.075) {
-				ratio = 0.075;
-			} else if (ratio > 1) {
-				ratio = 1;
-			}
-			$songEle.find(".hot").css("width", ratio * 100 + "%");
-
-			$songListEle.append($songEle);
-		}
-	}
-
-	function loadAlbums(data) {
-		if(data.code != 200){
-			MMR.get("simpleMsg").showError(data.error.value);
-			return;
-		}
-		
-		$("#albumListHead").addClass("now") //
-		.siblings().removeClass("now");
-
-		var pageBean = data.data // 
-		, $albumListEle = $("#albumList");
-		$albumListEle.parent().removeAttr("style") //
-		.siblings().css("display", "none");
-		$albumListEle.children().not(".prototype").remove();
-
-		var $prototype = $albumListEle.find(".prototype").clone().removeClass("prototype");
-		var albumList = pageBean.beans;
-		var album, $albumEle;
-
-		for (var i = 0; i < albumList.length; i++) {
-			album = albumList[i];
-			$albumEle = $prototype.clone();
-
-			$albumEle.find("img").attr({
-				"src" : album.icon,
-				"title" : album.name,
-				"data-href" : "album?albumId=" + album.id
-			});
-			$albumEle.find(".name").attr({
-				"title" : album.name,
-				"data-href" : "album?albumId=" + album.id
-			}).text(limitStringLength(album.name, 9));
-			$albumEle.find(".time").text(new DateFormatter("yyyy.MM.dd").format(album.createTime));
-
-			$albumListEle.append($albumEle);
-		}
-
-		loadPage($albumListEle.siblings("#pages"), pageBean);
-	}
-
-	function loadPage($pagesEle, pageBean) {
-		$pagesEle.empty();
-
-		if (pageBean.totalPage !== 0 && pageBean.totalPage !== 1) {
-			var begin = pageBean.page - 2;
-			var end = pageBean.page + 2;
-			if (pageBean.page < 3) {
-				begin = 1;
-				end = 5;
-			}
-			if (pageBean.totalPage < 5) {
-				end = pageBean.totalPage;
-			} else if (end > pageBean.totalPage) {
-				end = pageBean.totalPage;
-			}
-
-			var $previousPage = $("<li class='button' data-page='" + (pageBean.page - 1) + "'>< 上一页</li>");
-			if (pageBean.page === 1) {
-				$previousPage.addClass("unable");
-			} else {
-				$previousPage.addClass("enable");
-			}
-			$pagesEle.append($previousPage);
-
-			var $pageEle;
-			for (var i = begin; i < end + 1; i++) {
-				$pageEle = $("<li class='button num' data-page='" + i + "'>" + i + "</li>");
-				if (i === pageBean.page) {
-					$pageEle.removeClass("num").addClass("now");
+		//pre-load
+		$.ajax({
+			url : "album/singerId_" + PageScope.params.id + "/1",
+			type : "GET",
+			dataType : "json"
+		}).done(function(source){
+			Excutor({
+				source : source,
+				data : {
+					urlPrefix : "album/singerId_" + PageScope.params.id + "/"
+				},
+				before : function(source, data, excutor){
+					source = process(source);
+					data.pageBean = source;
+					data.albums = data.pageBean.beans;
+				},
+				excute : function(source, data, excutor){
+					var template = `
+					<ul class="albums">
+						{{each albums as album}}
+						<li class="album">
+							<div class="image">
+								<a href="#album?id={{album.id}}">
+									<img src="{{album.icon}}" title="{{album.name}}">
+								</a>
+								<div class="image_left">
+									<span class="circle"></span>
+									<span class="rectangle"></span>
+									<span class="triangle"></span>
+								</div>
+								<i title="播放"></i>
+							</div>
+							<a title="{{album.name}}" class="name" href="#album?id={{album.id}}">{{album.name | lengthLimit:9}}</a>
+							<span class="time">{{album.time | dateFormatter:'yyyy.MM.dd'}}</span>
+						</li>
+						{{/each}}
+					</ul>
+					<ul id="pages" class="buttons">
+					</ul>
+					`;
+					document.querySelector("div#albums").innerHTML = Template.compile(template)(data);
+					FUNCTION.loadPages("ul#pages", data, excutor);
 				}
-				$pagesEle.append($pageEle);
+			}).excute();
+		});
+		$.ajax({
+			url : "singer/" + PageScope.params.id + "/introduction",
+			type : "GET",
+			dataType : "json"
+		}).done(function(source){
+			document.querySelector("p#a").innerHTML = process(source);
+		});
+
+		var songs = document.querySelector("div#songs"), //
+		albums = document.querySelector("div#albums"), //
+		introduction = document.querySelector("div#introduction");
+		document.querySelector("ul#head").addEventListener("click",function(e){
+			if(e.target.id == ""){
+				alert("暂无");
+				return;
 			}
-
-			var $nextPage = $("<li class='button' data-page='" + (pageBean.page + 1) + "'>下一页 ></li>");
-			if (pageBean.page === pageBean.totalPage) {
-				$nextPage.addClass("unable");
-			} else {
-				$nextPage.addClass("enable");
+			songs.style.display = "none";
+			albums.style.display = "none";
+			introduction.style.display = "none";
+			switch(e.target.id){
+				case  "songs" :
+					songs.style.display = "block";
+					break;
+				case "albums" :
+					albums.style.display = "block";
+					break;
+				case "introduction" :
+					introduction.style.display = "block";
+					break;
+				default :
 			}
-			$pagesEle.append($nextPage);
-
-			$pagesEle.find(".button").not(".unable").not(".now").click(function() {
-				var page = $(this).attr("data-page");
-
-				AJAX({
-					url : "album/singerId_" + PageScope.params.singerId + "/" + page,
-					success : function(pageBean) {
-						loadAlbumList(pageBean);
-					}
-				});
-			})
-		}
-	}
+			var tag = e.target;
+			while(tag.nextSibling){
+				tag.nextSibling.className = "";
+				tag = tag.nextSibling;
+			}
+			while(tag.previousSibling){
+				tag.previousSibling.className = "";
+				tag = tag.previousSibling;
+			}
+			e.target.className = "now";
+		})
+	});
 
 	function loadIntroduction(data) {
 		if(data.code != 200){
 			MMR.get("simpleMsg").showError(data.error.value);
 			return;
 		}
-		
+
 		introduction = data.data;
 		$("#introductionHead").addClass("now") //
 		.siblings().removeClass("now");
@@ -211,22 +201,4 @@
 		}
 	}
 
-	$("#songListHead").click(function() {
-		AJAX({
-			url : "song/singerId_" + PageScope.params.singerId,
-			success : loadSongs
-		});
-	});
-	$("#albumListHead").click(function() {
-		AJAX({
-			url : "album/singerId_" + PageScope.params.singerId + "/1",
-			success : loadAlbums
-		});
-	});
-	$("#introductionHead").click(function() {
-		AJAX({
-			url : "singer/" + PageScope.params.singerId + "/introduction",
-			success : loadIntroduction
-		});
-	});
 }())

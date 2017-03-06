@@ -1,10 +1,3 @@
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="utf-8">
-<link rel="stylesheet" type="text/css" href="css/detail.css">
-<title>歌手详情页</title>
-</head>
 <style type="text/css">
 .entityMessage {
     position: relative;
@@ -239,7 +232,7 @@ table .maxtd .max .hot {
 }
 
 .contentDiv .albumList {
-	
+
 }
 
 .contentDiv .albumList .albums {
@@ -397,7 +390,7 @@ table .maxtd .max .hot {
 }
 
 .contentDiv .details {
-	
+
 }
 
 .contentDiv .details h3 {
@@ -413,7 +406,7 @@ table .maxtd .max .hot {
 }
 
 .similars {
-	
+
 }
 
 .similars .similar {
@@ -439,138 +432,25 @@ table .maxtd .max .hot {
 	text-decoration: underline;
 }
 </style>
-<body>
-	<div class="head">
-		<div class="head_top">
-			<h1>
-				<a href="#">我的音乐网</a>
-			</h1>
-			<ul class="nav">
-				<li class="selected">发现音乐<i></i></li>
-				<li>我的音乐</li>
-				<li>朋友</li>
-				<li>下载客户端</li>
-			</ul>
-			<div class="search">
-				<i></i> <input id="search_global" class="search_input" type="input" name="song" placeholder="单曲/歌手/专辑/歌单/MV/用户">
-			</div>
-			<span class="msg"></span>
-			<div id="userDiv" class="user">
-				<span class="username"><img src="image/default.jpg">xiedacon<i></i></span>
-				<ul class="user_nav nav_login" style="display: none;">
-					<i></i>
-					<li>
-						<ul>
-							<li>我的主页</li>
-							<li>我的等级</li>
-							<li>付费音乐包</li>
-							<li>积分商城</li>
-						</ul>
-					</li>
-					<li>
-						<ul>
-							<li>个人设置</li>
-							<li>导入歌单</li>
-						</ul>
-					</li>
-					<li class="exit">退出</li>
-				</ul>
-				<ul class="user_nav nav_logout" style="display: none;">
-					<i></i>
-					<li>
-						<ul>
-							<li id="toLoginByPhoneDiv">手机号登录</li>
-							<li>微信登录</li>
-							<li>QQ登录</li>
-							<li>Github登录</li>
-						</ul>
-					</li>
-				</ul>
-			</div>
-		</div>
-		<div class="head_bottom">
-			<ul class="subnav">
-				<li class="selected">推荐</li>
-				<li>排行榜</li>
-				<li>歌单</li>
-				<li>主播电台</li>
-				<li>歌手</li>
-				<li>新碟上架</li>
-			</ul>
-		</div>
-	</div>
-	<div class="body">
 		<div class="material">
 			<div class="material_left">
 				<div id="singer" class="entityMessage">
-					<img src="">
-					<div class="entityMessage_bottom">
-						<h2>
-							<span></span> <span class="remark"></span>
-						</h2>
-						<a href="javascript:void(0);" class="homePage" title="" onclick="jump(this);" style="display: none"> <span class="icon"> <i
-								class="icomoon"></i>
-						</span> <span>Ta的个人主页</span>
-						</a> <span class="collectionButton"> <i class="icomoon"></i>收藏
-						</span>
-					</div>
 				</div>
 				<div class="contentDiv">
-					<ul class="contentDiv_subnav">
-						<li id="songListHead" class="now" style="border-left: 1px #eee solid;">热门50单曲</li>
-						<li id="albumListHead">所有专辑</li>
-						<li onclick="alert('暂无');">相关MV</li>
-						<li id="introductionHead" style="border-right: 1px #eee solid;">歌手介绍</li>
+					<ul id="head" class="contentDiv_subnav">
+						<li id="songs" class="now" style="border-left: 1px #eee solid;">热门50单曲</li>
+						<li id="albums">所有专辑</li>
+						<li>相关MV</li>
+						<li id="introduction" style="border-right: 1px #eee solid;">歌手介绍</li>
 					</ul>
 					<div>
-						<div class="songList" style="display: none">
-							<div class="buttons">
-								<div class="play_addToPlayList">
-									<span class="play"><i class="icomoon"></i><span>播放</span></span> <span class="addToPlaylist icomoon"></span>
-								</div>
-								<span class="collection button"> <i class="icomoon"></i>收藏热门50
-								</span>
-							</div>
-							<table>
-								<tbody id="songList">
-									<tr class="prototype">
-										<td style="width: 14%;"><span class="num"></span> <i class="play icomoon"></i></td>
-										<td style="width: 31%;"><a class="songName" title="" href="javascript:void(0);" onclick="jump(this);"></a></td>
-										<td style="width: 14%;"><span class="time"></span>
-											<p class="hidden">
-												<span class="addToPlaylist icomoon"></span> 
-												<span class="collection icomoon"></span> 
-												<span class="share icomoon"></span> 
-												<span class="download icomoon"></span>
-											</p></td>
-										<td style="width: 19%;"><a class="special" title="" href="javascript:void(0);" onclick="jump(this);"></a></td>
-										<td class="maxtd" style="width: 22%;">
-											<p class="max">
-												<span class="hot"></span>
-											</p>
-										</td>
-									</tr>
-								</tbody>
-							</table>
+						<div id="songs" class="songList">
 						</div>
-						<div class="albumList" style="display: none">
-							<ul id="albumList" class="albums">
-								<li class="album prototype">
-									<div class="image" title="">
-										<img src="" onclick="jump(this);">
-										<div class="image_left">
-											<span class="circle"></span> <span class="rectangle"></span> <span class="triangle"></span>
-										</div>
-										<i title="播放"></i>
-									</div> <a title="" class="name" href="javascript:void(0);" onclick="jump(this);"></a> <span class="time">2013.03.12</span>
-								</li>
-							</ul>
-							<ul id="pages" class="buttons">
-							</ul>
+						<div id="albums" class="albumList" style="display: none">
 						</div>
 						<div id="introduction" class="details" style="display: none">
 							<h3>简介</h3>
-							<p></p>
+							<p id="a"></p>
 						</div>
 					</div>
 				</div>
@@ -587,9 +467,3 @@ table .maxtd .max .hot {
 				</ul>
 			</div>
 		</div>
-	</div>
-	<div class="foot">
-		<p>@2016</p>
-	</div>
-</body>
-</html>

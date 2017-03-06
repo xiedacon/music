@@ -490,28 +490,6 @@
 		return source.data;
 	}
 
-	function jump(ele) {
-		if ($(ele).hasClass(".selected")) {
-			return false;
-		}
-		var url = $(ele).attr("data-url");
-		$(".head .subnav li").removeClass("selected");
-		if (url) {
-			$(".head .subnav li[data-url=" + url + "]").addClass("selected");
-		}
-
-		var href = $(ele).attr("data-href");
-
-		if (!href) {
-			href = url;
-		}
-		if (href) {
-			router.startRouter(href);
-		}
-	}
-
-	window.FUNCTION = {};
-
 	$(".head_top .nav").children("li[id]").click(function() {
 		$(this).addClass("selected") //
 		.siblings().removeClass("selected");
