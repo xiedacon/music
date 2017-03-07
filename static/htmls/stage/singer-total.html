@@ -1,10 +1,3 @@
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="utf-8">
-<link rel="stylesheet" type="text/css" href="css/total.css">
-<title>歌手总页</title>
-</head>
 <style type="text/css">
 .body:after {
 	content: "";
@@ -214,8 +207,6 @@
 	overflow: hidden;
 }
 </style>
-<body>
-	<div class="body">
 		<div id="classifyList" class="material_left">
 			<ul class="select">
 				<h3>推荐</h3>
@@ -265,23 +256,32 @@
 				<li class="button double">其他</li>
 			</ul>
 			<ul id="singerList" class="songerList entitys" style="display: none;">
-				<li class="songer entity prototype">
+				{{each singers as singer index}}
+				<li class="songer entity" style="{{if (index+1)%5 === 0}}padding:25px 0 0 0{{/if}}">
 					<div class="imageDiv">
-						<img title="" src="" data-href="" onclick="jump(this);">
-					</div> <span title="" class="name" onclick="jump(this);"></span> <span title="" class="icon" style="display: none;" onclick="jump(this);">
+						<a href="#singer?id={{singer.id}}">
+							<img title="{{singer.name}}的音乐" src="{{singer.icon}}">
+						</a>
+					</div>
+					<a title="{{singer.name}}的音乐" class="name" href="#singer?id={{singer.id}}">{{singer.name}}</a>
+					{{if singer.userId}}
+					<a title="{{singer.name}}的个人主页" class="icon" href="#home?id={{singer.userId}}">
 						<i class="icomoon"></i>
-				</span>
+					</a>
+					{{/if}}
 				</li>
+				{{/each}}
 			</ul>
 			<ul id="simpleSingerList" class="songerList_simple" style="display: none;">
-				<li class="singer_simple prototype"><a class="name" href="javascript:void(0);" onclick="jump(this);" title=""></a> <span title=""
-					class="icon" onclick="jump(this);"> <i class="icomoon"></i>
-				</span></li>
+				{{each singers as singer index}}
+				<li class="singer_simple">
+					<a title="{{singer.name}}的音乐" class="name" href="#singer?id={{singer.id}}">{{singer.name}}</a>
+					{{if singer.userId}}
+					<a title="{{singer.name}}的个人主页" class="icon" href="#home?id={{singer.userId}}">
+						<i class="icomoon"></i>
+					</a>
+					{{/if}}
+				</li>
+				{{/each}}
 			</ul>
 		</div>
-	</div>
-	<div class="foot">
-		<p>@2016</p>
-	</div>
-</body>
-</html>

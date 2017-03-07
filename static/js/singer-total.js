@@ -1,14 +1,20 @@
 (function() {
 	var url = "singer";
-	if (PageScope.params.classifyId) {
-		if (PageScope.params.classifyId === "all") {
-			url = "singer";
-		} else if (PageScope.params.classifyId === "hot") {
-			url = "singer/hot";
-		} else {
-			url += "/classifyId_" + PageScope.params.classifyId;
-		}
+
+	if(PageScope.params.classifyId !== "all"){
+		url = "singer/classifyId_" + PageScope.params.classifyId;
 	}
+	if(PageScope.params.classifyId === "hot"){
+		url = "singer/hot";
+	}
+
+	$.ajax({
+		url : url,
+		type : "GET",
+		dataType : "json"
+	}).done(function(source){
+		
+	});
 	AJAX({
 		url : url,
 		success : loadFouction
@@ -19,7 +25,7 @@
 	});
 
 	function loadClassify(classifyList) {
-		
+
 		if (!classifyList) {
 			return;
 		}
@@ -64,7 +70,7 @@
 			MMR.get("simpleMsg").showError(data.error.value);
 			return;
 		}
-		
+
 		var data = data.data;
 		$("#singerList").css("display", "none");
 		$("#simpleSingerList").css("display", "none");
