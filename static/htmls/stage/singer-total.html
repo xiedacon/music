@@ -76,7 +76,6 @@
 
 .material_right .songerList {
 	padding: 0 0 25px 0;
-	border-bottom: 1px #D3D3D3 solid;
 }
 
 .body .material_right .right_buttons {
@@ -128,6 +127,14 @@
 	clear: both;
 }
 
+.body .material_right .songerList_simple:after {
+	content: "";
+	display: block;
+	height: 0;
+	visibility: hidden;
+	clear: both;
+}
+
 .songer img {
 	width: 100%;
 	cursor: pointer;
@@ -152,16 +159,19 @@
 	vertical-align: top;
 	font-size: 0.8em;
 }
-
+.entity{
+  position: relative;
+}
 .icon {
-	display: inline-block;
 	border: 9px #e60000 solid;
 	width: 0;
 	height: 0;
 	border-radius: 9px;
-	position: relative;
-	float: right;
+	position: absolute;
 	cursor: pointer;
+	top: 99%;
+	transform: translate(-100%, -100%);
+	left: 75%;
 }
 
 .icon i {
@@ -176,7 +186,8 @@
 
 .songerList_simple {
 	width: 100%;
-	margin: 10px 0 0 0;
+	padding: 10px 0 0 0;
+	border-top: 1px #D3D3D3 solid;
 }
 
 .songerList_simple td {
@@ -207,81 +218,7 @@
 	overflow: hidden;
 }
 </style>
-		<div id="classifyList" class="material_left">
-			<ul class="select">
-				<h3>推荐</h3>
-				<li id="classify_hot" class="option" data-url="singers" data-href="singers?classifyId=hot&classifyName=推荐歌手" onclick="jump(this);"><i
-					class="point"></i> <span title="推荐歌手" class="songerList">推荐歌手</span></li>
-				<li id="classify_all" class="option" data-url="singers" data-href="singers?classifyId=all&classifyName=入驻歌手" onclick="jump(this);"><i
-					class="point"></i> <span title="入驻歌手" class="songerList">入驻歌手</span></li>
-			</ul>
-			<ul class="select prototype" style="border: 0">
-				<h3></h3>
-				<li class="option prototype"><i class="point"></i> <a href="javascript:void(0);" data-url="singers" data-href="" onclick="jump(this);"
-					title="" class="songerList"></a></li>
-			</ul>
+		<div id="classifys" class="material_left">
 		</div>
-		<div class="material material_right">
-			<div class="material_top">
-				<h2></h2>
-			</div>
-			<ul class="right_buttons" style="display: none;">
-				<li class="button double now">热门</li>
-				<li class="button">A</li>
-				<li class="button">B</li>
-				<li class="button">C</li>
-				<li class="button">D</li>
-				<li class="button">E</li>
-				<li class="button">F</li>
-				<li class="button">G</li>
-				<li class="button">H</li>
-				<li class="button">I</li>
-				<li class="button">J</li>
-				<li class="button">K</li>
-				<li class="button">L</li>
-				<li class="button">M</li>
-				<li class="button">N</li>
-				<li class="button">O</li>
-				<li class="button">P</li>
-				<li class="button">Q</li>
-				<li class="button">R</li>
-				<li class="button">S</li>
-				<li class="button">T</li>
-				<li class="button">U</li>
-				<li class="button">V</li>
-				<li class="button">W</li>
-				<li class="button">C</li>
-				<li class="button">Y</li>
-				<li class="button">Z</li>
-				<li class="button double">其他</li>
-			</ul>
-			<ul id="singerList" class="songerList entitys" style="display: none;">
-				{{each singers as singer index}}
-				<li class="songer entity" style="{{if (index+1)%5 === 0}}padding:25px 0 0 0{{/if}}">
-					<div class="imageDiv">
-						<a href="#singer?id={{singer.id}}">
-							<img title="{{singer.name}}的音乐" src="{{singer.icon}}">
-						</a>
-					</div>
-					<a title="{{singer.name}}的音乐" class="name" href="#singer?id={{singer.id}}">{{singer.name}}</a>
-					{{if singer.userId}}
-					<a title="{{singer.name}}的个人主页" class="icon" href="#home?id={{singer.userId}}">
-						<i class="icomoon"></i>
-					</a>
-					{{/if}}
-				</li>
-				{{/each}}
-			</ul>
-			<ul id="simpleSingerList" class="songerList_simple" style="display: none;">
-				{{each singers as singer index}}
-				<li class="singer_simple">
-					<a title="{{singer.name}}的音乐" class="name" href="#singer?id={{singer.id}}">{{singer.name}}</a>
-					{{if singer.userId}}
-					<a title="{{singer.name}}的个人主页" class="icon" href="#home?id={{singer.userId}}">
-						<i class="icomoon"></i>
-					</a>
-					{{/if}}
-				</li>
-				{{/each}}
-			</ul>
+		<div id="singers" class="material material_right">
 		</div>
