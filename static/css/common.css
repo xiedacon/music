@@ -55,13 +55,24 @@ body {
 	width: 41%;
 }
 
-.head_top .nav li {
+.head_top .nav .option {
 	float: left;
 	color: #ccc;
 	display: block;
-	padding: 0 4%;
 	cursor: pointer;
 	position: relative;
+	padding: 0 4%;
+}
+
+.head_top .nav .selected:after{
+	position: absolute;
+	top: 100%;
+	left: 50%;
+	transform: translate(-50%, -100%);
+	border: 5px rgba(0,0,0,0) solid;
+	border-bottom-color: #e60000;
+	cursor: pointer;
+	content: "";
 }
 
 .head_top .nav .selected {
@@ -75,16 +86,6 @@ body {
 
 .head_top .nav li:hover {
 	background: #5f5f5f;
-}
-
-.selected i {
-    position: absolute;
-    top: 100%;
-    left: 50%;
-    transform: translate(-50%, -100%);
-    border: 5px rgba(0,0,0,0) solid;
-    border-bottom-color: #e60000;
-    cursor: pointer;
 }
 
 .head_top .nav:after {

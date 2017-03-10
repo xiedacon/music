@@ -1,110 +1,94 @@
-PageScope.params.userId? "" : PageScope.params.userId = UserManager.getUserId();
 (function() {
-	AJAX({
-		url : "user/" + PageScope.params.userId,
-		success : loadUser
+	PageScope.params.id? "" : PageScope.params.id = UserManager.getUserId();
+
+	$.ajax({
+		url : "user/" + PageScope.params.id,
+		type : "GET",
+		dataType : "json"
+	}).done(function(source){
+		var template = `
+		<div class=" entityMessage_left">
+			<img src="{{user.icon}}">
+		</div>
+		<div class="entityMessage_right">
+			<div class="right_top">
+				<h2>{{user.name}}</h2>
+				<span class="level">Lv.{{user.level}}</span>
+				<span class="attention">
+					<i class="icomoon"></i>关注
+				</span>
+				{{if user.singerId}}
+				<a href="#singer?id={{user.singerId}}" class="toSongerPage">查看歌手页</a>
+				{{/if}}
+				<!--
+				<p class="authentication">
+					<s><i>v</i></s> <span>哈速度很快</span>
+				</p>
+				 -->
+			</div>
+			<div class="dynamic_attention_fans">
+				<!--
+				<p class="dynamic">
+					<span class="num">213</span> 动态
+				</p>
+				-->
+				{{if user.attentionNum}}
+				<p class="attention attentionNum">
+					<span class="num">{{user.attentionNum}}</span> 关注
+				</p>
+				{{/if}}
+				{{if user.fansNum}}
+				<p class="fans">
+					<span class="num">{{user.fansNum}}</span> 粉丝
+				</p>
+				{{/if}}
+			</div>
+			{{if user.introduction}}
+			<p class='detail'>个人介绍：{{user.introduction}}</p>
+			{{/if}}
+			{{if user.area}}
+			<p class='detail'>所在地区：{{user.area}}</p>
+			{{/if}}
+			{{if user.age}}
+			<p class='detail'>年龄：{{user.age}}</p>
+			{{/if}}
+		</div>
+		`, //
+		data = {
+			user : process(source)
+		};
+
+		document.querySelector("div#user").innerHTML = Template.compile(template)(data);
+		if (data.user.createSongMenuNum) {
+			var createSongMenu = document.querySelector("h3#createSongMenu");//
+			createSongMenu.innerHTML = data.user.name + "创建的歌单（" + data.user.createSongMenuNum + "）";
+			createSongMenu.parentNode.style = "";
+		}
+		if (data.user.collectSongMenuNum) {
+			var collectionSongMenu = document.querySelector("h3#collectionSongMenu");//
+			collectionSongMenu.innerHTML = data.user.name + "收藏的歌单（" + data.user.collectSongMenuNum + "）";
+			collectionSongMenu.parentNode.style = "";
+		}
+
 	});
-	AJAX({
-		url : "songMenu/creatorId_" + PageScope.params.userId,
-		success : loadSongMenus_create
+
+	$.ajax({
+		url : "songMenu/creatorId_" + PageScope.params.id,
+		type : "GET",
+		dataType : "json"
+	}).done(function(source){
+		FUNCTION.loadSongMenus("ul#createSongMenus",{
+			songMenus:process(source)
+		});
 	});
-	AJAX({
-		url : "songMenu/collectorId_" + PageScope.params.userId,
-		success : loadSongMenus_collect
+
+	$.ajax({
+		url : "songMenu/collectorId_" + PageScope.params.id,
+		type : "GET",
+		dataType : "json"
+	}).done(function(source){
+		FUNCTION.loadSongMenus("ul#collectionSongMenus",{
+			songMenus:process(source)
+		});
 	});
-
-	function loadUser(data) {
-		if(data.code != 200){
-			MMR.get("simpleMsg").showError(data.error.value);
-			return;
-		}
-		
-		var user = data.data //
-		, $userEle = $("#user");
-
-		$userEle.find("img").attr("src", user.icon);
-		$userEle.find("h2").text(user.name);
-		$userEle.find(".level").text("Lv." + user.level);
-		$userEle.find(".attention");
-		if (user.singerId) {
-			$userEle.find(".toSongerPage").removeAttr("style").attr({
-				"data-href" : "singer?singerId=" + user.singerId
-			});
-		}
-
-		if (user.attentionNum || user.attentionNum === 0) {
-			$userEle.find(".attention .num").text(user.attentionNum);
-		}
-		if (user.fansNum || user.fansNum === 0) {
-			$userEle.find(".fans .num").text(user.fansNum);
-		}
-
-		$details = $userEle.find(".entityMessage_right")
-		if (user.introduction) {
-			$details.append("<p class='detail'>个人介绍：" + user.introduction + "</p>")
-		}
-		if (user.area) {
-			$details.append("<p class='detail'>所在地区：" + user.area + "</p>")
-		}
-		if (user.age) {
-			$details.append("<p class='detail'>年龄：" + user.age + "</p>")
-		}
-
-		$userEle.find(".createSongMenuNum").text(user.createSongMenuNum);
-		if (user.createSongMenuNum || user.createSongMenuNum > 0) {
-			$(".createSongMenu").text(user.name + "创建的歌单（" + user.createSongMenuNum + "）") //
-			.parent().removeAttr("style");
-		}
-		if (user.collectSongMenuNum && user.collectSongMenuNum > 0) {
-			$(".collectionSongMenu").text(user.name + "收藏的歌单（" + user.collectSongMenuNum + "）") //
-			.parent().removeAttr("style");
-		}
-	}
-
-	function loadSongMenus_create(data) {
-		var ele = $(".createSongMenu").siblings("ul")[0];
-		loadSongMenus(data, ele);
-	}
-
-	function loadSongMenus_collect(data) {
-		var ele = $(".collectionSongMenu").siblings("ul")[0];
-		loadSongMenus(data, ele);
-	}
-
-	function loadSongMenus(data, ele) {
-		if(data.code != 200){
-			MMR.get("simpleMsg").showError(data.error.value);
-			return;
-		}
-		
-		var songMenus = data.data //
-		, $songMenuListEle = $(ele);
-		var $prototype = $songMenuListEle.find(".prototype").clone().removeClass("prototype");
-		var $songMenuEle, songMenu;
-
-		for (var i = 0; i < songMenus.length; i++) {
-			$songMenuEle = $prototype.clone();
-			songMenu = songMenus[i];
-			$songMenuEle.find("img").attr({
-				"alt" : songMenu.name,
-				"src" : songMenu.icon,
-				"title" : songMenu.name
-			});
-			$songMenuEle.find("img").parent().attr({
-				"data-href" : "songMenu?songMenuId=" + songMenu.id
-			});
-			$songMenuEle.find(".num").text(songMenu.playNum);
-			$songMenuEle.find(".name").attr({
-				"title" : songMenu.name,
-				"data-href" : "songMenu?songMenuId=" + songMenu.id
-			}).text(limitStringLength(songMenu.name, 20));
-
-			$songMenuEle.attr("id", songMenu.id);
-			if ((i + 1) % 5 === 0) {
-				$songMenuEle.css("padding", "25px 0 0 0")
-			}
-
-			$songMenuListEle.append($songMenuEle);
-		}
-	}
 }())

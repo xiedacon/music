@@ -305,15 +305,10 @@
 				<a href="/music">我的音乐网</a>
 			</h1>
 			<ul class="nav">
-				<li id="findMusic" class="selected">
-					<a href="#index">发现音乐</a>
-					<i></i>
-				</li>
-				<li id="myMusic" onclick="MMR.get('login').show();">
-					<a href="">我的音乐</a>
-				</li>
-				<li onclick="alert('暂无')">朋友</li>
-				<li onclick="alert('暂无')">下载客户端</li>
+				<a href="#index" class="selected option">发现音乐</a>
+				<a id="myMusic" href="javascript:void(0)" onclick="MMR.get('login').show();" class="option">我的音乐</a>
+				<span onclick="alert('暂无')" class="option">朋友</span>
+				<span onclick="alert('暂无')" class="option">下载客户端</span>
 			</ul>
 			<div class="search">
 				<i></i> <input id="search_global" class="search_input" type="text" name="song" placeholder="单曲/歌手/专辑/歌单/MV/用户">
@@ -325,7 +320,9 @@
 					<i></i>
 					<li>
 						<ul>
-							<li data-href="home" onclick="jump(this);">我的主页</li>
+							<li>
+								<a href="#home">我的主页</a>
+							</li>
 							<!--
 							<li onclick="alert('暂无');">我的等级</li>
 							<li onclick="alert('暂无');">付费音乐包</li>
@@ -490,6 +487,9 @@
 		return source.data;
 	}
 
+	document.querySelector("").addEventListener("click",function(e){
+
+	})
 	$(".head_top .nav").children("li[id]").click(function() {
 		$(this).addClass("selected") //
 		.siblings().removeClass("selected");

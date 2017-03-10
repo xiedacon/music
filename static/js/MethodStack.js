@@ -123,7 +123,7 @@
 	}
 	FUNCTION.loadSongMenus = function (selector, data) {
 		var template = `
-		{{each pageBean.beans as songMenu index}}
+		{{each songMenus as songMenu index}}
 		<li class="songMenu entity" style="{{if (index+1)%5===0}}padding-right:0{{/if}}">
 			<div class="image">
 				<a href="#songMenu?id={{songMenu.id}}">
@@ -136,8 +136,10 @@
 				</div>
 			</div>
 			<a class="name" href="#songMenu?id={{songMenu.id}}" title="{{songMenu.name}}">{{songMenu.name}}</a>
+			{{if BY}}
 			<span class="by">by</span>
 			<a class="songer" href="#home?id={{songMenu.creatorId}}" title="{{songMenu.creatorName}}">{{songMenu.creatorName}}</a>
+			{{/if}}
 		</li>
 		{{/each}}
 		`;

@@ -97,17 +97,19 @@
 		unbindEvents();
 		bindEvents('nav_login');
 
-		$("#myMusic").attr({
-			"data-href" : "myMusic?userId=" + user.id,
-			"onclick" : "jump(this);"
-		})
+		// $("#myMusic").attr({
+		// 	"data-href" : "myMusic?userId=" + user.id,
+		// 	"onclick" : "jump(this);"
+		// })
 
-		if (firstFlag) {
-			firstFlag = false;
-			return;
-		}
-
-		router.startRouter("index");
+		// console.log("aaa");
+		// if (firstFlag) {
+		// 	firstFlag = false;
+		// 	return;
+		// }
+		Router.goto("#index");
+		document.querySelector("a#myMusic").href = "#myMusic?id=" + user.id;
+		document.querySelector("a#myMusic").onclick = function(){};
 	}
 	function removeUser() {
 		sessionStorage.removeItem("user");
@@ -184,7 +186,7 @@
 
 			possibleValues.splice(0, possibleValues.length, 2);
 			str = parse_base("s", "seconds", str, possibleValues);
-			
+
 			return str;
 		}
 

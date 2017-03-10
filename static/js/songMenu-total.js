@@ -12,10 +12,12 @@
 			source : source,
 			data : {
 				urlPrefix : "songMenu/" + orderBy + "_",
-				urlSuffix : supplement
+				urlSuffix : supplement,
+				BY : true
 			},
 			before : function(source, data, excutor){
 				data.pageBean = process(source);
+				data.songMenus = data.pageBean.beans;
 			},
 			excute : function(source, data, excutor){
 				FUNCTION.loadSongMenus("ul#songMenuList", data);
