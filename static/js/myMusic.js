@@ -1,12 +1,68 @@
 (function() {
-	AJAX({
-		url : "songMenu/creatorId_" + PageScope.params.userId,
-		success : loadCreatedSongMenus
+
+	$.ajax({
+		url : "songMenu/creatorId_" + PageScope.params.id,
+		type : "GET",
+		dataType : "json"
+	}).done(function(source){
+		var template = `
+		{{if songMenus.length > 0}}
+		<h2>
+			<i></i>
+			<span class="content">创建的歌单（{{songMenus.length}}）</span>
+			<span class="h2_rightF" onclick="MMR.get('addMenu').show();">
+				<i class="icomoon"></i>新建
+			</span>
+		</h2>
+		<ul class="select">
+			{{each songMenus as songMenu}}
+			<li id="{{songMenu.id}}" class="option" onclick="loadSongMenu({{songMenu.id}});">
+				<img src="{{songMenu.icon}}">
+				<div class="option_right">
+					<span class="name">
+						{{if songMenu.userId === '` + UserManager.getUserId() + `'}}
+						我
+						{{else if songMenu.userId}}
+						{{songMenu.creatorName}}
+						{{/if}}
+						{{songMenu.name}}
+					</span>
+					<br>
+					<span class="num">{{songMenu.songNum}}首</span>
+				</div>
+				{{if songMenu.userId !== '` + UserManager.getUserId() + `'}}
+				<div class="option_rightF">
+					{{if songMenu.creatorId === '` + UserManager.getUserId() + `'}}
+					<i class="edit icomoon" title="修改"></i>
+					{{/if}}
+					<i class="delete icomoon" onclick="MMR.deleteSongMenu(this);return false;" title="删除"></i>
+				</div>
+				{{/if}}
+			</li>
+			{{/each}}
+		</ul>
+		{{/if}}
+		`, //
+		data = {
+			songMenus : process(source)
+		};
+
+		document.querySelector("div#createdSongMenus").innerHTML = Template.compile(template)(data);
+			// $songMenuEle.find(".edit").removeAttr("style").on("click", function() {
+			// 	var songMenuId = $(this).parents(".option").attr("data-id");
+			// 	showEditPage(songMenuId);
+			// 	return false;
+			// });
 	});
-	AJAX({
-		url : "songMenu/collectorId_" + PageScope.params.userId,
-		success : loadCollectedSongMenus
-	});
+
+	// AJAX({
+	// 	url : "songMenu/creatorId_" + PageScope.params.userId,
+	// 	success : loadCreatedSongMenus
+	// });
+	// AJAX({
+	// 	url : "songMenu/collectorId_" + PageScope.params.userId,
+	// 	success : loadCollectedSongMenus
+	// });
 
 	function loadSongMenu(songMenuId) {
 		var $songMenus = $(".material_right li").not(".prototype");
@@ -37,7 +93,7 @@
 			MMR.get("simpleMsg").showError(data.error.value);
 			return;
 		}
-		
+
 		var data = data.data //
 		, $ele = $("#createdSongMenus");
 		if (data.length > 0) {
@@ -54,7 +110,7 @@
 			MMR.get("simpleMsg").showError(data.error.value);
 			return;
 		}
-		
+
 		var data = data.data //
 		, $ele = $("#collectedSongMenus");
 		if (data.length > 0) {
@@ -63,59 +119,6 @@
 		} else {
 			$ele.css("display", "none");
 			$ele.siblings("#collectedSongMenusHead").css("display", "none");
-		}
-	}
-
-	function loadSongMenus($ele, songMenus) {
-		var $songMenusEle = $ele;
-		var $prototype = $songMenusEle.find(".prototype").clone().removeClass("prototype");
-		var $songMenuEle, songMenu;
-
-		for (var i = 0; i < songMenus.length; i++) {
-			$songMenuEle = $prototype.clone();
-			songMenu = songMenus[i];
-
-			$songMenuEle.find("img").attr({
-				"src" : songMenu.icon
-			});
-
-			var userId = UserManager.getUserId();
-
-			if (songMenu.userId && userId === songMenu.userId) {
-				$songMenuEle.find(".name").text("我" + songMenu.name);
-			} else if (songMenu.userId) {
-				$songMenuEle.find(".name").text(songMenu.creatorName + songMenu.name);
-			} else {
-				$songMenuEle.find(".name").text(songMenu.name);
-			}
-			$songMenuEle.find(".num").text(songMenu.songNum + "首");
-
-			$songMenuEle.attr("data-id", songMenu.id).click(function() {
-				loadSongMenu($(this).attr("data-id"));
-			});
-
-			if (songMenu.userId === userId) {// 我喜欢的音乐，无法删除或修改
-				$songMenusEle.prepend($songMenuEle);
-				loadSongMenu(songMenu.id);
-				continue;
-			}
-
-			$songMenuEle.find(".option_rightF").removeAttr("style");
-
-			if (songMenu.creatorId === userId) {
-				$songMenuEle.find(".edit").removeAttr("style").on("click", function() {
-					var songMenuId = $(this).parents(".option").attr("data-id");
-					showEditPage(songMenuId);
-					return false;
-				});
-			}
-
-			$songMenuEle.find(".delete").on("click", function() {
-				MMR.deleteSongMenu(this);
-				return false;
-			});
-
-			$songMenusEle.append($songMenuEle);
 		}
 	}
 
@@ -131,7 +134,7 @@
 					MMR.get("simpleMsg").showError(data.error.value);
 					return;
 				}
-				
+
 				var songMenu = data.data //
 				;
 				songMenu_globe = songMenu;
@@ -193,7 +196,7 @@
 					tags += "-";
 				}
 			}
-			
+
 			$.ajax({
 				url : "songMenu/" + $("#editPage").attr("data-id"),
 				type : "PUT",
@@ -270,7 +273,7 @@
 			MMR.get("simpleMsg").showError(data.error.value);
 			return;
 		}
-		
+
 		var songMenu = data.data //
 		, $songMenuEle = $("#songMenu");
 		$songMenuEle.find(".songMenuMessage_left img").attr({

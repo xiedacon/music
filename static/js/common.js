@@ -107,7 +107,7 @@
 		// 	firstFlag = false;
 		// 	return;
 		// }
-		Router.goto("#index");
+		//Router.goto("#index");
 		document.querySelector("a#myMusic").href = "#myMusic?id=" + user.id;
 		document.querySelector("a#myMusic").onclick = function(){};
 	}

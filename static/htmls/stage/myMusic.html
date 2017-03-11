@@ -1,11 +1,4 @@
 <!DOCTYPE html>
-<html>
-<head>
-<meta charset="utf-8">
-<link rel="stylesheet" type="text/css" href="css/detail.css">
-<link rel="stylesheet" href="css/jquery.Jcrop.css" type="text/css" />
-<title>我的音乐</title>
-</head>
 <style type="text/css">
 .material .material_right {
 	border-right: 1px #bdbdbd solid;
@@ -62,11 +55,11 @@
 }
 
 .material .material_right .select {
-	
+
 }
 
 .select .option {
-	padding: 5px 0 5px 20px;
+	padding: 5px 0 5px 20px !important;
 	cursor: pointer;
 }
 
@@ -122,11 +115,11 @@
 }
 
 .option .option_rightF .edit {
-	
+
 }
 
 .option .option_rightF .delete {
-	
+
 }
 
 .material .material_left {
@@ -392,23 +385,10 @@
     cursor: default !important;
 }
 </style>
-<body>
-	<div class="body">
 		<div class="material">
 			<div class="material_right">
-				<h2 id="createdSongMenusHead">
-					<i></i> <span class="content"></span> <span class="h2_rightF" onclick="MMR.get('addMenu').show();"> <i class="icomoon"></i>新建
-					</span>
-				</h2>
-				<ul id="createdSongMenus" class="select">
-					<li class="option prototype"><img src="">
-						<div class="option_right">
-							<span class="name"></span><br> <span class="num"></span>
-						</div>
-						<div class="option_rightF" style="display: none">
-							<i class="edit icomoon" title="修改" style="display: none"></i> <i class="delete icomoon" title="删除"></i>
-						</div></li>
-				</ul>
+				<div id="createdSongMenus">
+				<div>
 				<h2 id="collectedSongMenusHead">
 					<i></i><span class="content"></span>
 				</h2>
@@ -426,7 +406,7 @@
 			<div class="material_left">
 				<div id="editPage" style="display: none">
 					<div class="editPage_top">
-						<a href="javascript:void(0);" onclick="jump(this);" class="name"></a> 
+						<a href="javascript:void(0);" onclick="jump(this);" class="name"></a>
 						<span>></span>
 						<strong>编辑歌单</strong>
 					</div>
@@ -435,11 +415,11 @@
 							<p>
 								<span class="key">歌单名：</span>
 								<span class="value">
-									<input id="songMenuName" name="name" type="text"> 
+									<input id="songMenuName" name="name" type="text">
 									<span class="errorMessage" style="visibility: hidden;">
 										<i class="icomoon"></i>
 									</span>
-								</span> 
+								</span>
 							</p>
 							<p>
 								<span class="key">标签：</span>
@@ -448,7 +428,7 @@
 										<a href="javascript:void(0);" onclick="MMR.get('tags').show();">选择标签</a>
 									</span>
 									<span class="message">选择适合的标签，最多选3个</span>
-								</span> 
+								</span>
 							</p>
 							<p>
 								<span class="key">介绍：</span>
@@ -466,14 +446,14 @@
 							</p>
 						</div>
 						<div class="bottom_right">
-							<img alt="" src=""> 
+							<img alt="" src="">
 							<span class="toImageEditPage">编辑封面</span>
 						</div>
 					</div>
 				</div>
 				<div id="imageEditPage" style="display: none">
 					<div class="editPage_top">
-						<a href="javascript:void(0);" onclick="jump(this);" class="name"></a> 
+						<a href="javascript:void(0);" onclick="jump(this);" class="name"></a>
 						<span>></span>
 						<a class="turnToEditPage" href="javascript:void(0);" onclick="">编辑歌单</a>
 						<span>></span>
@@ -622,9 +602,3 @@
 		</div>
 		<script src="js/jquery.min.js"></script>
 		<script src="js/jquery.Jcrop.js"></script>
-	</div>
-	<div class="foot">
-		<p>@2016</p>
-	</div>
-</body>
-</html>

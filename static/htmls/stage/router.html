@@ -487,17 +487,16 @@
 		return source.data;
 	}
 
-	document.querySelector("").addEventListener("click",function(e){
-
-	})
-	$(".head_top .nav").children("li[id]").click(function() {
-		$(this).addClass("selected") //
-		.siblings().removeClass("selected");
-
-		if ($(this).attr("id") === "findMusic") {
-			$(".head_bottom .subnav").css("display", "inherit");
-		} else {
-			$(".head_bottom .subnav").css("display", "none");
+	document.querySelector("ul.nav").addEventListener("click",function(e){
+		if(e.target.tagName != "A") return;
+		e.target.className = "option selected";
+		var tag = e.target;
+		while(tag = tag.nextElementSibling){
+			tag.className = "option";
+		}
+		tag = e.target;
+		while(tag = tag.previousElementSibling){
+			tag.className = "option";
 		}
 	})
 </script>
