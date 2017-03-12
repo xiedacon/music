@@ -48,11 +48,90 @@
 		};
 
 		document.querySelector("div#createdSongMenus").innerHTML = Template.compile(template)(data);
-			// $songMenuEle.find(".edit").removeAttr("style").on("click", function() {
-			// 	var songMenuId = $(this).parents(".option").attr("data-id");
-			// 	showEditPage(songMenuId);
-			// 	return false;
-			// });
+		// 	$songMenuEle.find(".edit").removeAttr("style").on("click", function() {
+		// 		var songMenuId = $(this).parents(".option").attr("data-id");
+		// 		showEditPage(songMenuId);
+		// 		return false;
+		// 	});
+
+		function dom(selector){
+			var eles = document.querySelectorAll(selector);
+			//if(!eles) return;
+
+			var allListeners = {};
+
+			return {
+				//dom
+				siblings : function(){
+					return this.parent().childs().filter(function(e){
+						return e != this;
+					});
+				},
+				parent : function(){
+					return dom(e.parentElement);
+				},
+				childs : function(){
+					return Array.from(e.children).map(function(e){
+						return dom(e);
+					});
+				},
+				//事件
+				on : function(type,listener,once){
+					var listeners = allListeners[type];
+					listener = EventListener(listener);
+					(listeners = listeners ? listeners : []).push(listener);
+					allListeners[type] = listeners;
+
+					e.addEventListener(type,listener,{
+						once : once
+					});
+
+					return this;
+				},
+				off : function(type,listener){
+					var listeners = allListeners[type];
+					if(!listeners){
+						e.removeEventListener(type,listener);
+						return this;
+					}
+					if(listener){
+						e.removeEventListener(type,listeners.filter(function(_listener){
+							return _listener.real == listener;
+						}));
+						allListeners[type] = listeners.filter(function(_listener){
+							return _listener.real != listener;
+						});
+						return this;
+					}
+
+					listeners.forEach(function(listener){
+						e.removeEventListener(type,listener);
+					});
+					allListeners[type] = undefined;
+
+					return this;
+				},
+				once : function(type,listener){
+					return this.on(type,listener,true);
+				},
+				trigger : function(type){
+					//
+					return this;
+				}
+			};
+		}
+		function EventListener(realListener){
+			var listener = function(e){
+				realListener({
+					target : dom(e.target),
+					currentTarget : dom(e.currentTarget),
+					stopPropagation : e.stopPropagation,
+					type : e.type
+				});
+			}
+			listener.real = realListener;
+			return listener;
+		}
 	});
 
 	// AJAX({
