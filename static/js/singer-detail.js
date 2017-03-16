@@ -180,25 +180,4 @@
 		})
 	});
 
-	function loadIntroduction(data) {
-		if(data.code != 200){
-			MMR.get("simpleMsg").showError(data.error.value);
-			return;
-		}
-
-		introduction = data.data;
-		$("#introductionHead").addClass("now") //
-		.siblings().removeClass("now");
-
-		var $introduction = $("#introduction");
-		$introduction.removeAttr("style") //
-		.siblings().css("display", "none");
-
-		if (data.code == 200) {
-			$introduction.find("p").text(introduction) //
-			.parent().removeAttr("style") //
-			.siblings().css("display", "none");
-		}
-	}
-
 }())

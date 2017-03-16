@@ -119,3 +119,114 @@ function Excutor(arguments){
     }
   }
 }
+
+//
+function dom(selector){
+  if(selector instanceof Element){
+    var ele = selector;
+  }else{
+    var ele = document.querySelector(selector);
+  }
+  if(!ele) throw "该dom元素不存在";
+
+  var allListeners = {};
+
+  return {
+    e : ele,
+    //dom
+    siblings : function(){
+      return this.parent().childs().filter(function(e){
+        return e != this;
+      });
+    },
+    parent : function(tagName){
+      var tag = ele.parentElement;
+      if(tagName){
+        while(tag.tagName != tagName){
+          tag = tag.parentElement;
+        }
+      }
+      return dom(tag);
+    },
+    childs : function(){
+      return Array.from(ele.children).map(function(e){
+        return dom(e);
+      });
+    },
+    addClass : function(className){
+      ele.className += " " + className;
+      return this;
+    },
+    removeClass : function(className){
+      if(ele.className){
+        var newClassName = "";
+        ele.className.split(/\s/).filter(function(_className){
+          return _className != className;
+        }).forEach(function(_className){
+          newClassName += _className;
+        });
+        ele.className = newClassName;
+        return this;
+      }
+    },
+    attr : function(attres){
+      if(attres === "class") attres = "className";
+      return ele[attres];
+    },
+    removeAttr : function(attrName){
+      if(attrName == "class") attrName = "className";
+      ele[attrName] = "";
+      return this;
+    },
+    css : function(csses){
+      for(var cssName in csses){
+        ele.style[cssName] = csses[cssName];
+      }
+      return this;
+    },
+    //事件
+    on : function(type,listener,once){
+      var listeners = allListeners[type];
+      (listeners = listeners ? listeners : []).push(listener);
+      allListeners[type] = listeners;
+
+      ele.addEventListener(type,listener,{
+        once : once
+      });
+
+      return this;
+    },
+    off : function(type,listener){
+      var listeners = allListeners[type];
+      if(!listeners){
+        ele.removeEventListener(type,listener);
+        return this;
+      }
+      if(listener){
+        listeners.filter(function(_listener){
+          return _listener == listener;
+        }).forEach(function(_listener){
+          ele.removeEventListener(type,_listener);
+        });
+        allListeners[type] = listeners.filter(function(_listener){
+          return _listener != listener;
+        });
+        return this;
+      }
+
+      listeners.forEach(function(_listener){
+        ele.removeEventListener(type,_listener);
+      });
+      allListeners[type] = undefined;
+
+      return this;
+    },
+    once : function(type,listener){
+      return this.on(type,listener,true);
+    },
+    trigger : function(type){
+      ele[type]();
+      return this;
+    }
+  };
+}

@@ -5,18 +5,39 @@
 		type : "GET",
 		dataType : "json"
 	}).done(function(source){
+		loadSongMenus("div#createdSongMenus",{
+			type : "创建的歌单",
+			songMenus : process(source)
+		});
+		loadSongMenu(dom("div#createdSongMenus ul.select").childs()[0].addClass("now").attr("id"));
+	});
+
+	$.ajax({
+		url : "songMenu/collectorId_" + PageScope.params.id,
+		type : "GET",
+		dataType : "json"
+	}).done(function(source){
+		loadSongMenus("div#collectedSongMenus",{
+			type : "收藏的歌单",
+			songMenus : process(source)
+		});
+	});
+
+	function loadSongMenus(selector,data){
 		var template = `
 		{{if songMenus.length > 0}}
 		<h2>
 			<i></i>
-			<span class="content">创建的歌单（{{songMenus.length}}）</span>
+			<span class="content">{{type}}（{{songMenus.length}}）</span>
+			{{if type==="创建的歌单"}}
 			<span class="h2_rightF" onclick="MMR.get('addMenu').show();">
 				<i class="icomoon"></i>新建
 			</span>
+			{{/if}}
 		</h2>
 		<ul class="select">
 			{{each songMenus as songMenu}}
-			<li id="{{songMenu.id}}" class="option" onclick="loadSongMenu({{songMenu.id}});">
+			<li id="{{songMenu.id}}" class="option">
 				<img src="{{songMenu.icon}}">
 				<div class="option_right">
 					<span class="name">
@@ -35,170 +56,164 @@
 					{{if songMenu.creatorId === '` + UserManager.getUserId() + `'}}
 					<i class="edit icomoon" title="修改"></i>
 					{{/if}}
-					<i class="delete icomoon" onclick="MMR.deleteSongMenu(this);return false;" title="删除"></i>
+					<i class="delete icomoon" title="删除"></i>
 				</div>
 				{{/if}}
 			</li>
 			{{/each}}
 		</ul>
 		{{/if}}
-		`, //
-		data = {
-			songMenus : process(source)
-		};
+		`;
 
-		document.querySelector("div#createdSongMenus").innerHTML = Template.compile(template)(data);
-		// 	$songMenuEle.find(".edit").removeAttr("style").on("click", function() {
-		// 		var songMenuId = $(this).parents(".option").attr("data-id");
-		// 		showEditPage(songMenuId);
-		// 		return false;
-		// 	});
-
-		function dom(selector){
-			var eles = document.querySelectorAll(selector);
-			//if(!eles) return;
-
-			var allListeners = {};
-
-			return {
-				//dom
-				siblings : function(){
-					return this.parent().childs().filter(function(e){
-						return e != this;
-					});
-				},
-				parent : function(){
-					return dom(e.parentElement);
-				},
-				childs : function(){
-					return Array.from(e.children).map(function(e){
-						return dom(e);
-					});
-				},
-				//事件
-				on : function(type,listener,once){
-					var listeners = allListeners[type];
-					listener = EventListener(listener);
-					(listeners = listeners ? listeners : []).push(listener);
-					allListeners[type] = listeners;
-
-					e.addEventListener(type,listener,{
-						once : once
-					});
-
-					return this;
-				},
-				off : function(type,listener){
-					var listeners = allListeners[type];
-					if(!listeners){
-						e.removeEventListener(type,listener);
-						return this;
+		document.querySelector(selector).innerHTML = Template.compile(template)(data);
+		dom(selector + " ul.select").on("click", function(e) {
+			switch(e.target.tagName){
+				case "LI":
+					loadSongMenu(e.target.id);
+					break;
+				case "I":
+					if(e.target.className.indexOf("edit")>=0){
+						showEditPage(dom(e.target).parent().parent().attr("id"));
 					}
-					if(listener){
-						e.removeEventListener(type,listeners.filter(function(_listener){
-							return _listener.real == listener;
-						}));
-						allListeners[type] = listeners.filter(function(_listener){
-							return _listener.real != listener;
-						});
-						return this;
+					if(e.target.className.indexOf("delete")>=0){
+						MMR.deleteSongMenu(this);
 					}
-
-					listeners.forEach(function(listener){
-						e.removeEventListener(type,listener);
-					});
-					allListeners[type] = undefined;
-
-					return this;
-				},
-				once : function(type,listener){
-					return this.on(type,listener,true);
-				},
-				trigger : function(type){
-					//
-					return this;
-				}
-			};
-		}
-		function EventListener(realListener){
-			var listener = function(e){
-				realListener({
-					target : dom(e.target),
-					currentTarget : dom(e.currentTarget),
-					stopPropagation : e.stopPropagation,
-					type : e.type
-				});
+					e.stopPropagation();
+					break;
+				default:
+					loadSongMenu(dom(e.target).parent("LI").attr("id"));
 			}
-			listener.real = realListener;
-			return listener;
-		}
-	});
-
-	// AJAX({
-	// 	url : "songMenu/creatorId_" + PageScope.params.userId,
-	// 	success : loadCreatedSongMenus
-	// });
-	// AJAX({
-	// 	url : "songMenu/collectorId_" + PageScope.params.userId,
-	// 	success : loadCollectedSongMenus
-	// });
+		});
+	}
 
 	function loadSongMenu(songMenuId) {
-		var $songMenus = $(".material_right li").not(".prototype");
-		$songMenus.filter("li[data-id='" + songMenuId + "']").addClass("now") //
-		$songMenus.filter("li[data-id!='" + songMenuId + "']").removeClass("now");
-
-		PageScope.loadForFirst = "comment/songMenuId_" + songMenuId;
-		PageScope.loadPageBean = "comment/songMenuId_" + songMenuId + "/";
-
-		$("#showPage").css("display", "block").siblings().css("display", "none");
-
-		AJAX({
-			url : "songMenu/" + songMenuId,
-			success : _loadSongMenu
+		dom("div#createdSongMenus ul.select").childs().forEach(function(e){
+			e.attr("id") == songMenuId ? e.addClass("now") : e.removeClass("now");
 		});
-		AJAX({
-			url : "song/songMenuId_" + songMenuId,
-			success : FUNCTION.loadSongs
+		try{
+		dom("div#collectedSongMenus ul.select").childs().forEach(function(e){
+			e.attr("id") == songMenuId ? e.addClass("now") : e.removeClass("now");
 		});
-		AJAX({
-			url : PageScope.loadForFirst,
-			success : FUNCTION.loadForFirst
+	}catch(error){}
+		var id = songMenuId;
+
+		$.ajax({
+			url : "songMenu/" + id,
+			type : "GET",
+			dataType : "json"
+		}).done(function(source){
+			var template = `
+			<div class="songMenuMessage_left entityMessage_left">
+				<img src="{{songMenu.icon}}">
+			</div>
+			<div class="songMenuMessage_right entityMessage_right">
+				<div class="label">
+					<span class="content">歌单</span>
+					<span class="triangle"><i></i></span>
+				</div>
+				<h2>{{songMenu.name}}</h2>
+				<div class="creator_time">
+					<div class="creator">
+						<a title="{{songMenu.creatorName}}" href="#home?id={{songMenu.creatorId}}">
+							<img src="{{songMenu.creatorIcon}}" />
+						</a>
+						<a class="creatorName" href="#home?id={{songMenu.creatorId}}" title="{{songMenu.creatorName}}">
+							{{songMenu.creatorName}}
+						</a>
+					</div>
+					<span class="createTime">
+						{{songMenu.createTime | dateFormatter:'yyyy-MM-dd'}}创建
+					</span>
+				</div>
+				<div class="buttons">
+					<div class="play_addToPlayList">
+						<span class="play" title="播放" onclick="MMR.get('music').batchAddThenPlay('songMenuId','{{songMenu.id}}')">
+							<i class="icomoon"></i>
+							<span>播放</span>
+						</span>
+						<span class="addToPlaylist icomoon" title="添加到播放列表" onclick="MMR.get('music').batchAdd('songMenuId','{{songMenu.id}}')"></span>
+					</div>
+					<span class="collection button" onclick="MMR.collectSongMenu({{songMenu.id}})">
+						<i class='icomoon'></i>{{songMenu.collectionNum}}
+					</span>
+					<span class="share button">
+						<i class='icomoon'></i>{{songMenu.shareNum}}
+					</span>
+					<span class="download button"><i class="icomoon"></i>下载</span>
+					<span class="comment button">
+						<i class='icomoon'></i>{{songMenu.commentNum}}
+					</span>
+				</div>
+				<div class="details">
+					<p class="tags">
+						标签：
+						{{each songMenu.songMenuSecondTagList as secondTag}}
+						<a class='tag' href='#songMenus?secondTagId={{secondTag.id}}&secondTagName={{secondTag.name}}'>
+							{{secondTag.name}}
+						</a>
+						{{/each}}
+					</p>
+					<p class="introduction">
+						介绍：
+						{{if songMenu.introduction}}
+						{{songMenu.introduction}}
+						{{else}}
+						无
+						{{/if}}
+					</p>
+				</div>
+			</div>
+			`, //
+			data = {
+				songMenu : process(source)
+			};
+
+			document.querySelector("div#songMenu").innerHTML = Template.compile(template)(data);
+			document.querySelector("span#songNum").innerHTML = data.songMenu.songNum + "首歌";
+			document.querySelector("i#playNum").innerHTML = data.songMenu.playNum;
+			document.querySelector("span#commentNum").innerHTML = "共" + data.songMenu.commentNum + "条评论";
+			var user = UserManager.getUser();
+			if (user) {
+				document.querySelector("img#userIcon").src = user.icon;
+			}
+			document.querySelector("span#addComment").addEventListener("click",function(){
+				MMR.addComment('songMenu', data.songMenu.id);
+			})
 		});
-	}
 
-	function loadCreatedSongMenus(data) {
-		if(data.code != 200){
-			MMR.get("simpleMsg").showError(data.error.value);
-			return;
-		}
+		$.ajax({
+			url : "song/songMenuId_" + id,
+			type : "GET",
+			dataType : "json"
+		}).done(function(source){
+			var data = {
+				songs : process(source)
+			}
+			FUNCTION.loadSongs("tbody#songList", data);
+		});
 
-		var data = data.data //
-		, $ele = $("#createdSongMenus");
-		if (data.length > 0) {
-			$ele.siblings("#createdSongMenusHead").find(".content").text("创建的歌单(" + data.length + ")");
-			loadSongMenus($ele, data);
-		} else {
-			$ele.css("display", "none");
-			$ele.siblings("#createdSongMenusHead").css("display", "none");
-		}
-	}
-
-	function loadCollectedSongMenus(data) {
-		if(data.code != 200){
-			MMR.get("simpleMsg").showError(data.error.value);
-			return;
-		}
-
-		var data = data.data //
-		, $ele = $("#collectedSongMenus");
-		if (data.length > 0) {
-			$ele.siblings("#collectedSongMenusHead").find(".content").text("收藏的歌单(" + data.length + ")");
-			loadSongMenus($ele, data);
-		} else {
-			$ele.css("display", "none");
-			$ele.siblings("#collectedSongMenusHead").css("display", "none");
-		}
+		$.ajax({
+			url : "comment/songMenuId_" + id + "/1",
+			type : "GET",
+			dataType : "json"
+		}).done(function(source){
+			Excutor({
+				source : source,
+				data : {
+					urlPrefix : "comment/songMenuId_" + id + "/"
+				},
+				before : function(source, data, excutor){
+					source = process(source);
+					data.hotList = source.hotList;
+					data.pageBean = source.pageBean;
+				},
+				excute : function(source, data, excutor){
+					FUNCTION.loadComments("ul#commentList", data);
+					FUNCTION.loadPages("ul#pages", data, excutor);
+					FUNCTION.loadEmojis();
+				}
+			}).excute();
+		});
 	}
 
 	function showEditPage(songMenuId) {
