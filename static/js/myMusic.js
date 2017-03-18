@@ -66,14 +66,31 @@
 		`;
 
 		document.querySelector(selector).innerHTML = Template.compile(template)(data);
+
+		var eles;
 		dom(selector + " ul.select").on("click", function(e) {
+			eles = eles ? eles : dom("div#createdSongMenus ul.select").childs().concat(dom("div#collectedSongMenus ul.select").childs());
 			switch(e.target.tagName){
 				case "LI":
+					eles.forEach(function(ele){
+						ele.attr("id") === e.target.id ? ele.addClass("now") : ele.removeClass("now");
+					});
+
 					loadSongMenu(e.target.id);
+					dom("div#showPage").css({display:"block"}).siblings().forEach(function(ele){
+						ele.css({display:"none"});
+					});
 					break;
 				case "I":
 					if(e.target.className.indexOf("edit")>=0){
-						showEditPage(dom(e.target).parent().parent().attr("id"));
+						eles.forEach(function(ele){
+							ele.removeClass("now");
+						});
+
+						loadEditPage(dom(e.target).parent("li").attr("id"));
+						dom("div#editPage").css({display:"block"}).siblings().forEach(function(ele){
+							ele.css({display:"none"});
+						});
 					}
 					if(e.target.className.indexOf("delete")>=0){
 						MMR.deleteSongMenu(this);
@@ -87,14 +104,6 @@
 	}
 
 	function loadSongMenu(songMenuId) {
-		dom("div#createdSongMenus ul.select").childs().forEach(function(e){
-			e.attr("id") == songMenuId ? e.addClass("now") : e.removeClass("now");
-		});
-		try{
-		dom("div#collectedSongMenus ul.select").childs().forEach(function(e){
-			e.attr("id") == songMenuId ? e.addClass("now") : e.removeClass("now");
-		});
-	}catch(error){}
 		var id = songMenuId;
 
 		$.ajax({
@@ -216,60 +225,101 @@
 		});
 	}
 
-	function showEditPage(songMenuId) {
-		$("#createdSongMenus .option,#collectedSongMenus .option").removeClass("now");
-		var $editPage = $("#editPage");
+	function loadEditPage(songMenuId){
 		$.ajax({
 			url : "songMenu/" + songMenuId,
 			dataType : "json",
-			type : "GET",
-			success : function(data) {
-				if(data.code != 200){
-					MMR.get("simpleMsg").showError(data.error.value);
-					return;
-				}
+			type : "GET"
+		}).done(function(source){
+			var template = `
+			<div class="editPage_top">
+				<a href="#songMenu?id={{songMenu.id}}" class="name">{{songMenu.name}}</a>
+				<span>></span>
+				<strong>编辑歌单</strong>
+			</div>
+			<div class="editPage_bottom">
+				<div class="bottom_left">
+					<p>
+						<span class="key">歌单名：</span>
+						<span class="value">
+							<input id="songMenuName" name="name" type="text" value="{{songMenu.name}}">
+							<span class="errorMessage" style="visibility: hidden;">
+								<i class="icomoon"></i>
+							</span>
+						</span>
+					</p>
+					<p>
+						<span class="key">标签：</span>
+						<span class="value">
+							<span id="tags" class="tags">
+								{{each songMenu.songMenuSecondTagList as tag}}
+								<span id="{{tag.id}}" class="tag">
+									{{tag.name}}
+									<i class='icomoon'></i>
+								</span>
+								{{/each}}
+								<a onclick="MMR.get('tags').show();">选择标签</a>
+							</span>
+							<span class="message">选择适合的标签，最多选3个</span>
+						</span>
+					</p>
+					<p>
+						<span class="key">介绍：</span>
+						<span class="value">
+							{{if songMenu.introduction}}
+							<textarea class="introduction">{{songMenu.introduction}}</textarea>
+							<span class="num">
+								{{1000 - songMenu.introduction.length}}
+							</span>
+							{{else}}
+							<textarea class="introduction"></textarea>
+							<span class="num">1000</span>
+							{{/if}}
+						</span>
+					</p>
+					<p>
+						<span class="key"></span>
+						<span class="value">
+							<span id="updateSongMenu" class="button enable" style="margin: 0 30px 0 0;">保 存</span>
+							<span class="button">取 消</span>
+						</span>
+					</p>
+				</div>
+				<div class="bottom_right">
+					<img alt="{{songMenu.name}}" src="{{songMenu.icon}}">
+					<span class="toImageEditPage">编辑封面</span>
+				</div>
+			</div>
+			`, //
+			data = {
+				songMenu : process(source)
+			};
 
-				var songMenu = data.data //
-				;
-				songMenu_globe = songMenu;
-				$editPage.attr("data-id", songMenu.id);
-				$editPage.find(".name").attr({
-					"data-href" : "songMenu?songMenuId=" + songMenu.id
-				}).text(songMenu.name);
-				$editPage.find("input").val(songMenu.name);
-				$editPage.find(".introduction").text("");
-				$editPage.find(".num").text(1000);
-				if (songMenu.introduction) {
-					$editPage.find(".introduction").text(songMenu.introduction);
-					$editPage.find(".num").text(1000 - songMenu.introduction.length);
-				}
-				var $tags = $editPage.find(".tags");
-				$tags.children(".tag").remove();
-				if (songMenu.songMenuSecondTagList) {
-					var tagList = songMenu.songMenuSecondTagList;
-					var tag;
-					for (var i = 0; i < tagList.length; i++) {
-						tag = tagList[i];
-						$tags.prepend("<span data-id='" + tag.id + "' class='tag'>" + tag.name + "<i class='icomoon'></i></span>");
-					}
-					$tags.find("i").on("click", function() {
-						$(this).parent().remove();
-					})
-				}
-				$editPage.find("img").attr("src", songMenu.icon)
-				$editPage.find(".toImageEditPage").on("click", showImageEditPage);
-				$editPage.find(".introduction").on("focusin", function() {
-					$editPage.find(".introduction").on("keydown", function() {
-						$(this).siblings(".num").text(1000 - $(this).val().length)
-					});
-				});
-				$editPage.find(".introduction").on("focusout", function() {
-					$editPage.find(".introduction").off("keydown");
-				});
+			document.querySelector("div#editPage").innerHTML = Template.compile(template)(data);
+		});
+	}
 
-				$editPage.css("display", "block").siblings().css("display", "none");
-			}
-		})
+	function showEditPage(songMenuId) {
+		$("#createdSongMenus .option,#collectedSongMenus .option").removeClass("now");
+		var $editPage = $("#editPage");
+		// $.ajax({
+		// 	url : "songMenu/" + songMenuId,
+		// 	dataType : "json",
+		// 	type : "GET",
+		// 	success : function(data) {
+		// 		$editPage.attr("data-id", songMenu.id);
+		// 			$tags.find("i").on("click", function() {
+		// 				$(this).parent().remove();
+		// 			})
+		// 		$editPage.find(".toImageEditPage").on("click", showImageEditPage);
+		// 		$editPage.find(".introduction").on("focusin", function() {
+		// 			$editPage.find(".introduction").on("keydown", function() {
+		// 				$(this).siblings(".num").text(1000 - $(this).val().length)
+		// 			});
+		// 		});
+		// 		$editPage.find(".introduction").on("focusout", function() {
+		// 			$editPage.find(".introduction").off("keydown");
+		// 		});
 
 		$editPage.find("#updateSongMenu").off().on("click", updateSongMenu);
 		function updateSongMenu() {

@@ -136,13 +136,13 @@ function dom(selector){
     //dom
     siblings : function(){
       return this.parent().childs().filter(function(e){
-        return e != this;
+        return e.e != ele;
       });
     },
     parent : function(tagName){
       var tag = ele.parentElement;
       if(tagName){
-        while(tag.tagName != tagName){
+        while(tag.tagName != tagName.toLocaleUpperCase()){
           tag = tag.parentElement;
         }
       }
