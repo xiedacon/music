@@ -300,13 +300,6 @@
 	}
 
 	function showEditPage(songMenuId) {
-		$("#createdSongMenus .option,#collectedSongMenus .option").removeClass("now");
-		var $editPage = $("#editPage");
-		// $.ajax({
-		// 	url : "songMenu/" + songMenuId,
-		// 	dataType : "json",
-		// 	type : "GET",
-		// 	success : function(data) {
 		// 		$editPage.attr("data-id", songMenu.id);
 		// 			$tags.find("i").on("click", function() {
 		// 				$(this).parent().remove();

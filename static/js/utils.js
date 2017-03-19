@@ -6,7 +6,7 @@ function WorkGroup(works) {
     throw TypeError("works必须为Array");
   }
 
-  var num = works.length | 0 //
+  var num = works.length || 0 //
   , callback = function(){} //
   , excuteFlag = true //
   //定义暴露出去的接口
@@ -121,112 +121,94 @@ function Excutor(arguments){
 }
 
 //
-function dom(selector){
-  if(selector instanceof Element){
-    var ele = selector;
-  }else{
-    var ele = document.querySelector(selector);
-  }
-  if(!ele) throw "该dom元素不存在";
-
-  var allListeners = {};
+function dom(param){//selector | Element
+  var emptyElement = document.createElement("div"),//
+  ele = ((param instanceof Element) && param)
+        || ((typeof param === "string") && document.querySelector(param))
+        || emptyElement, //
+  allListeners = {}, //
+  emptyFunction = function(){}, //
+  temp;
 
   return {
     e : ele,
-    //dom
-    siblings : function(){
-      return this.parent().childs().filter(function(e){
-        return e.e != ele;
-      });
+    //dom元素操作
+    remove : function(){ele.remove.apply(ele,arguments);},
+    clone : function(deep){return ele.cloneNode(typeof deep === "boolean" ? deep : true);},
+    replaceWith : function(){ele.replaceWith.apply(ele,arguments);},
+    contains : function(param){//selector | dom | Element
+      if(typeof param === "string") return this.querySelector(param) ? true : false;
+      if(!param instanceof Element) param = ((temp = param.e) && temp instanceof Element) ? temp : emptyElement;
+      return ele.contains(param);
+      // return ele.contains(((typeof param === "string") && this.querySelector(param))
+      //                     || (param instanceof Element && param)
+      //                     || ((param.e && param.e instanceof Element) ? params.e : emptyElement));
     },
-    parent : function(tagName){
+    text : function(content){
+      if(!content) return ele.textContent;
+      ele.textContent = content;
+      return this;
+    },
+    innerHTML : function(content){
+      if(!content) return ele.innerHTML;
+      ele.innerHTML = content;
+      return this;
+    },
+    querySelector : function(){return dom((temp = ele.querySelector.apply(ele,arguments)) ? temp : undefined);},
+    querySelectorAll : function(){return Array.from(ele.querySelectorAll.apply(ele,arguments)).map(function(e){return dom(e);});},
+    find : function(){return this.querySelectorAll.apply(this,arguments);},
+    parent : function(selector){
       var tag = ele.parentElement;
-      if(tagName){
-        while(tag.tagName != tagName.toLocaleUpperCase()){
+      if(selector)
+        while(tag && !tag.matches(selector))
           tag = tag.parentElement;
-        }
-      }
       return dom(tag);
     },
-    childs : function(){
-      return Array.from(ele.children).map(function(e){
-        return dom(e);
-      });
+    childs : function(selector){
+      return Array //
+              .from(ele.children)//
+              .filter(function(e){return selector ? e.matches(selector) : true;}) //
+              .map(function(e){return dom(e);});
     },
-    addClass : function(className){
-      ele.className += " " + className;
-      return this;
-    },
-    removeClass : function(className){
-      if(ele.className){
-        var newClassName = "";
-        ele.className.split(/\s/).filter(function(_className){
-          return _className != className;
-        }).forEach(function(_className){
-          newClassName += _className;
-        });
-        ele.className = newClassName;
-        return this;
-      }
-    },
+    removeChilds : function(selector){this.childs(selector).forEach(function(e){e.remove();});return this;},//mark
+    append : function(childs){ele.append(childs);return this;},
+    prepend : function(childs){ele.prepend(childs);return this;},
+    siblings : function(selector){return this.parent().childs(selector).filter(function(e){return e.e != ele;});},
+    after : function(siblings){ele.after(siblings);return this;},
+    before : function(siblings){ele.before(siblings);return this;},
+    //dom属性操作
+    addClass : function(className){ele.classList.add(className);return this;},
+    removeClass : function(className){ele.classList.remove(className);return this;},
+    hasClass : function(className){ele.classList.contains(className);return this;},
     attr : function(attres){
-      if(attres === "class") attres = "className";
-      return ele[attres];
-    },
-    removeAttr : function(attrName){
-      if(attrName == "class") attrName = "className";
-      ele[attrName] = "";
+      if(typeof attres === "string") return ele.getAttribute(attres);
+      for(var name in attres)
+        ele.setAttribute(name,attres[name]);
       return this;
     },
+    removeAttr : function(attrName){ele.removeAttribute(attrName);return this;},
+    hasAttr : function(attrName){ele.hasAttribute(attrName);return this;},
     css : function(csses){
-      for(var cssName in csses){
+      for(var cssName in csses)
         ele.style[cssName] = csses[cssName];
-      }
       return this;
     },
     //事件
     on : function(type,listener,once){
-      var listeners = allListeners[type];
-      (listeners = listeners ? listeners : []).push(listener);
+      var listeners = allListeners[type] || [];
+      ele.addEventListener(type,listener,{once : once});
+      listeners.push(listener);
       allListeners[type] = listeners;
-
-      ele.addEventListener(type,listener,{
-        once : once
-      });
-
       return this;
     },
     off : function(type,listener){
-      var listeners = allListeners[type];
-      if(!listeners){
-        ele.removeEventListener(type,listener);
-        return this;
-      }
-      if(listener){
-        listeners.filter(function(_listener){
-          return _listener == listener;
-        }).forEach(function(_listener){
-          ele.removeEventListener(type,_listener);
-        });
-        allListeners[type] = listeners.filter(function(_listener){
-          return _listener != listener;
-        });
-        return this;
-      }
-
-      listeners.forEach(function(_listener){
-        ele.removeEventListener(type,_listener);
+      ele.removeEventListener(type,listener);
+      allListeners[type] = (allListeners[type] || []).filter(function(_listener){
+        return (_listener !== ((listener || ele.removeEventListener(type,_listener)) || _listener));
       });
-      allListeners[type] = undefined;
-
       return this;
     },
-    once : function(type,listener){
-      return this.on(type,listener,true);
-    },
-    trigger : function(type){
-      ele[type]();
-      return this;
-    }
+    once : function(type,listener){return this.on(type,listener,true);},
+    trigger : function(type){((ele[type] && typeof ele[type] == "function") || emptyFunction)();return this;}
   };
 }
