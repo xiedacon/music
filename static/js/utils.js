@@ -131,6 +131,7 @@ function dom(param){//selector | Element
 
   return {
     e : ele,
+    type : ele.tagName.toLocaleLowerCase(),
     //dom元素操作
     remove : function(){ele.remove.apply(ele,arguments);},
     clone : function(deep){return ele.cloneNode(typeof deep === "boolean" ? deep : true);},
@@ -143,6 +144,7 @@ function dom(param){//selector | Element
       //                     || (param instanceof Element && param)
       //                     || ((param.e && param.e instanceof Element) ? params.e : emptyElement));
     },
+    matches : function(){ele.matches.apply(ele,arguments);},
     text : function(content){
       if(!content) return ele.textContent;
       ele.textContent = content;
@@ -151,6 +153,11 @@ function dom(param){//selector | Element
     innerHTML : function(content){
       if(!content) return ele.innerHTML;
       ele.innerHTML = content;
+      return this;
+    },
+    val : function(content){
+      if(!content) return ele.value;
+      ele.value = content;
       return this;
     },
     querySelector : function(){return dom((temp = ele.querySelector.apply(ele,arguments)) ? temp : undefined);},
@@ -173,6 +180,7 @@ function dom(param){//selector | Element
     append : function(){ele.append.apply(ele,arguments);return this;},
     prepend : function(){ele.prepend.apply(ele,arguments);return this;},
     siblings : function(selector){return this.parent().childs(selector).filter(function(e){return e.e != ele;});},
+    sibling : function(selector){return this.siblings(selector).pop();},
     after : function(){ele.after.apply(ele,arguments);return this;},
     before : function(){ele.before.apply(ele,arguments);return this;},
     //dom属性操作

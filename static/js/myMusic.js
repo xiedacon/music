@@ -258,7 +258,7 @@
 									<i class='icomoon'></i>
 								</span>
 								{{/each}}
-								<a onclick="MMR.get('tags').show();">选择标签</a>
+								<a>选择标签</a>
 							</span>
 							<span class="message">选择适合的标签，最多选3个</span>
 						</span>
@@ -295,25 +295,21 @@
 				songMenu : process(source)
 			};
 
-			document.querySelector("div#editPage").innerHTML = Template.compile(template)(data);
+			dom("div#editPage").innerHTML(Template.compile(template)(data));
+			dom("span#tags").on("click",function(e){
+				var ele = dom(e.target);
+				((ele.type === "i") && (ele.parent().remove()) //
+				 || (ele.type === "a") && (MMR.get('tags').show()));
+			});
+			var textarea = dom("textarea.introduction"), num = textarea.sibling("span.num"), i;
+			textarea.on("focusin",function(){
+				i = setInterval(function(){num.text(1000 - textarea.val().length)},500);
+			}).on("focusout",function(){clearInterval(i);});
+			dom("span.toImageEditPage").on("click",showImageEditPage);
 		});
 	}
 
 	function showEditPage(songMenuId) {
-		// 		$editPage.attr("data-id", songMenu.id);
-		// 			$tags.find("i").on("click", function() {
-		// 				$(this).parent().remove();
-		// 			})
-		// 		$editPage.find(".toImageEditPage").on("click", showImageEditPage);
-		// 		$editPage.find(".introduction").on("focusin", function() {
-		// 			$editPage.find(".introduction").on("keydown", function() {
-		// 				$(this).siblings(".num").text(1000 - $(this).val().length)
-		// 			});
-		// 		});
-		// 		$editPage.find(".introduction").on("focusout", function() {
-		// 			$editPage.find(".introduction").off("keydown");
-		// 		});
-
 		$editPage.find("#updateSongMenu").off().on("click", updateSongMenu);
 		function updateSongMenu() {
 			var name = $editPage.find("#songMenuName").val();
