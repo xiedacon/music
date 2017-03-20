@@ -127,7 +127,6 @@ function dom(param){//selector | Element
         || ((typeof param === "string") && document.querySelector(param))
         || emptyElement, //
   allListeners = {}, //
-  emptyFunction = function(){}, //
   temp;
 
   return {
@@ -170,16 +169,16 @@ function dom(param){//selector | Element
               .filter(function(e){return selector ? e.matches(selector) : true;}) //
               .map(function(e){return dom(e);});
     },
-    removeChilds : function(selector){this.childs(selector).forEach(function(e){e.remove();});return this;},//mark
-    append : function(childs){ele.append(childs);return this;},
-    prepend : function(childs){ele.prepend(childs);return this;},
+    removeChilds : function(selector){this.childs(selector).forEach(function(e){e.remove();});return this;},
+    append : function(){ele.append.apply(ele,arguments);return this;},
+    prepend : function(){ele.prepend.apply(ele,arguments);return this;},
     siblings : function(selector){return this.parent().childs(selector).filter(function(e){return e.e != ele;});},
-    after : function(siblings){ele.after(siblings);return this;},
-    before : function(siblings){ele.before(siblings);return this;},
+    after : function(){ele.after.apply(ele,arguments);return this;},
+    before : function(){ele.before.apply(ele,arguments);return this;},
     //dom属性操作
-    addClass : function(className){ele.classList.add(className);return this;},
+    addClass : function(className){className && ele.classList.add(className);return this;},
     removeClass : function(className){ele.classList.remove(className);return this;},
-    hasClass : function(className){ele.classList.contains(className);return this;},
+    hasClass : function(className){return ele.classList.contains(className);},
     attr : function(attres){
       if(typeof attres === "string") return ele.getAttribute(attres);
       for(var name in attres)
@@ -187,10 +186,11 @@ function dom(param){//selector | Element
       return this;
     },
     removeAttr : function(attrName){ele.removeAttribute(attrName);return this;},
-    hasAttr : function(attrName){ele.hasAttribute(attrName);return this;},
-    css : function(csses){
-      for(var cssName in csses)
-        ele.style[cssName] = csses[cssName];
+    hasAttr : function(attrName){return ele.hasAttribute(attrName);},
+    css : function(param){
+      if(typeof param === "string") return ele.style[param];
+      for(var cssName in param)
+        ele.style[cssName] = param[cssName];
       return this;
     },
     //事件
@@ -208,7 +208,13 @@ function dom(param){//selector | Element
       });
       return this;
     },
-    once : function(type,listener){return this.on(type,listener,true);},
-    trigger : function(type){((ele[type] && typeof ele[type] == "function") || emptyFunction)();return this;}
+    once : function(type,listener){
+      var fn = (function(){listener.apply(listener,arguments);this.off(type,fn);}).bind(this);
+      return this.on(type,fn,true);
+    },
+    trigger : function(type){
+      typeof type === "string" && ele.dispatchEvent(new Event(type,{bubbles:true,cancelable:true,composed:true}));
+      return this;
+    }
   };
 }
