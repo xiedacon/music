@@ -195,6 +195,9 @@ window.Router = (function(){
     },
     goto : function (hash) {
       routerAction(hash);
+    },
+    refresh : function(){
+      Router.goto(hashManager.hash);
     }
   };
 
