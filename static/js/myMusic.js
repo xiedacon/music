@@ -313,7 +313,114 @@
 				i = setInterval(function(){num.text(1000 - textarea.val().length)},500);
 			}).on("focusout",function(){clearInterval(i);});
 
-			toImageEditPage.on("click",showImageEditPage);
+			template = `
+			<div class="editPage_top">
+				<a href="#songMenu?id={{songMenu.id}}" class="name">{{songMenu.name}}</a>
+				<span>></span>
+				<a class="turnToEditPage">编辑歌单</a>
+				<span>></span>
+				<strong>编辑封面</strong>
+			</div>
+			<div class="editPage_bottom">
+				<div class="bottom_top">
+					<form id="image_form">
+						<a id="imageUpload" class="button" type="button">上传封面</a>
+						<input name="file" type="file" style="visibility: hidden;width: 0px;height: 0px">
+					</form>
+					<span>支持jpg、png、bmp格式的图片，且文件小于20M</span>
+				</div>
+				<div class="bottom_middle">
+					<div class="main">
+						<img id="main" alt="" src="{{songMenu.icon || 'image/default_cover.png'}}">
+					</div>
+					<div class="desc">
+						<span class="desc_head">歌单封面预览</span><br>
+						<div id="max" class="show_max">
+							<img id="image_max" alt="" src="{{songMenu.icon || 'image/default_cover.png'}}">
+						</div>
+						<span>大尺寸封面（180x180像素）</span>
+						<br>
+						<div id="min" class="show_min">
+							<img id="image_min" alt="" src="{{songMenu.icon || 'image/default_cover.png'}}">
+						</div>
+						<span>小尺寸封面（40x40像素）</span>
+					</div>
+				</div>
+				<div class="bottom_bottom">
+					<a id="image_update" class="button disable" type="button" style="background: #4c61fd;color: #fff;">保存</a>
+					<a id="image_quit" class="button" type="button">取消</a>
+				</div>
+			</div>
+			`;
+
+			dom("div#imageEditPage").innerHTML(Template.compile(template)(data));
+			dom("div#imageEditPage").on("click",function(e){
+				var tag = dom(e.target);
+				if(tag.matches("a#image_quit") || tag.matches("a.turnToEditPage")){
+					loadEditPage(data.songMenu.id);
+					dom("div#editPage").css({display:"block"}).siblings().forEach(function(ele){
+						ele.css({display:"none"});
+					});
+				}else if(tag.matches("a#imageUpload")){
+					dom("input[name=file]").trigger("click");
+				}
+			});
+			dom("input[name=file]").on("change",function(){
+				var imageUpload = dom("a#imageUpload").text("加载中..");
+				dom("img#main").once("load", function() {
+					$("#image_max").attr("src", $(this).attr("src"));
+					$("#image_min").attr("src", $(this).attr("src"));
+					// if ($(this).attr("style")) {
+					// 	$("#main").siblings(".jcrop-holder").find("img").attr("src", $(this).attr("src"));
+					// } else {
+					// 	chooseImage();
+					// }
+					imageUpload.text("上传封面");
+				})
+				previewImage($(this)[0], "main");
+			});
+			dom("a#image_update").on("click",function(){
+				if (position) {
+					var formData = new FormData();
+					formData.append("x1", position.x);
+					formData.append("y1", position.y);
+					formData.append("x2", position.x2);
+					formData.append("y2", position.y2);
+					formData.append("width", 320);
+					formData.append("height", 320);
+					formData.append("image", $("#main").attr("src"));
+
+					$(this).text("保存中..");
+
+					$.ajax({
+						url : "songMenu/" + $("#editPage").attr("data-id") + "/icon",
+						type : "PUT",
+						processData : false,
+						contentType : false,
+						context : this,
+						data : formData,
+						dataType : "json",
+						success : function(data) {
+							$(this).text("保存");
+
+							if (data.code === 200) {
+								router.startRouter("myMusic?userId=" + PageScope.params.userId, true);
+							} else {
+								MMR.get("simpleMsg").setData({
+									status : "error",
+									content : "上传失败"
+								}).show();
+							}
+						}
+					})
+				}
+			});
+
+			toImageEditPage.on("click",function(){
+				dom("div#imageEditPage").css({display:"block"}).siblings().forEach(function(ele){
+					ele.css({display:"none"});
+				});
+			});
 
 			dom("span#updateSongMenu").on("click",function(){
 				var id = dom("input#id").val(), //
@@ -349,93 +456,10 @@
 		});
 	}
 
-	function showImageEditPage() {
-		var $imageEditPage = $("#imageEditPage");
-		var imageSrc = $("#editPage img").attr("src");
-		$imageEditPage.find(".name").attr({
-			"data-href" : $("#editPage .name").attr("data-href")
-		}).text($("#editPage .name").text());
-
-		$imageEditPage.find(".turnToEditPage").on("click", function() {
-			$("#editPage").css("display", "block").siblings().css("display", "none");
-		});
-		$imageEditPage.find("#image_quit").on("click", function() {
-			$("#editPage").css("display", "block").siblings().css("display", "none");
-		});
-
-		var $image_update = $imageEditPage.find("#image_update").addClass("disable");
-		$("#main").removeData("Jcrop").removeAttr("style").attr("src", "image/default_cover.png") //
-		.siblings(".jcrop-holder").remove();
-		$("#main").off().on("load", function() {
-			if ($(this).attr("src") != "image/default_cover.png") {
-				$imageEditPage.find("#image_update").removeClass("disable");
-			}
-		})
-		$("#image_max,#image_min").attr("src", "image/default_cover.png");
-		$("#imageUpload").siblings("input[name='file']").remove();
-		$("#imageUpload").parent().append("<input name='file' type='file' style='visibility: hidden;width: 0px;height: 0px'>");
-		$imageEditPage.css("display", "block").siblings().css("display", "none");
-		position = undefined;
-	}
-
 	var allowExtention = ".jpg,.bmp,.png";
 	var extention;
 	var $input;
-	$("#imageUpload").on("click", function() {
-		$input = $(this).siblings("input");
-		$input.click();
-		$input.one("change", function() {
-			$("#imageUpload").text("加载中..");
-			$("#main").one("load", function() {
-				$("#image_max").attr("src", $(this).attr("src"));
-				$("#image_min").attr("src", $(this).attr("src"));
-				if ($(this).attr("style")) {
-					$("#main").siblings(".jcrop-holder").find("img").attr("src", $(this).attr("src"));
-				} else {
-					chooseImage();
-				}
-				$("#imageUpload").text("上传封面");
-			})
-			previewImage($(this)[0], "main");
-		});
-	})
-	$("#image_update").on("click", function() {
-		if (position) {
-			var formData = new FormData();
-			formData.append("x1", position.x);
-			formData.append("y1", position.y);
-			formData.append("x2", position.x2);
-			formData.append("y2", position.y2);
-			formData.append("width", 320);
-			formData.append("height", 320);
-			formData.append("image", $("#main").attr("src"));
 
-			$(this).text("保存中..");
-
-			$.ajax({
-				url : "songMenu/" + $("#editPage").attr("data-id") + "/icon",
-				type : "PUT",
-				processData : false,
-				contentType : false,
-				context : this,
-				data : formData,
-				dataType : "json",
-				success : function(data) {
-					$(this).text("保存");
-
-					if (data.code === 200) {
-						router.startRouter("myMusic?userId=" + PageScope.params.userId, true);
-					} else {
-						MMR.get("simpleMsg").setData({
-							status : "error",
-							content : "上传失败"
-						}).show();
-					}
-				}
-			})
-		}
-
-	})
 	var position;
 	var jcrop_api, boundx, boundy;
 	function chooseImage() {

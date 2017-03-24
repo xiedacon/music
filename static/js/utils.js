@@ -144,7 +144,7 @@ function dom(param){//selector | Element
       //                     || (param instanceof Element && param)
       //                     || ((param.e && param.e instanceof Element) ? params.e : emptyElement));
     },
-    matches : function(){ele.matches.apply(ele,arguments);},
+    matches : function(){return ele.matches.apply(ele,arguments);},
     text : function(content){
       if(!content) return ele.textContent;
       ele.textContent = content;
@@ -220,8 +220,11 @@ function dom(param){//selector | Element
       var fn = (function(){listener.apply(listener,arguments);this.off(type,fn);}).bind(this);
       return this.on(type,fn,true);
     },
-    trigger : function(type){
-      typeof type === "string" && ele.dispatchEvent(new Event(type,{bubbles:true,cancelable:true,composed:true}));
+    trigger : function(type){// 有点问题
+      if(typeof type === "string"){
+        ele.dispatchEvent(new Event(type,{bubbles:true,cancelable:true,composed:true}));
+        ele[type]();
+      }
       return this;
     }
   };
