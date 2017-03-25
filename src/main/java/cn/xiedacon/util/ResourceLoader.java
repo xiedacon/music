@@ -44,7 +44,7 @@ public class ResourceLoader {
 		virtualUri = virtualUri == null ? "" : virtualUri;
 		return new File(servletContext.getRealPath(realUri) + virtualUri);
 	}
-	
+
 	public static String getRealPath(String realUri) {
 		return servletContext.getRealPath(realUri);
 	}
@@ -59,6 +59,9 @@ public class ResourceLoader {
 			return;
 		}
 		try {
+			int len = in.available();
+			response.setContentLength(len);
+			response.setHeader("Content-Range", "bytes 0-" + (len - 1) + "/" + len);
 			response.setCharacterEncoding(charset);
 			IOUtils.copy(in, response.getOutputStream());
 		} catch (IOException e) {

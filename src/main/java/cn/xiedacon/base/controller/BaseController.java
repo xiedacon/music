@@ -61,7 +61,9 @@ public class BaseController {
 	@RequestMapping(value = "/file/{songId:\\w+}", method = RequestMethod.GET)
 	public void getFile(@PathVariable("songId") String songId, HttpServletRequest request,
 			HttpServletResponse response) {
-		response.setContentType("audio/mp3;");
+		response.setContentType("audio/mpeg;");
+		response.setHeader("Content-Disposition", "inline; filename=a.mp3;");
 		ResourceLoader.writeToResponse(songService.selectFileUriById(songId), response);
+		
 	}
 }
